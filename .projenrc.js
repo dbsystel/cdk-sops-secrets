@@ -7,12 +7,19 @@ const project = new awscdk.AwsCdkConstructLibrary({
 
   name: "cdk-sops-secrets",
   repositoryUrl: "https://github.com/markussiebert/cdk-sops-secrets.git",
+  peerDeps: [
 
+  ]
   // deps: [],                /* Runtime dependencies of this module. */
   // description: undefined,  /* The description is just a string that helps people understand the purpose of the package. */
   // devDeps: [],             /* Build dependencies for this module. */
   // packageName: undefined,  /* The "name" in package.json. */
 });
+
+project.buildWorkflow.preBuildSteps.unshift({
+  name: "list artifacts",
+  run: "ls -la dist/*"
+})
 
 project.buildWorkflow.preBuildSteps.unshift({
   name: "download go artifact",
