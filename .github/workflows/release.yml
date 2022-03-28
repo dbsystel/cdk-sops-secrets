@@ -17,11 +17,14 @@ jobs:
     env:
       CI: "true"
     steps:
-      - name: download go artifact
+      - name: Download goreleaser artifacts
         uses: actions/download-artifact@v2
         with:
-          name: build-artifact-go
-          path: dist/*
+          name: build-artifact-goreleaser
+          path: dist-goreleaser/*
+      - name: List artifacts
+        working-directory: ${{ github.workspace }}
+        run: ls -la dist-goreleaser/*
       - name: Checkout
         uses: actions/checkout@v2
         with:

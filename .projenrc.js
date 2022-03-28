@@ -29,20 +29,23 @@ const project = new awscdk.AwsCdkConstructLibrary({
 
 project.npmignore.addPatterns('lambda', 'dist-lambda');
 
-project.buildWorkflow.preBuildSteps.unshift({
-  name: 'List artifacts',
-  'working-directory': '${{ github.workspace }}',
-  run: 'ls -la dist-lambda/*',
-});
-
-project.buildWorkflow.preBuildSteps.unshift({
-  name: 'Download goreleaser artifacts',
-  uses: 'actions/download-artifact@v2',
-  with: {
-    name: 'build-artifact-go',
-    path: 'dist-lambda/*',
+additionalActions = [
+  {
+    name: 'Download goreleaser artifacts',
+    uses: 'actions/download-artifact@v2',
+    with: {
+      name: 'build-artifact-goreleaser',
+      path: 'dist-goreleaser/*',
+    },
   },
-});
+  {
+    name: 'List artifacts',
+    'working-directory': '${{ github.workspace }}',
+    run: 'ls -la dist-goreleaser/*',
+  }
+]
+
+project.buildWorkflow.preBuildSteps.unshift(...additionalActions);
 
 console.log(project.github.workflows.map((wr) => wr.name));
 
@@ -54,14 +57,7 @@ fixme.forEach((wf) => {
     if (key === 'build') {
       console.log(wf.jobs[key]);
     } else {
-      wf.jobs[key].steps.unshift({
-        name: 'download go artifact',
-        uses: 'actions/download-artifact@v2',
-        with: {
-          name: 'build-artifact-go',
-          path: 'dist/*',
-        },
-      });
+      wf.jobs[key].steps.unshift(...additionalActions);
     }
     wf.jobs[key] = { ...wf.jobs[key], needs: 'goreleaser' };
   });
