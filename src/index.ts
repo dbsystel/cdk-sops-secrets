@@ -1,6 +1,6 @@
 import { IGrantable, IPrincipal } from '@aws-cdk/aws-iam';
 import { Construct, CustomResource, CustomResourceProvider } from '@aws-cdk/core';
-import { Code, Function } from '@aws-cdk/aws-lambda';
+import { Code, Function, Runtime } from '@aws-cdk/aws-lambda';
 import * as cr from '@aws-cdk/custom-resources';
 import { Provider } from '@aws-cdk/custom-resources';
 
@@ -27,8 +27,10 @@ export class SopsSecretsProvider extends Construct implements IGrantable {
   public constructor(scope: Construct, id: string, props: SopsSecretsProviderProps ) {
     super(scope, id);
     const lambda = new Function(this, 'Function', {
-      code: Code.fromAsset('../assets/lambdasource.zip'),
-      
+      code: Code.fromAsset('../assets/cdk-sops-lambda.zip'),
+      runtime: Runtime.GO_1_X,
+      handler: ''
+
     })
     const cr = new Provider(this, 'Resource', {
       onEventHandler:
