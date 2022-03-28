@@ -17,6 +17,11 @@ jobs:
     env:
       CI: "true"
     steps:
+      - name: download go artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: build-artifact-go
+          path: dist/*
       - name: Checkout
         uses: actions/checkout@v2
         with:

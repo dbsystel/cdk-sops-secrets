@@ -14,14 +14,34 @@ const project = new awscdk.AwsCdkConstructLibrary({
   // packageName: undefined,  /* The "name" in package.json. */
 });
 
+project.buildWorkflow.preBuildSteps.unshift({
+  name: "download go artifact",
+  uses: "actions/download-artifact@v2",
+  with: {
+    name: "build-artifact-go",
+    path: "dist/*",
+  },
+})
+
 console.log(project.github.workflows.map((wr) => wr.name));
 
 const fixme = project.github.workflows.filter((wf) =>
   ["build", "release"].includes(wf.name)
 );
-
 fixme.forEach((wf) => {
   Object.keys(wf.jobs).forEach((key) => {
+    if(key === "build") {
+      console.log(wf.jobs[key])
+    } else {
+      wf.jobs[key].steps.unshift({
+        name: "download go artifact",
+        uses: "actions/download-artifact@v2",
+        with: {
+          name: "build-artifact-go",
+          path: "dist/*",
+        },
+      },)
+    }
     wf.jobs[key] = {...wf.jobs[key], needs: 'goreleaser'}
   });
   wf.addJob("goreleaser", {

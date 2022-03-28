@@ -20,6 +20,11 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.ref }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
+      - name: download go artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: build-artifact-go
+          path: dist/*
       - name: Install dependencies
         run: yarn install --check-files
       - name: build
@@ -55,6 +60,11 @@ jobs:
       contents: write
     if: always() && needs.build.outputs.self_mutation_happened && !(github.event.pull_request.head.repo.full_name != github.repository)
     steps:
+      - name: download go artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: build-artifact-go
+          path: dist/*
       - name: Checkout
         uses: actions/checkout@v2
         with:
@@ -86,6 +96,11 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: 14.x
+      - name: download go artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: build-artifact-go
+          path: dist/*
       - name: Download build artifacts
         uses: actions/download-artifact@v2
         with:
