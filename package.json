@@ -31,8 +31,8 @@
     "projen": "npx projen"
   },
   "author": {
-    "name": "Markus",
-    "email": "mail@markussiebert.com",
+    "name": "Markus Siebert",
+    "email": "dev@markussiebert.com",
     "organization": false
   },
   "devDependencies": {
