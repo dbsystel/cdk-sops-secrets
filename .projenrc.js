@@ -29,12 +29,14 @@ const project = new awscdk.AwsCdkConstructLibrary({
 
 project.npmignore.addPatterns('lambda', 'dist-lambda');
 
+goreleaserArtifactsNamespace = 'build-artifact-goreleaser'
+
 additionalActions = [
   {
     name: 'Download goreleaser artifacts',
     uses: 'actions/download-artifact@v2',
     with: {
-      name: 'build-artifact-goreleaser',
+      name: goreleaserArtifactsNamespace,
       path: 'dist-goreleaser/*',
     },
   },
@@ -42,6 +44,10 @@ additionalActions = [
     name: 'List artifacts',
     'working-directory': '${{ github.workspace }}',
     run: 'ls -la dist-goreleaser/*',
+  },
+  {
+    name: 'Prepare assets',
+    run: 'mkdir -p assets && cd assets && zip cdk-sops-lambda.zip ../dist-goreleaser/cdk-sops-secrets_linux_amd64/cdk-sops-lambda',
   }
 ]
 
@@ -106,7 +112,7 @@ fixme.forEach((wf) => {
         name: 'Upload artifact',
         uses: 'actions/upload-artifact@v2.1.1',
         with: {
-          name: 'build-artifact-go',
+          name: goreleaserArtifactsNamespace,
           path: 'dist/*',
         },
       },

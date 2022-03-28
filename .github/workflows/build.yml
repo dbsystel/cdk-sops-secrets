@@ -28,6 +28,8 @@ jobs:
       - name: List artifacts
         working-directory: ${{ github.workspace }}
         run: ls -la dist-goreleaser/*
+      - name: Prepare assets
+        run: mkdir -p assets && cd assets && zip cdk-sops-lambda.zip ../dist-goreleaser/cdk-sops-secrets_linux_amd64/cdk-sops-lambda
       - name: Install dependencies
         run: yarn install --check-files
       - name: build
@@ -71,6 +73,8 @@ jobs:
       - name: List artifacts
         working-directory: ${{ github.workspace }}
         run: ls -la dist-goreleaser/*
+      - name: Prepare assets
+        run: mkdir -p assets && cd assets && zip cdk-sops-lambda.zip ../dist-goreleaser/cdk-sops-secrets_linux_amd64/cdk-sops-lambda
       - name: Checkout
         uses: actions/checkout@v2
         with:
@@ -110,6 +114,8 @@ jobs:
       - name: List artifacts
         working-directory: ${{ github.workspace }}
         run: ls -la dist-goreleaser/*
+      - name: Prepare assets
+        run: mkdir -p assets && cd assets && zip cdk-sops-lambda.zip ../dist-goreleaser/cdk-sops-secrets_linux_amd64/cdk-sops-lambda
       - name: Download build artifacts
         uses: actions/download-artifact@v2
         with:
@@ -150,5 +156,5 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v2.1.1
         with:
-          name: build-artifact-go
+          name: build-artifact-goreleaser
           path: dist/*
