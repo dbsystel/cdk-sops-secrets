@@ -6,7 +6,7 @@ builds:
     # Notice: when used with `gomod.proxy`, this must be a package.
     #
     # Default is `.`.
-    main: ./lambda/main.go
+    main: main.go
 
     # Binary name.
     # Can be a path (e.g. `bin/app`) to wrap the binary in a directory.
