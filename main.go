@@ -8,7 +8,6 @@ import (
 	runtime "github.com/aws/aws-lambda-go/lambda"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/aws/aws-sdk-go/service/lambda"
 	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 	"github.com/aws/aws-sdk-go/service/secretsmanager"
@@ -44,9 +43,7 @@ type crSopsOutput struct {
 }
 
 var awsSession = session.New()
-var client = lambda.New(awsSession)
 var secrets = secretsmanager.New(awsSession)
-var s3Client = s3.New(awsSession)
 var s3Manager = s3manager.NewDownloader(awsSession)
 
 func getS3FileContent(file SOPSS3File) []byte {
