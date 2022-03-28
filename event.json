@@ -1,0 +1,15 @@
+{
+    "RequestType": "Create",
+    "LogicalResourceId": "LogicalResourceId",
+    "ResourceProperties": {
+        "SecretARN": "arn:aws:secretsmanager:eu-central-1:123456789012:secret:testsecret-cGftvV",
+        "S3SOPSContentFile": {
+            "Bucket": "my-sops-test-bucket",
+            "Key": "secret.json",
+            "Format": "json"
+        }
+    },
+    "ResourceType": "Custom::SOPS::Secret",
+    "RequestId": "RequestId",
+    "StackId": "StackId"
+  } 
