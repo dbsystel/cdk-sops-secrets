@@ -26,7 +26,8 @@ jobs:
         working-directory: ${{ github.workspace }}
         run: ls -la dist-goreleaser/*
       - name: Prepare assets
-        run: mkdir -p assets && cd assets && zip cdk-sops-lambda.zip ../dist-goreleaser/cdk-sops-secrets_linux_amd64/cdk-sops-lambda
+        working-directory: ${{ github.workspace }}
+        run: mkdir -p assets && zip assets/cdk-sops-lambda.zip dist-goreleaser/cdk-sops-secrets_linux_amd64/cdk-sops-lambda
       - name: Checkout
         uses: actions/checkout@v2
         with:

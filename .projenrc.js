@@ -13,7 +13,6 @@ const project = new awscdk.AwsCdkConstructLibrary({
     "@aws-cdk/aws-iam@^1.0.0",
     "@aws-cdk/aws-lambda@^1.0.0",
     "@aws-cdk/custom-resources@^1.0.0",
-    
   ],
   // deps: [],                /* Runtime dependencies of this module. */
   // description: undefined,  /* The description is just a string that helps people understand the purpose of the package. */
@@ -47,7 +46,8 @@ additionalActions = [
   },
   {
     name: 'Prepare assets',
-    run: 'mkdir -p assets && cd assets && zip cdk-sops-lambda.zip ../dist-goreleaser/cdk-sops-secrets_linux_amd64/cdk-sops-lambda',
+    'working-directory': '${{ github.workspace }}',
+    run: 'mkdir -p assets && zip assets/cdk-sops-lambda.zip dist-goreleaser/cdk-sops-secrets_linux_amd64/cdk-sops-lambda',
   }
 ]
 
