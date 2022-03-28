@@ -21,5 +21,6 @@ dist
 tsconfig.tsbuildinfo
 /.eslintrc.json
 !.jsii
-lambda
-dist-lambda
+/lambda
+/dist-lambda
+!/assets
