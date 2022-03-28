@@ -89,19 +89,26 @@ func handleRequest(ctx context.Context, event crSopsInput) crSopsOutput {
 	eventJson, _ := json.MarshalIndent(event, "", "  ")
 	log.Printf("Function invoked with:\n %s", eventJson)
 
-	sopsFile := &event.ResourceProperties.S3SOPSContentFile
+	if event.RequestType == "Create" || event.RequestType == "Update" {
+		sopsFile := &event.ResourceProperties.S3SOPSContentFile
 
-	// This is where the magic happens
-	ecnryptedContent := getS3FileContent(*sopsFile)
-	decryptedContent := decryptSopsFileContent(ecnryptedContent, *sopsFile)
-	updateSecretResp := updateSecret(event.ResourceProperties.SecretARN, decryptedContent)
+		// This is where the magic happens
+		ecnryptedContent := getS3FileContent(*sopsFile)
+		decryptedContent := decryptSopsFileContent(ecnryptedContent, *sopsFile)
+		updateSecretResp := updateSecret(event.ResourceProperties.SecretARN, decryptedContent)
 
-	log.Println("Successfully finished, returning")
-	return crSopsOutput{
-		PhysicalResourceId: *updateSecretResp.ARN,
-		NoEcho:             false,
-		Data:               *updateSecretResp,
+		log.Println("Successfully finished, returning")
+		return crSopsOutput{
+			PhysicalResourceId: *updateSecretResp.ARN,
+			NoEcho:             false,
+			Data:               *updateSecretResp,
+		}
+	} else if event.RequestType == "Delete" {
+		return crSopsOutput{}
+	} else {
+		log.Fatalf("Request '%s' not supported", event.RequestType)
 	}
+	return crSopsOutput{}
 }
 
 func main() {

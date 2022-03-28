@@ -9,26 +9,26 @@ const project = new awscdk.AwsCdkConstructLibrary({
   name: 'cdk-sops-secrets',
   repositoryUrl: 'https://github.com/markussiebert/cdk-sops-secrets.git',
   peerDeps: [
-    "@aws-cdk/aws-secretsmanager@^1.0.0",
-    "@aws-cdk/aws-iam@^1.0.0",
-    "@aws-cdk/aws-lambda@^1.0.0",
-    "@aws-cdk/custom-resources@^1.0.0",
+    '@aws-cdk/aws-secretsmanager@^1.0.0',
+    '@aws-cdk/aws-iam@^1.0.0',
+    '@aws-cdk/aws-lambda@^1.0.0',
+    '@aws-cdk/custom-resources@^1.0.0',
   ],
   // deps: [],                /* Runtime dependencies of this module. */
   // description: undefined,  /* The description is just a string that helps people understand the purpose of the package. */
   // devDeps: [],             /* Build dependencies for this module. */
   devDeps: [
-    "@aws-cdk/aws-secretsmanager@^1.0.0",
-    "@aws-cdk/aws-iam@^1.0.0",
-    "@aws-cdk/aws-lambda@^1.0.0",
-    "@aws-cdk/custom-resources@^1.0.0",
-  ]
+    '@aws-cdk/aws-secretsmanager@^1.0.0',
+    '@aws-cdk/aws-iam@^1.0.0',
+    '@aws-cdk/aws-lambda@^1.0.0',
+    '@aws-cdk/custom-resources@^1.0.0',
+  ],
   // packageName: undefined,  /* The "name" in package.json. */
 });
 
 project.npmignore.addPatterns('lambda', 'dist-lambda');
 
-goreleaserArtifactsNamespace = 'build-artifact-goreleaser'
+goreleaserArtifactsNamespace = 'build-artifact-goreleaser';
 
 additionalActions = [
   {
@@ -40,16 +40,16 @@ additionalActions = [
     },
   },
   {
-    name: 'List artifacts',
+    'name': 'List artifacts',
     'working-directory': '${{ github.workspace }}',
-    run: 'ls -ld $(find ./dist-goreleaser)',
+    'run': 'ls -ld $(find ./dist-goreleaser)',
   },
   {
-    name: 'Prepare assets',
+    'name': 'Prepare assets',
     'working-directory': '${{ github.workspace }}',
-    run: 'mkdir -p assets && zip assets/cdk-sops-lambda.zip ./dist-goreleaser/cdk-sops-secrets_linux_amd64/cdk-sops-lambda',
-  }
-]
+    'run': 'mkdir -p assets && zip assets/cdk-sops-lambda.zip ./dist-goreleaser/cdk-sops-secrets_linux_amd64/cdk-sops-lambda',
+  },
+];
 
 project.buildWorkflow.preBuildSteps.unshift(...additionalActions);
 
