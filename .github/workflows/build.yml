@@ -20,12 +20,12 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.ref }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
-      - name: download go artifact
+      - name: Download goreleaser artifacts
         uses: actions/download-artifact@v2
         with:
           name: build-artifact-go
-          path: dist/*
-      - name: list artifacts
+          path: dist-lambda/*
+      - name: List artifacts
         run: ls -la dist/*
       - name: Install dependencies
         run: yarn install --check-files
@@ -54,7 +54,7 @@ jobs:
           name: build-artifact
           path: dist
     container:
-      image: jsii/superchain:1-buster-slim-node14
+      image: jsii/superchain:1-buster-slim
   self-mutation:
     needs: goreleaser
     runs-on: ubuntu-latest

@@ -2,29 +2,45 @@ const { awscdk } = require('projen');
 const project = new awscdk.AwsCdkConstructLibrary({
   author: 'Markus Siebert',
   authorAddress: 'dev@markussiebert.com',
-  cdkVersion: '2.1.0',
+  cdkVersion: '1.0.0',
+  cdkVersionPinning: false,
   defaultReleaseBranch: 'main',
-
+  npmignoreEnabled: true,
   name: 'cdk-sops-secrets',
   repositoryUrl: 'https://github.com/markussiebert/cdk-sops-secrets.git',
-  peerDeps: [],
+  peerDeps: [
+    "@aws-cdk/aws-secretsmanager@^1.0.0",
+    "@aws-cdk/aws-iam@^1.0.0",
+    "@aws-cdk/aws-lambda@^1.0.0",
+    "@aws-cdk/custom-resources@^1.0.0",
+    
+  ],
   // deps: [],                /* Runtime dependencies of this module. */
   // description: undefined,  /* The description is just a string that helps people understand the purpose of the package. */
   // devDeps: [],             /* Build dependencies for this module. */
+  devDeps: [
+    "@aws-cdk/aws-secretsmanager@^1.0.0",
+    "@aws-cdk/aws-iam@^1.0.0",
+    "@aws-cdk/aws-lambda@^1.0.0",
+    "@aws-cdk/custom-resources@^1.0.0",
+  ]
   // packageName: undefined,  /* The "name" in package.json. */
 });
 
+project.npmignore.addPatterns('lambda', 'dist-lambda');
+
 project.buildWorkflow.preBuildSteps.unshift({
-  name: 'list artifacts',
-  run: 'ls -la dist/*',
+  name: 'List artifacts',
+  'working-directory': '${{ github.workspace }}',
+  run: 'ls -la dist-lambda/*',
 });
 
 project.buildWorkflow.preBuildSteps.unshift({
-  name: 'download go artifact',
+  name: 'Download goreleaser artifacts',
   uses: 'actions/download-artifact@v2',
   with: {
     name: 'build-artifact-go',
-    path: 'dist/*',
+    path: 'dist-lambda/*',
   },
 });
 

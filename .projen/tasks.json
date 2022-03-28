@@ -255,25 +255,25 @@
           "exec": "yarn upgrade npm-check-updates"
         },
         {
-          "exec": "npm-check-updates --dep dev --upgrade --target=minor --reject='aws-cdk-lib,constructs,projen'"
+          "exec": "npm-check-updates --dep dev --upgrade --target=minor --reject='projen'"
         },
         {
-          "exec": "npm-check-updates --dep optional --upgrade --target=minor --reject='aws-cdk-lib,constructs,projen'"
+          "exec": "npm-check-updates --dep optional --upgrade --target=minor --reject='projen'"
         },
         {
-          "exec": "npm-check-updates --dep peer --upgrade --target=minor --reject='aws-cdk-lib,constructs,projen'"
+          "exec": "npm-check-updates --dep peer --upgrade --target=minor --reject='projen'"
         },
         {
-          "exec": "npm-check-updates --dep prod --upgrade --target=minor --reject='aws-cdk-lib,constructs,projen'"
+          "exec": "npm-check-updates --dep prod --upgrade --target=minor --reject='projen'"
         },
         {
-          "exec": "npm-check-updates --dep bundle --upgrade --target=minor --reject='aws-cdk-lib,constructs,projen'"
+          "exec": "npm-check-updates --dep bundle --upgrade --target=minor --reject='projen'"
         },
         {
           "exec": "yarn install --check-files"
         },
         {
-          "exec": "yarn upgrade @types/jest @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser aws-cdk-lib constructs eslint-import-resolver-node eslint-import-resolver-typescript eslint-plugin-import eslint jest jest-junit jsii jsii-diff jsii-docgen jsii-pacmak json-schema npm-check-updates standard-version ts-jest typescript aws-cdk-lib constructs"
+          "exec": "yarn upgrade @aws-cdk/aws-iam @aws-cdk/aws-lambda @aws-cdk/aws-secretsmanager @aws-cdk/custom-resources @types/jest @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser eslint-import-resolver-node eslint-import-resolver-typescript eslint-plugin-import eslint jest jest-junit jsii jsii-diff jsii-docgen jsii-pacmak json-schema npm-check-updates standard-version ts-jest typescript @aws-cdk/aws-iam @aws-cdk/aws-lambda @aws-cdk/aws-secretsmanager @aws-cdk/core @aws-cdk/custom-resources constructs @aws-cdk/core @aws-cdk/assert"
         },
         {
           "exec": "npx projen"
