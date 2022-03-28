@@ -42,7 +42,7 @@ additionalActions = [
   {
     name: 'List artifacts',
     'working-directory': '${{ github.workspace }}',
-    run: 'ls -la dist-goreleaser/* && dist-goreleaser/cdk-sops-secrets_linux_amd64/*',
+    run: 'ls -la dist-goreleaser/* && ls -la dist-goreleaser/cdk-sops-secrets_linux_amd64/*',
   },
   {
     name: 'Prepare assets',
