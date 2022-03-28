@@ -25,6 +25,8 @@ jobs:
         with:
           name: build-artifact-go
           path: dist/*
+      - name: list artifacts
+        run: ls -la dist/*
       - name: Install dependencies
         run: yarn install --check-files
       - name: build
