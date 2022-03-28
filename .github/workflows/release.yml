@@ -24,7 +24,7 @@ jobs:
           path: dist-goreleaser/*
       - name: List artifacts
         working-directory: ${{ github.workspace }}
-        run: ls -la dist-goreleaser/*
+        run: ls -la dist-goreleaser/* && dist-goreleaser/cdk-sops-secrets_linux_amd64/*
       - name: Prepare assets
         working-directory: ${{ github.workspace }}
         run: mkdir -p assets && zip assets/cdk-sops-lambda.zip dist-goreleaser/cdk-sops-secrets_linux_amd64/cdk-sops-lambda
