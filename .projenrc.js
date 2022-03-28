@@ -1,7 +1,7 @@
 const { awscdk } = require('projen');
 const project = new awscdk.AwsCdkConstructLibrary({
-  author: 'Markus',
-  authorAddress: 'mail@markussiebert.com',
+  author: 'Markus Siebert',
+  authorAddress: 'dev@markussiebert.com',
   cdkVersion: '2.1.0',
   defaultReleaseBranch: 'main',
   name: 'cdk-sops-secrets',
@@ -12,4 +12,8 @@ const project = new awscdk.AwsCdkConstructLibrary({
   // devDeps: [],             /* Build dependencies for this module. */
   // packageName: undefined,  /* The "name" in package.json. */
 });
+
+new awscdk.LambdaFunction(project, {
+  runtime: awscdk.LambdaRuntime.
+})
 project.synth();
