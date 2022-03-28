@@ -27,7 +27,8 @@ export class SopsSecretsProvider extends Construct implements IGrantable {
   public constructor(scope: Construct, id: string, props: SopsSecretsProviderProps ) {
     super(scope, id);
     const lambda = new Function(this, 'Function', {
-      code: Code.fromAsset(../dist/)
+      code: Code.fromAsset('../assets/lambdasource.zip'),
+      
     })
     const cr = new Provider(this, 'Resource', {
       onEventHandler:
