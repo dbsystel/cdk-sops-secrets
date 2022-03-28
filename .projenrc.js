@@ -36,7 +36,7 @@ additionalActions = [
     uses: 'actions/download-artifact@v2',
     with: {
       name: goreleaserArtifactsNamespace,
-      path: 'dist-goreleaser/*',
+      path: 'dist-goreleaser',
     },
   },
   {

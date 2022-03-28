@@ -24,7 +24,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: build-artifact-goreleaser
-          path: dist-goreleaser/*
+          path: dist-goreleaser
       - name: List artifacts
         working-directory: ${{ github.workspace }}
         run: ls -ld $(find ./dist-goreleaser)
@@ -70,7 +70,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: build-artifact-goreleaser
-          path: dist-goreleaser/*
+          path: dist-goreleaser
       - name: List artifacts
         working-directory: ${{ github.workspace }}
         run: ls -ld $(find ./dist-goreleaser)
@@ -112,7 +112,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: build-artifact-goreleaser
-          path: dist-goreleaser/*
+          path: dist-goreleaser
       - name: List artifacts
         working-directory: ${{ github.workspace }}
         run: ls -ld $(find ./dist-goreleaser)
