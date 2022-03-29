@@ -40,14 +40,12 @@ additionalActions = [
     },
   },
   {
-    'name': 'List artifacts',
-    'working-directory': '${{ github.workspace }}',
-    'run': 'ls -ld $(find ./dist-goreleaser)',
+    name: 'List artifacts',
+    run: 'ls -ld $(find ./dist-goreleaser)',
   },
   {
-    'name': 'Prepare assets',
-    'working-directory': '${{ github.workspace }}',
-    'run': 'mkdir -p assets && zip assets/cdk-sops-lambda.zip ./dist-goreleaser/cdk-sops-secrets_linux_amd64/cdk-sops-lambda',
+    name: 'Prepare assets',
+    run: 'mkdir -p assets && zip assets/cdk-sops-lambda.zip ./dist-goreleaser/cdk-sops-secrets_linux_amd64/cdk-sops-lambda',
   },
 ];
 
