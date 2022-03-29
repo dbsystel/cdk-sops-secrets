@@ -5,9 +5,10 @@
         "SecretARN": "arn:aws:secretsmanager:eu-central-1:123456789012:secret:testsecret-cGftvV",
         "S3SOPSContentFile": {
             "Bucket": "my-sops-test-bucket",
-            "Key": "secret.json",
+            "Key": "sopsfile.enc-age.json",
             "Format": "json"
-        }
+        },
+        "SOPSAgeKey": "AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3"
     },
     "ResourceType": "Custom::SOPS::Secret",
     "RequestId": "RequestId",

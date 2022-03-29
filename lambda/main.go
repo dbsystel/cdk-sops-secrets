@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"log"
+	"os"
 
 	runtime "github.com/aws/aws-lambda-go/lambda"
 	"github.com/aws/aws-sdk-go/aws"
@@ -23,6 +24,7 @@ type SOPSS3File struct {
 type SOPSResourcePropertys struct {
 	SecretARN         string     `json:"SecretARN"`
 	S3SOPSContentFile SOPSS3File `json:"S3SOPSContentFile"`
+	SOPSAgeKey        string     `json:"SOPSAgeKey,omitempty"`
 }
 
 type crSopsInput struct {
@@ -91,6 +93,11 @@ func handleRequest(ctx context.Context, event crSopsInput) crSopsOutput {
 
 	if event.RequestType == "Create" || event.RequestType == "Update" {
 		sopsFile := &event.ResourceProperties.S3SOPSContentFile
+
+		// Enable AGE Support
+		if event.ResourceProperties.SOPSAgeKey != "" {
+			os.Setenv("SOPS_AGE_KEY", event.ResourceProperties.SOPSAgeKey)
+		}
 
 		// This is where the magic happens
 		ecnryptedContent := getS3FileContent(*sopsFile)

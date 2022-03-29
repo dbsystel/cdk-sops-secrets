@@ -6,7 +6,22 @@
       "type": "build"
     },
     {
+      "name": "@aws-cdk/aws-kms",
+      "version": "^1.0.0",
+      "type": "build"
+    },
+    {
       "name": "@aws-cdk/aws-lambda",
+      "version": "^1.0.0",
+      "type": "build"
+    },
+    {
+      "name": "@aws-cdk/aws-logs",
+      "version": "^1.0.0",
+      "type": "build"
+    },
+    {
+      "name": "@aws-cdk/aws-s3-assets",
       "version": "^1.0.0",
       "type": "build"
     },
@@ -37,6 +52,11 @@
     {
       "name": "@typescript-eslint/parser",
       "version": "^5",
+      "type": "build"
+    },
+    {
+      "name": "aws-cdk",
+      "version": "^1",
       "type": "build"
     },
     {
@@ -104,6 +124,10 @@
       "type": "build"
     },
     {
+      "name": "ts-node",
+      "type": "build"
+    },
+    {
       "name": "typescript",
       "type": "build"
     },
@@ -113,7 +137,22 @@
       "type": "peer"
     },
     {
+      "name": "@aws-cdk/aws-kms",
+      "version": "^1.0.0",
+      "type": "peer"
+    },
+    {
       "name": "@aws-cdk/aws-lambda",
+      "version": "^1.0.0",
+      "type": "peer"
+    },
+    {
+      "name": "@aws-cdk/aws-logs",
+      "version": "^1.0.0",
+      "type": "peer"
+    },
+    {
+      "name": "@aws-cdk/aws-s3-assets",
       "version": "^1.0.0",
       "type": "peer"
     },

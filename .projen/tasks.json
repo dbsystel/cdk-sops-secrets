@@ -130,6 +130,78 @@
         }
       ]
     },
+    "integ:secret:assert": {
+      "name": "integ:secret:assert",
+      "description": "assert the snapshot of integration test 'secret'",
+      "steps": [
+        {
+          "exec": "[ -d \"test/secret.integ.snapshot\" ] || (echo \"No snapshot available for integration test 'secret'. Run 'projen integ:secret:deploy' to capture.\" && exit 1)"
+        },
+        {
+          "exec": "cdk synth --app \"ts-node -P tsconfig.dev.json test/secret.integ.ts\" --no-version-reporting --no-asset-metadata --no-path-metadata --context aws-cdk:enableDiffNoFail=true --context @aws-cdk/aws-apigateway:usagePlanKeyOrderInsensitiveId=true --context @aws-cdk/core:enableStackNameDuplicates=true --context @aws-cdk/core:stackRelativeExports=true --context @aws-cdk/aws-ecr-assets:dockerIgnoreSupport=true --context @aws-cdk/aws-secretsmanager:parseOwnedSecretName=true --context @aws-cdk/aws-kms:defaultKeyPolicies=true --context @aws-cdk/aws-s3:grantWriteWithoutAcl=true --context @aws-cdk/aws-ecs-patterns:removeDefaultDesiredCount=true --context @aws-cdk/aws-rds:lowercaseDbIdentifier=true --context @aws-cdk/aws-efs:defaultEncryptionAtRest=true --context @aws-cdk/aws-lambda:recognizeVersionProps=true --context @aws-cdk/aws-cloudfront:defaultSecurityPolicyTLSv1.2_2021=true --context @aws-cdk/core:newStyleStackSynthesis=true -o test/.tmp/secret.integ/assert.cdk.out > /dev/null"
+        },
+        {
+          "exec": "diff -r -x asset.* -x cdk.out -x manifest.json -x tree.json test/secret.integ.snapshot/ test/.tmp/secret.integ/assert.cdk.out/"
+        }
+      ]
+    },
+    "integ:secret:deploy": {
+      "name": "integ:secret:deploy",
+      "description": "deploy integration test 'secret' and capture snapshot",
+      "steps": [
+        {
+          "exec": "rm -fr test/.tmp/secret.integ/deploy.cdk.out"
+        },
+        {
+          "exec": "cdk deploy --app \"ts-node -P tsconfig.dev.json test/secret.integ.ts\" --no-version-reporting --no-asset-metadata --no-path-metadata --context aws-cdk:enableDiffNoFail=true --context @aws-cdk/aws-apigateway:usagePlanKeyOrderInsensitiveId=true --context @aws-cdk/core:enableStackNameDuplicates=true --context @aws-cdk/core:stackRelativeExports=true --context @aws-cdk/aws-ecr-assets:dockerIgnoreSupport=true --context @aws-cdk/aws-secretsmanager:parseOwnedSecretName=true --context @aws-cdk/aws-kms:defaultKeyPolicies=true --context @aws-cdk/aws-s3:grantWriteWithoutAcl=true --context @aws-cdk/aws-ecs-patterns:removeDefaultDesiredCount=true --context @aws-cdk/aws-rds:lowercaseDbIdentifier=true --context @aws-cdk/aws-efs:defaultEncryptionAtRest=true --context @aws-cdk/aws-lambda:recognizeVersionProps=true --context @aws-cdk/aws-cloudfront:defaultSecurityPolicyTLSv1.2_2021=true --context @aws-cdk/core:newStyleStackSynthesis=true '**' --require-approval=never -o test/.tmp/secret.integ/deploy.cdk.out"
+        },
+        {
+          "exec": "rm -fr test/secret.integ.snapshot"
+        },
+        {
+          "exec": "mv test/.tmp/secret.integ/deploy.cdk.out test/secret.integ.snapshot"
+        },
+        {
+          "spawn": "integ:secret:destroy"
+        }
+      ]
+    },
+    "integ:secret:destroy": {
+      "name": "integ:secret:destroy",
+      "description": "destroy integration test 'secret'",
+      "steps": [
+        {
+          "exec": "cdk destroy --app test/secret.integ.snapshot '**' --no-version-reporting"
+        }
+      ]
+    },
+    "integ:secret:snapshot": {
+      "name": "integ:secret:snapshot",
+      "description": "update snapshot for integration test \"secret\"",
+      "steps": [
+        {
+          "exec": "cdk synth --app \"ts-node -P tsconfig.dev.json test/secret.integ.ts\" --no-version-reporting --no-asset-metadata --no-path-metadata --context aws-cdk:enableDiffNoFail=true --context @aws-cdk/aws-apigateway:usagePlanKeyOrderInsensitiveId=true --context @aws-cdk/core:enableStackNameDuplicates=true --context @aws-cdk/core:stackRelativeExports=true --context @aws-cdk/aws-ecr-assets:dockerIgnoreSupport=true --context @aws-cdk/aws-secretsmanager:parseOwnedSecretName=true --context @aws-cdk/aws-kms:defaultKeyPolicies=true --context @aws-cdk/aws-s3:grantWriteWithoutAcl=true --context @aws-cdk/aws-ecs-patterns:removeDefaultDesiredCount=true --context @aws-cdk/aws-rds:lowercaseDbIdentifier=true --context @aws-cdk/aws-efs:defaultEncryptionAtRest=true --context @aws-cdk/aws-lambda:recognizeVersionProps=true --context @aws-cdk/aws-cloudfront:defaultSecurityPolicyTLSv1.2_2021=true --context @aws-cdk/core:newStyleStackSynthesis=true -o test/secret.integ.snapshot > /dev/null"
+        }
+      ]
+    },
+    "integ:secret:watch": {
+      "name": "integ:secret:watch",
+      "description": "watch integration test 'secret' (without updating snapshots)",
+      "steps": [
+        {
+          "exec": "cdk watch --app \"ts-node -P tsconfig.dev.json test/secret.integ.ts\" --no-version-reporting --no-asset-metadata --no-path-metadata --context aws-cdk:enableDiffNoFail=true --context @aws-cdk/aws-apigateway:usagePlanKeyOrderInsensitiveId=true --context @aws-cdk/core:enableStackNameDuplicates=true --context @aws-cdk/core:stackRelativeExports=true --context @aws-cdk/aws-ecr-assets:dockerIgnoreSupport=true --context @aws-cdk/aws-secretsmanager:parseOwnedSecretName=true --context @aws-cdk/aws-kms:defaultKeyPolicies=true --context @aws-cdk/aws-s3:grantWriteWithoutAcl=true --context @aws-cdk/aws-ecs-patterns:removeDefaultDesiredCount=true --context @aws-cdk/aws-rds:lowercaseDbIdentifier=true --context @aws-cdk/aws-efs:defaultEncryptionAtRest=true --context @aws-cdk/aws-lambda:recognizeVersionProps=true --context @aws-cdk/aws-cloudfront:defaultSecurityPolicyTLSv1.2_2021=true --context @aws-cdk/core:newStyleStackSynthesis=true '**' -o test/.tmp/secret.integ/deploy.cdk.out"
+        }
+      ]
+    },
+    "integ:snapshot-all": {
+      "name": "integ:snapshot-all",
+      "description": "update snapshot for all integration tests",
+      "steps": [
+        {
+          "spawn": "integ:secret:snapshot"
+        }
+      ]
+    },
     "package": {
       "name": "package",
       "description": "Creates the distribution package",
@@ -207,6 +279,9 @@
         },
         {
           "spawn": "eslint"
+        },
+        {
+          "spawn": "integ:secret:assert"
         }
       ]
     },
@@ -273,7 +348,7 @@
           "exec": "yarn install --check-files"
         },
         {
-          "exec": "yarn upgrade @aws-cdk/aws-iam @aws-cdk/aws-lambda @aws-cdk/aws-secretsmanager @aws-cdk/custom-resources @types/jest @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser eslint-import-resolver-node eslint-import-resolver-typescript eslint-plugin-import eslint jest jest-junit jsii jsii-diff jsii-docgen jsii-pacmak json-schema npm-check-updates standard-version ts-jest typescript @aws-cdk/aws-iam @aws-cdk/aws-lambda @aws-cdk/aws-secretsmanager @aws-cdk/core @aws-cdk/custom-resources constructs @aws-cdk/core @aws-cdk/assert"
+          "exec": "yarn upgrade @aws-cdk/aws-iam @aws-cdk/aws-kms @aws-cdk/aws-lambda @aws-cdk/aws-logs @aws-cdk/aws-s3-assets @aws-cdk/aws-secretsmanager @aws-cdk/custom-resources @types/jest @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser aws-cdk eslint-import-resolver-node eslint-import-resolver-typescript eslint-plugin-import eslint jest jest-junit jsii jsii-diff jsii-docgen jsii-pacmak json-schema npm-check-updates standard-version ts-jest ts-node typescript @aws-cdk/aws-iam @aws-cdk/aws-kms @aws-cdk/aws-lambda @aws-cdk/aws-logs @aws-cdk/aws-s3-assets @aws-cdk/aws-secretsmanager @aws-cdk/core @aws-cdk/custom-resources constructs @aws-cdk/core @aws-cdk/assert"
         },
         {
           "exec": "npx projen"

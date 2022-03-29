@@ -12,7 +12,10 @@ const project = new awscdk.AwsCdkConstructLibrary({
     '@aws-cdk/aws-secretsmanager@^1.0.0',
     '@aws-cdk/aws-iam@^1.0.0',
     '@aws-cdk/aws-lambda@^1.0.0',
+    '@aws-cdk/aws-logs@^1.0.0',
     '@aws-cdk/custom-resources@^1.0.0',
+    '@aws-cdk/aws-s3-assets@^1.0.0',
+    '@aws-cdk/aws-kms@^1.0.0',
   ],
   // deps: [],                /* Runtime dependencies of this module. */
   // description: undefined,  /* The description is just a string that helps people understand the purpose of the package. */
@@ -21,8 +24,12 @@ const project = new awscdk.AwsCdkConstructLibrary({
     '@aws-cdk/aws-secretsmanager@^1.0.0',
     '@aws-cdk/aws-iam@^1.0.0',
     '@aws-cdk/aws-lambda@^1.0.0',
+    '@aws-cdk/aws-logs@^1.0.0',
     '@aws-cdk/custom-resources@^1.0.0',
+    '@aws-cdk/aws-s3-assets@^1.0.0',
+    '@aws-cdk/aws-kms@^1.0.0',
   ],
+  integrationTestAutoDiscover: true,
   // packageName: undefined,  /* The "name" in package.json. */
 });
 
