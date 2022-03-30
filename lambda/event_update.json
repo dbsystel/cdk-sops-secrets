@@ -1,11 +1,11 @@
 {
-    "RequestType": "Create",
+    "RequestType": "Update",
     "LogicalResourceId": "LogicalResourceId",
     "ResourceProperties": {
-        "SecretARN": "arn:aws:secretsmanager:eu-central-1:123456789012:secret:testsecret-cGftvV",
+        "SecretARN": "arn:aws:secretsmanager:eu-central-1:123456789012:secret:testsecret",
         "S3SOPSContentFile": {
-            "Bucket": "my-sops-test-bucket",
-            "Key": "sopsfile.enc-age.json",
+            "Bucket": "..",
+            "Key": "../test-secrets/sopsfile.enc-age.json",
             "Format": "json"
         },
         "SOPSAgeKey": "AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3"
@@ -13,4 +13,4 @@
     "ResourceType": "Custom::SOPS::Secret",
     "RequestId": "RequestId",
     "StackId": "StackId"
-  } 
+} 

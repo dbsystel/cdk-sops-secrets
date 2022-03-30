@@ -1,15 +1,20 @@
 package main
 
 import (
+	"context"
 	"crypto/sha256"
 	"encoding/json"
 	"fmt"
 	"io"
 	"io/ioutil"
+	"log"
 	"os"
 	"reflect"
 	"testing"
+	"time"
 
+	"github.com/aws/aws-lambda-go/cfn"
+	"github.com/aws/aws-lambda-go/lambdacontext"
 	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager/s3manageriface"
@@ -42,10 +47,9 @@ func (d S3ManagerMockClient) Download(w io.WriterAt, input *s3.GetObjectInput, o
 }
 
 func Test_GetS3FileContent(t *testing.T) {
-	mockDownloader := &S3ManagerMockClient{}
 	mocks := &AWS{
-		secretsmanager: nil,
-		s3downlaoder:   mockDownloader,
+		secretsmanager: &SecretsManagerMockClient{},
+		s3downlaoder:   &S3ManagerMockClient{},
 	}
 	data, err := mocks.getS3FileContent(SOPSS3File{
 		Bucket: "..",
@@ -62,10 +66,9 @@ func Test_GetS3FileContent(t *testing.T) {
 }
 
 func Test_UpdateSecret(t *testing.T) {
-	mockSecret := &SecretsManagerMockClient{}
 	mocks := &AWS{
-		secretsmanager: mockSecret,
-		s3downlaoder:   nil,
+		secretsmanager: &SecretsManagerMockClient{},
+		s3downlaoder:   &S3ManagerMockClient{},
 	}
 	arn := "arn:${Partition}:secretsmanager:${Region}:${Account}:secret:${SecretId}"
 	secretValue := []byte("some-secret-data")
@@ -105,6 +108,69 @@ func Test_DecryptSopsFileContent(t *testing.T) {
 	}
 }
 
+func Test_FullWorkflow_Create(t *testing.T) {
+	mocks := &AWS{
+		secretsmanager: &SecretsManagerMockClient{},
+		s3downlaoder:   &S3ManagerMockClient{},
+	}
+	d := time.Now().Add(50 * time.Millisecond)
+	ctx, _ := context.WithDeadline(context.Background(), d)
+	ctx = lambdacontext.NewContext(ctx, &lambdacontext.LambdaContext{
+		AwsRequestID:       "AwsRequestID",
+		InvokedFunctionArn: "arn:aws:lambda:us-east-2:123456789012:function:blank-go",
+	})
+	inputJson := ReadJSONFromFile(t, "event_create.json")
+	var event cfn.Event
+	err := json.Unmarshal(inputJson, &event)
+
+	phys, data, err := mocks.syncSopsToSecretsmanager(ctx, event)
+	check(err)
+	log.Println(phys)
+	log.Println(data)
+}
+
+func Test_FullWorkflow_Update(t *testing.T) {
+	mocks := &AWS{
+		secretsmanager: &SecretsManagerMockClient{},
+		s3downlaoder:   &S3ManagerMockClient{},
+	}
+	d := time.Now().Add(50 * time.Millisecond)
+	ctx, _ := context.WithDeadline(context.Background(), d)
+	ctx = lambdacontext.NewContext(ctx, &lambdacontext.LambdaContext{
+		AwsRequestID:       "AwsRequestID",
+		InvokedFunctionArn: "arn:aws:lambda:us-east-2:123456789012:function:blank-go",
+	})
+	inputJson := ReadJSONFromFile(t, "event_update.json")
+	var event cfn.Event
+	err := json.Unmarshal(inputJson, &event)
+
+	phys, data, err := mocks.syncSopsToSecretsmanager(ctx, event)
+	check(err)
+	log.Println(phys)
+	log.Println(data)
+}
+
+func Test_FullWorkflow_Delete(t *testing.T) {
+	mocks := &AWS{
+		secretsmanager: &SecretsManagerMockClient{},
+		s3downlaoder:   &S3ManagerMockClient{},
+	}
+	d := time.Now().Add(50 * time.Millisecond)
+	ctx, _ := context.WithDeadline(context.Background(), d)
+	ctx = lambdacontext.NewContext(ctx, &lambdacontext.LambdaContext{
+		AwsRequestID:       "AwsRequestID",
+		InvokedFunctionArn: "arn:aws:lambda:us-east-2:123456789012:function:blank-go",
+	})
+	inputJson := ReadJSONFromFile(t, "event_delete.json")
+	var event cfn.Event
+	err := json.Unmarshal(inputJson, &event)
+
+	phys, data, err := mocks.syncSopsToSecretsmanager(ctx, event)
+	check(err)
+	log.Println(phys)
+	log.Println(data)
+}
+
 func check(e error) {
 	if e != nil {
 		panic(e)
@@ -126,9 +192,7 @@ func marshallAny(input []byte) map[string]interface{} {
 //		AwsRequestID:       "495b12a8-xmpl-4eca-8168-160484189f99",
 //		InvokedFunctionArn: "arn:aws:lambda:us-east-2:123456789012:function:blank-go",
 //	})
-//	inputJson := ReadJSONFromFile(t, "event.json")
-//	var event cfn.Event
-//	err := json.Unmarshal(inputJson, &event)
+
 //	if err != nil {
 //		t.Errorf("could not unmarshal event. details: %v", err)
 //	}

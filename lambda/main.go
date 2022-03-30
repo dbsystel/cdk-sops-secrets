@@ -58,7 +58,7 @@ func decryptSopsFileContent(content []byte, file SOPSS3File) (data []byte, err e
 	if err != nil {
 		return nil, errors.New(fmt.Sprintf("Decryption error:\n%v\n", err))
 	}
-	log.Println("decrypted")
+	log.Println("Decrypted")
 	return resp, nil
 }
 
@@ -78,8 +78,8 @@ func (a AWS) updateSecret(secretArn string, secretContent []byte) (data *secrets
 
 func (a AWS) syncSopsToSecretsmanager(ctx context.Context, event cfn.Event) (physicalResourceID string, data map[string]interface{}, err error) {
 	// event
-	eventJson, _ := json.MarshalIndent(event, "", "  ")
-	log.Printf("Function invoked with:\n %s", eventJson)
+	// eventJson, _ := json.MarshalIndent(event, "", "  ")
+	// log.Printf("Function invoked with:\n %s", eventJson)
 
 	if event.RequestType == cfn.RequestCreate || event.RequestType == cfn.RequestUpdate {
 
