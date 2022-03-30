@@ -59,3 +59,4 @@ test/secret.integ.snapshot/manifest.json
 test/secret.integ.snapshot/**/manifest.json
 test/secret.integ.snapshot/tree.json
 test/secret.integ.snapshot/**/tree.json
+/assets

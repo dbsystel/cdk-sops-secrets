@@ -23,6 +23,6 @@ tsconfig.tsbuildinfo
 !.jsii
 test/.tmp
 test/secret.integ.snapshot
-/lambda/
-/dist-lambda/
-!/assets/
+/lambda
+/dist-lambda
+!/assets
