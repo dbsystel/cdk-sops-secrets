@@ -74,6 +74,10 @@ fixme.forEach((wf) => {
       console.log(wf.jobs[key]);
     } else {
       wf.jobs[key].steps.splice(1, 0, ...additionalActions);
+      wf.jobs[key].steps.splice(6, 0, {
+        name: 'List Everything again',
+        run: 'ls -ld $(find .)',
+      });
     }
     wf.jobs[key] = { ...wf.jobs[key], needs: 'goreleaser' };
   });

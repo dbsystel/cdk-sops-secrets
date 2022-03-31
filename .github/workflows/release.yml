@@ -36,6 +36,8 @@ jobs:
         run: |-
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
+      - name: List Everything again
+        run: ls -ld $(find .)
       - name: Install dependencies
         run: yarn install --check-files --frozen-lockfile
       - name: release
