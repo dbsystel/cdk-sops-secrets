@@ -1,6 +1,8 @@
 # .goreleaser.yaml
 builds:
-  - dir: lambda
+  - id: cdk-sops-secrets
+
+    dir: lambda
 
     # Path to main.go file or main package.
     # Notice: when used with `gomod.proxy`, this must be a package.
@@ -25,12 +27,41 @@ builds:
     goarch:
       - amd64
 
-    # Custom flags templates.
-    # Default is empty.
+    # Custom environment variables to be set during the builds.
+    # Default is empty.‚
     env:
       - GOFLAGS=-trimpath
 
-    # Set a specific go binary to use when building. It is safe to ignore
-    # this option in most cases.
-    # Default is "go"
-    gobinary: "go1.18"
+    mod_timestamp: '202002020000'
+
+archives:
+  - id: cdk-sops-secrets
+
+    # Builds reference which build instances should be archived in this archive.
+    builds:
+    - cdk-sops-secrets
+
+    # Archive format. Valid options are `tar.gz`, `tar.xz`, `tar`, `gz`, `zip` and `binary`.
+    # If format is `binary`, no archives are created and the binaries are instead
+    # uploaded directly.
+    # Default is `tar.gz`.
+    format: zip
+    files:
+      - none*
+    # Archive name template.
+    # Defaults:
+    # - if format is `tar.gz`, `tar.xz`, `gz` or `zip`:
+    #   - `{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}{{ if .Mips }}_{{ .Mips }}{{ end }}`
+    # - if format is `binary`:
+    #   - `{{ .Binary }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}{{ if .Mips }}_{{ .Mips }}{{ end }}`
+    name_template: "{{ .ProjectName }}"
+
+    # Set to true, if you want all files in the archive to be in a single directory.
+    # If set to true and you extract the archive 'goreleaser_Linux_arm64.tar.gz',
+    # you get a folder 'goreleaser_Linux_arm64'.
+    # If set to false, all files are extracted separately.
+    # You can also set it to a custom folder name (templating is supported).
+    # Default is false.
+    wrap_in_directory: true
+
+dist: assets

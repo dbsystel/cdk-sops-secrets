@@ -44,16 +44,12 @@ additionalActions = [
     uses: 'actions/download-artifact@v2',
     with: {
       name: goreleaserArtifactsNamespace,
-      path: 'dist-goreleaser',
+      path: 'assets',
     },
   },
   {
-    name: 'Zip Lambda',
-    run: 'cd dist-goreleaser/cdk-sops-secrets_linux_amd64 && touch -t 202002020000 cdk-sops-secrets && ls -la cdk-sops-secrets && shasum cdk-sops-secrets &&  zip -X cdk-sops-lambda.zip cdk-sops-secrets'
-  },
-  {
     name: 'Move Lambda to assets',
-    run: 'mkdir -p assets && mv ./dist-goreleaser/cdk-sops-secrets_linux_amd64/cdk-sops-lambda.zip ./assets/cdk-sops-lambda.zip && touch -t 202002020000 assets/cdk-sops-lambda.zip && shasum assets/cdk-sops-lambda.zip && ls -la assets/cdk-sops-lambda.zip',
+    run: 'cd assets && rm -f !("cdk-sops-lambda.zip") && shasum cdk-sops-lambda.zip && ls -la cdk-sops-lambda.zip',
   },
 ];
 
@@ -122,7 +118,7 @@ fixme.forEach((wf) => {
         uses: 'actions/upload-artifact@v2.1.1',
         with: {
           name: goreleaserArtifactsNamespace,
-          path: 'dist/*',
+          path: 'assets/*',
         },
       },
     ],
