@@ -12,3 +12,4 @@ rm -f cdk-sops-secrets
 cd ..
 mkdir -p assets
 mv lambda/cdk-sops-lambda.zip assets/cdk-sops-lambda.zip
+touch -t 202002020000 assets/cdk-sops-lambda.zip
