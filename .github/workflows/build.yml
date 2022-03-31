@@ -28,7 +28,7 @@ jobs:
       - name: Zip Lambda
         run: cd dist-goreleaser && touch -t 202002020000 cdk-sops-secrets && zip -X cdk-sops-lambda.zip cdk-sops-secrets
       - name: Move Lambda to assets
-        run: mkdir -p assets && mv ./dist-goreleaser/cdk-sops-lambda.zip ./assets/cdk-sops-lambda.zip && touch -t 202002020000 assets/cdk-sops-lambda.zip && md5 assets/cdk-sops-lambda.zip
+        run: mkdir -p assets && mv ./dist-goreleaser/cdk-sops-lambda.zip ./assets/cdk-sops-lambda.zip && touch -t 202002020000 assets/cdk-sops-lambda.zip && apt-get install md5 && d5 assets/cdk-sops-lambda.zip
       - name: Install dependencies
         run: yarn install --check-files
       - name: build
@@ -78,7 +78,7 @@ jobs:
       - name: Zip Lambda
         run: cd dist-goreleaser && touch -t 202002020000 cdk-sops-secrets && zip -X cdk-sops-lambda.zip cdk-sops-secrets
       - name: Move Lambda to assets
-        run: mkdir -p assets && mv ./dist-goreleaser/cdk-sops-lambda.zip ./assets/cdk-sops-lambda.zip && touch -t 202002020000 assets/cdk-sops-lambda.zip && md5 assets/cdk-sops-lambda.zip
+        run: mkdir -p assets && mv ./dist-goreleaser/cdk-sops-lambda.zip ./assets/cdk-sops-lambda.zip && touch -t 202002020000 assets/cdk-sops-lambda.zip && apt-get install md5 && d5 assets/cdk-sops-lambda.zip
       - name: Download patch
         uses: actions/download-artifact@v2
         with:
@@ -117,7 +117,7 @@ jobs:
       - name: Zip Lambda
         run: cd dist-goreleaser && touch -t 202002020000 cdk-sops-secrets && zip -X cdk-sops-lambda.zip cdk-sops-secrets
       - name: Move Lambda to assets
-        run: mkdir -p assets && mv ./dist-goreleaser/cdk-sops-lambda.zip ./assets/cdk-sops-lambda.zip && touch -t 202002020000 assets/cdk-sops-lambda.zip && md5 assets/cdk-sops-lambda.zip
+        run: mkdir -p assets && mv ./dist-goreleaser/cdk-sops-lambda.zip ./assets/cdk-sops-lambda.zip && touch -t 202002020000 assets/cdk-sops-lambda.zip && apt-get install md5 && d5 assets/cdk-sops-lambda.zip
       - name: Prepare Repository
         run: mv dist .repo
       - name: Install Dependencies
