@@ -29,8 +29,11 @@ builds:
 
     # Custom environment variables to be set during the builds.
     # Default is empty.‚
-    env:
-      - GOFLAGS=-trimpath
+    flags:
+      - -trimpath
+    
+    ldflags:
+      - main.Date=202002020000
 
     mod_timestamp: '202002020000'
 
