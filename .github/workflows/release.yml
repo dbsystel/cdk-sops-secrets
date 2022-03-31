@@ -26,18 +26,12 @@ jobs:
         with:
           name: build-artifact-goreleaser
           path: dist-goreleaser
-      - name: List artifacts
-        run: ls -ld $(find ./dist-goreleaser)
       - name: Prepare assets
         run: mkdir -p assets && zip assets/cdk-sops-lambda.zip ./dist-goreleaser/cdk-sops-secrets_linux_amd64/cdk-sops-lambda
-      - name: List Everything
-        run: ls -ld $(find .)
       - name: Set git identity
         run: |-
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
-      - name: List Everything again
-        run: ls -ld $(find .)
       - name: Install dependencies
         run: yarn install --check-files --frozen-lockfile
       - name: release

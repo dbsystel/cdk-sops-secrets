@@ -47,16 +47,8 @@ additionalActions = [
     },
   },
   {
-    name: 'List artifacts',
-    run: 'ls -ld $(find ./dist-goreleaser)',
-  },
-  {
     name: 'Prepare assets',
     run: 'mkdir -p assets && zip assets/cdk-sops-lambda.zip ./dist-goreleaser/cdk-sops-secrets_linux_amd64/cdk-sops-lambda',
-  },
-  {
-    name: 'List Everything',
-    run: 'ls -ld $(find .)',
   },
 ];
 
@@ -74,10 +66,6 @@ fixme.forEach((wf) => {
       console.log(wf.jobs[key]);
     } else {
       wf.jobs[key].steps.splice(1, 0, ...additionalActions);
-      wf.jobs[key].steps.splice(6, 0, {
-        name: 'List Everything again',
-        run: 'ls -ld $(find .)',
-      });
     }
     wf.jobs[key] = { ...wf.jobs[key], needs: 'goreleaser' };
   });
