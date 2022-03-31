@@ -25,8 +25,8 @@ jobs:
         with:
           name: build-artifact-goreleaser
           path: assets
-      - name: Move Lambda to assets
-        run: cd assets && rm -f !("cdk-sops-lambda.zip") && shasum cdk-sops-lambda.zip && ls -la cdk-sops-lambda.zip
+      - name: Debug assets
+        run: shasum assets/cdk-sops-lambda.zip && ls -la assets/cdk-sops-lambda.zip
       - name: Install dependencies
         run: yarn install --check-files
       - name: build
@@ -73,8 +73,8 @@ jobs:
         with:
           name: build-artifact-goreleaser
           path: assets
-      - name: Move Lambda to assets
-        run: cd assets && rm -f !("cdk-sops-lambda.zip") && shasum cdk-sops-lambda.zip && ls -la cdk-sops-lambda.zip
+      - name: Debug assets
+        run: shasum assets/cdk-sops-lambda.zip && ls -la assets/cdk-sops-lambda.zip
       - name: Download patch
         uses: actions/download-artifact@v2
         with:
@@ -110,8 +110,8 @@ jobs:
         with:
           name: build-artifact-goreleaser
           path: assets
-      - name: Move Lambda to assets
-        run: cd assets && rm -f !("cdk-sops-lambda.zip") && shasum cdk-sops-lambda.zip && ls -la cdk-sops-lambda.zip
+      - name: Debug assets
+        run: shasum assets/cdk-sops-lambda.zip && ls -la assets/cdk-sops-lambda.zip
       - name: Prepare Repository
         run: mv dist .repo
       - name: Install Dependencies
@@ -148,4 +148,4 @@ jobs:
         uses: actions/upload-artifact@v2.1.1
         with:
           name: build-artifact-goreleaser
-          path: assets/*
+          path: assets/cdk-sops-secrets.zip

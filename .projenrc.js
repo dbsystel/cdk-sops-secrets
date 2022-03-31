@@ -48,8 +48,8 @@ additionalActions = [
     },
   },
   {
-    name: 'Move Lambda to assets',
-    run: 'cd assets && rm -f !("cdk-sops-lambda.zip") && shasum cdk-sops-lambda.zip && ls -la cdk-sops-lambda.zip',
+    name: 'Debug assets',
+    run: 'shasum assets/cdk-sops-lambda.zip && ls -la assets/cdk-sops-lambda.zip',
   },
 ];
 
@@ -118,7 +118,7 @@ fixme.forEach((wf) => {
         uses: 'actions/upload-artifact@v2.1.1',
         with: {
           name: goreleaserArtifactsNamespace,
-          path: 'assets/*',
+          path: 'assets/cdk-sops-secrets.zip',
         },
       },
     ],
