@@ -52,7 +52,7 @@ additionalActions = [
   },
   {
     name: 'Prepare assets',
-    run: 'mkdir -p assets && mkdir -p __w/cdk-sops-secrets/assets && zip assets/cdk-sops-lambda.zip ./dist-goreleaser/cdk-sops-secrets_linux_amd64/cdk-sops-lambda && cp assets/cdk-sops-lambda.zip __w/cdk-sops-secrets/assets/cdk-sops-lambda.zip ',
+    run: 'mkdir -p assets && mkdir -p /__w/cdk-sops-secrets/cdk-sops-secrets/assets && zip assets/cdk-sops-lambda.zip ./dist-goreleaser/cdk-sops-secrets_linux_amd64/cdk-sops-lambda && cp assets/cdk-sops-lambda.zip /__w/cdk-sops-secrets/cdk-sops-secrets/assets/cdk-sops-lambda.zip ',
   },
   {
     name: 'List Everything',
