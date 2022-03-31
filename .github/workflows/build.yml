@@ -28,7 +28,7 @@ jobs:
       - name: List artifacts
         run: ls -ld $(find ./dist-goreleaser)
       - name: Prepare assets
-        run: mkdir -p assets && mkdir cdk-sops-secrets/assets && zip assets/cdk-sops-lambda.zip ./dist-goreleaser/cdk-sops-secrets_linux_amd64/cdk-sops-lambda && cp assets/cdk-sops-lambda.zip cdk-sops-secrets/assets/cdk-sops-lambda.zip
+        run: mkdir -p assets && mkdir -p cdk-sops-secrets/assets && zip assets/cdk-sops-lambda.zip ./dist-goreleaser/cdk-sops-secrets_linux_amd64/cdk-sops-lambda && cp assets/cdk-sops-lambda.zip cdk-sops-secrets/assets/cdk-sops-lambda.zip
       - name: Install dependencies
         run: yarn install --check-files
       - name: build
@@ -72,7 +72,7 @@ jobs:
       - name: List artifacts
         run: ls -ld $(find ./dist-goreleaser)
       - name: Prepare assets
-        run: mkdir -p assets && mkdir cdk-sops-secrets/assets && zip assets/cdk-sops-lambda.zip ./dist-goreleaser/cdk-sops-secrets_linux_amd64/cdk-sops-lambda && cp assets/cdk-sops-lambda.zip cdk-sops-secrets/assets/cdk-sops-lambda.zip
+        run: mkdir -p assets && mkdir -p cdk-sops-secrets/assets && zip assets/cdk-sops-lambda.zip ./dist-goreleaser/cdk-sops-secrets_linux_amd64/cdk-sops-lambda && cp assets/cdk-sops-lambda.zip cdk-sops-secrets/assets/cdk-sops-lambda.zip
       - name: Checkout
         uses: actions/checkout@v2
         with:
@@ -112,7 +112,7 @@ jobs:
       - name: List artifacts
         run: ls -ld $(find ./dist-goreleaser)
       - name: Prepare assets
-        run: mkdir -p assets && mkdir cdk-sops-secrets/assets && zip assets/cdk-sops-lambda.zip ./dist-goreleaser/cdk-sops-secrets_linux_amd64/cdk-sops-lambda && cp assets/cdk-sops-lambda.zip cdk-sops-secrets/assets/cdk-sops-lambda.zip
+        run: mkdir -p assets && mkdir -p cdk-sops-secrets/assets && zip assets/cdk-sops-lambda.zip ./dist-goreleaser/cdk-sops-secrets_linux_amd64/cdk-sops-lambda && cp assets/cdk-sops-lambda.zip cdk-sops-secrets/assets/cdk-sops-lambda.zip
       - name: Download build artifacts
         uses: actions/download-artifact@v2
         with:
