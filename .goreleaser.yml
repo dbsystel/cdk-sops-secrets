@@ -27,5 +27,5 @@ builds:
 
     # Custom flags templates.
     # Default is empty.
-    flags:
-      - -trimpath
+    env:
+      - GOFLAGS=-trimpath
