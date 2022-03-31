@@ -47,8 +47,12 @@ additionalActions = [
     },
   },
   {
-    name: 'Prepare assets',
-    run: 'mkdir -p assets && zip assets/cdk-sops-lambda.zip ./dist-goreleaser/cdk-sops-secrets_linux_amd64/cdk-sops-lambda',
+    name: 'Zip Lambda',
+    run: 'cd dist-goreleaser && touch -t 202002020000 cdk-sops-secrets && zip -X cdk-sops-lambda.zip cdk-sops-secrets'
+  },
+  {
+    name: 'Move Lambda to assets',
+    run: 'mkdir -p assets && mv ./dist-goreleaser/cdk-sops-lambda.zip ./assets/cdk-sops-lambda.zip',
   },
 ];
 
