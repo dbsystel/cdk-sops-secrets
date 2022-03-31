@@ -48,7 +48,7 @@ additionalActions = [
     },
   },
   {
-    name: 'Debug assets',
+    name: 'Debug goreleaser artifacts',
     run: 'shasum assets/cdk-sops-lambda.zip && ls -la assets/cdk-sops-lambda.zip',
   },
 ];
