@@ -75,7 +75,7 @@ jobs:
         uses: actions/upload-artifact@v2.1.1
         with:
           name: build-artifact-goreleaser
-          path: assets/cdk-sops-secrets.zip
+          path: assets/*
   release_github:
     name: Publish to GitHub Releases
     needs: release

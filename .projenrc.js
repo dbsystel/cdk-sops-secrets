@@ -118,7 +118,7 @@ fixme.forEach((wf) => {
         uses: 'actions/upload-artifact@v2.1.1',
         with: {
           name: goreleaserArtifactsNamespace,
-          path: 'assets/cdk-sops-secrets.zip',
+          path: 'assets/*',
         },
       },
     ],
