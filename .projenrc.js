@@ -53,7 +53,7 @@ additionalActions = [
   },
   {
     name: 'Move Lambda to assets',
-    run: 'mkdir -p assets && mv ./dist-goreleaser/cdk-sops-lambda.zip ./assets/cdk-sops-lambda.zip && touch -t 202002020000 assets/cdk-sops-lambda.zip && apt-get install md5 && d5 assets/cdk-sops-lambda.zip',
+    run: 'mkdir -p assets && mv ./dist-goreleaser/cdk-sops-lambda.zip ./assets/cdk-sops-lambda.zip && touch -t 202002020000 assets/cdk-sops-lambda.zip && shasum assets/cdk-sops-lambda.zip',
   },
 ];
 
