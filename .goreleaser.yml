@@ -29,3 +29,8 @@ builds:
     # Default is empty.
     env:
       - GOFLAGS=-trimpath
+
+    # Set a specific go binary to use when building. It is safe to ignore
+    # this option in most cases.
+    # Default is "go"
+    gobinary: "go1.18"
