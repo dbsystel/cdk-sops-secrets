@@ -32,6 +32,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
   integrationTestAutoDiscover: true,
   // packageName: undefined,  /* The "name" in package.json. */
 });
+
 project.gitignore.addPatterns('/assets');
 project.npmignore.addPatterns('/lambda', '/dist-lambda', '!/assets');
 
@@ -62,14 +63,16 @@ project.buildWorkflow.preBuildSteps.unshift( ...additionalActions);
 console.log(project.github.workflows.map((wr) => wr.name));
 
 const fixme = project.github.workflows.filter((wf) =>
-  ['build', 'release'].includes(wf.name),
+  ['build','release'].includes(wf.name),
 );
 fixme.forEach((wf) => {
+  
   Object.keys(wf.jobs).forEach((key) => {
-    if (key === 'build') {
-      console.log(wf.jobs[key]);
-    } else {
+    if (key !== 'build') {
       wf.jobs[key].steps.splice(1, 0, ...additionalActions);
+    }
+    if (['build','release'].includes(key)) {
+      wf.jobs[key] = { ...wf.jobs[key], container: { image: 'jsii/superchain:1-buster-slim-node16'} };
     }
     wf.jobs[key] = { ...wf.jobs[key], needs: 'goreleaser' };
   });

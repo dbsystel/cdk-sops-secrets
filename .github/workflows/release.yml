@@ -48,7 +48,7 @@ jobs:
           name: build-artifact
           path: dist
     container:
-      image: jsii/superchain:1-buster-slim
+      image: jsii/superchain:1-buster-slim-node16
   goreleaser:
     name: goreleaser
     runs-on: ubuntu-latest
