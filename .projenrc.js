@@ -52,11 +52,12 @@ additionalActions = [
   },
   {
     name: 'Prepare assets',
-    run: 'mkdir -p assets && mkdir -p cdk-sops-secrets/assets && zip assets/cdk-sops-lambda.zip ./dist-goreleaser/cdk-sops-secrets_linux_amd64/cdk-sops-lambda && cp assets/cdk-sops-lambda.zip cdk-sops-secrets/assets/cdk-sops-lambda.zip',
+    run: 'mkdir -p assets && zip assets/cdk-sops-lambda.zip ./dist-goreleaser/cdk-sops-secrets_linux_amd64/cdk-sops-lambda',
   },
 ];
 
-project.buildWorkflow.preBuildSteps.unshift(...additionalActions);
+
+project.buildWorkflow.preBuildSteps.unshift( ...additionalActions);
 
 console.log(project.github.workflows.map((wr) => wr.name));
 
@@ -68,7 +69,7 @@ fixme.forEach((wf) => {
     if (key === 'build') {
       console.log(wf.jobs[key]);
     } else {
-      wf.jobs[key].steps.unshift(...additionalActions);
+      wf.jobs[key].steps.splice(1, 0, ...additionalActions);
     }
     wf.jobs[key] = { ...wf.jobs[key], needs: 'goreleaser' };
   });

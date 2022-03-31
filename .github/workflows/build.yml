@@ -28,7 +28,7 @@ jobs:
       - name: List artifacts
         run: ls -ld $(find ./dist-goreleaser)
       - name: Prepare assets
-        run: mkdir -p assets && mkdir -p cdk-sops-secrets/assets && zip assets/cdk-sops-lambda.zip ./dist-goreleaser/cdk-sops-secrets_linux_amd64/cdk-sops-lambda && cp assets/cdk-sops-lambda.zip cdk-sops-secrets/assets/cdk-sops-lambda.zip
+        run: mkdir -p assets && zip assets/cdk-sops-lambda.zip ./dist-goreleaser/cdk-sops-secrets_linux_amd64/cdk-sops-lambda
       - name: Install dependencies
         run: yarn install --check-files
       - name: build
@@ -64,6 +64,12 @@ jobs:
       contents: write
     if: always() && needs.build.outputs.self_mutation_happened && !(github.event.pull_request.head.repo.full_name != github.repository)
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.PROJEN_GITHUB_TOKEN }}
+          ref: ${{ github.event.pull_request.head.ref }}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
       - name: Download goreleaser artifacts
         uses: actions/download-artifact@v2
         with:
@@ -72,13 +78,7 @@ jobs:
       - name: List artifacts
         run: ls -ld $(find ./dist-goreleaser)
       - name: Prepare assets
-        run: mkdir -p assets && mkdir -p cdk-sops-secrets/assets && zip assets/cdk-sops-lambda.zip ./dist-goreleaser/cdk-sops-secrets_linux_amd64/cdk-sops-lambda && cp assets/cdk-sops-lambda.zip cdk-sops-secrets/assets/cdk-sops-lambda.zip
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          token: ${{ secrets.PROJEN_GITHUB_TOKEN }}
-          ref: ${{ github.event.pull_request.head.ref }}
-          repository: ${{ github.event.pull_request.head.repo.full_name }}
+        run: mkdir -p assets && zip assets/cdk-sops-lambda.zip ./dist-goreleaser/cdk-sops-secrets_linux_amd64/cdk-sops-lambda
       - name: Download patch
         uses: actions/download-artifact@v2
         with:
@@ -104,6 +104,11 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: 14.x
+      - name: Download build artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: build-artifact
+          path: dist
       - name: Download goreleaser artifacts
         uses: actions/download-artifact@v2
         with:
@@ -112,12 +117,7 @@ jobs:
       - name: List artifacts
         run: ls -ld $(find ./dist-goreleaser)
       - name: Prepare assets
-        run: mkdir -p assets && mkdir -p cdk-sops-secrets/assets && zip assets/cdk-sops-lambda.zip ./dist-goreleaser/cdk-sops-secrets_linux_amd64/cdk-sops-lambda && cp assets/cdk-sops-lambda.zip cdk-sops-secrets/assets/cdk-sops-lambda.zip
-      - name: Download build artifacts
-        uses: actions/download-artifact@v2
-        with:
-          name: build-artifact
-          path: dist
+        run: mkdir -p assets && zip assets/cdk-sops-lambda.zip ./dist-goreleaser/cdk-sops-secrets_linux_amd64/cdk-sops-lambda
       - name: Prepare Repository
         run: mv dist .repo
       - name: Install Dependencies
