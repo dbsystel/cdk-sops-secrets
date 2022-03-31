@@ -49,11 +49,11 @@ additionalActions = [
   },
   {
     name: 'Zip Lambda',
-    run: 'cd dist-goreleaser && touch -t 202002020000 cdk-sops-secrets && zip -X cdk-sops-lambda.zip cdk-sops-secrets'
+    run: 'cd dist-goreleaser && touch -t 202002020000 cdk-sops-secrets && ls -la cdk-sops-secrets shasum cdk-sops-secrets &&  zip -X cdk-sops-lambda.zip cdk-sops-secrets'
   },
   {
     name: 'Move Lambda to assets',
-    run: 'mkdir -p assets && mv ./dist-goreleaser/cdk-sops-lambda.zip ./assets/cdk-sops-lambda.zip && touch -t 202002020000 assets/cdk-sops-lambda.zip && shasum assets/cdk-sops-lambda.zip',
+    run: 'mkdir -p assets && mv ./dist-goreleaser/cdk-sops-lambda.zip ./assets/cdk-sops-lambda.zip && touch -t 202002020000 assets/cdk-sops-lambda.zip && shasum assets/cdk-sops-lambda.zip && ls -la assets/cdk-sops-lambda.zip',
   },
 ];
 
