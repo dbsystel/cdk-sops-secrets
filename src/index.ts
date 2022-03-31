@@ -23,7 +23,7 @@ export class SopsSync extends Construct {
     const sopsFileFormat = props.sopsFileFormat ?? props.sopsFilePath.split('.').pop;
 
     const provider = props.sopsProvider ?? new SingletonFunction(this, 'Function', {
-      code: Code.fromAsset('assets/cdk-sops-lambda.zip'),
+      code: Code.fromAsset('assets/cdk-sops-secrets.zip'),
       runtime: Runtime.GO_1_X,
       handler: 'cdk-sops-secrets',
       uuid: 'cdk-sops-secrets',
