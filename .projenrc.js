@@ -32,7 +32,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
   integrationTestAutoDiscover: true,
   // packageName: undefined,  /* The "name" in package.json. */
 });
-project.gitignore.addPatterns('/assets')
+project.gitignore.addPatterns('/assets');
 project.npmignore.addPatterns('/lambda', '/dist-lambda', '!/assets');
 
 goreleaserArtifactsNamespace = 'build-artifact-goreleaser';

@@ -117,7 +117,7 @@ func Test_FullWorkflow_Create(t *testing.T) {
 	ctx, _ := context.WithDeadline(context.Background(), d)
 	ctx = lambdacontext.NewContext(ctx, &lambdacontext.LambdaContext{
 		AwsRequestID:       "AwsRequestID",
-		InvokedFunctionArn: "arn:aws:lambda:us-east-2:123456789012:function:blank-go",
+		InvokedFunctionArn: "arn:aws:lambda:us-east-2:123456789012:function:cdk-sops-secrets",
 	})
 	inputJson := ReadJSONFromFile(t, "event_create.json")
 	var event cfn.Event

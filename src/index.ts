@@ -21,7 +21,7 @@ export class SopsSync extends Construct {
     super(scope, id);
 
     const sopsFileFormat = props.sopsFileFormat ?? props.sopsFilePath.split('.').pop;
-    
+
     const provider = props.sopsProvider ?? new SingletonFunction(this, 'Function', {
       code: Code.fromAsset('./assets/cdk-sops-secrets.zip'),
       runtime: Runtime.GO_1_X,
@@ -62,10 +62,10 @@ export class SopsSync extends Construct {
   }
 }
 
-export interface SopsSecretProps extends SecretProps, SopsSyncOptions {} 
+export interface SopsSecretProps extends SecretProps, SopsSyncOptions {}
 export class SopsSecrets extends Secret {
   public constructor(scope: Construct, id: string, props: SopsSecretProps) {
     super(scope, id, props as SecretProps);
-    new SopsSync(this, 'SopsSync', { secret: this, ...(props as SopsSyncOptions) })
+    new SopsSync(this, 'SopsSync', { secret: this, ...(props as SopsSyncOptions) });
   }
 }
