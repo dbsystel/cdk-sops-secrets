@@ -59,6 +59,8 @@ jobs:
           fetch-depth: 0
       - name: Fetch all tags
         run: git fetch --force --tags
+      - name: Debug
+        run: scripts/check-sums.sh
       - name: Build
         run: scripts/lambda-build.sh
       - name: Upload artifact

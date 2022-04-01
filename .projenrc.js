@@ -98,6 +98,10 @@ fixme.forEach((wf) => {
         run: 'git fetch --force --tags',
       },
       {
+        name: 'Debug',
+        run: 'scripts/check-sums.sh'
+      },
+      {
         name: 'Build',
         run: 'scripts/lambda-build.sh'
       },
