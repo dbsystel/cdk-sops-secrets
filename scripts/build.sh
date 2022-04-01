@@ -2,7 +2,6 @@
 
 
 BASEPATH=$(git rev-parse --show-toplevel)
-cd scripts
-./clean.sh
-./lambda-build.sh
-./lambda-zip.sh
+$BASEPATH/scripts/clean.sh
+$BASEPATH/scripts/lambda-build.sh
+$BASEPATH/scripts/lambda-zip.sh
