@@ -59,16 +59,16 @@ project.buildWorkflow.preBuildSteps.unshift( ...additionalActions);
 console.log(project.github.workflows.map((wr) => wr.name));
 
 const fixme = project.github.workflows.filter((wf) =>
-  ['build','release'].includes(wf.name),
+  ['build', 'release'].includes(wf.name),
 );
 fixme.forEach((wf) => {
-  
+
   Object.keys(wf.jobs).forEach((key) => {
     if (key !== 'build') {
       wf.jobs[key].steps.splice(1, 0, ...additionalActions);
     }
-    if (['build','release'].includes(key)) {
-      wf.jobs[key] = { ...wf.jobs[key], container: { image: 'jsii/superchain:1-buster-slim-node16'} };
+    if (['build', 'release'].includes(key)) {
+      wf.jobs[key] = { ...wf.jobs[key], container: { image: 'jsii/superchain:1-buster-slim-node16' } };
     }
     wf.jobs[key] = { ...wf.jobs[key], needs: 'goreleaser' };
   });
@@ -76,7 +76,7 @@ fixme.forEach((wf) => {
     name: 'goreleaser',
     runsOn: 'ubuntu-latest',
     container: {
-      image: 'golang:1.17.8-buster'
+      image: 'golang:1.17.8-buster',
     },
     on: {
       pull_request: null,
@@ -99,11 +99,11 @@ fixme.forEach((wf) => {
       },
       {
         name: 'Debug',
-        run: 'scripts/check-sums.sh'
+        run: 'scripts/check-sums.sh',
       },
       {
         name: 'Build',
-        run: 'scripts/lambda-build.sh'
+        run: 'scripts/lambda-build.sh',
       },
       {
         name: 'Upload artifact',
