@@ -4,7 +4,7 @@ BASEPATH=$(git rev-parse --show-toplevel)
 cd "$BASEPATH/lambda"
 export GOOS=linux
 export GOARCH=amd64
-export GOFLAGS="-trimpath"
+export GOFLAGS="-asmflags -trimpath"
 go build
 touch -t 202002020000 cdk-sops-secrets
 chmod 755 cdk-sops-secrets
