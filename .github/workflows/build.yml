@@ -20,7 +20,7 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.ref }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
-      - name: Download goreleaser artifacts
+      - name: Download zipper artifacts
         uses: actions/download-artifact@v2
         with:
           name: zipper
@@ -66,7 +66,7 @@ jobs:
           token: ${{ secrets.PROJEN_GITHUB_TOKEN }}
           ref: ${{ github.event.pull_request.head.ref }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
-      - name: Download goreleaser artifacts
+      - name: Download zipper artifacts
         uses: actions/download-artifact@v2
         with:
           name: zipper
@@ -101,7 +101,7 @@ jobs:
         with:
           name: build-artifact
           path: dist
-      - name: Download goreleaser artifacts
+      - name: Download zipper artifacts
         uses: actions/download-artifact@v2
         with:
           name: zipper
@@ -132,10 +132,6 @@ jobs:
         run: scripts/check-sums.sh
       - name: Build
         run: scripts/lambda-build.sh
-      - name: Build
-        run: scripts/setup-deterministic-zip.sh
-      - name: Build
-        run: scripts/lambda-deterministic-zip.sh
       - name: Upload artifact
         uses: actions/upload-artifact@v2.1.1
         with:
@@ -152,7 +148,7 @@ jobs:
     steps:
       - name: Prepare
         run: apk add zip git
-      - name: Download goreleaser artifacts
+      - name: Download gobuild artifacts
         uses: actions/download-artifact@v2
         with:
           name: gobuild

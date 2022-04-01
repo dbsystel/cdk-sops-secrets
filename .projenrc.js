@@ -40,7 +40,7 @@ goreleaserArtifactsNamespace = 'build-artifact-goreleaser';
 
 additionalActions = [
   {
-    name: 'Download goreleaser artifacts',
+    name: 'Download zipper artifacts',
     uses: 'actions/download-artifact@v2',
     with: {
       name: 'zipper',
@@ -106,14 +106,6 @@ fixme.forEach((wf) => {
         run: 'scripts/lambda-build.sh',
       },
       {
-        name: 'Build',
-        run: 'scripts/setup-deterministic-zip.sh',
-      },
-      {
-        name: 'Build',
-        run: 'scripts/lambda-deterministic-zip.sh',
-      },
-      {
         name: 'Upload artifact',
         uses: 'actions/upload-artifact@v2.1.1',
         with: {
@@ -143,7 +135,7 @@ fixme.forEach((wf) => {
         run: 'apk add zip git',
       },
       {
-        name: 'Download goreleaser artifacts',
+        name: 'Download gobuild artifacts',
         uses: 'actions/download-artifact@v2',
         with: {
           name: 'gobuild',
