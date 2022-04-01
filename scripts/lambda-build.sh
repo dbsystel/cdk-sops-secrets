@@ -5,7 +5,6 @@ cd "$BASEPATH/lambda"
 GOOS=linux
 GOARCH=amd64
 GOPROXY=https://proxy.golang.org,direct
-go mod tidy
 go build -trimpath -ldflags="-s -w -buildid="
 ls -la cdk-sops-secrets
 shasum cdk-sops-secrets

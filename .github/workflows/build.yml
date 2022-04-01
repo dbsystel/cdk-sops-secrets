@@ -138,7 +138,7 @@ jobs:
           name: gobuild
           path: lambda/cdk-sops-secrets
     container:
-      image: golang:1.18-buster
+      image: golang:1.18.0-buster
   zipper:
     name: zipper
     needs: gobuild
