@@ -135,6 +135,13 @@ fixme.forEach((wf) => {
         run: 'apk add zip git',
       },
       {
+        name: 'Checkout',
+        uses: 'actions/checkout@v2',
+        with: {
+          'fetch-depth': 0,
+        },
+      },
+      {
         name: 'Download gobuild artifacts',
         uses: 'actions/download-artifact@v2',
         with: {
