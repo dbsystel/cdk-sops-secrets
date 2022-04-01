@@ -44,12 +44,8 @@ additionalActions = [
     uses: 'actions/download-artifact@v2',
     with: {
       name: goreleaserArtifactsNamespace,
-      path: 'lambda',
+      path: 'assets',
     },
-  },
-  {
-    name: 'Zip lambda',
-    run: 'scripts/lambda-zip.sh',
   },
 ];
 
@@ -110,11 +106,19 @@ fixme.forEach((wf) => {
         run: 'scripts/lambda-build.sh',
       },
       {
+        name: 'Build',
+        run: 'scripts/setup-deterministic-zip.sh',
+      },
+      {
+        name: 'Build',
+        run: 'scripts/lambda-deterministic-zip.sh',
+      },
+      {
         name: 'Upload artifact',
         uses: 'actions/upload-artifact@v2.1.1',
         with: {
           name: goreleaserArtifactsNamespace,
-          path: 'lambda/cdk-sops-secrets',
+          path: 'assets/cdk-sops-lambda.zip',
         },
       },
     ],

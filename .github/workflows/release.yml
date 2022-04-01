@@ -25,9 +25,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: build-artifact-goreleaser
-          path: lambda
-      - name: Zip lambda
-        run: scripts/lambda-zip.sh
+          path: assets
       - name: Set git identity
         run: |-
           git config user.name "github-actions"
@@ -65,13 +63,17 @@ jobs:
         run: scripts/check-sums.sh
       - name: Build
         run: scripts/lambda-build.sh
+      - name: Build
+        run: scripts/setup-deterministic-zip.sh
+      - name: Build
+        run: scripts/lambda-deterministic-zip.sh
       - name: Upload artifact
         uses: actions/upload-artifact@v2.1.1
         with:
           name: build-artifact-goreleaser
-          path: lambda/cdk-sops-secrets
+          path: assets/cdk-sops-lambda.zip
     container:
-      image: golang:1.17.8-buster
+      image: golang:1.18-buster
   release_github:
     name: Publish to GitHub Releases
     needs: release
