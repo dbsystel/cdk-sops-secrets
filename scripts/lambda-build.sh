@@ -6,7 +6,7 @@ GOOS=linux
 GOARCH=amd64
 CGO_ENABLED=0
 GOPROXY=https://proxy.golang.org,direct
-GO
+ZERO_AR_DATE=1
 go build -trimpath
 ls -la cdk-sops-secrets
 touch -t 202002020000 cdk-sops-secrets
