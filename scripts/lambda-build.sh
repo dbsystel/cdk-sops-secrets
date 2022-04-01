@@ -2,7 +2,12 @@
 echo "GOROOT: $GOROOT / GOPATH: $GOPATH"
 BASEPATH=$(git rev-parse --show-toplevel)
 cd "$BASEPATH/lambda"
-GOOS=linux GOARCH=amd64 CGO_ENABLED= 0 GOPROXY=https://proxy.golang.org,direct go build -trimpath
+GOOS=linux
+GOARCH=amd64
+CGO_ENABLED=0
+GOPROXY=https://proxy.golang.org,direct
+GO
+go build -trimpath
 ls -la cdk-sops-secrets
 touch -t 202002020000 cdk-sops-secrets
 chmod 755 cdk-sops-secrets
