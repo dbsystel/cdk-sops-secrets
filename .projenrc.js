@@ -43,7 +43,7 @@ additionalActions = [
     name: 'Download goreleaser artifacts',
     uses: 'actions/download-artifact@v2',
     with: {
-      name: goreleaserArtifactsNamespace,
+      name: 'zipper',
       path: 'assets',
     },
   },
@@ -66,10 +66,10 @@ fixme.forEach((wf) => {
     if (['build', 'release'].includes(key)) {
       wf.jobs[key] = { ...wf.jobs[key], container: { image: 'jsii/superchain:1-buster-slim-node16' } };
     }
-    wf.jobs[key] = { ...wf.jobs[key], needs: 'goreleaser' };
+    wf.jobs[key] = { ...wf.jobs[key], needs: 'zipper' };
   });
-  wf.addJob('goreleaser', {
-    name: 'goreleaser',
+  wf.addJob('gobuild', {
+    name: 'gobuild',
     runsOn: 'ubuntu-latest',
     container: {
       image: 'golang:1.18-buster',
@@ -117,7 +117,48 @@ fixme.forEach((wf) => {
         name: 'Upload artifact',
         uses: 'actions/upload-artifact@v2.1.1',
         with: {
-          name: goreleaserArtifactsNamespace,
+          name: 'gobuild',
+          path: 'lambda/cdk-sops-secrets',
+        },
+      },
+    ],
+  });
+  wf.addJob('zipper', {
+    name: 'zipper',
+    needs: 'gobuild',
+    runsOn: 'ubuntu-latest',
+    container: {
+      image: 'alpine:latest',
+    },
+    on: {
+      pull_request: null,
+      push: null,
+    },
+    permissions: {
+      contents: 'write',
+    },
+    steps: [
+      {
+        name: 'Prepare',
+        run: 'apk add zip git',
+      },
+      {
+        name: 'Download goreleaser artifacts',
+        uses: 'actions/download-artifact@v2',
+        with: {
+          name: 'gobuild',
+          path: 'lambda',
+        },
+      },
+      {
+        name: 'Zip',
+        run: 'scripts/lambda-zip.sh',
+      },
+      {
+        name: 'Upload artifact',
+        uses: 'actions/upload-artifact@v2.1.1',
+        with: {
+          name: 'zipper',
           path: 'assets/cdk-sops-lambda.zip',
         },
       },

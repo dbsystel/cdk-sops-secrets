@@ -8,7 +8,7 @@ on:
   workflow_dispatch: {}
 jobs:
   release:
-    needs: goreleaser
+    needs: zipper
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -24,7 +24,7 @@ jobs:
       - name: Download goreleaser artifacts
         uses: actions/download-artifact@v2
         with:
-          name: build-artifact-goreleaser
+          name: zipper
           path: assets
       - name: Set git identity
         run: |-
@@ -45,8 +45,8 @@ jobs:
           path: dist
     container:
       image: jsii/superchain:1-buster-slim-node16
-  goreleaser:
-    name: goreleaser
+  gobuild:
+    name: gobuild
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -70,10 +70,33 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v2.1.1
         with:
-          name: build-artifact-goreleaser
-          path: assets/cdk-sops-lambda.zip
+          name: gobuild
+          path: lambda/cdk-sops-secrets
     container:
       image: golang:1.18-buster
+  zipper:
+    name: zipper
+    needs: gobuild
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Prepare
+        run: apk add zip git
+      - name: Download goreleaser artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: gobuild
+          path: lambda
+      - name: Zip
+        run: scripts/lambda-zip.sh
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2.1.1
+        with:
+          name: zipper
+          path: assets/cdk-sops-lambda.zip
+    container:
+      image: alpine:latest
   release_github:
     name: Publish to GitHub Releases
     needs: release

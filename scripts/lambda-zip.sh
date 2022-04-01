@@ -1,8 +1,8 @@
-#!/bin/bash
+#!/bin/sh
 
 BASEPATH=$(git rev-parse --show-toplevel)
 mkdir -p "$BASEPATH/assets"
 cd "$BASEPATH/lambda"
 zip -X9om "$BASEPATH/assets/cdk-sops-lambda.zip" cdk-sops-secrets
-shasum "$BASEPATH/assets/cdk-sops-lambda.zip"
+sha1sum "$BASEPATH/assets/cdk-sops-lambda.zip"
 ls -la "$BASEPATH/assets/cdk-sops-lambda.zip"
