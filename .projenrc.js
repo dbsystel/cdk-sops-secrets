@@ -98,7 +98,11 @@ fixme.forEach((wf) => {
         run: 'git fetch --force --tags',
       },
       {
-        name: 'Debug',
+        name: 'Debug1',
+        run: 'pwd',
+      },
+      {
+        name: 'Debug2',
         run: 'scripts/check-sums.sh',
       },
       {
