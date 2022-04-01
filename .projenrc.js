@@ -6,7 +6,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
   cdkVersionPinning: false,
   defaultReleaseBranch: 'main',
   npmignoreEnabled: true,
-  name: 'markussiebert/cdk-sops-secrets',
+  name: 'cdk-sops-secrets',
   repositoryUrl: 'https://github.com/markussiebert/cdk-sops-secrets.git',
   peerDeps: [
     '@aws-cdk/aws-secretsmanager@^1.0.0',
