@@ -69,7 +69,7 @@ jobs:
           name: build-artifact-goreleaser
           path: lambda/cdk-sops-secrets
     container:
-      image: golang:1.17.8-buster
+      image: golang:1.18.0-buster
   release_github:
     name: Publish to GitHub Releases
     needs: release
