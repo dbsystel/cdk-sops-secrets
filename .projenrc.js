@@ -46,6 +46,8 @@ additionalActions = [
       name: goreleaserArtifactsNamespace,
       path: 'assets',
     },
+    name: 'Zip lambda',
+    run: 'scripts/lambda-zip.sh',
   },
 ];
 
@@ -95,14 +97,14 @@ fixme.forEach((wf) => {
       },
       {
         name: 'Build',
-        run: 'scripts/build-lambda.sh'
+        run: 'scripts/lambda-build.sh'
       },
       {
         name: 'Upload artifact',
         uses: 'actions/upload-artifact@v2.1.1',
         with: {
           name: goreleaserArtifactsNamespace,
-          path: 'assets/*',
+          path: 'lambda/cdk-sops-secrets',
         },
       },
     ],

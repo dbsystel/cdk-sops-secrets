@@ -20,11 +20,12 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.ref }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
-      - name: Download goreleaser artifacts
+      - name: Zip lambda
         uses: actions/download-artifact@v2
         with:
           name: build-artifact-goreleaser
           path: assets
+        run: scripts/lambda-zip.sh
       - name: Install dependencies
         run: yarn install --check-files
       - name: build
@@ -66,11 +67,12 @@ jobs:
           token: ${{ secrets.PROJEN_GITHUB_TOKEN }}
           ref: ${{ github.event.pull_request.head.ref }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
-      - name: Download goreleaser artifacts
+      - name: Zip lambda
         uses: actions/download-artifact@v2
         with:
           name: build-artifact-goreleaser
           path: assets
+        run: scripts/lambda-zip.sh
       - name: Download patch
         uses: actions/download-artifact@v2
         with:
@@ -101,11 +103,12 @@ jobs:
         with:
           name: build-artifact
           path: dist
-      - name: Download goreleaser artifacts
+      - name: Zip lambda
         uses: actions/download-artifact@v2
         with:
           name: build-artifact-goreleaser
           path: assets
+        run: scripts/lambda-zip.sh
       - name: Prepare Repository
         run: mv dist .repo
       - name: Install Dependencies
@@ -127,11 +130,11 @@ jobs:
       - name: Fetch all tags
         run: git fetch --force --tags
       - name: Build
-        run: scripts/build-lambda.sh
+        run: scripts/lambda-build.sh
       - name: Upload artifact
         uses: actions/upload-artifact@v2.1.1
         with:
           name: build-artifact-goreleaser
-          path: assets/*
+          path: lambda/cdk-sops-secrets
     container:
       image: golang:1.18.0-buster
