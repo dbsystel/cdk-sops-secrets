@@ -75,6 +75,9 @@ fixme.forEach((wf) => {
   wf.addJob('goreleaser', {
     name: 'goreleaser',
     runsOn: 'ubuntu-latest',
+    container: {
+      image: 'golang:1.18.0-buster'
+    },
     on: {
       pull_request: null,
       push: null,
@@ -95,23 +98,8 @@ fixme.forEach((wf) => {
         run: 'git fetch --force --tags',
       },
       {
-        name: 'Set up Go',
-        uses: 'actions/setup-go@v2',
-        with: {
-          'go-version': 1.18,
-        },
-      },
-      {
-        name: 'Run GoReleaser',
-        uses: 'goreleaser/goreleaser-action@v2',
-        with: {
-          distribution: 'goreleaser',
-          version: 'latest',
-          args: 'release --rm-dist',
-        },
-        env: {
-          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}',
-        },
+        name: 'Build',
+        run: 'scripts/build-lambda.sh'
       },
       {
         name: 'Upload artifact',

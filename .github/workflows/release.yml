@@ -59,23 +59,15 @@ jobs:
           fetch-depth: 0
       - name: Fetch all tags
         run: git fetch --force --tags
-      - name: Set up Go
-        uses: actions/setup-go@v2
-        with:
-          go-version: 1.18
-      - name: Run GoReleaser
-        uses: goreleaser/goreleaser-action@v2
-        with:
-          distribution: goreleaser
-          version: latest
-          args: release --rm-dist
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build
+        run: scripts/build-lambda.sh
       - name: Upload artifact
         uses: actions/upload-artifact@v2.1.1
         with:
           name: build-artifact-goreleaser
           path: assets/*
+    container:
+      image: golang:1.18.0-buster
   release_github:
     name: Publish to GitHub Releases
     needs: release
