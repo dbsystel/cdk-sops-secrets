@@ -25,8 +25,6 @@ jobs:
         with:
           name: build-artifact-goreleaser
           path: assets
-      - name: Debug goreleaser artifacts
-        run: shasum assets/cdk-sops-secrets.zip && ls -la assets/cdk-sops-secrets.zip
       - name: Install dependencies
         run: yarn install --check-files
       - name: build
@@ -73,8 +71,6 @@ jobs:
         with:
           name: build-artifact-goreleaser
           path: assets
-      - name: Debug goreleaser artifacts
-        run: shasum assets/cdk-sops-secrets.zip && ls -la assets/cdk-sops-secrets.zip
       - name: Download patch
         uses: actions/download-artifact@v2
         with:
@@ -110,8 +106,6 @@ jobs:
         with:
           name: build-artifact-goreleaser
           path: assets
-      - name: Debug goreleaser artifacts
-        run: shasum assets/cdk-sops-secrets.zip && ls -la assets/cdk-sops-secrets.zip
       - name: Prepare Repository
         run: mv dist .repo
       - name: Install Dependencies

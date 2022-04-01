@@ -47,10 +47,6 @@ additionalActions = [
       path: 'assets',
     },
   },
-  {
-    name: 'Debug goreleaser artifacts',
-    run: 'shasum assets/cdk-sops-secrets.zip && ls -la assets/cdk-sops-secrets.zip',
-  },
 ];
 
 

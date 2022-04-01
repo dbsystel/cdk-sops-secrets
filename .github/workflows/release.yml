@@ -26,8 +26,6 @@ jobs:
         with:
           name: build-artifact-goreleaser
           path: assets
-      - name: Debug goreleaser artifacts
-        run: shasum assets/cdk-sops-secrets.zip && ls -la assets/cdk-sops-secrets.zip
       - name: Set git identity
         run: |-
           git config user.name "github-actions"
