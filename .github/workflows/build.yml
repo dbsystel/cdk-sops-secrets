@@ -20,11 +20,12 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.ref }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
-      - name: Zip lambda
+      - name: Download goreleaser artifacts
         uses: actions/download-artifact@v2
         with:
           name: build-artifact-goreleaser
           path: assets
+      - name: Zip lambda
         run: scripts/lambda-zip.sh
       - name: Install dependencies
         run: yarn install --check-files
@@ -67,11 +68,12 @@ jobs:
           token: ${{ secrets.PROJEN_GITHUB_TOKEN }}
           ref: ${{ github.event.pull_request.head.ref }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
-      - name: Zip lambda
+      - name: Download goreleaser artifacts
         uses: actions/download-artifact@v2
         with:
           name: build-artifact-goreleaser
           path: assets
+      - name: Zip lambda
         run: scripts/lambda-zip.sh
       - name: Download patch
         uses: actions/download-artifact@v2
@@ -103,11 +105,12 @@ jobs:
         with:
           name: build-artifact
           path: dist
-      - name: Zip lambda
+      - name: Download goreleaser artifacts
         uses: actions/download-artifact@v2
         with:
           name: build-artifact-goreleaser
           path: assets
+      - name: Zip lambda
         run: scripts/lambda-zip.sh
       - name: Prepare Repository
         run: mv dist .repo

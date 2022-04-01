@@ -21,11 +21,12 @@ jobs:
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - name: Zip lambda
+      - name: Download goreleaser artifacts
         uses: actions/download-artifact@v2
         with:
           name: build-artifact-goreleaser
           path: assets
+      - name: Zip lambda
         run: scripts/lambda-zip.sh
       - name: Set git identity
         run: |-

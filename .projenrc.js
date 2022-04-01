@@ -46,6 +46,8 @@ additionalActions = [
       name: goreleaserArtifactsNamespace,
       path: 'assets',
     },
+  },
+  {
     name: 'Zip lambda',
     run: 'scripts/lambda-zip.sh',
   },
