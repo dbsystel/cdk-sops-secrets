@@ -44,7 +44,7 @@ additionalActions = [
     uses: 'actions/download-artifact@v2',
     with: {
       name: goreleaserArtifactsNamespace,
-      path: 'assets',
+      path: 'lambda',
     },
   },
   {

@@ -25,7 +25,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: build-artifact-goreleaser
-          path: assets
+          path: lambda
       - name: Zip lambda
         run: scripts/lambda-zip.sh
       - name: Set git identity
