@@ -1,5 +1,5 @@
 {
-  "name": "cdk-sops-secrets",
+  "name": "markussiebert/cdk-sops-secrets",
   "repository": {
     "type": "git",
     "url": "https://github.com/markussiebert/cdk-sops-secrets.git"
