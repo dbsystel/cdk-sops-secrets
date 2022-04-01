@@ -21,9 +21,7 @@ export class SopsSync extends Construct {
     super(scope, id);
 
     const sopsFileFormat = props.sopsFileFormat ?? props.sopsFilePath.split('.').pop;
-    const code = Code.fromAsset('assets/cdk-sops-lambda.zip', {
-      assetHash: 'temporary',
-    });
+    const code = Code.fromAsset('assets/cdk-sops-lambda.zip');
     const provider = props.sopsProvider ?? new SingletonFunction(this, 'Function', {
       code,
       runtime: Runtime.GO_1_X,
