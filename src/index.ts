@@ -5,6 +5,9 @@ import { Asset } from '@aws-cdk/aws-s3-assets';
 import { ISecret, Secret, SecretProps } from '@aws-cdk/aws-secretsmanager';
 import { Annotations, Construct, CustomResource, SecretValue } from '@aws-cdk/core';
 
+/**
+ * Configuration options for the SopsSync
+ */
 export interface SopsSyncOptions {
   /**
    * The custom resource provider to use. If you don't specify any, a new
@@ -40,7 +43,10 @@ export interface SopsSyncOptions {
   readonly sopsAgeKey?: SecretValue;
 
   /**
+   * Should the encrypted sops value should be converted to JSON?
+   * Only JSON can be handled by cloud formations dynamic references.
    *
+   * @default true
    */
   readonly convertToJSON?: boolean;
 
@@ -53,15 +59,40 @@ export interface SopsSyncOptions {
    */
   readonly flatten?: boolean;
 }
+
+/**
+ * The configuration options extended by the target Secret
+ */
 export interface SopsSyncProps extends SopsSyncOptions{
+  /**
+   * The secret that will be populated with the encrypted sops file content.
+   */
   readonly secret: ISecret;
 }
 
+/**
+ * The custom resource, that is syncing the content from a sops file to a secret.
+ */
 export class SopsSync extends Construct {
 
+  /**
+   * The current versionId of the secret populated via this resource
+   */
   readonly versionId: string;
+
+  /**
+   * The format of the input file
+   */
   readonly sopsFileFormat: 'json' | 'yaml';
+
+  /**
+   * Was the format converted to json?
+   */
   readonly converToJSON: boolean;
+
+  /**
+   * Was the structure flattened?
+   */
   readonly flatten: boolean;
 
   constructor(scope: Construct, id: string, props: SopsSyncProps) {
@@ -141,8 +172,16 @@ export class SopsSync extends Construct {
   };
 }
 
+/**
+ * The configuration options of the SopsSecret
+ */
 export interface SopsSecretProps extends SecretProps, SopsSyncOptions {}
-export class SopsSecrets extends Secret {
+
+/**
+ * A drop in replacement for the normal Secret, that is populated with the encrypted
+ * content of the given sops file.
+ */
+export class SopsSecret extends Secret {
   readonly sync: SopsSync;
   public constructor(scope: Construct, id: string, props: SopsSecretProps) {
     super(scope, id, props as SecretProps);

@@ -2,37 +2,39 @@
 
 ## Constructs <a name="Constructs" id="Constructs"></a>
 
-### SopsSecrets <a name="SopsSecrets" id="cdk-sops-secrets.SopsSecrets"></a>
+### SopsSecret <a name="SopsSecret" id="cdk-sops-secrets.SopsSecret"></a>
 
-#### Initializers <a name="Initializers" id="cdk-sops-secrets.SopsSecrets.Initializer"></a>
+A drop in replacement for the normal Secret, that is populated with the encrypted content of the given sops file.
+
+#### Initializers <a name="Initializers" id="cdk-sops-secrets.SopsSecret.Initializer"></a>
 
 ```typescript
-import { SopsSecrets } from 'cdk-sops-secrets'
+import { SopsSecret } from 'cdk-sops-secrets'
 
-new SopsSecrets(scope: Construct, id: string, props: SopsSecretProps)
+new SopsSecret(scope: Construct, id: string, props: SopsSecretProps)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-sops-secrets.SopsSecrets.Initializer.parameter.scope">scope</a></code> | <code>@aws-cdk/core.Construct</code> | *No description.* |
-| <code><a href="#cdk-sops-secrets.SopsSecrets.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#cdk-sops-secrets.SopsSecrets.Initializer.parameter.props">props</a></code> | <code><a href="#cdk-sops-secrets.SopsSecretProps">SopsSecretProps</a></code> | *No description.* |
+| <code><a href="#cdk-sops-secrets.SopsSecret.Initializer.parameter.scope">scope</a></code> | <code>@aws-cdk/core.Construct</code> | *No description.* |
+| <code><a href="#cdk-sops-secrets.SopsSecret.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#cdk-sops-secrets.SopsSecret.Initializer.parameter.props">props</a></code> | <code><a href="#cdk-sops-secrets.SopsSecretProps">SopsSecretProps</a></code> | *No description.* |
 
 ---
 
-##### `scope`<sup>Required</sup> <a name="scope" id="cdk-sops-secrets.SopsSecrets.Initializer.parameter.scope"></a>
+##### `scope`<sup>Required</sup> <a name="scope" id="cdk-sops-secrets.SopsSecret.Initializer.parameter.scope"></a>
 
 - *Type:* @aws-cdk/core.Construct
 
 ---
 
-##### `id`<sup>Required</sup> <a name="id" id="cdk-sops-secrets.SopsSecrets.Initializer.parameter.id"></a>
+##### `id`<sup>Required</sup> <a name="id" id="cdk-sops-secrets.SopsSecret.Initializer.parameter.id"></a>
 
 - *Type:* string
 
 ---
 
-##### `props`<sup>Required</sup> <a name="props" id="cdk-sops-secrets.SopsSecrets.Initializer.parameter.props"></a>
+##### `props`<sup>Required</sup> <a name="props" id="cdk-sops-secrets.SopsSecret.Initializer.parameter.props"></a>
 
 - *Type:* <a href="#cdk-sops-secrets.SopsSecretProps">SopsSecretProps</a>
 
@@ -42,21 +44,21 @@ new SopsSecrets(scope: Construct, id: string, props: SopsSecretProps)
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#cdk-sops-secrets.SopsSecrets.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#cdk-sops-secrets.SopsSecrets.applyRemovalPolicy">applyRemovalPolicy</a></code> | Apply the given removal policy to this resource. |
-| <code><a href="#cdk-sops-secrets.SopsSecrets.addReplicaRegion">addReplicaRegion</a></code> | Adds a replica region for the secret. |
-| <code><a href="#cdk-sops-secrets.SopsSecrets.addRotationSchedule">addRotationSchedule</a></code> | Adds a rotation schedule to the secret. |
-| <code><a href="#cdk-sops-secrets.SopsSecrets.addTargetAttachment">addTargetAttachment</a></code> | Adds a target attachment to the secret. |
-| <code><a href="#cdk-sops-secrets.SopsSecrets.addToResourcePolicy">addToResourcePolicy</a></code> | Adds a statement to the IAM resource policy associated with this secret. |
-| <code><a href="#cdk-sops-secrets.SopsSecrets.attach">attach</a></code> | Attach a target to this secret. |
-| <code><a href="#cdk-sops-secrets.SopsSecrets.denyAccountRootDelete">denyAccountRootDelete</a></code> | Denies the `DeleteSecret` action to all principals within the current account. |
-| <code><a href="#cdk-sops-secrets.SopsSecrets.grantRead">grantRead</a></code> | Grants reading the secret value to some role. |
-| <code><a href="#cdk-sops-secrets.SopsSecrets.grantWrite">grantWrite</a></code> | Grants writing and updating the secret value to some role. |
-| <code><a href="#cdk-sops-secrets.SopsSecrets.secretValueFromJson">secretValueFromJson</a></code> | Interpret the secret as a JSON object and return a field's value from it as a `SecretValue`. |
+| <code><a href="#cdk-sops-secrets.SopsSecret.toString">toString</a></code> | Returns a string representation of this construct. |
+| <code><a href="#cdk-sops-secrets.SopsSecret.applyRemovalPolicy">applyRemovalPolicy</a></code> | Apply the given removal policy to this resource. |
+| <code><a href="#cdk-sops-secrets.SopsSecret.addReplicaRegion">addReplicaRegion</a></code> | Adds a replica region for the secret. |
+| <code><a href="#cdk-sops-secrets.SopsSecret.addRotationSchedule">addRotationSchedule</a></code> | Adds a rotation schedule to the secret. |
+| <code><a href="#cdk-sops-secrets.SopsSecret.addTargetAttachment">addTargetAttachment</a></code> | Adds a target attachment to the secret. |
+| <code><a href="#cdk-sops-secrets.SopsSecret.addToResourcePolicy">addToResourcePolicy</a></code> | Adds a statement to the IAM resource policy associated with this secret. |
+| <code><a href="#cdk-sops-secrets.SopsSecret.attach">attach</a></code> | Attach a target to this secret. |
+| <code><a href="#cdk-sops-secrets.SopsSecret.denyAccountRootDelete">denyAccountRootDelete</a></code> | Denies the `DeleteSecret` action to all principals within the current account. |
+| <code><a href="#cdk-sops-secrets.SopsSecret.grantRead">grantRead</a></code> | Grants reading the secret value to some role. |
+| <code><a href="#cdk-sops-secrets.SopsSecret.grantWrite">grantWrite</a></code> | Grants writing and updating the secret value to some role. |
+| <code><a href="#cdk-sops-secrets.SopsSecret.secretValueFromJson">secretValueFromJson</a></code> | Interpret the secret as a JSON object and return a field's value from it as a `SecretValue`. |
 
 ---
 
-##### `toString` <a name="toString" id="cdk-sops-secrets.SopsSecrets.toString"></a>
+##### `toString` <a name="toString" id="cdk-sops-secrets.SopsSecret.toString"></a>
 
 ```typescript
 public toString(): string
@@ -64,7 +66,7 @@ public toString(): string
 
 Returns a string representation of this construct.
 
-##### `applyRemovalPolicy` <a name="applyRemovalPolicy" id="cdk-sops-secrets.SopsSecrets.applyRemovalPolicy"></a>
+##### `applyRemovalPolicy` <a name="applyRemovalPolicy" id="cdk-sops-secrets.SopsSecret.applyRemovalPolicy"></a>
 
 ```typescript
 public applyRemovalPolicy(policy: RemovalPolicy): void
@@ -80,13 +82,13 @@ to be replaced.
 The resource can be deleted (`RemovalPolicy.DESTROY`), or left in your AWS
 account for data recovery and cleanup later (`RemovalPolicy.RETAIN`).
 
-###### `policy`<sup>Required</sup> <a name="policy" id="cdk-sops-secrets.SopsSecrets.applyRemovalPolicy.parameter.policy"></a>
+###### `policy`<sup>Required</sup> <a name="policy" id="cdk-sops-secrets.SopsSecret.applyRemovalPolicy.parameter.policy"></a>
 
 - *Type:* @aws-cdk/core.RemovalPolicy
 
 ---
 
-##### `addReplicaRegion` <a name="addReplicaRegion" id="cdk-sops-secrets.SopsSecrets.addReplicaRegion"></a>
+##### `addReplicaRegion` <a name="addReplicaRegion" id="cdk-sops-secrets.SopsSecret.addReplicaRegion"></a>
 
 ```typescript
 public addReplicaRegion(region: string, encryptionKey?: IKey): void
@@ -94,7 +96,7 @@ public addReplicaRegion(region: string, encryptionKey?: IKey): void
 
 Adds a replica region for the secret.
 
-###### `region`<sup>Required</sup> <a name="region" id="cdk-sops-secrets.SopsSecrets.addReplicaRegion.parameter.region"></a>
+###### `region`<sup>Required</sup> <a name="region" id="cdk-sops-secrets.SopsSecret.addReplicaRegion.parameter.region"></a>
 
 - *Type:* string
 
@@ -102,7 +104,7 @@ The name of the region.
 
 ---
 
-###### `encryptionKey`<sup>Optional</sup> <a name="encryptionKey" id="cdk-sops-secrets.SopsSecrets.addReplicaRegion.parameter.encryptionKey"></a>
+###### `encryptionKey`<sup>Optional</sup> <a name="encryptionKey" id="cdk-sops-secrets.SopsSecret.addReplicaRegion.parameter.encryptionKey"></a>
 
 - *Type:* @aws-cdk/aws-kms.IKey
 
@@ -110,7 +112,7 @@ The customer-managed encryption key to use for encrypting the secret value.
 
 ---
 
-##### `addRotationSchedule` <a name="addRotationSchedule" id="cdk-sops-secrets.SopsSecrets.addRotationSchedule"></a>
+##### `addRotationSchedule` <a name="addRotationSchedule" id="cdk-sops-secrets.SopsSecret.addRotationSchedule"></a>
 
 ```typescript
 public addRotationSchedule(id: string, options: RotationScheduleOptions): RotationSchedule
@@ -118,19 +120,19 @@ public addRotationSchedule(id: string, options: RotationScheduleOptions): Rotati
 
 Adds a rotation schedule to the secret.
 
-###### `id`<sup>Required</sup> <a name="id" id="cdk-sops-secrets.SopsSecrets.addRotationSchedule.parameter.id"></a>
+###### `id`<sup>Required</sup> <a name="id" id="cdk-sops-secrets.SopsSecret.addRotationSchedule.parameter.id"></a>
 
 - *Type:* string
 
 ---
 
-###### `options`<sup>Required</sup> <a name="options" id="cdk-sops-secrets.SopsSecrets.addRotationSchedule.parameter.options"></a>
+###### `options`<sup>Required</sup> <a name="options" id="cdk-sops-secrets.SopsSecret.addRotationSchedule.parameter.options"></a>
 
 - *Type:* @aws-cdk/aws-secretsmanager.RotationScheduleOptions
 
 ---
 
-##### ~~`addTargetAttachment`~~ <a name="addTargetAttachment" id="cdk-sops-secrets.SopsSecrets.addTargetAttachment"></a>
+##### ~~`addTargetAttachment`~~ <a name="addTargetAttachment" id="cdk-sops-secrets.SopsSecret.addTargetAttachment"></a>
 
 ```typescript
 public addTargetAttachment(id: string, options: AttachedSecretOptions): SecretTargetAttachment
@@ -138,19 +140,19 @@ public addTargetAttachment(id: string, options: AttachedSecretOptions): SecretTa
 
 Adds a target attachment to the secret.
 
-###### `id`<sup>Required</sup> <a name="id" id="cdk-sops-secrets.SopsSecrets.addTargetAttachment.parameter.id"></a>
+###### `id`<sup>Required</sup> <a name="id" id="cdk-sops-secrets.SopsSecret.addTargetAttachment.parameter.id"></a>
 
 - *Type:* string
 
 ---
 
-###### `options`<sup>Required</sup> <a name="options" id="cdk-sops-secrets.SopsSecrets.addTargetAttachment.parameter.options"></a>
+###### `options`<sup>Required</sup> <a name="options" id="cdk-sops-secrets.SopsSecret.addTargetAttachment.parameter.options"></a>
 
 - *Type:* @aws-cdk/aws-secretsmanager.AttachedSecretOptions
 
 ---
 
-##### `addToResourcePolicy` <a name="addToResourcePolicy" id="cdk-sops-secrets.SopsSecrets.addToResourcePolicy"></a>
+##### `addToResourcePolicy` <a name="addToResourcePolicy" id="cdk-sops-secrets.SopsSecret.addToResourcePolicy"></a>
 
 ```typescript
 public addToResourcePolicy(statement: PolicyStatement): AddToResourcePolicyResult
@@ -162,13 +164,13 @@ If this secret was created in this stack, a resource policy will be
 automatically created upon the first call to `addToResourcePolicy`. If
 the secret is imported, then this is a no-op.
 
-###### `statement`<sup>Required</sup> <a name="statement" id="cdk-sops-secrets.SopsSecrets.addToResourcePolicy.parameter.statement"></a>
+###### `statement`<sup>Required</sup> <a name="statement" id="cdk-sops-secrets.SopsSecret.addToResourcePolicy.parameter.statement"></a>
 
 - *Type:* @aws-cdk/aws-iam.PolicyStatement
 
 ---
 
-##### `attach` <a name="attach" id="cdk-sops-secrets.SopsSecrets.attach"></a>
+##### `attach` <a name="attach" id="cdk-sops-secrets.SopsSecret.attach"></a>
 
 ```typescript
 public attach(target: ISecretAttachmentTarget): ISecret
@@ -176,7 +178,7 @@ public attach(target: ISecretAttachmentTarget): ISecret
 
 Attach a target to this secret.
 
-###### `target`<sup>Required</sup> <a name="target" id="cdk-sops-secrets.SopsSecrets.attach.parameter.target"></a>
+###### `target`<sup>Required</sup> <a name="target" id="cdk-sops-secrets.SopsSecret.attach.parameter.target"></a>
 
 - *Type:* @aws-cdk/aws-secretsmanager.ISecretAttachmentTarget
 
@@ -184,7 +186,7 @@ The target to attach.
 
 ---
 
-##### `denyAccountRootDelete` <a name="denyAccountRootDelete" id="cdk-sops-secrets.SopsSecrets.denyAccountRootDelete"></a>
+##### `denyAccountRootDelete` <a name="denyAccountRootDelete" id="cdk-sops-secrets.SopsSecret.denyAccountRootDelete"></a>
 
 ```typescript
 public denyAccountRootDelete(): void
@@ -192,7 +194,7 @@ public denyAccountRootDelete(): void
 
 Denies the `DeleteSecret` action to all principals within the current account.
 
-##### `grantRead` <a name="grantRead" id="cdk-sops-secrets.SopsSecrets.grantRead"></a>
+##### `grantRead` <a name="grantRead" id="cdk-sops-secrets.SopsSecret.grantRead"></a>
 
 ```typescript
 public grantRead(grantee: IGrantable, versionStages?: string[]): Grant
@@ -200,19 +202,19 @@ public grantRead(grantee: IGrantable, versionStages?: string[]): Grant
 
 Grants reading the secret value to some role.
 
-###### `grantee`<sup>Required</sup> <a name="grantee" id="cdk-sops-secrets.SopsSecrets.grantRead.parameter.grantee"></a>
+###### `grantee`<sup>Required</sup> <a name="grantee" id="cdk-sops-secrets.SopsSecret.grantRead.parameter.grantee"></a>
 
 - *Type:* @aws-cdk/aws-iam.IGrantable
 
 ---
 
-###### `versionStages`<sup>Optional</sup> <a name="versionStages" id="cdk-sops-secrets.SopsSecrets.grantRead.parameter.versionStages"></a>
+###### `versionStages`<sup>Optional</sup> <a name="versionStages" id="cdk-sops-secrets.SopsSecret.grantRead.parameter.versionStages"></a>
 
 - *Type:* string[]
 
 ---
 
-##### `grantWrite` <a name="grantWrite" id="cdk-sops-secrets.SopsSecrets.grantWrite"></a>
+##### `grantWrite` <a name="grantWrite" id="cdk-sops-secrets.SopsSecret.grantWrite"></a>
 
 ```typescript
 public grantWrite(grantee: IGrantable): Grant
@@ -220,13 +222,13 @@ public grantWrite(grantee: IGrantable): Grant
 
 Grants writing and updating the secret value to some role.
 
-###### `grantee`<sup>Required</sup> <a name="grantee" id="cdk-sops-secrets.SopsSecrets.grantWrite.parameter.grantee"></a>
+###### `grantee`<sup>Required</sup> <a name="grantee" id="cdk-sops-secrets.SopsSecret.grantWrite.parameter.grantee"></a>
 
 - *Type:* @aws-cdk/aws-iam.IGrantable
 
 ---
 
-##### `secretValueFromJson` <a name="secretValueFromJson" id="cdk-sops-secrets.SopsSecrets.secretValueFromJson"></a>
+##### `secretValueFromJson` <a name="secretValueFromJson" id="cdk-sops-secrets.SopsSecret.secretValueFromJson"></a>
 
 ```typescript
 public secretValueFromJson(jsonField: string): SecretValue
@@ -234,7 +236,7 @@ public secretValueFromJson(jsonField: string): SecretValue
 
 Interpret the secret as a JSON object and return a field's value from it as a `SecretValue`.
 
-###### `jsonField`<sup>Required</sup> <a name="jsonField" id="cdk-sops-secrets.SopsSecrets.secretValueFromJson.parameter.jsonField"></a>
+###### `jsonField`<sup>Required</sup> <a name="jsonField" id="cdk-sops-secrets.SopsSecret.secretValueFromJson.parameter.jsonField"></a>
 
 - *Type:* string
 
@@ -244,86 +246,86 @@ Interpret the secret as a JSON object and return a field's value from it as a `S
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#cdk-sops-secrets.SopsSecrets.isConstruct">isConstruct</a></code> | Return whether the given object is a Construct. |
-| <code><a href="#cdk-sops-secrets.SopsSecrets.isResource">isResource</a></code> | Check whether the given construct is a Resource. |
-| <code><a href="#cdk-sops-secrets.SopsSecrets.fromSecretArn">fromSecretArn</a></code> | *No description.* |
-| <code><a href="#cdk-sops-secrets.SopsSecrets.fromSecretAttributes">fromSecretAttributes</a></code> | Import an existing secret into the Stack. |
-| <code><a href="#cdk-sops-secrets.SopsSecrets.fromSecretCompleteArn">fromSecretCompleteArn</a></code> | Imports a secret by complete ARN. |
-| <code><a href="#cdk-sops-secrets.SopsSecrets.fromSecretName">fromSecretName</a></code> | Imports a secret by secret name; |
-| <code><a href="#cdk-sops-secrets.SopsSecrets.fromSecretNameV2">fromSecretNameV2</a></code> | Imports a secret by secret name. |
-| <code><a href="#cdk-sops-secrets.SopsSecrets.fromSecretPartialArn">fromSecretPartialArn</a></code> | Imports a secret by partial ARN. |
+| <code><a href="#cdk-sops-secrets.SopsSecret.isConstruct">isConstruct</a></code> | Return whether the given object is a Construct. |
+| <code><a href="#cdk-sops-secrets.SopsSecret.isResource">isResource</a></code> | Check whether the given construct is a Resource. |
+| <code><a href="#cdk-sops-secrets.SopsSecret.fromSecretArn">fromSecretArn</a></code> | *No description.* |
+| <code><a href="#cdk-sops-secrets.SopsSecret.fromSecretAttributes">fromSecretAttributes</a></code> | Import an existing secret into the Stack. |
+| <code><a href="#cdk-sops-secrets.SopsSecret.fromSecretCompleteArn">fromSecretCompleteArn</a></code> | Imports a secret by complete ARN. |
+| <code><a href="#cdk-sops-secrets.SopsSecret.fromSecretName">fromSecretName</a></code> | Imports a secret by secret name; |
+| <code><a href="#cdk-sops-secrets.SopsSecret.fromSecretNameV2">fromSecretNameV2</a></code> | Imports a secret by secret name. |
+| <code><a href="#cdk-sops-secrets.SopsSecret.fromSecretPartialArn">fromSecretPartialArn</a></code> | Imports a secret by partial ARN. |
 
 ---
 
-##### `isConstruct` <a name="isConstruct" id="cdk-sops-secrets.SopsSecrets.isConstruct"></a>
+##### `isConstruct` <a name="isConstruct" id="cdk-sops-secrets.SopsSecret.isConstruct"></a>
 
 ```typescript
-import { SopsSecrets } from 'cdk-sops-secrets'
+import { SopsSecret } from 'cdk-sops-secrets'
 
-SopsSecrets.isConstruct(x: any)
+SopsSecret.isConstruct(x: any)
 ```
 
 Return whether the given object is a Construct.
 
-###### `x`<sup>Required</sup> <a name="x" id="cdk-sops-secrets.SopsSecrets.isConstruct.parameter.x"></a>
+###### `x`<sup>Required</sup> <a name="x" id="cdk-sops-secrets.SopsSecret.isConstruct.parameter.x"></a>
 
 - *Type:* any
 
 ---
 
-##### `isResource` <a name="isResource" id="cdk-sops-secrets.SopsSecrets.isResource"></a>
+##### `isResource` <a name="isResource" id="cdk-sops-secrets.SopsSecret.isResource"></a>
 
 ```typescript
-import { SopsSecrets } from 'cdk-sops-secrets'
+import { SopsSecret } from 'cdk-sops-secrets'
 
-SopsSecrets.isResource(construct: IConstruct)
+SopsSecret.isResource(construct: IConstruct)
 ```
 
 Check whether the given construct is a Resource.
 
-###### `construct`<sup>Required</sup> <a name="construct" id="cdk-sops-secrets.SopsSecrets.isResource.parameter.construct"></a>
+###### `construct`<sup>Required</sup> <a name="construct" id="cdk-sops-secrets.SopsSecret.isResource.parameter.construct"></a>
 
 - *Type:* @aws-cdk/core.IConstruct
 
 ---
 
-##### ~~`fromSecretArn`~~ <a name="fromSecretArn" id="cdk-sops-secrets.SopsSecrets.fromSecretArn"></a>
+##### ~~`fromSecretArn`~~ <a name="fromSecretArn" id="cdk-sops-secrets.SopsSecret.fromSecretArn"></a>
 
 ```typescript
-import { SopsSecrets } from 'cdk-sops-secrets'
+import { SopsSecret } from 'cdk-sops-secrets'
 
-SopsSecrets.fromSecretArn(scope: Construct, id: string, secretArn: string)
+SopsSecret.fromSecretArn(scope: Construct, id: string, secretArn: string)
 ```
 
-###### `scope`<sup>Required</sup> <a name="scope" id="cdk-sops-secrets.SopsSecrets.fromSecretArn.parameter.scope"></a>
+###### `scope`<sup>Required</sup> <a name="scope" id="cdk-sops-secrets.SopsSecret.fromSecretArn.parameter.scope"></a>
 
 - *Type:* constructs.Construct
 
 ---
 
-###### `id`<sup>Required</sup> <a name="id" id="cdk-sops-secrets.SopsSecrets.fromSecretArn.parameter.id"></a>
+###### `id`<sup>Required</sup> <a name="id" id="cdk-sops-secrets.SopsSecret.fromSecretArn.parameter.id"></a>
 
 - *Type:* string
 
 ---
 
-###### `secretArn`<sup>Required</sup> <a name="secretArn" id="cdk-sops-secrets.SopsSecrets.fromSecretArn.parameter.secretArn"></a>
+###### `secretArn`<sup>Required</sup> <a name="secretArn" id="cdk-sops-secrets.SopsSecret.fromSecretArn.parameter.secretArn"></a>
 
 - *Type:* string
 
 ---
 
-##### `fromSecretAttributes` <a name="fromSecretAttributes" id="cdk-sops-secrets.SopsSecrets.fromSecretAttributes"></a>
+##### `fromSecretAttributes` <a name="fromSecretAttributes" id="cdk-sops-secrets.SopsSecret.fromSecretAttributes"></a>
 
 ```typescript
-import { SopsSecrets } from 'cdk-sops-secrets'
+import { SopsSecret } from 'cdk-sops-secrets'
 
-SopsSecrets.fromSecretAttributes(scope: Construct, id: string, attrs: SecretAttributes)
+SopsSecret.fromSecretAttributes(scope: Construct, id: string, attrs: SecretAttributes)
 ```
 
 Import an existing secret into the Stack.
 
-###### `scope`<sup>Required</sup> <a name="scope" id="cdk-sops-secrets.SopsSecrets.fromSecretAttributes.parameter.scope"></a>
+###### `scope`<sup>Required</sup> <a name="scope" id="cdk-sops-secrets.SopsSecret.fromSecretAttributes.parameter.scope"></a>
 
 - *Type:* constructs.Construct
 
@@ -331,7 +333,7 @@ the scope of the import.
 
 ---
 
-###### `id`<sup>Required</sup> <a name="id" id="cdk-sops-secrets.SopsSecrets.fromSecretAttributes.parameter.id"></a>
+###### `id`<sup>Required</sup> <a name="id" id="cdk-sops-secrets.SopsSecret.fromSecretAttributes.parameter.id"></a>
 
 - *Type:* string
 
@@ -339,7 +341,7 @@ the ID of the imported Secret in the construct tree.
 
 ---
 
-###### `attrs`<sup>Required</sup> <a name="attrs" id="cdk-sops-secrets.SopsSecrets.fromSecretAttributes.parameter.attrs"></a>
+###### `attrs`<sup>Required</sup> <a name="attrs" id="cdk-sops-secrets.SopsSecret.fromSecretAttributes.parameter.attrs"></a>
 
 - *Type:* @aws-cdk/aws-secretsmanager.SecretAttributes
 
@@ -347,42 +349,42 @@ the attributes of the imported secret.
 
 ---
 
-##### `fromSecretCompleteArn` <a name="fromSecretCompleteArn" id="cdk-sops-secrets.SopsSecrets.fromSecretCompleteArn"></a>
+##### `fromSecretCompleteArn` <a name="fromSecretCompleteArn" id="cdk-sops-secrets.SopsSecret.fromSecretCompleteArn"></a>
 
 ```typescript
-import { SopsSecrets } from 'cdk-sops-secrets'
+import { SopsSecret } from 'cdk-sops-secrets'
 
-SopsSecrets.fromSecretCompleteArn(scope: Construct, id: string, secretCompleteArn: string)
+SopsSecret.fromSecretCompleteArn(scope: Construct, id: string, secretCompleteArn: string)
 ```
 
 Imports a secret by complete ARN.
 
 The complete ARN is the ARN with the Secrets Manager-supplied suffix.
 
-###### `scope`<sup>Required</sup> <a name="scope" id="cdk-sops-secrets.SopsSecrets.fromSecretCompleteArn.parameter.scope"></a>
+###### `scope`<sup>Required</sup> <a name="scope" id="cdk-sops-secrets.SopsSecret.fromSecretCompleteArn.parameter.scope"></a>
 
 - *Type:* constructs.Construct
 
 ---
 
-###### `id`<sup>Required</sup> <a name="id" id="cdk-sops-secrets.SopsSecrets.fromSecretCompleteArn.parameter.id"></a>
+###### `id`<sup>Required</sup> <a name="id" id="cdk-sops-secrets.SopsSecret.fromSecretCompleteArn.parameter.id"></a>
 
 - *Type:* string
 
 ---
 
-###### `secretCompleteArn`<sup>Required</sup> <a name="secretCompleteArn" id="cdk-sops-secrets.SopsSecrets.fromSecretCompleteArn.parameter.secretCompleteArn"></a>
+###### `secretCompleteArn`<sup>Required</sup> <a name="secretCompleteArn" id="cdk-sops-secrets.SopsSecret.fromSecretCompleteArn.parameter.secretCompleteArn"></a>
 
 - *Type:* string
 
 ---
 
-##### ~~`fromSecretName`~~ <a name="fromSecretName" id="cdk-sops-secrets.SopsSecrets.fromSecretName"></a>
+##### ~~`fromSecretName`~~ <a name="fromSecretName" id="cdk-sops-secrets.SopsSecret.fromSecretName"></a>
 
 ```typescript
-import { SopsSecrets } from 'cdk-sops-secrets'
+import { SopsSecret } from 'cdk-sops-secrets'
 
-SopsSecrets.fromSecretName(scope: Construct, id: string, secretName: string)
+SopsSecret.fromSecretName(scope: Construct, id: string, secretName: string)
 ```
 
 Imports a secret by secret name;
@@ -390,30 +392,30 @@ Imports a secret by secret name;
 the ARN of the Secret will be set to the secret name.
 A secret with this name must exist in the same account & region.
 
-###### `scope`<sup>Required</sup> <a name="scope" id="cdk-sops-secrets.SopsSecrets.fromSecretName.parameter.scope"></a>
+###### `scope`<sup>Required</sup> <a name="scope" id="cdk-sops-secrets.SopsSecret.fromSecretName.parameter.scope"></a>
 
 - *Type:* constructs.Construct
 
 ---
 
-###### `id`<sup>Required</sup> <a name="id" id="cdk-sops-secrets.SopsSecrets.fromSecretName.parameter.id"></a>
+###### `id`<sup>Required</sup> <a name="id" id="cdk-sops-secrets.SopsSecret.fromSecretName.parameter.id"></a>
 
 - *Type:* string
 
 ---
 
-###### `secretName`<sup>Required</sup> <a name="secretName" id="cdk-sops-secrets.SopsSecrets.fromSecretName.parameter.secretName"></a>
+###### `secretName`<sup>Required</sup> <a name="secretName" id="cdk-sops-secrets.SopsSecret.fromSecretName.parameter.secretName"></a>
 
 - *Type:* string
 
 ---
 
-##### `fromSecretNameV2` <a name="fromSecretNameV2" id="cdk-sops-secrets.SopsSecrets.fromSecretNameV2"></a>
+##### `fromSecretNameV2` <a name="fromSecretNameV2" id="cdk-sops-secrets.SopsSecret.fromSecretNameV2"></a>
 
 ```typescript
-import { SopsSecrets } from 'cdk-sops-secrets'
+import { SopsSecret } from 'cdk-sops-secrets'
 
-SopsSecrets.fromSecretNameV2(scope: Construct, id: string, secretName: string)
+SopsSecret.fromSecretNameV2(scope: Construct, id: string, secretName: string)
 ```
 
 Imports a secret by secret name.
@@ -421,49 +423,49 @@ Imports a secret by secret name.
 A secret with this name must exist in the same account & region.
 Replaces the deprecated `fromSecretName`.
 
-###### `scope`<sup>Required</sup> <a name="scope" id="cdk-sops-secrets.SopsSecrets.fromSecretNameV2.parameter.scope"></a>
+###### `scope`<sup>Required</sup> <a name="scope" id="cdk-sops-secrets.SopsSecret.fromSecretNameV2.parameter.scope"></a>
 
 - *Type:* constructs.Construct
 
 ---
 
-###### `id`<sup>Required</sup> <a name="id" id="cdk-sops-secrets.SopsSecrets.fromSecretNameV2.parameter.id"></a>
+###### `id`<sup>Required</sup> <a name="id" id="cdk-sops-secrets.SopsSecret.fromSecretNameV2.parameter.id"></a>
 
 - *Type:* string
 
 ---
 
-###### `secretName`<sup>Required</sup> <a name="secretName" id="cdk-sops-secrets.SopsSecrets.fromSecretNameV2.parameter.secretName"></a>
+###### `secretName`<sup>Required</sup> <a name="secretName" id="cdk-sops-secrets.SopsSecret.fromSecretNameV2.parameter.secretName"></a>
 
 - *Type:* string
 
 ---
 
-##### `fromSecretPartialArn` <a name="fromSecretPartialArn" id="cdk-sops-secrets.SopsSecrets.fromSecretPartialArn"></a>
+##### `fromSecretPartialArn` <a name="fromSecretPartialArn" id="cdk-sops-secrets.SopsSecret.fromSecretPartialArn"></a>
 
 ```typescript
-import { SopsSecrets } from 'cdk-sops-secrets'
+import { SopsSecret } from 'cdk-sops-secrets'
 
-SopsSecrets.fromSecretPartialArn(scope: Construct, id: string, secretPartialArn: string)
+SopsSecret.fromSecretPartialArn(scope: Construct, id: string, secretPartialArn: string)
 ```
 
 Imports a secret by partial ARN.
 
 The partial ARN is the ARN without the Secrets Manager-supplied suffix.
 
-###### `scope`<sup>Required</sup> <a name="scope" id="cdk-sops-secrets.SopsSecrets.fromSecretPartialArn.parameter.scope"></a>
+###### `scope`<sup>Required</sup> <a name="scope" id="cdk-sops-secrets.SopsSecret.fromSecretPartialArn.parameter.scope"></a>
 
 - *Type:* constructs.Construct
 
 ---
 
-###### `id`<sup>Required</sup> <a name="id" id="cdk-sops-secrets.SopsSecrets.fromSecretPartialArn.parameter.id"></a>
+###### `id`<sup>Required</sup> <a name="id" id="cdk-sops-secrets.SopsSecret.fromSecretPartialArn.parameter.id"></a>
 
 - *Type:* string
 
 ---
 
-###### `secretPartialArn`<sup>Required</sup> <a name="secretPartialArn" id="cdk-sops-secrets.SopsSecrets.fromSecretPartialArn.parameter.secretPartialArn"></a>
+###### `secretPartialArn`<sup>Required</sup> <a name="secretPartialArn" id="cdk-sops-secrets.SopsSecret.fromSecretPartialArn.parameter.secretPartialArn"></a>
 
 - *Type:* string
 
@@ -473,19 +475,19 @@ The partial ARN is the ARN without the Secrets Manager-supplied suffix.
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-sops-secrets.SopsSecrets.property.node">node</a></code> | <code>@aws-cdk/core.ConstructNode</code> | The construct tree node associated with this construct. |
-| <code><a href="#cdk-sops-secrets.SopsSecrets.property.env">env</a></code> | <code>@aws-cdk/core.ResourceEnvironment</code> | The environment this resource belongs to. |
-| <code><a href="#cdk-sops-secrets.SopsSecrets.property.stack">stack</a></code> | <code>@aws-cdk/core.Stack</code> | The stack in which this resource is defined. |
-| <code><a href="#cdk-sops-secrets.SopsSecrets.property.secretArn">secretArn</a></code> | <code>string</code> | The ARN of the secret in AWS Secrets Manager. |
-| <code><a href="#cdk-sops-secrets.SopsSecrets.property.secretName">secretName</a></code> | <code>string</code> | The name of the secret. |
-| <code><a href="#cdk-sops-secrets.SopsSecrets.property.secretValue">secretValue</a></code> | <code>@aws-cdk/core.SecretValue</code> | Retrieve the value of the stored secret as a `SecretValue`. |
-| <code><a href="#cdk-sops-secrets.SopsSecrets.property.encryptionKey">encryptionKey</a></code> | <code>@aws-cdk/aws-kms.IKey</code> | The customer-managed encryption key that is used to encrypt this secret, if any. |
-| <code><a href="#cdk-sops-secrets.SopsSecrets.property.secretFullArn">secretFullArn</a></code> | <code>string</code> | The full ARN of the secret in AWS Secrets Manager, which is the ARN including the Secrets Manager-supplied 6-character suffix. |
-| <code><a href="#cdk-sops-secrets.SopsSecrets.property.sync">sync</a></code> | <code><a href="#cdk-sops-secrets.SopsSync">SopsSync</a></code> | *No description.* |
+| <code><a href="#cdk-sops-secrets.SopsSecret.property.node">node</a></code> | <code>@aws-cdk/core.ConstructNode</code> | The construct tree node associated with this construct. |
+| <code><a href="#cdk-sops-secrets.SopsSecret.property.env">env</a></code> | <code>@aws-cdk/core.ResourceEnvironment</code> | The environment this resource belongs to. |
+| <code><a href="#cdk-sops-secrets.SopsSecret.property.stack">stack</a></code> | <code>@aws-cdk/core.Stack</code> | The stack in which this resource is defined. |
+| <code><a href="#cdk-sops-secrets.SopsSecret.property.secretArn">secretArn</a></code> | <code>string</code> | The ARN of the secret in AWS Secrets Manager. |
+| <code><a href="#cdk-sops-secrets.SopsSecret.property.secretName">secretName</a></code> | <code>string</code> | The name of the secret. |
+| <code><a href="#cdk-sops-secrets.SopsSecret.property.secretValue">secretValue</a></code> | <code>@aws-cdk/core.SecretValue</code> | Retrieve the value of the stored secret as a `SecretValue`. |
+| <code><a href="#cdk-sops-secrets.SopsSecret.property.encryptionKey">encryptionKey</a></code> | <code>@aws-cdk/aws-kms.IKey</code> | The customer-managed encryption key that is used to encrypt this secret, if any. |
+| <code><a href="#cdk-sops-secrets.SopsSecret.property.secretFullArn">secretFullArn</a></code> | <code>string</code> | The full ARN of the secret in AWS Secrets Manager, which is the ARN including the Secrets Manager-supplied 6-character suffix. |
+| <code><a href="#cdk-sops-secrets.SopsSecret.property.sync">sync</a></code> | <code><a href="#cdk-sops-secrets.SopsSync">SopsSync</a></code> | *No description.* |
 
 ---
 
-##### `node`<sup>Required</sup> <a name="node" id="cdk-sops-secrets.SopsSecrets.property.node"></a>
+##### `node`<sup>Required</sup> <a name="node" id="cdk-sops-secrets.SopsSecret.property.node"></a>
 
 ```typescript
 public readonly node: ConstructNode;
@@ -497,7 +499,7 @@ The construct tree node associated with this construct.
 
 ---
 
-##### `env`<sup>Required</sup> <a name="env" id="cdk-sops-secrets.SopsSecrets.property.env"></a>
+##### `env`<sup>Required</sup> <a name="env" id="cdk-sops-secrets.SopsSecret.property.env"></a>
 
 ```typescript
 public readonly env: ResourceEnvironment;
@@ -516,7 +518,7 @@ that might be different than the stack they were imported into.
 
 ---
 
-##### `stack`<sup>Required</sup> <a name="stack" id="cdk-sops-secrets.SopsSecrets.property.stack"></a>
+##### `stack`<sup>Required</sup> <a name="stack" id="cdk-sops-secrets.SopsSecret.property.stack"></a>
 
 ```typescript
 public readonly stack: Stack;
@@ -528,7 +530,7 @@ The stack in which this resource is defined.
 
 ---
 
-##### `secretArn`<sup>Required</sup> <a name="secretArn" id="cdk-sops-secrets.SopsSecrets.property.secretArn"></a>
+##### `secretArn`<sup>Required</sup> <a name="secretArn" id="cdk-sops-secrets.SopsSecret.property.secretArn"></a>
 
 ```typescript
 public readonly secretArn: string;
@@ -543,7 +545,7 @@ For secrets imported by the deprecated `fromSecretName`, it will return the `sec
 
 ---
 
-##### `secretName`<sup>Required</sup> <a name="secretName" id="cdk-sops-secrets.SopsSecrets.property.secretName"></a>
+##### `secretName`<sup>Required</sup> <a name="secretName" id="cdk-sops-secrets.SopsSecret.property.secretName"></a>
 
 ```typescript
 public readonly secretName: string;
@@ -558,7 +560,7 @@ For "owned" secrets, this will be the full resource name (secret name + suffix),
 
 ---
 
-##### `secretValue`<sup>Required</sup> <a name="secretValue" id="cdk-sops-secrets.SopsSecrets.property.secretValue"></a>
+##### `secretValue`<sup>Required</sup> <a name="secretValue" id="cdk-sops-secrets.SopsSecret.property.secretValue"></a>
 
 ```typescript
 public readonly secretValue: SecretValue;
@@ -570,7 +572,7 @@ Retrieve the value of the stored secret as a `SecretValue`.
 
 ---
 
-##### `encryptionKey`<sup>Optional</sup> <a name="encryptionKey" id="cdk-sops-secrets.SopsSecrets.property.encryptionKey"></a>
+##### `encryptionKey`<sup>Optional</sup> <a name="encryptionKey" id="cdk-sops-secrets.SopsSecret.property.encryptionKey"></a>
 
 ```typescript
 public readonly encryptionKey: IKey;
@@ -585,7 +587,7 @@ KMS key for the account and region is being used.
 
 ---
 
-##### `secretFullArn`<sup>Optional</sup> <a name="secretFullArn" id="cdk-sops-secrets.SopsSecrets.property.secretFullArn"></a>
+##### `secretFullArn`<sup>Optional</sup> <a name="secretFullArn" id="cdk-sops-secrets.SopsSecret.property.secretFullArn"></a>
 
 ```typescript
 public readonly secretFullArn: string;
@@ -599,7 +601,7 @@ This is equal to `secretArn` in most cases, but is undefined when a full ARN is 
 
 ---
 
-##### `sync`<sup>Required</sup> <a name="sync" id="cdk-sops-secrets.SopsSecrets.property.sync"></a>
+##### `sync`<sup>Required</sup> <a name="sync" id="cdk-sops-secrets.SopsSecret.property.sync"></a>
 
 ```typescript
 public readonly sync: SopsSync;
@@ -611,6 +613,8 @@ public readonly sync: SopsSync;
 
 
 ### SopsSync <a name="SopsSync" id="cdk-sops-secrets.SopsSync"></a>
+
+The custom resource, that is syncing the content from a sops file to a secret.
 
 #### Initializers <a name="Initializers" id="cdk-sops-secrets.SopsSync.Initializer"></a>
 
@@ -691,10 +695,10 @@ Return whether the given object is a Construct.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#cdk-sops-secrets.SopsSync.property.node">node</a></code> | <code>@aws-cdk/core.ConstructNode</code> | The construct tree node associated with this construct. |
-| <code><a href="#cdk-sops-secrets.SopsSync.property.converToJSON">converToJSON</a></code> | <code>boolean</code> | *No description.* |
-| <code><a href="#cdk-sops-secrets.SopsSync.property.flatten">flatten</a></code> | <code>boolean</code> | *No description.* |
-| <code><a href="#cdk-sops-secrets.SopsSync.property.sopsFileFormat">sopsFileFormat</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#cdk-sops-secrets.SopsSync.property.versionId">versionId</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#cdk-sops-secrets.SopsSync.property.converToJSON">converToJSON</a></code> | <code>boolean</code> | Was the format converted to json? |
+| <code><a href="#cdk-sops-secrets.SopsSync.property.flatten">flatten</a></code> | <code>boolean</code> | Was the structure flattened? |
+| <code><a href="#cdk-sops-secrets.SopsSync.property.sopsFileFormat">sopsFileFormat</a></code> | <code>string</code> | The format of the input file. |
+| <code><a href="#cdk-sops-secrets.SopsSync.property.versionId">versionId</a></code> | <code>string</code> | The current versionId of the secret populated via this resource. |
 
 ---
 
@@ -718,6 +722,8 @@ public readonly converToJSON: boolean;
 
 - *Type:* boolean
 
+Was the format converted to json?
+
 ---
 
 ##### `flatten`<sup>Required</sup> <a name="flatten" id="cdk-sops-secrets.SopsSync.property.flatten"></a>
@@ -727,6 +733,8 @@ public readonly flatten: boolean;
 ```
 
 - *Type:* boolean
+
+Was the structure flattened?
 
 ---
 
@@ -738,6 +746,8 @@ public readonly sopsFileFormat: string;
 
 - *Type:* string
 
+The format of the input file.
+
 ---
 
 ##### `versionId`<sup>Required</sup> <a name="versionId" id="cdk-sops-secrets.SopsSync.property.versionId"></a>
@@ -748,12 +758,16 @@ public readonly versionId: string;
 
 - *Type:* string
 
+The current versionId of the secret populated via this resource.
+
 ---
 
 
 ## Structs <a name="Structs" id="Structs"></a>
 
 ### SopsSecretProps <a name="SopsSecretProps" id="cdk-sops-secrets.SopsSecretProps"></a>
+
+The configuration options of the SopsSecret.
 
 #### Initializer <a name="Initializer" id="cdk-sops-secrets.SopsSecretProps.Initializer"></a>
 
@@ -775,7 +789,7 @@ const sopsSecretProps: SopsSecretProps = { ... }
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.secretName">secretName</a></code> | <code>string</code> | A name for the secret. |
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.secretStringBeta1">secretStringBeta1</a></code> | <code>@aws-cdk/aws-secretsmanager.SecretStringValueBeta1</code> | Initial value for the secret. |
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.sopsFilePath">sopsFilePath</a></code> | <code>string</code> | The filepath to the sops file. |
-| <code><a href="#cdk-sops-secrets.SopsSecretProps.property.convertToJSON">convertToJSON</a></code> | <code>boolean</code> | *No description.* |
+| <code><a href="#cdk-sops-secrets.SopsSecretProps.property.convertToJSON">convertToJSON</a></code> | <code>boolean</code> | Should the encrypted sops value should be converted to JSON? |
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.flatten">flatten</a></code> | <code>boolean</code> | Should the structure be flattened? |
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.sopsAgeKey">sopsAgeKey</a></code> | <code>@aws-cdk/core.SecretValue</code> | The age key that should be used for encryption. |
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.sopsFileFormat">sopsFileFormat</a></code> | <code>string</code> | The format of the sops file. |
@@ -910,6 +924,11 @@ public readonly convertToJSON: boolean;
 ```
 
 - *Type:* boolean
+- *Default:* true
+
+Should the encrypted sops value should be converted to JSON?
+
+Only JSON can be handled by cloud formations dynamic references.
 
 ---
 
@@ -989,6 +1008,8 @@ provider will be created - or if already exists within this stack - reused.
 
 ### SopsSyncOptions <a name="SopsSyncOptions" id="cdk-sops-secrets.SopsSyncOptions"></a>
 
+Configuration options for the SopsSync.
+
 #### Initializer <a name="Initializer" id="cdk-sops-secrets.SopsSyncOptions.Initializer"></a>
 
 ```typescript
@@ -1002,7 +1023,7 @@ const sopsSyncOptions: SopsSyncOptions = { ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#cdk-sops-secrets.SopsSyncOptions.property.sopsFilePath">sopsFilePath</a></code> | <code>string</code> | The filepath to the sops file. |
-| <code><a href="#cdk-sops-secrets.SopsSyncOptions.property.convertToJSON">convertToJSON</a></code> | <code>boolean</code> | *No description.* |
+| <code><a href="#cdk-sops-secrets.SopsSyncOptions.property.convertToJSON">convertToJSON</a></code> | <code>boolean</code> | Should the encrypted sops value should be converted to JSON? |
 | <code><a href="#cdk-sops-secrets.SopsSyncOptions.property.flatten">flatten</a></code> | <code>boolean</code> | Should the structure be flattened? |
 | <code><a href="#cdk-sops-secrets.SopsSyncOptions.property.sopsAgeKey">sopsAgeKey</a></code> | <code>@aws-cdk/core.SecretValue</code> | The age key that should be used for encryption. |
 | <code><a href="#cdk-sops-secrets.SopsSyncOptions.property.sopsFileFormat">sopsFileFormat</a></code> | <code>string</code> | The format of the sops file. |
@@ -1030,6 +1051,11 @@ public readonly convertToJSON: boolean;
 ```
 
 - *Type:* boolean
+- *Default:* true
+
+Should the encrypted sops value should be converted to JSON?
+
+Only JSON can be handled by cloud formations dynamic references.
 
 ---
 
@@ -1109,6 +1135,8 @@ provider will be created - or if already exists within this stack - reused.
 
 ### SopsSyncProps <a name="SopsSyncProps" id="cdk-sops-secrets.SopsSyncProps"></a>
 
+The configuration options extended by the target Secret.
+
 #### Initializer <a name="Initializer" id="cdk-sops-secrets.SopsSyncProps.Initializer"></a>
 
 ```typescript
@@ -1122,13 +1150,13 @@ const sopsSyncProps: SopsSyncProps = { ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#cdk-sops-secrets.SopsSyncProps.property.sopsFilePath">sopsFilePath</a></code> | <code>string</code> | The filepath to the sops file. |
-| <code><a href="#cdk-sops-secrets.SopsSyncProps.property.convertToJSON">convertToJSON</a></code> | <code>boolean</code> | *No description.* |
+| <code><a href="#cdk-sops-secrets.SopsSyncProps.property.convertToJSON">convertToJSON</a></code> | <code>boolean</code> | Should the encrypted sops value should be converted to JSON? |
 | <code><a href="#cdk-sops-secrets.SopsSyncProps.property.flatten">flatten</a></code> | <code>boolean</code> | Should the structure be flattened? |
 | <code><a href="#cdk-sops-secrets.SopsSyncProps.property.sopsAgeKey">sopsAgeKey</a></code> | <code>@aws-cdk/core.SecretValue</code> | The age key that should be used for encryption. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProps.property.sopsFileFormat">sopsFileFormat</a></code> | <code>string</code> | The format of the sops file. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProps.property.sopsKmsKey">sopsKmsKey</a></code> | <code>@aws-cdk/aws-kms.IKey[]</code> | The kmsKey used to encrypt the sops file. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProps.property.sopsProvider">sopsProvider</a></code> | <code>@aws-cdk/aws-lambda.IFunction</code> | The custom resource provider to use. |
-| <code><a href="#cdk-sops-secrets.SopsSyncProps.property.secret">secret</a></code> | <code>@aws-cdk/aws-secretsmanager.ISecret</code> | *No description.* |
+| <code><a href="#cdk-sops-secrets.SopsSyncProps.property.secret">secret</a></code> | <code>@aws-cdk/aws-secretsmanager.ISecret</code> | The secret that will be populated with the encrypted sops file content. |
 
 ---
 
@@ -1151,6 +1179,11 @@ public readonly convertToJSON: boolean;
 ```
 
 - *Type:* boolean
+- *Default:* true
+
+Should the encrypted sops value should be converted to JSON?
+
+Only JSON can be handled by cloud formations dynamic references.
 
 ---
 
@@ -1235,6 +1268,8 @@ public readonly secret: ISecret;
 ```
 
 - *Type:* @aws-cdk/aws-secretsmanager.ISecret
+
+The secret that will be populated with the encrypted sops file content.
 
 ---
 
