@@ -8,6 +8,7 @@ import (
 	"log"
 	"os"
 	"regexp"
+	"strconv"
 
 	runtime "github.com/aws/aws-lambda-go/lambda"
 	"github.com/aws/aws-sdk-go/aws"
@@ -23,16 +24,18 @@ import (
 	"github.com/aws/aws-lambda-go/cfn"
 )
 
-type SOPSS3File struct {
+type SopsS3File struct {
 	Bucket string `json:"Bucket"`
 	Key    string `json:"Key"`
-	Format string `json:"Format"`
 }
 
-type SOPSResourcePropertys struct {
-	SecretARN         string     `json:"SecretARN"`
-	S3SOPSContentFile SOPSS3File `json:"S3SOPSContentFile"`
-	SOPSAgeKey        string     `json:"SOPSAgeKey,omitempty"`
+type SopsSyncResourcePropertys struct {
+	SecretARN     string     `json:"SecretARN"`
+	SopsS3File    SopsS3File `json:"SopsS3File"`
+	SopsAgeKey    string     `json:"SopsAgeKey,omitempty"`
+	Format        string     `json:"Format"`
+	ConvertToJSON string     `json:"ConvertToJSON,omitempty"`
+	Flatten       string     `json:"Flatten,omitempty"`
 }
 
 type AWS struct {
@@ -40,7 +43,7 @@ type AWS struct {
 	s3downlaoder   s3manageriface.DownloaderAPI
 }
 
-func (a AWS) getS3FileContent(file SOPSS3File) (data []byte, err error) {
+func (a AWS) getS3FileContent(file SopsS3File) (data []byte, err error) {
 	log.Printf("Downloading file '%s' from bucket '%s'\n", file.Key, file.Bucket)
 	buf := aws.NewWriteAtBuffer([]byte{})
 	resp, err := a.s3downlaoder.Download(buf, &s3.GetObjectInput{
@@ -54,9 +57,9 @@ func (a AWS) getS3FileContent(file SOPSS3File) (data []byte, err error) {
 	return buf.Bytes(), nil
 }
 
-func decryptSopsFileContent(content []byte, file SOPSS3File) (data []byte, err error) {
-	log.Printf("Decrypting content with format %s\n", file.Format)
-	resp, err := decrypt.Data(content, file.Format)
+func decryptSopsFileContent(content []byte, format string) (data []byte, err error) {
+	log.Printf("Decrypting content with format %s\n", format)
+	resp, err := decrypt.Data(content, format)
 	if err != nil {
 		return nil, errors.New(fmt.Sprintf("Decryption error:\n%v\n", err))
 	}
@@ -95,33 +98,93 @@ func (a AWS) syncSopsToSecretsmanager(ctx context.Context, event cfn.Event) (phy
 			return "", nil, err
 		}
 
-		resourceProperties := SOPSResourcePropertys{}
+		resourceProperties := SopsSyncResourcePropertys{}
 		if err := json.Unmarshal(jsonResourceProps, &resourceProperties); err != nil {
 			return "", nil, err
 		}
 
 		// Enable AGE Support
-		if resourceProperties.SOPSAgeKey != "" {
-			os.Setenv("SOPS_AGE_KEY", resourceProperties.SOPSAgeKey)
+		if resourceProperties.SopsAgeKey != "" {
+			os.Setenv("SOPS_AGE_KEY", resourceProperties.SopsAgeKey)
 		}
 
-		sopsFile := resourceProperties.S3SOPSContentFile
+		sopsFile := resourceProperties.SopsS3File
 
 		// This is where the magic happens
 		ecnryptedContent, err := a.getS3FileContent(sopsFile)
 		if err != nil {
 			return "", nil, err
 		}
-		decryptedContent, err := decryptSopsFileContent(ecnryptedContent, sopsFile)
+		decryptedContent, err := decryptSopsFileContent(ecnryptedContent, resourceProperties.Format)
 		if err != nil {
 			return "", nil, err
 		}
+		log.Println(string(decryptedContent))
+		var decryptedInterface interface{}
+		switch resourceProperties.Format {
+		case "json":
+			{
+				err := json.Unmarshal(decryptedContent, &decryptedInterface)
+				if err != nil {
+					return "", nil, err
+				}
+			}
+		case "yaml":
+			{
+				err := yaml.Unmarshal(decryptedContent, &decryptedInterface)
+				if err != nil {
+					return "", nil, err
+				}
+			}
+		default:
+			return "", nil, errors.New(fmt.Sprintf("Format %s not supported", resourceProperties.Format))
+		}
+
+		if resourceProperties.Flatten == "" {
+			resourceProperties.Flatten = "true"
+		}
+		resourcePropertiesFlatten, err := strconv.ParseBool(resourceProperties.Flatten)
+		if err != nil {
+			return "", nil, err
+		}
+
+		var finalInterface interface{}
+
+		if resourcePropertiesFlatten {
+			flattenedInterface := make(map[string]interface{})
+			err := flatten("", decryptedInterface, flattenedInterface)
+			if err != nil {
+				return "", nil, err
+			}
+			finalInterface = flattenedInterface
+		} else {
+			finalInterface = decryptedInterface
+		}
+
+		if resourceProperties.ConvertToJSON == "" {
+			resourceProperties.ConvertToJSON = "true"
+		}
+		resourcePropertieConvertToJSON, err := strconv.ParseBool(resourceProperties.ConvertToJSON)
+		if err != nil {
+			return "", nil, err
+		}
+		if resourcePropertieConvertToJSON || resourceProperties.Format == "json" {
+			decryptedContent, err = toJSON(finalInterface)
+			if err != nil {
+				return "", nil, err
+			}
+		} else if resourceProperties.Format == "yaml" {
+			decryptedContent, err = toYAML(finalInterface)
+			if err != nil {
+				return "", nil, err
+			}
+		}
+		// Write the secret
 		updateSecretResp, err := a.updateSecret(resourceProperties.SecretARN, decryptedContent)
 		if err != nil {
 			return "", nil, err
 		}
 
-		log.Println("Successfully finished, returning")
 		returnData := make(map[string]interface{})
 
 		returnData["ARN"] = *updateSecretResp.ARN
@@ -161,11 +224,60 @@ func fromYAML(in []byte) (interface{}, error) {
 	return ret, nil
 }
 
-func toJSON(in any) ([]byte, error) {
-	ret, err := json.Marshal(in)
+func fromJSON(in []byte) (interface{}, error) {
+	var ret interface{}
+	err := json.Unmarshal(in, &ret)
 	if err != nil {
 		return nil, err
 	}
 	return ret, nil
+}
 
+func toJSON(in any) ([]byte, error) {
+	ret, err := json.MarshalIndent(in, "", "  ")
+	if err != nil {
+		return nil, err
+	}
+	return ret, nil
+}
+
+func toYAML(in any) ([]byte, error) {
+	ret, err := yaml.Marshal(in)
+	if err != nil {
+		return nil, err
+	}
+	return ret, nil
+}
+
+func flatten(parentkey string, input any, output map[string]interface{}) error {
+
+	switch child := input.(type) {
+	case map[string]interface{}:
+		{
+			for k, v := range child {
+				if parentkey == "" {
+					flatten(k, v, output)
+				} else {
+					flatten(fmt.Sprintf("%s%s%s", parentkey, ".", k), v, output)
+				}
+
+			}
+		}
+	case []interface{}:
+		{
+			for i, v := range child {
+				if parentkey == "" {
+					flatten(fmt.Sprintf("[%d]", i), v, output)
+				} else {
+					flatten(fmt.Sprintf("%s%s[%d]", parentkey, ".", i), v, output)
+				}
+			}
+		}
+	default:
+		{
+			output[parentkey] = input
+		}
+	}
+
+	return nil
 }

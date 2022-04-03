@@ -481,6 +481,7 @@ The partial ARN is the ARN without the Secrets Manager-supplied suffix.
 | <code><a href="#cdk-sops-secrets.SopsSecrets.property.secretValue">secretValue</a></code> | <code>@aws-cdk/core.SecretValue</code> | Retrieve the value of the stored secret as a `SecretValue`. |
 | <code><a href="#cdk-sops-secrets.SopsSecrets.property.encryptionKey">encryptionKey</a></code> | <code>@aws-cdk/aws-kms.IKey</code> | The customer-managed encryption key that is used to encrypt this secret, if any. |
 | <code><a href="#cdk-sops-secrets.SopsSecrets.property.secretFullArn">secretFullArn</a></code> | <code>string</code> | The full ARN of the secret in AWS Secrets Manager, which is the ARN including the Secrets Manager-supplied 6-character suffix. |
+| <code><a href="#cdk-sops-secrets.SopsSecrets.property.sync">sync</a></code> | <code><a href="#cdk-sops-secrets.SopsSync">SopsSync</a></code> | *No description.* |
 
 ---
 
@@ -598,6 +599,16 @@ This is equal to `secretArn` in most cases, but is undefined when a full ARN is 
 
 ---
 
+##### `sync`<sup>Required</sup> <a name="sync" id="cdk-sops-secrets.SopsSecrets.property.sync"></a>
+
+```typescript
+public readonly sync: SopsSync;
+```
+
+- *Type:* <a href="#cdk-sops-secrets.SopsSync">SopsSync</a>
+
+---
+
 
 ### SopsSync <a name="SopsSync" id="cdk-sops-secrets.SopsSync"></a>
 
@@ -680,6 +691,10 @@ Return whether the given object is a Construct.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#cdk-sops-secrets.SopsSync.property.node">node</a></code> | <code>@aws-cdk/core.ConstructNode</code> | The construct tree node associated with this construct. |
+| <code><a href="#cdk-sops-secrets.SopsSync.property.converToJSON">converToJSON</a></code> | <code>boolean</code> | *No description.* |
+| <code><a href="#cdk-sops-secrets.SopsSync.property.flatten">flatten</a></code> | <code>boolean</code> | *No description.* |
+| <code><a href="#cdk-sops-secrets.SopsSync.property.sopsFileFormat">sopsFileFormat</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#cdk-sops-secrets.SopsSync.property.versionId">versionId</a></code> | <code>string</code> | *No description.* |
 
 ---
 
@@ -692,6 +707,46 @@ public readonly node: ConstructNode;
 - *Type:* @aws-cdk/core.ConstructNode
 
 The construct tree node associated with this construct.
+
+---
+
+##### `converToJSON`<sup>Required</sup> <a name="converToJSON" id="cdk-sops-secrets.SopsSync.property.converToJSON"></a>
+
+```typescript
+public readonly converToJSON: boolean;
+```
+
+- *Type:* boolean
+
+---
+
+##### `flatten`<sup>Required</sup> <a name="flatten" id="cdk-sops-secrets.SopsSync.property.flatten"></a>
+
+```typescript
+public readonly flatten: boolean;
+```
+
+- *Type:* boolean
+
+---
+
+##### `sopsFileFormat`<sup>Required</sup> <a name="sopsFileFormat" id="cdk-sops-secrets.SopsSync.property.sopsFileFormat"></a>
+
+```typescript
+public readonly sopsFileFormat: string;
+```
+
+- *Type:* string
+
+---
+
+##### `versionId`<sup>Required</sup> <a name="versionId" id="cdk-sops-secrets.SopsSync.property.versionId"></a>
+
+```typescript
+public readonly versionId: string;
+```
+
+- *Type:* string
 
 ---
 
@@ -719,11 +774,13 @@ const sopsSecretProps: SopsSecretProps = { ... }
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.replicaRegions">replicaRegions</a></code> | <code>@aws-cdk/aws-secretsmanager.ReplicaRegion[]</code> | A list of regions where to replicate this secret. |
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.secretName">secretName</a></code> | <code>string</code> | A name for the secret. |
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.secretStringBeta1">secretStringBeta1</a></code> | <code>@aws-cdk/aws-secretsmanager.SecretStringValueBeta1</code> | Initial value for the secret. |
-| <code><a href="#cdk-sops-secrets.SopsSecretProps.property.sopsFilePath">sopsFilePath</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#cdk-sops-secrets.SopsSecretProps.property.sopsAgeKey">sopsAgeKey</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#cdk-sops-secrets.SopsSecretProps.property.sopsFileFormat">sopsFileFormat</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#cdk-sops-secrets.SopsSecretProps.property.sopsKmsKey">sopsKmsKey</a></code> | <code>@aws-cdk/aws-kms.IKey</code> | *No description.* |
-| <code><a href="#cdk-sops-secrets.SopsSecretProps.property.sopsProvider">sopsProvider</a></code> | <code>@aws-cdk/aws-lambda.IFunction</code> | *No description.* |
+| <code><a href="#cdk-sops-secrets.SopsSecretProps.property.sopsFilePath">sopsFilePath</a></code> | <code>string</code> | The filepath to the sops file. |
+| <code><a href="#cdk-sops-secrets.SopsSecretProps.property.convertToJSON">convertToJSON</a></code> | <code>boolean</code> | *No description.* |
+| <code><a href="#cdk-sops-secrets.SopsSecretProps.property.flatten">flatten</a></code> | <code>boolean</code> | Should the structure be flattened? |
+| <code><a href="#cdk-sops-secrets.SopsSecretProps.property.sopsAgeKey">sopsAgeKey</a></code> | <code>@aws-cdk/core.SecretValue</code> | The age key that should be used for encryption. |
+| <code><a href="#cdk-sops-secrets.SopsSecretProps.property.sopsFileFormat">sopsFileFormat</a></code> | <code>string</code> | The format of the sops file. |
+| <code><a href="#cdk-sops-secrets.SopsSecretProps.property.sopsKmsKey">sopsKmsKey</a></code> | <code>@aws-cdk/aws-kms.IKey[]</code> | The kmsKey used to encrypt the sops file. |
+| <code><a href="#cdk-sops-secrets.SopsSecretProps.property.sopsProvider">sopsProvider</a></code> | <code>@aws-cdk/aws-lambda.IFunction</code> | The custom resource provider to use. |
 
 ---
 
@@ -842,15 +899,46 @@ public readonly sopsFilePath: string;
 
 - *Type:* string
 
+The filepath to the sops file.
+
+---
+
+##### `convertToJSON`<sup>Optional</sup> <a name="convertToJSON" id="cdk-sops-secrets.SopsSecretProps.property.convertToJSON"></a>
+
+```typescript
+public readonly convertToJSON: boolean;
+```
+
+- *Type:* boolean
+
+---
+
+##### `flatten`<sup>Optional</sup> <a name="flatten" id="cdk-sops-secrets.SopsSecretProps.property.flatten"></a>
+
+```typescript
+public readonly flatten: boolean;
+```
+
+- *Type:* boolean
+- *Default:* true
+
+Should the structure be flattened?
+
+The result will be a flat structure and all
+object keys will be replaced with the full jsonpath as key.
+This is usefull for dynamic references, as those don't support nested objects.
+
 ---
 
 ##### `sopsAgeKey`<sup>Optional</sup> <a name="sopsAgeKey" id="cdk-sops-secrets.SopsSecretProps.property.sopsAgeKey"></a>
 
 ```typescript
-public readonly sopsAgeKey: string;
+public readonly sopsAgeKey: SecretValue;
 ```
 
-- *Type:* string
+- *Type:* @aws-cdk/core.SecretValue
+
+The age key that should be used for encryption.
 
 ---
 
@@ -861,16 +949,25 @@ public readonly sopsFileFormat: string;
 ```
 
 - *Type:* string
+- *Default:* The fileformat will be derived from the file ending
+
+The format of the sops file.
 
 ---
 
 ##### `sopsKmsKey`<sup>Optional</sup> <a name="sopsKmsKey" id="cdk-sops-secrets.SopsSecretProps.property.sopsKmsKey"></a>
 
 ```typescript
-public readonly sopsKmsKey: IKey;
+public readonly sopsKmsKey: IKey[];
 ```
 
-- *Type:* @aws-cdk/aws-kms.IKey
+- *Type:* @aws-cdk/aws-kms.IKey[]
+- *Default:* The key will be derived from the sops file
+
+The kmsKey used to encrypt the sops file.
+
+Encrypt permissions
+will be granted to the custom resource provider.
 
 ---
 
@@ -881,6 +978,12 @@ public readonly sopsProvider: IFunction;
 ```
 
 - *Type:* @aws-cdk/aws-lambda.IFunction
+- *Default:* A new singleton provider will be created
+
+The custom resource provider to use.
+
+If you don't specify any, a new
+provider will be created - or if already exists within this stack - reused.
 
 ---
 
@@ -898,11 +1001,13 @@ const sopsSyncOptions: SopsSyncOptions = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-sops-secrets.SopsSyncOptions.property.sopsFilePath">sopsFilePath</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#cdk-sops-secrets.SopsSyncOptions.property.sopsAgeKey">sopsAgeKey</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#cdk-sops-secrets.SopsSyncOptions.property.sopsFileFormat">sopsFileFormat</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#cdk-sops-secrets.SopsSyncOptions.property.sopsKmsKey">sopsKmsKey</a></code> | <code>@aws-cdk/aws-kms.IKey</code> | *No description.* |
-| <code><a href="#cdk-sops-secrets.SopsSyncOptions.property.sopsProvider">sopsProvider</a></code> | <code>@aws-cdk/aws-lambda.IFunction</code> | *No description.* |
+| <code><a href="#cdk-sops-secrets.SopsSyncOptions.property.sopsFilePath">sopsFilePath</a></code> | <code>string</code> | The filepath to the sops file. |
+| <code><a href="#cdk-sops-secrets.SopsSyncOptions.property.convertToJSON">convertToJSON</a></code> | <code>boolean</code> | *No description.* |
+| <code><a href="#cdk-sops-secrets.SopsSyncOptions.property.flatten">flatten</a></code> | <code>boolean</code> | Should the structure be flattened? |
+| <code><a href="#cdk-sops-secrets.SopsSyncOptions.property.sopsAgeKey">sopsAgeKey</a></code> | <code>@aws-cdk/core.SecretValue</code> | The age key that should be used for encryption. |
+| <code><a href="#cdk-sops-secrets.SopsSyncOptions.property.sopsFileFormat">sopsFileFormat</a></code> | <code>string</code> | The format of the sops file. |
+| <code><a href="#cdk-sops-secrets.SopsSyncOptions.property.sopsKmsKey">sopsKmsKey</a></code> | <code>@aws-cdk/aws-kms.IKey[]</code> | The kmsKey used to encrypt the sops file. |
+| <code><a href="#cdk-sops-secrets.SopsSyncOptions.property.sopsProvider">sopsProvider</a></code> | <code>@aws-cdk/aws-lambda.IFunction</code> | The custom resource provider to use. |
 
 ---
 
@@ -914,15 +1019,46 @@ public readonly sopsFilePath: string;
 
 - *Type:* string
 
+The filepath to the sops file.
+
+---
+
+##### `convertToJSON`<sup>Optional</sup> <a name="convertToJSON" id="cdk-sops-secrets.SopsSyncOptions.property.convertToJSON"></a>
+
+```typescript
+public readonly convertToJSON: boolean;
+```
+
+- *Type:* boolean
+
+---
+
+##### `flatten`<sup>Optional</sup> <a name="flatten" id="cdk-sops-secrets.SopsSyncOptions.property.flatten"></a>
+
+```typescript
+public readonly flatten: boolean;
+```
+
+- *Type:* boolean
+- *Default:* true
+
+Should the structure be flattened?
+
+The result will be a flat structure and all
+object keys will be replaced with the full jsonpath as key.
+This is usefull for dynamic references, as those don't support nested objects.
+
 ---
 
 ##### `sopsAgeKey`<sup>Optional</sup> <a name="sopsAgeKey" id="cdk-sops-secrets.SopsSyncOptions.property.sopsAgeKey"></a>
 
 ```typescript
-public readonly sopsAgeKey: string;
+public readonly sopsAgeKey: SecretValue;
 ```
 
-- *Type:* string
+- *Type:* @aws-cdk/core.SecretValue
+
+The age key that should be used for encryption.
 
 ---
 
@@ -933,16 +1069,25 @@ public readonly sopsFileFormat: string;
 ```
 
 - *Type:* string
+- *Default:* The fileformat will be derived from the file ending
+
+The format of the sops file.
 
 ---
 
 ##### `sopsKmsKey`<sup>Optional</sup> <a name="sopsKmsKey" id="cdk-sops-secrets.SopsSyncOptions.property.sopsKmsKey"></a>
 
 ```typescript
-public readonly sopsKmsKey: IKey;
+public readonly sopsKmsKey: IKey[];
 ```
 
-- *Type:* @aws-cdk/aws-kms.IKey
+- *Type:* @aws-cdk/aws-kms.IKey[]
+- *Default:* The key will be derived from the sops file
+
+The kmsKey used to encrypt the sops file.
+
+Encrypt permissions
+will be granted to the custom resource provider.
 
 ---
 
@@ -953,6 +1098,12 @@ public readonly sopsProvider: IFunction;
 ```
 
 - *Type:* @aws-cdk/aws-lambda.IFunction
+- *Default:* A new singleton provider will be created
+
+The custom resource provider to use.
+
+If you don't specify any, a new
+provider will be created - or if already exists within this stack - reused.
 
 ---
 
@@ -970,11 +1121,13 @@ const sopsSyncProps: SopsSyncProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-sops-secrets.SopsSyncProps.property.sopsFilePath">sopsFilePath</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#cdk-sops-secrets.SopsSyncProps.property.sopsAgeKey">sopsAgeKey</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#cdk-sops-secrets.SopsSyncProps.property.sopsFileFormat">sopsFileFormat</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#cdk-sops-secrets.SopsSyncProps.property.sopsKmsKey">sopsKmsKey</a></code> | <code>@aws-cdk/aws-kms.IKey</code> | *No description.* |
-| <code><a href="#cdk-sops-secrets.SopsSyncProps.property.sopsProvider">sopsProvider</a></code> | <code>@aws-cdk/aws-lambda.IFunction</code> | *No description.* |
+| <code><a href="#cdk-sops-secrets.SopsSyncProps.property.sopsFilePath">sopsFilePath</a></code> | <code>string</code> | The filepath to the sops file. |
+| <code><a href="#cdk-sops-secrets.SopsSyncProps.property.convertToJSON">convertToJSON</a></code> | <code>boolean</code> | *No description.* |
+| <code><a href="#cdk-sops-secrets.SopsSyncProps.property.flatten">flatten</a></code> | <code>boolean</code> | Should the structure be flattened? |
+| <code><a href="#cdk-sops-secrets.SopsSyncProps.property.sopsAgeKey">sopsAgeKey</a></code> | <code>@aws-cdk/core.SecretValue</code> | The age key that should be used for encryption. |
+| <code><a href="#cdk-sops-secrets.SopsSyncProps.property.sopsFileFormat">sopsFileFormat</a></code> | <code>string</code> | The format of the sops file. |
+| <code><a href="#cdk-sops-secrets.SopsSyncProps.property.sopsKmsKey">sopsKmsKey</a></code> | <code>@aws-cdk/aws-kms.IKey[]</code> | The kmsKey used to encrypt the sops file. |
+| <code><a href="#cdk-sops-secrets.SopsSyncProps.property.sopsProvider">sopsProvider</a></code> | <code>@aws-cdk/aws-lambda.IFunction</code> | The custom resource provider to use. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProps.property.secret">secret</a></code> | <code>@aws-cdk/aws-secretsmanager.ISecret</code> | *No description.* |
 
 ---
@@ -987,15 +1140,46 @@ public readonly sopsFilePath: string;
 
 - *Type:* string
 
+The filepath to the sops file.
+
+---
+
+##### `convertToJSON`<sup>Optional</sup> <a name="convertToJSON" id="cdk-sops-secrets.SopsSyncProps.property.convertToJSON"></a>
+
+```typescript
+public readonly convertToJSON: boolean;
+```
+
+- *Type:* boolean
+
+---
+
+##### `flatten`<sup>Optional</sup> <a name="flatten" id="cdk-sops-secrets.SopsSyncProps.property.flatten"></a>
+
+```typescript
+public readonly flatten: boolean;
+```
+
+- *Type:* boolean
+- *Default:* true
+
+Should the structure be flattened?
+
+The result will be a flat structure and all
+object keys will be replaced with the full jsonpath as key.
+This is usefull for dynamic references, as those don't support nested objects.
+
 ---
 
 ##### `sopsAgeKey`<sup>Optional</sup> <a name="sopsAgeKey" id="cdk-sops-secrets.SopsSyncProps.property.sopsAgeKey"></a>
 
 ```typescript
-public readonly sopsAgeKey: string;
+public readonly sopsAgeKey: SecretValue;
 ```
 
-- *Type:* string
+- *Type:* @aws-cdk/core.SecretValue
+
+The age key that should be used for encryption.
 
 ---
 
@@ -1006,16 +1190,25 @@ public readonly sopsFileFormat: string;
 ```
 
 - *Type:* string
+- *Default:* The fileformat will be derived from the file ending
+
+The format of the sops file.
 
 ---
 
 ##### `sopsKmsKey`<sup>Optional</sup> <a name="sopsKmsKey" id="cdk-sops-secrets.SopsSyncProps.property.sopsKmsKey"></a>
 
 ```typescript
-public readonly sopsKmsKey: IKey;
+public readonly sopsKmsKey: IKey[];
 ```
 
-- *Type:* @aws-cdk/aws-kms.IKey
+- *Type:* @aws-cdk/aws-kms.IKey[]
+- *Default:* The key will be derived from the sops file
+
+The kmsKey used to encrypt the sops file.
+
+Encrypt permissions
+will be granted to the custom resource provider.
 
 ---
 
@@ -1026,6 +1219,12 @@ public readonly sopsProvider: IFunction;
 ```
 
 - *Type:* @aws-cdk/aws-lambda.IFunction
+- *Default:* A new singleton provider will be created
+
+The custom resource provider to use.
+
+If you don't specify any, a new
+provider will be created - or if already exists within this stack - reused.
 
 ---
 

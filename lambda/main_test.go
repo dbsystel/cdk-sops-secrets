@@ -24,13 +24,16 @@ func TestMain(t *testing.M) {
 
 func Test_GetS3FileContent(t *testing.T) {
 	mocks := &AWS{
-		secretsmanager: &SecretsManagerMockClient{},
-		s3downlaoder:   &S3ManagerMockClient{},
+		secretsmanager: &SecretsManagerMockClient{
+			t: t,
+		},
+		s3downlaoder: &S3ManagerMockClient{
+			t: t,
+		},
 	}
-	data, err := mocks.getS3FileContent(SOPSS3File{
+	data, err := mocks.getS3FileContent(SopsS3File{
 		Bucket: "..",
 		Key:    "../test-secrets/json/sopsfile.enc-age.json",
-		Format: "..",
 	})
 	check(err)
 	snaps.MatchSnapshot(t, strings.ReplaceAll(string(data), "-----", ""))
@@ -38,8 +41,12 @@ func Test_GetS3FileContent(t *testing.T) {
 
 func Test_UpdateSecret(t *testing.T) {
 	mocks := &AWS{
-		secretsmanager: &SecretsManagerMockClient{},
-		s3downlaoder:   &S3ManagerMockClient{},
+		secretsmanager: &SecretsManagerMockClient{
+			t: t,
+		},
+		s3downlaoder: &S3ManagerMockClient{
+			t: t,
+		},
 	}
 	inputArn := "arn:${Partition}:secretsmanager:${Region}:${Account}:secret:${SecretId}"
 	secretValue := []byte("some-secret-data")
@@ -55,7 +62,7 @@ func Test_DecryptSopsFileContent(t *testing.T) {
 
 	sopsEncrypted, err := os.ReadFile("../test-secrets/json/sopsfile.enc-age.json")
 	check(err)
-	sopsDecrypted, err := decryptSopsFileContent(sopsEncrypted, SOPSS3File{Bucket: "", Key: "", Format: "json"})
+	sopsDecrypted, err := decryptSopsFileContent(sopsEncrypted, "json")
 	check(err)
 	sopsExpected, err := os.ReadFile("../test-secrets/json/sopsfile.json")
 	check(err)

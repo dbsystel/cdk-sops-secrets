@@ -1,16 +1,17 @@
 {
-    "RequestType": "Delete",
+    "RequestType": "Create",
     "LogicalResourceId": "LogicalResourceId",
     "ResourceProperties": {
         "SecretARN": "arn:aws:secretsmanager:eu-central-1:123456789012:secret:testsecret",
-        "S3SOPSContentFile": {
+        "SopsS3File": {
             "Bucket": "..",
-            "Key": "../test-secrets/json/sopsfile.enc-age.json",
-            "Format": "json"
+            "Key": "../test-secrets/yaml/sopsfile.enc-age.yaml"
         },
-        "SOPSAgeKey": "AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3"
+        "Format": "yaml",
+        "ConvertToJSON": "true",
+        "SopsAgeKey": "AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3"
     },
     "ResourceType": "Custom::SOPS::Secret",
     "RequestId": "RequestId",
     "StackId": "StackId"
-  } 
+} 

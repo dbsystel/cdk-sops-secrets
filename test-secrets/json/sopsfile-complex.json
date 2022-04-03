@@ -15,5 +15,21 @@
         }
       },
       "notsodeep": "struct"
+    },
+    "and now": {
+      "some": [
+        {
+          "basic": false
+        },
+        {
+          "nested": 12345
+        },
+        {
+          "type": 1.2345
+        },
+        {
+          "tests": "Finish!"
+        }
+      ]
     }
   }

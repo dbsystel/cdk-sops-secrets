@@ -1,0 +1,33 @@
+3RD PARTY LICENSES
+
+Note that not all files in the cdk-sops-secrets repository and in the released
+software packages belong to the cdk-sops-secrets project. For 3rd party files, 
+the individual licenses apply.
+
+* mozilla/sops
+    https://github.com/mozilla/sops
+    Mozilla Public License Version 2.0, https://github.com/mozilla/sops/blob/master/LICENSE
+
+* aws/aws-cdk
+    https://github.com/aws/aws-cdk
+     Apache License Version 2.0, January 2004, https://github.com/aws/aws-cdk/blob/master/LICENSE
+
+* aws/aws-sdk-go
+    https://github.com/aws/aws-sdk-go
+    Apache License Version 2.0, January 2004, https://github.com/aws/aws-sdk-go/blob/main/LICENSE.txt
+
+* aws/aws-lambda-go
+    Apache License Version 2.0, January 2004, https://github.com/aws/aws-lambda-go/blob/main/LICENSE
+    https://github.com/aws/aws-lambda-go
+
+* gkampitakis/go-snaps
+    https://github.com/gkampitakis/go-snaps
+    MIT License, https://github.com/gkampitakis/go-snaps/blob/master/LICENSE
+
+* go-test/deep
+    https://github.com/go-test/deep
+    MIT License, https://github.com/go-test/deep/blob/master/LICENSE
+
+* go-yaml/yaml
+    https://github.com/go-yaml/yaml/tree/v3
+    MIT License, https://github.com/go-yaml/yaml/blob/v3/LICENSE
