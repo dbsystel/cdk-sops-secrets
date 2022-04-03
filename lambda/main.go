@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"regexp"
 
 	runtime "github.com/aws/aws-lambda-go/lambda"
 	"github.com/aws/aws-sdk-go/aws"
@@ -17,6 +18,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/secretsmanager"
 	"github.com/aws/aws-sdk-go/service/secretsmanager/secretsmanageriface"
 	"go.mozilla.org/sops/v3/decrypt"
+	"gopkg.in/yaml.v3"
 
 	"github.com/aws/aws-lambda-go/cfn"
 )
@@ -72,6 +74,9 @@ func (a AWS) updateSecret(secretArn string, secretContent []byte) (data *secrets
 	if secretErr != nil {
 		return nil, errors.New(fmt.Sprintf("Failed to store secret value:\n%v\n", secretErr))
 	}
+	re := regexp.MustCompile(`(^arn:.*:secretsmanager:)(.*)`)
+	arn := re.ReplaceAllString(*secretResp.ARN, `arn:custom:sopssync:$2`)
+	secretResp.ARN = &arn
 	log.Printf("Succesfully stored secret:\n%v\n", secretResp)
 	return secretResp, nil
 }
@@ -119,10 +124,10 @@ func (a AWS) syncSopsToSecretsmanager(ctx context.Context, event cfn.Event) (phy
 		log.Println("Successfully finished, returning")
 		returnData := make(map[string]interface{})
 
-		returnData["ARN"] = updateSecretResp.ARN
-		returnData["Name"] = updateSecretResp.Name
+		returnData["ARN"] = *updateSecretResp.ARN
+		returnData["Name"] = *updateSecretResp.Name
 		returnData["VersionStages"] = updateSecretResp.VersionStages
-		returnData["VersionId"] = updateSecretResp.VersionId
+		returnData["VersionId"] = *updateSecretResp.VersionId
 
 		return *updateSecretResp.ARN, returnData, nil
 	} else if event.RequestType == cfn.RequestDelete {
@@ -145,4 +150,22 @@ func handleRequest(ctx context.Context, event cfn.Event) (physicalResourceID str
 
 func main() {
 	runtime.Start(cfn.LambdaWrap(handleRequest))
+}
+
+func fromYAML(in []byte) (interface{}, error) {
+	var ret interface{}
+	err := yaml.Unmarshal(in, &ret)
+	if err != nil {
+		return nil, err
+	}
+	return ret, nil
+}
+
+func toJSON(in any) ([]byte, error) {
+	ret, err := json.Marshal(in)
+	if err != nil {
+		return nil, err
+	}
+	return ret, nil
+
 }

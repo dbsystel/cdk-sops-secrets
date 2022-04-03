@@ -1,0 +1,19 @@
+{
+    "some": {
+      "deep": {
+        "nested": {
+          "object": "structure",
+          "arrays": [
+            "with",
+            "several",
+            {
+              "values": {
+                "and": "objects"
+              }
+            }
+          ]
+        }
+      },
+      "notsodeep": "struct"
+    }
+  }

@@ -5,7 +5,10 @@ go 1.18
 require (
 	github.com/aws/aws-lambda-go v1.15.0
 	github.com/aws/aws-sdk-go v1.37.18
+	github.com/gkampitakis/go-snaps v0.2.3
+	github.com/go-test/deep v1.0.2-0.20181118220953-042da051cf31
 	go.mozilla.org/sops/v3 v3.7.2
+	gopkg.in/yaml.v3 v3.0.0-20210107172259-749611fa9fcc
 )
 
 require (
@@ -25,6 +28,7 @@ require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible // indirect
 	github.com/dimchansky/utfbom v1.1.0 // indirect
 	github.com/fatih/color v1.7.0 // indirect
+	github.com/gkampitakis/ciinfo v0.1.0 // indirect
 	github.com/golang/protobuf v1.4.1 // indirect
 	github.com/golang/snappy v0.0.1 // indirect
 	github.com/google/go-cmp v0.5.6 // indirect
@@ -43,6 +47,8 @@ require (
 	github.com/howeyc/gopass v0.0.0-20170109162249-bf9dde6d0d2c // indirect
 	github.com/jmespath/go-jmespath v0.4.0 // indirect
 	github.com/jtolds/gls v4.20.0+incompatible // indirect
+	github.com/kr/pretty v0.3.0 // indirect
+	github.com/kr/text v0.2.0 // indirect
 	github.com/lib/pq v1.2.0 // indirect
 	github.com/mattn/go-colorable v0.0.9 // indirect
 	github.com/mattn/go-isatty v0.0.3 // indirect
@@ -51,8 +57,9 @@ require (
 	github.com/mitchellh/mapstructure v1.1.2 // indirect
 	github.com/pierrec/lz4 v2.0.5+incompatible // indirect
 	github.com/pkg/errors v0.9.1 // indirect
+	github.com/rogpeppe/go-internal v1.8.0 // indirect
 	github.com/ryanuber/go-glob v1.0.0 // indirect
-	github.com/sergi/go-diff v1.1.0 // indirect
+	github.com/sergi/go-diff v1.2.0 // indirect
 	github.com/sirupsen/logrus v1.8.1 // indirect
 	github.com/smartystreets/assertions v1.2.1 // indirect
 	go.mozilla.org/gopgagent v0.0.0-20170926210634-4d7ea76ff71a // indirect
@@ -73,5 +80,4 @@ require (
 	gopkg.in/ini.v1 v1.44.0 // indirect
 	gopkg.in/square/go-jose.v2 v2.3.1 // indirect
 	gopkg.in/urfave/cli.v1 v1.20.0 // indirect
-	gopkg.in/yaml.v3 v3.0.0-20210107172259-749611fa9fcc // indirect
 )
