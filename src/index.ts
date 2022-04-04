@@ -128,20 +128,6 @@ export class SopsSync extends Construct {
       uuid: 'cdk-sops-secrets',
     });
 
-    if ( provider.role !== undefined ) {
-      if ( props.sopsKmsKey !== undefined ) {
-        props.sopsKmsKey.forEach( (key) => key.grantDecrypt(provider.role!) );
-      }
-      const fileContent = fs.readFileSync(props.sopsFilePath);
-      const regex = /arn:aws:kms:[a-z0-9-]+:[\d]+:key\/[a-z0-9-]+/gm;
-      const results = regex.exec(fileContent.toString());
-      if ( results !== undefined ) {
-        results?.forEach( (result, index) => Key.fromKeyArn(this, `SopsKey${index}`, result).grantEncrypt(provider.role!));
-      }
-      props.secret.grantWrite(provider);
-    } else {
-      Annotations.of(this).addWarning('Please ensure propper permissions for the passed lambda function:\n  - write Access to the secret\n  - encrypt with the sopsKmsKey');
-    }
 
     if (!fs.existsSync(props.sopsFilePath)) {
       throw new Error(`File ${props.sopsFilePath} does not exist!`);
@@ -151,7 +137,21 @@ export class SopsSync extends Construct {
       path: props.sopsFilePath,
     });
 
-    sopsAsset.bucket.grantRead(provider);
+    if ( provider.role !== undefined ) {
+      if ( props.sopsKmsKey !== undefined ) {
+        props.sopsKmsKey.forEach( (key) => key.grantDecrypt(provider.role!) );
+      }
+      const fileContent = fs.readFileSync(props.sopsFilePath);
+      const regex = /arn:aws:kms:[a-z0-9-]+:[\d]+:key\/[a-z0-9-]+/gm;
+      const results = regex.exec(fileContent.toString());
+      if ( results !== undefined ) {
+        results?.forEach( (result, index) => Key.fromKeyArn(this, `SopsKey${index}`, result).grantDecrypt(provider.role!));
+      }
+      props.secret.grantWrite(provider);
+      sopsAsset.bucket.grantRead(provider);
+    } else {
+      Annotations.of(this).addWarning('Please ensure propper permissions for the passed lambda function:\n  - write Access to the secret\n  - encrypt with the sopsKmsKey\n  - download from asset bucket');
+    }
 
     const cr = new CustomResource(this, 'Resource', {
       serviceToken: provider.functionArn,

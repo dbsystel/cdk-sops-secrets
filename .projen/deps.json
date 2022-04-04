@@ -36,6 +36,11 @@
       "type": "build"
     },
     {
+      "name": "@aws-cdk/aws-ssm",
+      "version": "^1.0.0",
+      "type": "build"
+    },
+    {
       "name": "@aws-cdk/custom-resources",
       "version": "^1.0.0",
       "type": "build"
@@ -163,6 +168,11 @@
     },
     {
       "name": "@aws-cdk/aws-secretsmanager",
+      "version": "^1.0.0",
+      "type": "peer"
+    },
+    {
+      "name": "@aws-cdk/aws-ssm",
       "version": "^1.0.0",
       "type": "peer"
     },

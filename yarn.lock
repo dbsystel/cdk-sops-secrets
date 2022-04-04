@@ -302,7 +302,7 @@
     "@aws-cdk/core" "1.151.0"
     constructs "^3.3.69"
 
-"@aws-cdk/aws-ssm@1.151.0":
+"@aws-cdk/aws-ssm@1.151.0", "@aws-cdk/aws-ssm@^1.0.0":
   version "1.151.0"
   resolved "https://registry.yarnpkg.com/@aws-cdk/aws-ssm/-/aws-ssm-1.151.0.tgz#856c244d2f767747236d0f8e6a3ce1a24538424d"
   integrity sha512-U3lBRNr7jIAlFbVGFd8BLsOvkfndIPx/gxUvVvqTYCE1U8x4+WJsrUUPOYUQ8NMrAWIYmEyAB15JwWS5WkiEXg==
