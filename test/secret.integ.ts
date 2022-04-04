@@ -1,92 +1,92 @@
 //import { Code, Function, Runtime } from '@aws-cdk/aws-lambda';
-import { App, SecretValue, Stack } from "@aws-cdk/core";
-import { SopsSecret } from "../src/index";
+import { App, SecretValue, Stack } from '@aws-cdk/core';
+import { SopsSecret } from '../src/index';
 
 const app = new App();
 
-const stack = new Stack(app, "SecretIntegration");
+const stack = new Stack(app, 'SecretIntegration');
 
-new SopsSecret(stack, "SopsSecretJSON", {
-  sopsFilePath: "test-secrets/json/sopsfile.enc-age.json",
+new SopsSecret(stack, 'SopsSecretJSON', {
+  sopsFilePath: 'test-secrets/json/sopsfile.enc-age.json',
   // see test-secrets/README.md for further information regarding the test file
   sopsAgeKey: SecretValue.plainText(
-    "AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3"
+    'AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3',
   ),
 });
 
-new SopsSecret(stack, "SopsSecretYAML", {
-  sopsFilePath: "test-secrets/yaml/sopsfile.enc-age.yaml",
+new SopsSecret(stack, 'SopsSecretYAML', {
+  sopsFilePath: 'test-secrets/yaml/sopsfile.enc-age.yaml',
   convertToJSON: false,
   // see test-secrets/README.md for further information regarding the test file
   sopsAgeKey: SecretValue.plainText(
-    "AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3"
+    'AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3',
   ),
 });
 
-new SopsSecret(stack, "SopsSecretYAMLasJSON", {
-  sopsFilePath: "test-secrets/yaml/sopsfile.enc-age.yaml",
+new SopsSecret(stack, 'SopsSecretYAMLasJSON', {
+  sopsFilePath: 'test-secrets/yaml/sopsfile.enc-age.yaml',
   convertToJSON: true,
   // see test-secrets/README.md for further information regarding the test file
   sopsAgeKey: SecretValue.plainText(
-    "AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3"
+    'AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3',
   ),
 });
 
-new SopsSecret(stack, "SopsComplexSecretJSON", {
-  sopsFilePath: "test-secrets/json/sopsfile-complex.enc-age.json",
+new SopsSecret(stack, 'SopsComplexSecretJSON', {
+  sopsFilePath: 'test-secrets/json/sopsfile-complex.enc-age.json',
   flatten: false,
   // see test-secrets/README.md for further information regarding the test file
   sopsAgeKey: SecretValue.plainText(
-    "AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3"
+    'AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3',
   ),
 });
 
-new SopsSecret(stack, "SopsComplexSecretJSONFlat", {
-  sopsFilePath: "test-secrets/json/sopsfile-complex.enc-age.json",
+new SopsSecret(stack, 'SopsComplexSecretJSONFlat', {
+  sopsFilePath: 'test-secrets/json/sopsfile-complex.enc-age.json',
   flatten: true,
   // see test-secrets/README.md for further information regarding the test file
   sopsAgeKey: SecretValue.plainText(
-    "AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3"
+    'AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3',
   ),
 });
 
-new SopsSecret(stack, "SopComplexSecretYAML", {
-  sopsFilePath: "test-secrets/yaml/sopsfile-complex.enc-age.yaml",
+new SopsSecret(stack, 'SopComplexSecretYAML', {
+  sopsFilePath: 'test-secrets/yaml/sopsfile-complex.enc-age.yaml',
   convertToJSON: false,
   flatten: false,
   // see test-secrets/README.md for further information regarding the test file
   sopsAgeKey: SecretValue.plainText(
-    "AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3"
+    'AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3',
   ),
 });
 
-new SopsSecret(stack, "SopComplexSecretYAMLFlat", {
-  sopsFilePath: "test-secrets/yaml/sopsfile-complex.enc-age.yaml",
+new SopsSecret(stack, 'SopComplexSecretYAMLFlat', {
+  sopsFilePath: 'test-secrets/yaml/sopsfile-complex.enc-age.yaml',
   convertToJSON: false,
   flatten: true,
   // see test-secrets/README.md for further information regarding the test file
   sopsAgeKey: SecretValue.plainText(
-    "AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3"
+    'AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3',
   ),
 });
 
-new SopsSecret(stack, "SopsComplexSecretYAMLasJSON", {
-  sopsFilePath: "test-secrets/yaml/sopsfile-complex.enc-age.yaml",
+new SopsSecret(stack, 'SopsComplexSecretYAMLasJSON', {
+  sopsFilePath: 'test-secrets/yaml/sopsfile-complex.enc-age.yaml',
   convertToJSON: true,
   flatten: false,
   // see test-secrets/README.md for further information regarding the test file
   sopsAgeKey: SecretValue.plainText(
-    "AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3"
+    'AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3',
   ),
 });
 
-new SopsSecret(stack, "SopsComplexSecretYAMLasJSONFlat", {
-  sopsFilePath: "test-secrets/yaml/sopsfile-complex.enc-age.yaml",
+new SopsSecret(stack, 'SopsComplexSecretYAMLasJSONFlat', {
+  sopsFilePath: 'test-secrets/yaml/sopsfile-complex.enc-age.yaml',
   convertToJSON: true,
   flatten: true,
   // see test-secrets/README.md for further information regarding the test file
   sopsAgeKey: SecretValue.plainText(
-    "AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3"
+    'AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3',
   ),
 });
 //new Function(stack, 'TestFunction', {

@@ -1,19 +1,19 @@
-import * as fs from "fs";
-import { IKey, Key } from "@aws-cdk/aws-kms";
+import * as fs from 'fs';
+import { IKey, Key } from '@aws-cdk/aws-kms';
 import {
   Code,
   IFunction,
   Runtime,
   SingletonFunction,
-} from "@aws-cdk/aws-lambda";
-import { Asset } from "@aws-cdk/aws-s3-assets";
-import { ISecret, Secret, SecretProps } from "@aws-cdk/aws-secretsmanager";
+} from '@aws-cdk/aws-lambda';
+import { Asset } from '@aws-cdk/aws-s3-assets';
+import { ISecret, Secret, SecretProps } from '@aws-cdk/aws-secretsmanager';
 import {
   Annotations,
   Construct,
   CustomResource,
   SecretValue,
-} from "@aws-cdk/core";
+} from '@aws-cdk/core';
 
 /**
  * Configuration options for the SopsSync
@@ -37,7 +37,7 @@ export interface SopsSyncOptions {
    *
    * @default - The fileformat will be derived from the file ending
    */
-  readonly sopsFileFormat?: undefined | "json" | "yaml";
+  readonly sopsFileFormat?: undefined | 'json' | 'yaml';
 
   /**
    * The kmsKey used to encrypt the sops file. Encrypt permissions
@@ -92,7 +92,7 @@ export class SopsSync extends Construct {
   /**
    * The format of the input file
    */
-  readonly sopsFileFormat: "json" | "yaml";
+  readonly sopsFileFormat: 'json' | 'yaml';
 
   /**
    * Was the format converted to json?
@@ -111,18 +111,18 @@ export class SopsSync extends Construct {
     this.flatten = props.flatten ?? true;
 
     const sopsFileFormat =
-      props.sopsFileFormat ?? props.sopsFilePath.split(".").pop();
+      props.sopsFileFormat ?? props.sopsFilePath.split('.').pop();
     switch (sopsFileFormat) {
-      case "json": {
-        this.sopsFileFormat = "json";
+      case 'json': {
+        this.sopsFileFormat = 'json';
         break;
       }
-      case "yaml": {
-        this.sopsFileFormat = "yaml";
+      case 'yaml': {
+        this.sopsFileFormat = 'yaml';
         break;
       }
-      case "yml": {
-        this.sopsFileFormat = "yaml";
+      case 'yml': {
+        this.sopsFileFormat = 'yaml';
         break;
       }
       default: {
@@ -130,21 +130,21 @@ export class SopsSync extends Construct {
       }
     }
 
-    const code = Code.fromAsset("assets/cdk-sops-lambda.zip");
+    const code = Code.fromAsset('assets/cdk-sops-lambda.zip');
     const provider =
       props.sopsProvider ??
-      new SingletonFunction(this, "Function", {
+      new SingletonFunction(this, 'Function', {
         code,
         runtime: Runtime.GO_1_X,
-        handler: "cdk-sops-secrets",
-        uuid: "cdk-sops-secrets",
+        handler: 'cdk-sops-secrets',
+        uuid: 'cdk-sops-secrets',
       });
 
     if (!fs.existsSync(props.sopsFilePath)) {
       throw new Error(`File ${props.sopsFilePath} does not exist!`);
     }
 
-    const sopsAsset = new Asset(this, "Asset", {
+    const sopsAsset = new Asset(this, 'Asset', {
       path: props.sopsFilePath,
     });
 
@@ -158,21 +158,21 @@ export class SopsSync extends Construct {
       if (results !== undefined) {
         results?.forEach((result, index) =>
           Key.fromKeyArn(this, `SopsKey${index}`, result).grantDecrypt(
-            provider.role!
-          )
+            provider.role!,
+          ),
         );
       }
       props.secret.grantWrite(provider);
       sopsAsset.bucket.grantRead(provider);
     } else {
       Annotations.of(this).addWarning(
-        "Please ensure propper permissions for the passed lambda function:\n  - write Access to the secret\n  - encrypt with the sopsKmsKey\n  - download from asset bucket"
+        'Please ensure propper permissions for the passed lambda function:\n  - write Access to the secret\n  - encrypt with the sopsKmsKey\n  - download from asset bucket',
       );
     }
 
-    const cr = new CustomResource(this, "Resource", {
+    const cr = new CustomResource(this, 'Resource', {
       serviceToken: provider.functionArn,
-      resourceType: "Custom::SopsSync",
+      resourceType: 'Custom::SopsSync',
       properties: {
         SecretARN: props.secret.secretArn,
         SopsS3File: {
@@ -185,7 +185,7 @@ export class SopsSync extends Construct {
         SopsAgeKey: props.sopsAgeKey,
       },
     });
-    this.versionId = cr.getAttString("VersionId");
+    this.versionId = cr.getAttString('VersionId');
   }
 }
 
@@ -202,7 +202,7 @@ export class SopsSecret extends Secret {
   readonly sync: SopsSync;
   public constructor(scope: Construct, id: string, props: SopsSecretProps) {
     super(scope, id, props as SecretProps);
-    this.sync = new SopsSync(this, "SopsSync", {
+    this.sync = new SopsSync(this, 'SopsSync', {
       secret: this,
       ...(props as SopsSyncOptions),
     });
