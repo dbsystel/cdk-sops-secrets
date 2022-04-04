@@ -155,7 +155,7 @@ export class SopsSync extends Construct {
 
     const cr = new CustomResource(this, 'Resource', {
       serviceToken: provider.functionArn,
-      resourceType: 'Custom::SecretSopsSync',
+      resourceType: 'Custom::SopsSync',
       properties: {
         SecretARN: props.secret.secretArn,
         SopsS3File: {
