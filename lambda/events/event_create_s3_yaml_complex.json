@@ -10,6 +10,7 @@
     "Format": "yaml",
     "ConvertToJSON": "false",
     "Flatten": "false",
+    "StringifyValues": "false",
     "SopsAgeKey": "AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3"
   },
   "ResourceType": "Custom::SOPS::Secret",

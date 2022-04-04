@@ -698,6 +698,7 @@ Return whether the given object is a Construct.
 | <code><a href="#cdk-sops-secrets.SopsSync.property.converToJSON">converToJSON</a></code> | <code>boolean</code> | Was the format converted to json? |
 | <code><a href="#cdk-sops-secrets.SopsSync.property.flatten">flatten</a></code> | <code>boolean</code> | Was the structure flattened? |
 | <code><a href="#cdk-sops-secrets.SopsSync.property.sopsFileFormat">sopsFileFormat</a></code> | <code>string</code> | The format of the input file. |
+| <code><a href="#cdk-sops-secrets.SopsSync.property.stringifiedValues">stringifiedValues</a></code> | <code>boolean</code> | Were the values stringified? |
 | <code><a href="#cdk-sops-secrets.SopsSync.property.versionId">versionId</a></code> | <code>string</code> | The current versionId of the secret populated via this resource. |
 
 ---
@@ -750,6 +751,18 @@ The format of the input file.
 
 ---
 
+##### `stringifiedValues`<sup>Required</sup> <a name="stringifiedValues" id="cdk-sops-secrets.SopsSync.property.stringifiedValues"></a>
+
+```typescript
+public readonly stringifiedValues: boolean;
+```
+
+- *Type:* boolean
+
+Were the values stringified?
+
+---
+
 ##### `versionId`<sup>Required</sup> <a name="versionId" id="cdk-sops-secrets.SopsSync.property.versionId"></a>
 
 ```typescript
@@ -795,6 +808,7 @@ const sopsSecretProps: SopsSecretProps = { ... }
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.sopsFileFormat">sopsFileFormat</a></code> | <code>string</code> | The format of the sops file. |
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.sopsKmsKey">sopsKmsKey</a></code> | <code>@aws-cdk/aws-kms.IKey[]</code> | The kmsKey used to encrypt the sops file. |
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.sopsProvider">sopsProvider</a></code> | <code>@aws-cdk/aws-lambda.IFunction</code> | The custom resource provider to use. |
+| <code><a href="#cdk-sops-secrets.SopsSecretProps.property.stringifyValues">stringifyValues</a></code> | <code>boolean</code> | Shall all values be flattened? |
 
 ---
 
@@ -1006,6 +1020,21 @@ provider will be created - or if already exists within this stack - reused.
 
 ---
 
+##### `stringifyValues`<sup>Optional</sup> <a name="stringifyValues" id="cdk-sops-secrets.SopsSecretProps.property.stringifyValues"></a>
+
+```typescript
+public readonly stringifyValues: boolean;
+```
+
+- *Type:* boolean
+
+Shall all values be flattened?
+
+This is usefull for dynamic references, as there
+are lookup errors for certain float types
+
+---
+
 ### SopsSyncOptions <a name="SopsSyncOptions" id="cdk-sops-secrets.SopsSyncOptions"></a>
 
 Configuration options for the SopsSync.
@@ -1029,6 +1058,7 @@ const sopsSyncOptions: SopsSyncOptions = { ... }
 | <code><a href="#cdk-sops-secrets.SopsSyncOptions.property.sopsFileFormat">sopsFileFormat</a></code> | <code>string</code> | The format of the sops file. |
 | <code><a href="#cdk-sops-secrets.SopsSyncOptions.property.sopsKmsKey">sopsKmsKey</a></code> | <code>@aws-cdk/aws-kms.IKey[]</code> | The kmsKey used to encrypt the sops file. |
 | <code><a href="#cdk-sops-secrets.SopsSyncOptions.property.sopsProvider">sopsProvider</a></code> | <code>@aws-cdk/aws-lambda.IFunction</code> | The custom resource provider to use. |
+| <code><a href="#cdk-sops-secrets.SopsSyncOptions.property.stringifyValues">stringifyValues</a></code> | <code>boolean</code> | Shall all values be flattened? |
 
 ---
 
@@ -1133,6 +1163,21 @@ provider will be created - or if already exists within this stack - reused.
 
 ---
 
+##### `stringifyValues`<sup>Optional</sup> <a name="stringifyValues" id="cdk-sops-secrets.SopsSyncOptions.property.stringifyValues"></a>
+
+```typescript
+public readonly stringifyValues: boolean;
+```
+
+- *Type:* boolean
+
+Shall all values be flattened?
+
+This is usefull for dynamic references, as there
+are lookup errors for certain float types
+
+---
+
 ### SopsSyncProps <a name="SopsSyncProps" id="cdk-sops-secrets.SopsSyncProps"></a>
 
 The configuration options extended by the target Secret.
@@ -1156,6 +1201,7 @@ const sopsSyncProps: SopsSyncProps = { ... }
 | <code><a href="#cdk-sops-secrets.SopsSyncProps.property.sopsFileFormat">sopsFileFormat</a></code> | <code>string</code> | The format of the sops file. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProps.property.sopsKmsKey">sopsKmsKey</a></code> | <code>@aws-cdk/aws-kms.IKey[]</code> | The kmsKey used to encrypt the sops file. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProps.property.sopsProvider">sopsProvider</a></code> | <code>@aws-cdk/aws-lambda.IFunction</code> | The custom resource provider to use. |
+| <code><a href="#cdk-sops-secrets.SopsSyncProps.property.stringifyValues">stringifyValues</a></code> | <code>boolean</code> | Shall all values be flattened? |
 | <code><a href="#cdk-sops-secrets.SopsSyncProps.property.secret">secret</a></code> | <code>@aws-cdk/aws-secretsmanager.ISecret</code> | The secret that will be populated with the encrypted sops file content. |
 
 ---
@@ -1258,6 +1304,21 @@ The custom resource provider to use.
 
 If you don't specify any, a new
 provider will be created - or if already exists within this stack - reused.
+
+---
+
+##### `stringifyValues`<sup>Optional</sup> <a name="stringifyValues" id="cdk-sops-secrets.SopsSyncProps.property.stringifyValues"></a>
+
+```typescript
+public readonly stringifyValues: boolean;
+```
+
+- *Type:* boolean
+
+Shall all values be flattened?
+
+This is usefull for dynamic references, as there
+are lookup errors for certain float types
 
 ---
 

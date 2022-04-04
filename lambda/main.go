@@ -30,12 +30,13 @@ type SopsS3File struct {
 }
 
 type SopsSyncResourcePropertys struct {
-	SecretARN     string     `json:"SecretARN"`
-	SopsS3File    SopsS3File `json:"SopsS3File"`
-	SopsAgeKey    string     `json:"SopsAgeKey,omitempty"`
-	Format        string     `json:"Format"`
-	ConvertToJSON string     `json:"ConvertToJSON,omitempty"`
-	Flatten       string     `json:"Flatten,omitempty"`
+	SecretARN       string     `json:"SecretARN"`
+	SopsS3File      SopsS3File `json:"SopsS3File"`
+	SopsAgeKey      string     `json:"SopsAgeKey,omitempty"`
+	Format          string     `json:"Format"`
+	ConvertToJSON   string     `json:"ConvertToJSON,omitempty"`
+	Flatten         string     `json:"Flatten,omitempty"`
+	StringifyValues string     `json:"StringifyValues,omitempty"`
 }
 
 type AWS struct {
@@ -161,6 +162,20 @@ func (a AWS) syncSopsToSecretsmanager(ctx context.Context, event cfn.Event) (phy
 			finalInterface = decryptedInterface
 		}
 
+		if resourceProperties.StringifyValues == "" {
+			resourceProperties.StringifyValues = "true"
+		}
+		resourcePropertiesStringifyValues, err := strconv.ParseBool(resourceProperties.StringifyValues)
+		if err != nil {
+			return "", nil, err
+		}
+		if resourcePropertiesStringifyValues {
+			finalInterface, _, err = stringifyValues(finalInterface)
+			if err != nil {
+				return "", nil, err
+			}
+		}
+
 		if resourceProperties.ConvertToJSON == "" {
 			resourceProperties.ConvertToJSON = "true"
 		}
@@ -247,6 +262,50 @@ func toYAML(in any) ([]byte, error) {
 		return nil, err
 	}
 	return ret, nil
+}
+
+func stringifyValues(input any) (interface{}, string, error) {
+	switch child := input.(type) {
+	case map[string]interface{}:
+		{
+			output := make(map[string]interface{})
+			for k, v := range child {
+				object, val, err := stringifyValues(v)
+				if err != nil {
+					return nil, "", err
+				}
+				if object != nil {
+					output[k] = object
+				} else {
+					output[k] = val
+				}
+			}
+			return output, "", nil
+		}
+	case []interface{}:
+		{
+			output := []interface{}{}
+			for _, v := range child {
+				object, val, err := stringifyValues(v)
+				if err != nil {
+					return nil, "", err
+				}
+				if object != nil {
+					output = append(output, object)
+				} else {
+					output = append(output, val)
+				}
+			}
+			return output, "", nil
+		}
+	default:
+		{
+			return nil, fmt.Sprint(input), nil
+		}
+	}
+
+	// Should never happen
+	return nil, "", nil
 }
 
 func flatten(parentkey string, input any, output map[string]interface{}) error {

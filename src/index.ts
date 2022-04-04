@@ -68,6 +68,12 @@ export interface SopsSyncOptions {
    * @default true
    */
   readonly flatten?: boolean;
+
+  /**
+   * Shall all values be flattened? This is usefull for dynamic references, as there
+   * are lookup errors for certain float types
+   */
+  readonly stringifyValues?: boolean;
 }
 
 /**
@@ -104,11 +110,17 @@ export class SopsSync extends Construct {
    */
   readonly flatten: boolean;
 
+  /**
+   * Were the values stringified?
+   */
+  readonly stringifiedValues: boolean;
+
   constructor(scope: Construct, id: string, props: SopsSyncProps) {
     super(scope, id);
 
     this.converToJSON = props.convertToJSON ?? true;
     this.flatten = props.flatten ?? true;
+    this.stringifiedValues = props.stringifyValues ?? true;
 
     const sopsFileFormat =
       props.sopsFileFormat ?? props.sopsFilePath.split('.').pop();
@@ -182,6 +194,7 @@ export class SopsSync extends Construct {
         ConvertToJSON: this.converToJSON,
         Flatten: this.flatten,
         Format: this.sopsFileFormat,
+        StringifiedValues: this.stringifiedValues,
         SopsAgeKey: props.sopsAgeKey,
       },
     });

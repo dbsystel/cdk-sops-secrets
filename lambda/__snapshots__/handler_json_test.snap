@@ -59,6 +59,36 @@ map[string]interface {}{
 nil
 ---
 
+[Test_FullWorkflow_Create_S3_JSON_Complex_StringifyValues - 1]
+>>>S3MAnagerMockClient.Download.Input
+{
+  Bucket: "..",
+  Key: "../test-secrets/json/sopsfile-complex.enc-age.json"
+}
+---
+
+[Test_FullWorkflow_Create_S3_JSON_Complex_StringifyValues - 2]
+>>>SecretsManagerMockClient.PutSecretValue.Input
+{
+  SecretId: "arn:aws:secretsmanager:eu-central-1:123456789012:secret:testsecret",
+  SecretString: "{\n  \"and now\": {\n    \"some\": [\n      {\n        \"basic\": \"false\"\n      },\n      {\n        \"nested\": \"12345\"\n      },\n      {\n        \"type\": \"1.2345\"\n      },\n      {\n        \"tests\": \"Finish!\"\n      }\n    ]\n  },\n  \"some\": {\n    \"deep\": {\n      \"nested\": {\n        \"arrays\": [\n          \"with\",\n          \"several\",\n          {\n            \"values\": {\n              \"and\": \"objects\"\n            }\n          }\n        ],\n        \"object\": \"structure\"\n      }\n    },\n    \"notsodeep\": \"struct\"\n  }\n}"
+}
+---
+
+[Test_FullWorkflow_Create_S3_JSON_Complex_StringifyValues - 3]
+>>>syncSopsToSecretsmanager
+arn:custom:sopssync:eu-central-1:123456789012:secret:testsecret
+map[string]interface {}{
+    "ARN":           "arn:custom:sopssync:eu-central-1:123456789012:secret:testsecret",
+    "Name":          "dfb70680d326c245dbdd113d635caa16113e78b1eb8b7447f10eeb861e491724",
+    "VersionId":     "ddc702937cbed1b68f84659094f8db7c862114642ae2a98baa43c42e16b256f4",
+    "VersionStages": []*string{
+        &"dfb70680d326c245dbdd113d635caa16113e78b1eb8b7447f10eeb861e491724",
+    },
+}
+nil
+---
+
 [Test_FullWorkflow_Create_S3_JSON_Complex_Flat - 1]
 >>>S3MAnagerMockClient.Download.Input
 {
