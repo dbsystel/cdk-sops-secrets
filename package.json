@@ -112,10 +112,12 @@
     ],
     "coverageDirectory": "coverage",
     "coveragePathIgnorePatterns": [
-      "/node_modules/"
+      "/node_modules/",
+      "/lambda/"
     ],
     "testPathIgnorePatterns": [
-      "/node_modules/"
+      "/node_modules/",
+      "/lambda/"
     ],
     "watchPathIgnorePatterns": [
       "/node_modules/"
