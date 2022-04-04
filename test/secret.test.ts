@@ -54,8 +54,8 @@ test('KMS Key given via props', () => {
   new SopsSecret(stack, 'SopsSecret', {
     sopsFilePath: 'test-secrets/yaml/sopsfile.enc-age.yaml',
     sopsKmsKey: [
-      Key.fromKeyArn(stack, 'Key', 'arn:aws:kms:aws-region-1:110123456789:key/00000000-1234-4321-abcd-1234abcd12ab')
-    ]
+      Key.fromKeyArn(stack, 'Key', 'arn:aws:kms:aws-region-1:110123456789:key/00000000-1234-4321-abcd-1234abcd12ab'),
+    ],
   });
   Template.fromStack(stack).hasResource('AWS::IAM::Policy', {
     Properties: Match.objectLike({
@@ -140,7 +140,7 @@ test('Set format: yaml', () => {
 test('Exception when set format: notsupported', () => {
   const app = new App();
   const stack = new Stack(app, 'SecretIntegration');
-  
+
   expect( () => new SopsSecret(stack, 'SopsSecret', {
     sopsFilePath: 'test-secrets/json/sopsfile.enc-age.notsupported',
   })).toThrowError('Unsupported sopsFileFormat notsupported');
@@ -151,8 +151,8 @@ test('secretValueFromJson(...)', () => {
   const stack = new Stack(app, 'SecretIntegration');
   const secret = new SopsSecret(stack, 'SopsSecret', {
     sopsFilePath: 'test-secrets/json/sopsfile.enc-age.json',
-  })
-  
+  });
+
   new StringParameter(stack, 'TestParameter', {
     stringValue: secret.secretValueFromJson('test').toString(),
   });
@@ -172,11 +172,11 @@ test('secretValueFromJson(...)', () => {
               'Fn::GetAtt': [
                 'SopsSecretSopsSync7D825417',
                 'VersionId',
-              ]
+              ],
             },
-            '}}'
-          ]
-        ]
+            '}}',
+          ],
+        ],
       },
     }),
   });
