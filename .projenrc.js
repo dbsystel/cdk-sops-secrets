@@ -47,7 +47,10 @@ const project = new awscdk.AwsCdkConstructLibrary({
   // packageName: undefined,  /* The "name" in package.json. */
 });
 
-project.prettier.addIgnorePattern("/test-secrets/", "/test/**/");
+project.prettier.addIgnorePattern("/test-secrets/");
+project.prettier.addIgnorePattern("/test/*snapshot");
+project.prettier.addIgnorePattern("API.md");
+project.prettier.addIgnorePattern("package.json");
 project.jest.addIgnorePattern("/lambda/");
 project.gitignore.addPatterns("/assets");
 project.npmignore.addPatterns("/lambda", "/dist-lambda", "!/assets");
