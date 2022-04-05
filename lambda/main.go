@@ -303,9 +303,6 @@ func stringifyValues(input any) (interface{}, string, error) {
 			return nil, fmt.Sprint(input), nil
 		}
 	}
-
-	// Should never happen
-	return nil, "", nil
 }
 
 func flatten(parentkey string, input any, output map[string]interface{}) error {
@@ -328,7 +325,7 @@ func flatten(parentkey string, input any, output map[string]interface{}) error {
 				if parentkey == "" {
 					flatten(fmt.Sprintf("[%d]", i), v, output)
 				} else {
-					flatten(fmt.Sprintf("%s%s[%d]", parentkey, ".", i), v, output)
+					flatten(fmt.Sprintf("%s[%d]", parentkey, i), v, output)
 				}
 			}
 		}

@@ -7,3 +7,17 @@ Using this library it is possible to populate Secrets with values from a mozilla
 Secrets filled in this way can be used immediately within the CloudFormation stack.
 
 This way, secrets can be securely stored in git repositories and easily synchronized into AWS SecretsManager Secrets.
+
+# Motivation
+
+This project was created to solve a recurring problem of syncing mozilla/sops secrets into AWS SecretsManager in a convenient, secure way.
+ 
+Apart from that, the project was for learning:
+- Write a golang lambda
+- Writing unit tests incl. mocks in golang
+- Reproducible builds of go (byte-by-byte identical)
+- Build reproducible zips (byte-by-byte identical)
+- Release an npm package
+- Setting up projects with projen
+- CI/CD with github actions
+- CDK unit and integration tests

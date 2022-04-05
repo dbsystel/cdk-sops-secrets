@@ -114,25 +114,25 @@ new Function(stack, 'TestFunction', {
 function createMapComplex(prefix: string, secret: SopsSecret) {
   return {
     [`${prefix}_and_now_some_0_basic`]: secret
-      .secretValueFromJson('and now.some.[0].basic')
+      .secretValueFromJson('and now.some[0].basic')
       .toString(),
     [`${prefix}_and_now_some_1_nested`]: secret
-      .secretValueFromJson('and now.some.[1].nested')
+      .secretValueFromJson('and now.some[1].nested')
       .toString(),
     [`${prefix}_and_now_some_2_type`]: secret
-      .secretValueFromJson('and now.some.[2].type')
+      .secretValueFromJson('and now.some[2].type')
       .toString(),
     [`${prefix}_and_now_some_3_tests`]: secret
-      .secretValueFromJson('and now.some.[3].tests')
+      .secretValueFromJson('and now.some[3].tests')
       .toString(),
     [`${prefix}_some_deep_nested_arrays_0`]: secret
-      .secretValueFromJson('some.deep.nested.arrays.[0]')
+      .secretValueFromJson('some.deep.nested.arrays[0]')
       .toString(),
     [`${prefix}_some_deep_nested_arrays_1`]: secret
-      .secretValueFromJson('some.deep.nested.arrays.[1]')
+      .secretValueFromJson('some.deep.nested.arrays[1]')
       .toString(),
     [`${prefix}_some_deep_nested_arrays_2_values_and`]: secret
-      .secretValueFromJson('some.deep.nested.arrays.[2].values.and')
+      .secretValueFromJson('some.deep.nested.arrays[2].values.and')
       .toString(),
     [`${prefix}_some_deep_nested_object`]: secret
       .secretValueFromJson('some.deep.nested.object')

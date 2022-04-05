@@ -131,7 +131,7 @@ nil
 >>>SecretsManagerMockClient.PutSecretValue.Input
 {
   SecretId: "arn:aws:secretsmanager:eu-central-1:123456789012:secret:testsecret",
-  SecretString: "and now.some.[0].basic: false\nand now.some.[1].nested: 12345\nand now.some.[2].type: 1.2345\nand now.some.[3].tests: Finish!\nsome.deep.nested.arrays.[0]: with\nsome.deep.nested.arrays.[1]: several\nsome.deep.nested.arrays.[2].values.and: objects\nsome.deep.nested.object: structure\nsome.notsodeep: struct\n"
+  SecretString: "and now.some[0].basic: false\nand now.some[1].nested: 12345\nand now.some[2].type: 1.2345\nand now.some[3].tests: Finish!\nsome.deep.nested.arrays[0]: with\nsome.deep.nested.arrays[1]: several\nsome.deep.nested.arrays[2].values.and: objects\nsome.deep.nested.object: structure\nsome.notsodeep: struct\n"
 }
 ---
 
@@ -141,7 +141,7 @@ arn:custom:sopssync:eu-central-1:123456789012:secret:testsecret
 map[string]interface {}{
     "ARN":           "arn:custom:sopssync:eu-central-1:123456789012:secret:testsecret",
     "Name":          "dfb70680d326c245dbdd113d635caa16113e78b1eb8b7447f10eeb861e491724",
-    "VersionId":     "85302e252d1bb6c2032c6245730e25a47103c627fafede751faf8808f68f2f75",
+    "VersionId":     "9383dcb62f4f91358496ec0e473c605325cf76d5162b1432f3efaaac14e6d07f",
     "VersionStages": []*string{
         &"dfb70680d326c245dbdd113d635caa16113e78b1eb8b7447f10eeb861e491724",
     },
@@ -161,7 +161,7 @@ nil
 >>>SecretsManagerMockClient.PutSecretValue.Input
 {
   SecretId: "arn:aws:secretsmanager:eu-central-1:123456789012:secret:testsecret",
-  SecretString: "{\n  \"and now.some.[0].basic\": false,\n  \"and now.some.[1].nested\": 12345,\n  \"and now.some.[2].type\": 1.2345,\n  \"and now.some.[3].tests\": \"Finish!\",\n  \"some.deep.nested.arrays.[0]\": \"with\",\n  \"some.deep.nested.arrays.[1]\": \"several\",\n  \"some.deep.nested.arrays.[2].values.and\": \"objects\",\n  \"some.deep.nested.object\": \"structure\",\n  \"some.notsodeep\": \"struct\"\n}"
+  SecretString: "{\n  \"and now.some[0].basic\": false,\n  \"and now.some[1].nested\": 12345,\n  \"and now.some[2].type\": 1.2345,\n  \"and now.some[3].tests\": \"Finish!\",\n  \"some.deep.nested.arrays[0]\": \"with\",\n  \"some.deep.nested.arrays[1]\": \"several\",\n  \"some.deep.nested.arrays[2].values.and\": \"objects\",\n  \"some.deep.nested.object\": \"structure\",\n  \"some.notsodeep\": \"struct\"\n}"
 }
 ---
 
@@ -171,7 +171,7 @@ arn:custom:sopssync:eu-central-1:123456789012:secret:testsecret
 map[string]interface {}{
     "ARN":           "arn:custom:sopssync:eu-central-1:123456789012:secret:testsecret",
     "Name":          "dfb70680d326c245dbdd113d635caa16113e78b1eb8b7447f10eeb861e491724",
-    "VersionId":     "749b77a8a63172dc7a3963000d438539e6ecc4df18dcda92558161a4d8b72f45",
+    "VersionId":     "e9a8d3ab5715c1120faae25b669e5905a92fe4b261ae97eb1e65ad9ba52f9ee6",
     "VersionStages": []*string{
         &"dfb70680d326c245dbdd113d635caa16113e78b1eb8b7447f10eeb861e491724",
     },

@@ -107,15 +107,15 @@ map[string]interface {}{
 [Test_Flatten - 2]
 >>>Complex
 map[string]interface {}{
-    "and now.some.[0].basic":                 bool(false),
-    "and now.some.[1].nested":                float64(12345),
-    "and now.some.[2].type":                  float64(1.2345),
-    "and now.some.[3].tests":                 "Finish!",
-    "some.deep.nested.arrays.[0]":            "with",
-    "some.deep.nested.arrays.[1]":            "several",
-    "some.deep.nested.arrays.[2].values.and": "objects",
-    "some.deep.nested.object":                "structure",
-    "some.notsodeep":                         "struct",
+    "and now.some[0].basic":                 bool(false),
+    "and now.some[1].nested":                float64(12345),
+    "and now.some[2].type":                  float64(1.2345),
+    "and now.some[3].tests":                 "Finish!",
+    "some.deep.nested.arrays[0]":            "with",
+    "some.deep.nested.arrays[1]":            "several",
+    "some.deep.nested.arrays[2].values.and": "objects",
+    "some.deep.nested.object":               "structure",
+    "some.notsodeep":                        "struct",
 }
 ---
 
