@@ -20,7 +20,7 @@ This project was created to solve a recurring problem of syncing mozilla/sops se
 Apart from that, the project was for learning:
 - Write a golang lambda
 - Writing unit tests incl. mocks in golang
-- Reproducible builds of go (byte-by-byte identical)
+- Reproducible builds of golang binaries (byte-by-byte identical)
 - Build reproducible zips (byte-by-byte identical)
 - Release an npm package
 - Setting up projects with projen
