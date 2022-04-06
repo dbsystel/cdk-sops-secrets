@@ -4,6 +4,14 @@ const project = new awscdk.AwsCdkConstructLibrary({
   authorAddress: 'dev@markussiebert.com',
   cdkVersion: '1.0.0',
   cdkVersionPinning: false,
+  keywords: [
+    'mozilla/sops',
+    'sops',
+    'kms',
+    'gitops',
+    'secrets management',
+    'secrets'
+  ],
   cdkDependenciesAsDeps: false,
   defaultReleaseBranch: 'main',
   npmignoreEnabled: true,

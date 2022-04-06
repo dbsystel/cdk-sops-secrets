@@ -87,7 +87,13 @@
     "constructs": "^3.2.27"
   },
   "keywords": [
-    "cdk"
+    "cdk",
+    "gitops",
+    "kms",
+    "mozilla/sops",
+    "secrets",
+    "secrets management",
+    "sops"
   ],
   "main": "lib/index.js",
   "license": "Apache-2.0",
