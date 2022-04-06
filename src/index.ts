@@ -200,7 +200,7 @@ export class SopsSyncProvider extends SingletonFunction {
       code: Code.fromAsset('assets/cdk-sops-lambda.zip'),
       runtime: Runtime.GO_1_X,
       handler: 'cdk-sops-secrets',
-      uuid: 'cdk-sops-secrets',
+      uuid: 'SopsSyncProvider',
       environment: {
         SOPS_AGE_KEY: Lazy.string({
           produce: () =>
