@@ -21,7 +21,7 @@ This way, secrets can be securely stored in git repositories and easily synchron
         sopsFilePath: 'secets/sopsfile-encrypted.json',
     });
    ```
-3. Access the secret via dynamic references
+3. Optional: Access the secret via dynamic references
    ```ts
    secret.secretValueFromJson('json.path.dotted.notation.accessor[0]').toString(),
    ```
