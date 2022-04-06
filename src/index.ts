@@ -198,7 +198,9 @@ export class SopsSyncProvider extends SingletonFunction {
 
   constructor(scope: Construct, id?: string) {
     super(scope, id ?? 'SopsSyncProvider', {
-      code: Code.fromAsset(path.join(__dirname, '../assets/cdk-sops-lambda.zip')),
+      code: Code.fromAsset(
+        path.join(__dirname, '../assets/cdk-sops-lambda.zip'),
+      ),
       runtime: Runtime.GO_1_X,
       handler: 'cdk-sops-secrets',
       uuid: 'SopsSyncProvider',
