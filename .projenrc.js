@@ -10,7 +10,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
     'kms',
     'gitops',
     'secrets management',
-    'secrets'
+    'secrets',
   ],
   cdkDependenciesAsDeps: false,
   defaultReleaseBranch: 'main',
