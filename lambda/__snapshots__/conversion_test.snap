@@ -1,0 +1,197 @@
+
+[Test_FromJSON - 1]
+>>>Simple
+map[string]interface {}{
+    "key1": "value1",
+    "key2": float64(12345),
+    "key3": bool(false),
+}
+---
+
+[Test_FromJSON - 2]
+>>>Complex
+map[string]interface {}{
+    "and now": map[string]interface {}{
+        "some": []interface {}{
+            map[string]interface {}{
+                "basic": bool(false),
+            },
+            map[string]interface {}{
+                "nested": float64(12345),
+            },
+            map[string]interface {}{
+                "type": float64(1.2345),
+            },
+            map[string]interface {}{
+                "tests": "Finish!",
+            },
+        },
+    },
+    "some": map[string]interface {}{
+        "deep": map[string]interface {}{
+            "nested": map[string]interface {}{
+                "arrays": []interface {}{
+                    "with",
+                    "several",
+                    map[string]interface {}{
+                        "values": map[string]interface {}{
+                            "and": "objects",
+                        },
+                    },
+                },
+                "object": "structure",
+            },
+        },
+        "notsodeep": "struct",
+    },
+}
+---
+
+[Test_FromYAML - 1]
+>>>Simple
+map[string]interface {}{
+    "key1": "value1",
+    "key2": int(12345),
+    "key3": bool(false),
+}
+---
+
+[Test_FromYAML - 2]
+>>>Complex
+map[string]interface {}{
+    "and now": map[string]interface {}{
+        "some": []interface {}{
+            map[string]interface {}{
+                "basic": bool(false),
+            },
+            map[string]interface {}{
+                "nested": int(12345),
+            },
+            map[string]interface {}{
+                "type": float64(1.2345),
+            },
+            map[string]interface {}{
+                "tests": "Finish!",
+            },
+        },
+    },
+    "some": map[string]interface {}{
+        "deep": map[string]interface {}{
+            "nested": map[string]interface {}{
+                "arrays": []interface {}{
+                    "with",
+                    "several",
+                    map[string]interface {}{
+                        "values": map[string]interface {}{
+                            "and": "objects",
+                        },
+                    },
+                },
+                "object": "structure",
+            },
+        },
+        "notsodeep": "struct",
+    },
+}
+---
+
+[Test_Flatten - 1]
+>>>Simple
+map[string]interface {}{
+    "key1": "value1",
+    "key2": float64(12345),
+    "key3": bool(false),
+}
+---
+
+[Test_Flatten - 2]
+>>>Complex
+map[string]interface {}{
+    "and now.some[0].basic":                 bool(false),
+    "and now.some[1].nested":                float64(12345),
+    "and now.some[2].type":                  float64(1.2345),
+    "and now.some[3].tests":                 "Finish!",
+    "some.deep.nested.arrays[0]":            "with",
+    "some.deep.nested.arrays[1]":            "several",
+    "some.deep.nested.arrays[2].values.and": "objects",
+    "some.deep.nested.object":               "structure",
+    "some.notsodeep":                        "struct",
+}
+---
+
+[Test_toJSON - 1]
+>>>Simple
+{
+  "key1": "value1",
+  "key2": 12345,
+  "key3": false
+}
+---
+
+[Test_toJSON - 2]
+>>>Complex
+{
+  "and now": {
+    "some": [
+      {
+        "basic": false
+      },
+      {
+        "nested": 12345
+      },
+      {
+        "type": 1.2345
+      },
+      {
+        "tests": "Finish!"
+      }
+    ]
+  },
+  "some": {
+    "deep": {
+      "nested": {
+        "arrays": [
+          "with",
+          "several",
+          {
+            "values": {
+              "and": "objects"
+            }
+          }
+        ],
+        "object": "structure"
+      }
+    },
+    "notsodeep": "struct"
+  }
+}
+---
+
+[Test_toYAML - 1]
+>>>Simple
+key1: value1
+key2: 12345
+key3: false
+
+---
+
+[Test_toYAML - 2]
+>>>Complex
+and now:
+    some:
+        - basic: false
+        - nested: 12345
+        - type: 1.2345
+        - tests: Finish!
+some:
+    deep:
+        nested:
+            arrays:
+                - with
+                - several
+                - values:
+                    and: objects
+            object: structure
+    notsodeep: struct
+
+---
