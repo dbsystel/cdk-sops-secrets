@@ -1,4 +1,5 @@
 import * as fs from 'fs';
+import * as path from 'path';
 import { IKey, Key } from '@aws-cdk/aws-kms';
 import { Code, Runtime, SingletonFunction } from '@aws-cdk/aws-lambda';
 import { Asset } from '@aws-cdk/aws-s3-assets';
@@ -197,7 +198,7 @@ export class SopsSyncProvider extends SingletonFunction {
 
   constructor(scope: Construct, id?: string) {
     super(scope, id ?? 'SopsSyncProvider', {
-      code: Code.fromAsset('assets/cdk-sops-lambda.zip'),
+      code: Code.fromAsset(path.join(__dirname, '../assets/cdk-sops-lambda.zip')),
       runtime: Runtime.GO_1_X,
       handler: 'cdk-sops-secrets',
       uuid: 'SopsSyncProvider',
