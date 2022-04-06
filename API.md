@@ -776,6 +776,681 @@ The current versionId of the secret populated via this resource.
 ---
 
 
+### SopsSyncProvider <a name="SopsSyncProvider" id="cdk-sops-secrets.SopsSyncProvider"></a>
+
+#### Initializers <a name="Initializers" id="cdk-sops-secrets.SopsSyncProvider.Initializer"></a>
+
+```typescript
+import { SopsSyncProvider } from 'cdk-sops-secrets'
+
+new SopsSyncProvider(scope: Construct, id?: string)
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#cdk-sops-secrets.SopsSyncProvider.Initializer.parameter.scope">scope</a></code> | <code>@aws-cdk/core.Construct</code> | *No description.* |
+| <code><a href="#cdk-sops-secrets.SopsSyncProvider.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+
+---
+
+##### `scope`<sup>Required</sup> <a name="scope" id="cdk-sops-secrets.SopsSyncProvider.Initializer.parameter.scope"></a>
+
+- *Type:* @aws-cdk/core.Construct
+
+---
+
+##### `id`<sup>Optional</sup> <a name="id" id="cdk-sops-secrets.SopsSyncProvider.Initializer.parameter.id"></a>
+
+- *Type:* string
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#cdk-sops-secrets.SopsSyncProvider.toString">toString</a></code> | Returns a string representation of this construct. |
+| <code><a href="#cdk-sops-secrets.SopsSyncProvider.applyRemovalPolicy">applyRemovalPolicy</a></code> | Apply the given removal policy to this resource. |
+| <code><a href="#cdk-sops-secrets.SopsSyncProvider.addEventSource">addEventSource</a></code> | Adds an event source to this function. |
+| <code><a href="#cdk-sops-secrets.SopsSyncProvider.addEventSourceMapping">addEventSourceMapping</a></code> | Adds an event source that maps to this AWS Lambda function. |
+| <code><a href="#cdk-sops-secrets.SopsSyncProvider.addPermission">addPermission</a></code> | Adds a permission to the Lambda resource policy. |
+| <code><a href="#cdk-sops-secrets.SopsSyncProvider.addToRolePolicy">addToRolePolicy</a></code> | Adds a statement to the IAM role assumed by the instance. |
+| <code><a href="#cdk-sops-secrets.SopsSyncProvider.configureAsyncInvoke">configureAsyncInvoke</a></code> | Configures options for asynchronous invocation. |
+| <code><a href="#cdk-sops-secrets.SopsSyncProvider.considerWarningOnInvokeFunctionPermissions">considerWarningOnInvokeFunctionPermissions</a></code> | A warning will be added to functions under the following conditions: - permissions that include `lambda:InvokeFunction` are added to the unqualified function. |
+| <code><a href="#cdk-sops-secrets.SopsSyncProvider.grantInvoke">grantInvoke</a></code> | Grant the given identity permissions to invoke this Lambda. |
+| <code><a href="#cdk-sops-secrets.SopsSyncProvider.metric">metric</a></code> | Return the given named metric for this Function. |
+| <code><a href="#cdk-sops-secrets.SopsSyncProvider.metricDuration">metricDuration</a></code> | How long execution of this Lambda takes. |
+| <code><a href="#cdk-sops-secrets.SopsSyncProvider.metricErrors">metricErrors</a></code> | How many invocations of this Lambda fail. |
+| <code><a href="#cdk-sops-secrets.SopsSyncProvider.metricInvocations">metricInvocations</a></code> | How often this Lambda is invoked. |
+| <code><a href="#cdk-sops-secrets.SopsSyncProvider.metricThrottles">metricThrottles</a></code> | How often this Lambda is throttled. |
+| <code><a href="#cdk-sops-secrets.SopsSyncProvider.addDependency">addDependency</a></code> | Using node.addDependency() does not work on this method as the underlying lambda function is modeled as a singleton across the stack. Use this method instead to declare dependencies. |
+| <code><a href="#cdk-sops-secrets.SopsSyncProvider.addEnvironment">addEnvironment</a></code> | Adds an environment variable to this Lambda function. |
+| <code><a href="#cdk-sops-secrets.SopsSyncProvider.addLayers">addLayers</a></code> | Adds one or more Lambda Layers to this Lambda function. |
+| <code><a href="#cdk-sops-secrets.SopsSyncProvider.dependOn">dependOn</a></code> | The SingletonFunction construct cannot be added as a dependency of another construct using node.addDependency(). Use this method instead to declare this as a dependency of another construct. |
+| <code><a href="#cdk-sops-secrets.SopsSyncProvider.addAgeKey">addAgeKey</a></code> | *No description.* |
+
+---
+
+##### `toString` <a name="toString" id="cdk-sops-secrets.SopsSyncProvider.toString"></a>
+
+```typescript
+public toString(): string
+```
+
+Returns a string representation of this construct.
+
+##### `applyRemovalPolicy` <a name="applyRemovalPolicy" id="cdk-sops-secrets.SopsSyncProvider.applyRemovalPolicy"></a>
+
+```typescript
+public applyRemovalPolicy(policy: RemovalPolicy): void
+```
+
+Apply the given removal policy to this resource.
+
+The Removal Policy controls what happens to this resource when it stops
+being managed by CloudFormation, either because you've removed it from the
+CDK application or because you've made a change that requires the resource
+to be replaced.
+
+The resource can be deleted (`RemovalPolicy.DESTROY`), or left in your AWS
+account for data recovery and cleanup later (`RemovalPolicy.RETAIN`).
+
+###### `policy`<sup>Required</sup> <a name="policy" id="cdk-sops-secrets.SopsSyncProvider.applyRemovalPolicy.parameter.policy"></a>
+
+- *Type:* @aws-cdk/core.RemovalPolicy
+
+---
+
+##### `addEventSource` <a name="addEventSource" id="cdk-sops-secrets.SopsSyncProvider.addEventSource"></a>
+
+```typescript
+public addEventSource(source: IEventSource): void
+```
+
+Adds an event source to this function.
+
+Event sources are implemented in the @aws-cdk/aws-lambda-event-sources module.
+
+The following example adds an SQS Queue as an event source:
+```
+import { SqsEventSource } from '@aws-cdk/aws-lambda-event-sources';
+myFunction.addEventSource(new SqsEventSource(myQueue));
+```
+
+###### `source`<sup>Required</sup> <a name="source" id="cdk-sops-secrets.SopsSyncProvider.addEventSource.parameter.source"></a>
+
+- *Type:* @aws-cdk/aws-lambda.IEventSource
+
+---
+
+##### `addEventSourceMapping` <a name="addEventSourceMapping" id="cdk-sops-secrets.SopsSyncProvider.addEventSourceMapping"></a>
+
+```typescript
+public addEventSourceMapping(id: string, options: EventSourceMappingOptions): EventSourceMapping
+```
+
+Adds an event source that maps to this AWS Lambda function.
+
+###### `id`<sup>Required</sup> <a name="id" id="cdk-sops-secrets.SopsSyncProvider.addEventSourceMapping.parameter.id"></a>
+
+- *Type:* string
+
+---
+
+###### `options`<sup>Required</sup> <a name="options" id="cdk-sops-secrets.SopsSyncProvider.addEventSourceMapping.parameter.options"></a>
+
+- *Type:* @aws-cdk/aws-lambda.EventSourceMappingOptions
+
+---
+
+##### `addPermission` <a name="addPermission" id="cdk-sops-secrets.SopsSyncProvider.addPermission"></a>
+
+```typescript
+public addPermission(name: string, permission: Permission): void
+```
+
+Adds a permission to the Lambda resource policy.
+
+###### `name`<sup>Required</sup> <a name="name" id="cdk-sops-secrets.SopsSyncProvider.addPermission.parameter.name"></a>
+
+- *Type:* string
+
+---
+
+###### `permission`<sup>Required</sup> <a name="permission" id="cdk-sops-secrets.SopsSyncProvider.addPermission.parameter.permission"></a>
+
+- *Type:* @aws-cdk/aws-lambda.Permission
+
+---
+
+##### `addToRolePolicy` <a name="addToRolePolicy" id="cdk-sops-secrets.SopsSyncProvider.addToRolePolicy"></a>
+
+```typescript
+public addToRolePolicy(statement: PolicyStatement): void
+```
+
+Adds a statement to the IAM role assumed by the instance.
+
+###### `statement`<sup>Required</sup> <a name="statement" id="cdk-sops-secrets.SopsSyncProvider.addToRolePolicy.parameter.statement"></a>
+
+- *Type:* @aws-cdk/aws-iam.PolicyStatement
+
+---
+
+##### `configureAsyncInvoke` <a name="configureAsyncInvoke" id="cdk-sops-secrets.SopsSyncProvider.configureAsyncInvoke"></a>
+
+```typescript
+public configureAsyncInvoke(options: EventInvokeConfigOptions): void
+```
+
+Configures options for asynchronous invocation.
+
+###### `options`<sup>Required</sup> <a name="options" id="cdk-sops-secrets.SopsSyncProvider.configureAsyncInvoke.parameter.options"></a>
+
+- *Type:* @aws-cdk/aws-lambda.EventInvokeConfigOptions
+
+---
+
+##### `considerWarningOnInvokeFunctionPermissions` <a name="considerWarningOnInvokeFunctionPermissions" id="cdk-sops-secrets.SopsSyncProvider.considerWarningOnInvokeFunctionPermissions"></a>
+
+```typescript
+public considerWarningOnInvokeFunctionPermissions(scope: Construct, action: string): void
+```
+
+A warning will be added to functions under the following conditions: - permissions that include `lambda:InvokeFunction` are added to the unqualified function.
+
+function.currentVersion is invoked before or after the permission is created.
+
+This applies only to permissions on Lambda functions, not versions or aliases.
+This function is overridden as a noOp for QualifiedFunctionBase.
+
+###### `scope`<sup>Required</sup> <a name="scope" id="cdk-sops-secrets.SopsSyncProvider.considerWarningOnInvokeFunctionPermissions.parameter.scope"></a>
+
+- *Type:* @aws-cdk/core.Construct
+
+---
+
+###### `action`<sup>Required</sup> <a name="action" id="cdk-sops-secrets.SopsSyncProvider.considerWarningOnInvokeFunctionPermissions.parameter.action"></a>
+
+- *Type:* string
+
+---
+
+##### `grantInvoke` <a name="grantInvoke" id="cdk-sops-secrets.SopsSyncProvider.grantInvoke"></a>
+
+```typescript
+public grantInvoke(grantee: IGrantable): Grant
+```
+
+Grant the given identity permissions to invoke this Lambda.
+
+###### `grantee`<sup>Required</sup> <a name="grantee" id="cdk-sops-secrets.SopsSyncProvider.grantInvoke.parameter.grantee"></a>
+
+- *Type:* @aws-cdk/aws-iam.IGrantable
+
+---
+
+##### `metric` <a name="metric" id="cdk-sops-secrets.SopsSyncProvider.metric"></a>
+
+```typescript
+public metric(metricName: string, props?: MetricOptions): Metric
+```
+
+Return the given named metric for this Function.
+
+###### `metricName`<sup>Required</sup> <a name="metricName" id="cdk-sops-secrets.SopsSyncProvider.metric.parameter.metricName"></a>
+
+- *Type:* string
+
+---
+
+###### `props`<sup>Optional</sup> <a name="props" id="cdk-sops-secrets.SopsSyncProvider.metric.parameter.props"></a>
+
+- *Type:* @aws-cdk/aws-cloudwatch.MetricOptions
+
+---
+
+##### `metricDuration` <a name="metricDuration" id="cdk-sops-secrets.SopsSyncProvider.metricDuration"></a>
+
+```typescript
+public metricDuration(props?: MetricOptions): Metric
+```
+
+How long execution of this Lambda takes.
+
+Average over 5 minutes
+
+###### `props`<sup>Optional</sup> <a name="props" id="cdk-sops-secrets.SopsSyncProvider.metricDuration.parameter.props"></a>
+
+- *Type:* @aws-cdk/aws-cloudwatch.MetricOptions
+
+---
+
+##### `metricErrors` <a name="metricErrors" id="cdk-sops-secrets.SopsSyncProvider.metricErrors"></a>
+
+```typescript
+public metricErrors(props?: MetricOptions): Metric
+```
+
+How many invocations of this Lambda fail.
+
+Sum over 5 minutes
+
+###### `props`<sup>Optional</sup> <a name="props" id="cdk-sops-secrets.SopsSyncProvider.metricErrors.parameter.props"></a>
+
+- *Type:* @aws-cdk/aws-cloudwatch.MetricOptions
+
+---
+
+##### `metricInvocations` <a name="metricInvocations" id="cdk-sops-secrets.SopsSyncProvider.metricInvocations"></a>
+
+```typescript
+public metricInvocations(props?: MetricOptions): Metric
+```
+
+How often this Lambda is invoked.
+
+Sum over 5 minutes
+
+###### `props`<sup>Optional</sup> <a name="props" id="cdk-sops-secrets.SopsSyncProvider.metricInvocations.parameter.props"></a>
+
+- *Type:* @aws-cdk/aws-cloudwatch.MetricOptions
+
+---
+
+##### `metricThrottles` <a name="metricThrottles" id="cdk-sops-secrets.SopsSyncProvider.metricThrottles"></a>
+
+```typescript
+public metricThrottles(props?: MetricOptions): Metric
+```
+
+How often this Lambda is throttled.
+
+Sum over 5 minutes
+
+###### `props`<sup>Optional</sup> <a name="props" id="cdk-sops-secrets.SopsSyncProvider.metricThrottles.parameter.props"></a>
+
+- *Type:* @aws-cdk/aws-cloudwatch.MetricOptions
+
+---
+
+##### `addDependency` <a name="addDependency" id="cdk-sops-secrets.SopsSyncProvider.addDependency"></a>
+
+```typescript
+public addDependency(up: IDependable): void
+```
+
+Using node.addDependency() does not work on this method as the underlying lambda function is modeled as a singleton across the stack. Use this method instead to declare dependencies.
+
+###### `up`<sup>Required</sup> <a name="up" id="cdk-sops-secrets.SopsSyncProvider.addDependency.parameter.up"></a>
+
+- *Type:* @aws-cdk/core.IDependable
+
+---
+
+##### `addEnvironment` <a name="addEnvironment" id="cdk-sops-secrets.SopsSyncProvider.addEnvironment"></a>
+
+```typescript
+public addEnvironment(key: string, value: string, options?: EnvironmentOptions): Function
+```
+
+Adds an environment variable to this Lambda function.
+
+If this is a ref to a Lambda function, this operation results in a no-op.
+
+###### `key`<sup>Required</sup> <a name="key" id="cdk-sops-secrets.SopsSyncProvider.addEnvironment.parameter.key"></a>
+
+- *Type:* string
+
+The environment variable key.
+
+---
+
+###### `value`<sup>Required</sup> <a name="value" id="cdk-sops-secrets.SopsSyncProvider.addEnvironment.parameter.value"></a>
+
+- *Type:* string
+
+The environment variable's value.
+
+---
+
+###### `options`<sup>Optional</sup> <a name="options" id="cdk-sops-secrets.SopsSyncProvider.addEnvironment.parameter.options"></a>
+
+- *Type:* @aws-cdk/aws-lambda.EnvironmentOptions
+
+Environment variable options.
+
+---
+
+##### `addLayers` <a name="addLayers" id="cdk-sops-secrets.SopsSyncProvider.addLayers"></a>
+
+```typescript
+public addLayers(layers: ILayerVersion): void
+```
+
+Adds one or more Lambda Layers to this Lambda function.
+
+###### `layers`<sup>Required</sup> <a name="layers" id="cdk-sops-secrets.SopsSyncProvider.addLayers.parameter.layers"></a>
+
+- *Type:* @aws-cdk/aws-lambda.ILayerVersion
+
+the layers to be added.
+
+---
+
+##### `dependOn` <a name="dependOn" id="cdk-sops-secrets.SopsSyncProvider.dependOn"></a>
+
+```typescript
+public dependOn(down: IConstruct): void
+```
+
+The SingletonFunction construct cannot be added as a dependency of another construct using node.addDependency(). Use this method instead to declare this as a dependency of another construct.
+
+###### `down`<sup>Required</sup> <a name="down" id="cdk-sops-secrets.SopsSyncProvider.dependOn.parameter.down"></a>
+
+- *Type:* @aws-cdk/core.IConstruct
+
+---
+
+##### `addAgeKey` <a name="addAgeKey" id="cdk-sops-secrets.SopsSyncProvider.addAgeKey"></a>
+
+```typescript
+public addAgeKey(key: SecretValue): void
+```
+
+###### `key`<sup>Required</sup> <a name="key" id="cdk-sops-secrets.SopsSyncProvider.addAgeKey.parameter.key"></a>
+
+- *Type:* @aws-cdk/core.SecretValue
+
+---
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#cdk-sops-secrets.SopsSyncProvider.isConstruct">isConstruct</a></code> | Return whether the given object is a Construct. |
+| <code><a href="#cdk-sops-secrets.SopsSyncProvider.isResource">isResource</a></code> | Check whether the given construct is a Resource. |
+
+---
+
+##### `isConstruct` <a name="isConstruct" id="cdk-sops-secrets.SopsSyncProvider.isConstruct"></a>
+
+```typescript
+import { SopsSyncProvider } from 'cdk-sops-secrets'
+
+SopsSyncProvider.isConstruct(x: any)
+```
+
+Return whether the given object is a Construct.
+
+###### `x`<sup>Required</sup> <a name="x" id="cdk-sops-secrets.SopsSyncProvider.isConstruct.parameter.x"></a>
+
+- *Type:* any
+
+---
+
+##### `isResource` <a name="isResource" id="cdk-sops-secrets.SopsSyncProvider.isResource"></a>
+
+```typescript
+import { SopsSyncProvider } from 'cdk-sops-secrets'
+
+SopsSyncProvider.isResource(construct: IConstruct)
+```
+
+Check whether the given construct is a Resource.
+
+###### `construct`<sup>Required</sup> <a name="construct" id="cdk-sops-secrets.SopsSyncProvider.isResource.parameter.construct"></a>
+
+- *Type:* @aws-cdk/core.IConstruct
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#cdk-sops-secrets.SopsSyncProvider.property.node">node</a></code> | <code>@aws-cdk/core.ConstructNode</code> | The construct tree node associated with this construct. |
+| <code><a href="#cdk-sops-secrets.SopsSyncProvider.property.env">env</a></code> | <code>@aws-cdk/core.ResourceEnvironment</code> | The environment this resource belongs to. |
+| <code><a href="#cdk-sops-secrets.SopsSyncProvider.property.stack">stack</a></code> | <code>@aws-cdk/core.Stack</code> | The stack in which this resource is defined. |
+| <code><a href="#cdk-sops-secrets.SopsSyncProvider.property.architecture">architecture</a></code> | <code>@aws-cdk/aws-lambda.Architecture</code> | The architecture of this Lambda Function. |
+| <code><a href="#cdk-sops-secrets.SopsSyncProvider.property.connections">connections</a></code> | <code>@aws-cdk/aws-ec2.Connections</code> | Access the Connections object. |
+| <code><a href="#cdk-sops-secrets.SopsSyncProvider.property.functionArn">functionArn</a></code> | <code>string</code> | The ARN fo the function. |
+| <code><a href="#cdk-sops-secrets.SopsSyncProvider.property.functionName">functionName</a></code> | <code>string</code> | The name of the function. |
+| <code><a href="#cdk-sops-secrets.SopsSyncProvider.property.grantPrincipal">grantPrincipal</a></code> | <code>@aws-cdk/aws-iam.IPrincipal</code> | The principal this Lambda Function is running as. |
+| <code><a href="#cdk-sops-secrets.SopsSyncProvider.property.isBoundToVpc">isBoundToVpc</a></code> | <code>boolean</code> | Whether or not this Lambda function was bound to a VPC. |
+| <code><a href="#cdk-sops-secrets.SopsSyncProvider.property.latestVersion">latestVersion</a></code> | <code>@aws-cdk/aws-lambda.IVersion</code> | The `$LATEST` version of this function. |
+| <code><a href="#cdk-sops-secrets.SopsSyncProvider.property.permissionsNode">permissionsNode</a></code> | <code>@aws-cdk/core.ConstructNode</code> | The construct node where permissions are attached. |
+| <code><a href="#cdk-sops-secrets.SopsSyncProvider.property.resourceArnsForGrantInvoke">resourceArnsForGrantInvoke</a></code> | <code>string[]</code> | The ARN(s) to put into the resource field of the generated IAM policy for grantInvoke(). |
+| <code><a href="#cdk-sops-secrets.SopsSyncProvider.property.role">role</a></code> | <code>@aws-cdk/aws-iam.IRole</code> | The IAM role associated with this function. |
+| <code><a href="#cdk-sops-secrets.SopsSyncProvider.property.currentVersion">currentVersion</a></code> | <code>@aws-cdk/aws-lambda.Version</code> | Returns a `lambda.Version` which represents the current version of this singleton Lambda function. A new version will be created every time the function's configuration changes. |
+| <code><a href="#cdk-sops-secrets.SopsSyncProvider.property.logGroup">logGroup</a></code> | <code>@aws-cdk/aws-logs.ILogGroup</code> | The LogGroup where the Lambda function's logs are made available. |
+| <code><a href="#cdk-sops-secrets.SopsSyncProvider.property.runtime">runtime</a></code> | <code>@aws-cdk/aws-lambda.Runtime</code> | The runtime environment for the Lambda function. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="cdk-sops-secrets.SopsSyncProvider.property.node"></a>
+
+```typescript
+public readonly node: ConstructNode;
+```
+
+- *Type:* @aws-cdk/core.ConstructNode
+
+The construct tree node associated with this construct.
+
+---
+
+##### `env`<sup>Required</sup> <a name="env" id="cdk-sops-secrets.SopsSyncProvider.property.env"></a>
+
+```typescript
+public readonly env: ResourceEnvironment;
+```
+
+- *Type:* @aws-cdk/core.ResourceEnvironment
+
+The environment this resource belongs to.
+
+For resources that are created and managed by the CDK
+(generally, those created by creating new class instances like Role, Bucket, etc.),
+this is always the same as the environment of the stack they belong to;
+however, for imported resources
+(those obtained from static methods like fromRoleArn, fromBucketName, etc.),
+that might be different than the stack they were imported into.
+
+---
+
+##### `stack`<sup>Required</sup> <a name="stack" id="cdk-sops-secrets.SopsSyncProvider.property.stack"></a>
+
+```typescript
+public readonly stack: Stack;
+```
+
+- *Type:* @aws-cdk/core.Stack
+
+The stack in which this resource is defined.
+
+---
+
+##### `architecture`<sup>Required</sup> <a name="architecture" id="cdk-sops-secrets.SopsSyncProvider.property.architecture"></a>
+
+```typescript
+public readonly architecture: Architecture;
+```
+
+- *Type:* @aws-cdk/aws-lambda.Architecture
+
+The architecture of this Lambda Function.
+
+---
+
+##### `connections`<sup>Required</sup> <a name="connections" id="cdk-sops-secrets.SopsSyncProvider.property.connections"></a>
+
+```typescript
+public readonly connections: Connections;
+```
+
+- *Type:* @aws-cdk/aws-ec2.Connections
+
+Access the Connections object.
+
+Will fail if not a VPC-enabled Lambda Function
+
+---
+
+##### `functionArn`<sup>Required</sup> <a name="functionArn" id="cdk-sops-secrets.SopsSyncProvider.property.functionArn"></a>
+
+```typescript
+public readonly functionArn: string;
+```
+
+- *Type:* string
+
+The ARN fo the function.
+
+---
+
+##### `functionName`<sup>Required</sup> <a name="functionName" id="cdk-sops-secrets.SopsSyncProvider.property.functionName"></a>
+
+```typescript
+public readonly functionName: string;
+```
+
+- *Type:* string
+
+The name of the function.
+
+---
+
+##### `grantPrincipal`<sup>Required</sup> <a name="grantPrincipal" id="cdk-sops-secrets.SopsSyncProvider.property.grantPrincipal"></a>
+
+```typescript
+public readonly grantPrincipal: IPrincipal;
+```
+
+- *Type:* @aws-cdk/aws-iam.IPrincipal
+
+The principal this Lambda Function is running as.
+
+---
+
+##### `isBoundToVpc`<sup>Required</sup> <a name="isBoundToVpc" id="cdk-sops-secrets.SopsSyncProvider.property.isBoundToVpc"></a>
+
+```typescript
+public readonly isBoundToVpc: boolean;
+```
+
+- *Type:* boolean
+
+Whether or not this Lambda function was bound to a VPC.
+
+If this is is `false`, trying to access the `connections` object will fail.
+
+---
+
+##### `latestVersion`<sup>Required</sup> <a name="latestVersion" id="cdk-sops-secrets.SopsSyncProvider.property.latestVersion"></a>
+
+```typescript
+public readonly latestVersion: IVersion;
+```
+
+- *Type:* @aws-cdk/aws-lambda.IVersion
+
+The `$LATEST` version of this function.
+
+Note that this is reference to a non-specific AWS Lambda version, which
+means the function this version refers to can return different results in
+different invocations.
+
+To obtain a reference to an explicit version which references the current
+function configuration, use `lambdaFunction.currentVersion` instead.
+
+---
+
+##### `permissionsNode`<sup>Required</sup> <a name="permissionsNode" id="cdk-sops-secrets.SopsSyncProvider.property.permissionsNode"></a>
+
+```typescript
+public readonly permissionsNode: ConstructNode;
+```
+
+- *Type:* @aws-cdk/core.ConstructNode
+
+The construct node where permissions are attached.
+
+---
+
+##### `resourceArnsForGrantInvoke`<sup>Required</sup> <a name="resourceArnsForGrantInvoke" id="cdk-sops-secrets.SopsSyncProvider.property.resourceArnsForGrantInvoke"></a>
+
+```typescript
+public readonly resourceArnsForGrantInvoke: string[];
+```
+
+- *Type:* string[]
+
+The ARN(s) to put into the resource field of the generated IAM policy for grantInvoke().
+
+---
+
+##### `role`<sup>Optional</sup> <a name="role" id="cdk-sops-secrets.SopsSyncProvider.property.role"></a>
+
+```typescript
+public readonly role: IRole;
+```
+
+- *Type:* @aws-cdk/aws-iam.IRole
+
+The IAM role associated with this function.
+
+Undefined if the function was imported without a role.
+
+---
+
+##### `currentVersion`<sup>Required</sup> <a name="currentVersion" id="cdk-sops-secrets.SopsSyncProvider.property.currentVersion"></a>
+
+```typescript
+public readonly currentVersion: Version;
+```
+
+- *Type:* @aws-cdk/aws-lambda.Version
+
+Returns a `lambda.Version` which represents the current version of this singleton Lambda function. A new version will be created every time the function's configuration changes.
+
+You can specify options for this version using the `currentVersionOptions`
+prop when initializing the `lambda.SingletonFunction`.
+
+---
+
+##### `logGroup`<sup>Required</sup> <a name="logGroup" id="cdk-sops-secrets.SopsSyncProvider.property.logGroup"></a>
+
+```typescript
+public readonly logGroup: ILogGroup;
+```
+
+- *Type:* @aws-cdk/aws-logs.ILogGroup
+
+The LogGroup where the Lambda function's logs are made available.
+
+If either `logRetention` is set or this property is called, a CloudFormation custom resource is added to the stack that
+pre-creates the log group as part of the stack deployment, if it already doesn't exist, and sets the correct log retention
+period (never expire, by default).
+
+Further, if the log group already exists and the `logRetention` is not set, the custom resource will reset the log retention
+to never expire even if it was configured with a different value.
+
+---
+
+##### `runtime`<sup>Required</sup> <a name="runtime" id="cdk-sops-secrets.SopsSyncProvider.property.runtime"></a>
+
+```typescript
+public readonly runtime: Runtime;
+```
+
+- *Type:* @aws-cdk/aws-lambda.Runtime
+
+The runtime environment for the Lambda function.
+
+---
+
+
 ## Structs <a name="Structs" id="Structs"></a>
 
 ### SopsSecretProps <a name="SopsSecretProps" id="cdk-sops-secrets.SopsSecretProps"></a>
@@ -807,7 +1482,7 @@ const sopsSecretProps: SopsSecretProps = { ... }
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.sopsAgeKey">sopsAgeKey</a></code> | <code>@aws-cdk/core.SecretValue</code> | The age key that should be used for encryption. |
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.sopsFileFormat">sopsFileFormat</a></code> | <code>string</code> | The format of the sops file. |
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.sopsKmsKey">sopsKmsKey</a></code> | <code>@aws-cdk/aws-kms.IKey[]</code> | The kmsKey used to encrypt the sops file. |
-| <code><a href="#cdk-sops-secrets.SopsSecretProps.property.sopsProvider">sopsProvider</a></code> | <code>@aws-cdk/aws-lambda.IFunction</code> | The custom resource provider to use. |
+| <code><a href="#cdk-sops-secrets.SopsSecretProps.property.sopsProvider">sopsProvider</a></code> | <code><a href="#cdk-sops-secrets.SopsSyncProvider">SopsSyncProvider</a></code> | The custom resource provider to use. |
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.stringifyValues">stringifyValues</a></code> | <code>boolean</code> | Shall all values be flattened? |
 
 ---
@@ -1007,10 +1682,10 @@ will be granted to the custom resource provider.
 ##### `sopsProvider`<sup>Optional</sup> <a name="sopsProvider" id="cdk-sops-secrets.SopsSecretProps.property.sopsProvider"></a>
 
 ```typescript
-public readonly sopsProvider: IFunction;
+public readonly sopsProvider: SopsSyncProvider;
 ```
 
-- *Type:* @aws-cdk/aws-lambda.IFunction
+- *Type:* <a href="#cdk-sops-secrets.SopsSyncProvider">SopsSyncProvider</a>
 - *Default:* A new singleton provider will be created
 
 The custom resource provider to use.
@@ -1057,7 +1732,7 @@ const sopsSyncOptions: SopsSyncOptions = { ... }
 | <code><a href="#cdk-sops-secrets.SopsSyncOptions.property.sopsAgeKey">sopsAgeKey</a></code> | <code>@aws-cdk/core.SecretValue</code> | The age key that should be used for encryption. |
 | <code><a href="#cdk-sops-secrets.SopsSyncOptions.property.sopsFileFormat">sopsFileFormat</a></code> | <code>string</code> | The format of the sops file. |
 | <code><a href="#cdk-sops-secrets.SopsSyncOptions.property.sopsKmsKey">sopsKmsKey</a></code> | <code>@aws-cdk/aws-kms.IKey[]</code> | The kmsKey used to encrypt the sops file. |
-| <code><a href="#cdk-sops-secrets.SopsSyncOptions.property.sopsProvider">sopsProvider</a></code> | <code>@aws-cdk/aws-lambda.IFunction</code> | The custom resource provider to use. |
+| <code><a href="#cdk-sops-secrets.SopsSyncOptions.property.sopsProvider">sopsProvider</a></code> | <code><a href="#cdk-sops-secrets.SopsSyncProvider">SopsSyncProvider</a></code> | The custom resource provider to use. |
 | <code><a href="#cdk-sops-secrets.SopsSyncOptions.property.stringifyValues">stringifyValues</a></code> | <code>boolean</code> | Shall all values be flattened? |
 
 ---
@@ -1150,10 +1825,10 @@ will be granted to the custom resource provider.
 ##### `sopsProvider`<sup>Optional</sup> <a name="sopsProvider" id="cdk-sops-secrets.SopsSyncOptions.property.sopsProvider"></a>
 
 ```typescript
-public readonly sopsProvider: IFunction;
+public readonly sopsProvider: SopsSyncProvider;
 ```
 
-- *Type:* @aws-cdk/aws-lambda.IFunction
+- *Type:* <a href="#cdk-sops-secrets.SopsSyncProvider">SopsSyncProvider</a>
 - *Default:* A new singleton provider will be created
 
 The custom resource provider to use.
@@ -1200,7 +1875,7 @@ const sopsSyncProps: SopsSyncProps = { ... }
 | <code><a href="#cdk-sops-secrets.SopsSyncProps.property.sopsAgeKey">sopsAgeKey</a></code> | <code>@aws-cdk/core.SecretValue</code> | The age key that should be used for encryption. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProps.property.sopsFileFormat">sopsFileFormat</a></code> | <code>string</code> | The format of the sops file. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProps.property.sopsKmsKey">sopsKmsKey</a></code> | <code>@aws-cdk/aws-kms.IKey[]</code> | The kmsKey used to encrypt the sops file. |
-| <code><a href="#cdk-sops-secrets.SopsSyncProps.property.sopsProvider">sopsProvider</a></code> | <code>@aws-cdk/aws-lambda.IFunction</code> | The custom resource provider to use. |
+| <code><a href="#cdk-sops-secrets.SopsSyncProps.property.sopsProvider">sopsProvider</a></code> | <code><a href="#cdk-sops-secrets.SopsSyncProvider">SopsSyncProvider</a></code> | The custom resource provider to use. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProps.property.stringifyValues">stringifyValues</a></code> | <code>boolean</code> | Shall all values be flattened? |
 | <code><a href="#cdk-sops-secrets.SopsSyncProps.property.secret">secret</a></code> | <code>@aws-cdk/aws-secretsmanager.ISecret</code> | The secret that will be populated with the encrypted sops file content. |
 
@@ -1294,10 +1969,10 @@ will be granted to the custom resource provider.
 ##### `sopsProvider`<sup>Optional</sup> <a name="sopsProvider" id="cdk-sops-secrets.SopsSyncProps.property.sopsProvider"></a>
 
 ```typescript
-public readonly sopsProvider: IFunction;
+public readonly sopsProvider: SopsSyncProvider;
 ```
 
-- *Type:* @aws-cdk/aws-lambda.IFunction
+- *Type:* <a href="#cdk-sops-secrets.SopsSyncProvider">SopsSyncProvider</a>
 - *Default:* A new singleton provider will be created
 
 The custom resource provider to use.

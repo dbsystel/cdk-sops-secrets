@@ -1,6 +1,6 @@
 import { Match, Template } from '@aws-cdk/assertions';
 import { Key } from '@aws-cdk/aws-kms';
-import { StringParameter } from '@aws-cdk/aws-ssm';
+import { Function, InlineCode, Runtime } from '@aws-cdk/aws-lambda';
 import { App, Stack } from '@aws-cdk/core';
 import { SopsSecret } from '../src';
 
@@ -169,27 +169,38 @@ test('secretValueFromJson(...)', () => {
     sopsFilePath: 'test-secrets/json/sopsfile.enc-age.json',
   });
 
-  new StringParameter(stack, 'TestParameter', {
-    stringValue: secret.secretValueFromJson('test').toString(),
+  new Function(stack, 'TestParameter', {
+    code: InlineCode.fromInline('TEST'),
+    runtime: Runtime.NODEJS_14_X,
+    handler: 'test',
+    environment: {
+      stringValue: secret.secretValueFromJson('test').toString(),
+    },
   });
 
-  Template.fromStack(stack).hasResource('AWS::SSM::Parameter', {
+  Template.fromStack(stack).hasResource('AWS::Lambda::Function', {
     Properties: Match.objectLike({
-      Value: {
-        'Fn::Join': [
-          '',
-          [
-            '{{resolve:secretsmanager:',
-            {
-              Ref: 'SopsSecretBBFD4AF3',
-            },
-            ':SecretString:test::',
-            {
-              'Fn::GetAtt': ['SopsSecretSopsSync7D825417', 'VersionId'],
-            },
-            '}}',
-          ],
-        ],
+      Handler: 'test',
+      Runtime: 'nodejs14.x',
+      Environment: {
+        Variables: {
+          stringValue: {
+            'Fn::Join': [
+              '',
+              [
+                '{{resolve:secretsmanager:',
+                {
+                  Ref: 'SopsSecretBBFD4AF3',
+                },
+                ':SecretString:test::',
+                {
+                  'Fn::GetAtt': ['SopsSecretSopsSync7D825417', 'VersionId'],
+                },
+                '}}',
+              ],
+            ],
+          },
+        },
       },
     }),
   });

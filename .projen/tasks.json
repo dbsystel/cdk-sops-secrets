@@ -348,7 +348,7 @@
           "exec": "yarn install --check-files"
         },
         {
-          "exec": "yarn upgrade @aws-cdk/assertions @aws-cdk/aws-iam @aws-cdk/aws-kms @aws-cdk/aws-lambda @aws-cdk/aws-logs @aws-cdk/aws-s3-assets @aws-cdk/aws-secretsmanager @aws-cdk/aws-ssm @aws-cdk/custom-resources @types/jest @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser aws-cdk eslint-config-prettier eslint-import-resolver-node eslint-import-resolver-typescript eslint-plugin-import eslint-plugin-prettier eslint jest jest-junit jsii jsii-diff jsii-docgen jsii-pacmak json-schema npm-check-updates prettier standard-version ts-jest ts-node typescript @aws-cdk/aws-iam @aws-cdk/aws-kms @aws-cdk/aws-lambda @aws-cdk/aws-logs @aws-cdk/aws-s3-assets @aws-cdk/aws-secretsmanager @aws-cdk/aws-ssm @aws-cdk/core @aws-cdk/custom-resources constructs @aws-cdk/core @aws-cdk/assert"
+          "exec": "yarn upgrade @aws-cdk/assertions @aws-cdk/aws-iam @aws-cdk/aws-kms @aws-cdk/aws-lambda @aws-cdk/aws-logs @aws-cdk/aws-s3-assets @aws-cdk/aws-secretsmanager @types/jest @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser aws-cdk eslint-config-prettier eslint-import-resolver-node eslint-import-resolver-typescript eslint-plugin-import eslint-plugin-prettier eslint jest jest-junit jsii jsii-diff jsii-docgen jsii-pacmak json-schema npm-check-updates prettier standard-version ts-jest ts-node typescript @aws-cdk/aws-iam @aws-cdk/aws-kms @aws-cdk/aws-lambda @aws-cdk/aws-logs @aws-cdk/aws-s3-assets @aws-cdk/aws-secretsmanager @aws-cdk/core constructs @aws-cdk/assert"
         },
         {
           "exec": "npx projen"

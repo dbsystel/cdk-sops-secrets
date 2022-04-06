@@ -1,17 +1,13 @@
 import * as fs from 'fs';
 import { IKey, Key } from '@aws-cdk/aws-kms';
-import {
-  Code,
-  IFunction,
-  Runtime,
-  SingletonFunction,
-} from '@aws-cdk/aws-lambda';
+import { Code, Runtime, SingletonFunction } from '@aws-cdk/aws-lambda';
 import { Asset } from '@aws-cdk/aws-s3-assets';
 import { ISecret, Secret, SecretProps } from '@aws-cdk/aws-secretsmanager';
 import {
   Annotations,
   Construct,
   CustomResource,
+  Lazy,
   SecretValue,
 } from '@aws-cdk/core';
 
@@ -25,7 +21,7 @@ export interface SopsSyncOptions {
    *
    * @default - A new singleton provider will be created
    */
-  readonly sopsProvider?: IFunction;
+  readonly sopsProvider?: SopsSyncProvider;
 
   /**
    * The filepath to the sops file
@@ -142,15 +138,7 @@ export class SopsSync extends Construct {
       }
     }
 
-    const code = Code.fromAsset('assets/cdk-sops-lambda.zip');
-    const provider =
-      props.sopsProvider ??
-      new SingletonFunction(this, 'Function', {
-        code,
-        runtime: Runtime.GO_1_X,
-        handler: 'cdk-sops-secrets',
-        uuid: 'cdk-sops-secrets',
-      });
+    const provider = props.sopsProvider ?? new SopsSyncProvider(scope);
 
     if (!fs.existsSync(props.sopsFilePath)) {
       throw new Error(`File ${props.sopsFilePath} does not exist!`);
@@ -181,6 +169,9 @@ export class SopsSync extends Construct {
         'Please ensure propper permissions for the passed lambda function:\n  - write Access to the secret\n  - encrypt with the sopsKmsKey\n  - download from asset bucket',
       );
     }
+    if (props.sopsAgeKey !== undefined) {
+      provider.addAgeKey(props.sopsAgeKey);
+    }
 
     const cr = new CustomResource(this, 'Resource', {
       serviceToken: provider.functionArn,
@@ -195,10 +186,35 @@ export class SopsSync extends Construct {
         Flatten: this.flatten,
         Format: this.sopsFileFormat,
         StringifiedValues: this.stringifiedValues,
-        SopsAgeKey: props.sopsAgeKey,
       },
     });
     this.versionId = cr.getAttString('VersionId');
+  }
+}
+
+export class SopsSyncProvider extends SingletonFunction {
+  private sopsAgeKeys: SecretValue[];
+
+  constructor(scope: Construct, id?: string) {
+    super(scope, id ?? 'SopsSyncProvider', {
+      code: Code.fromAsset('assets/cdk-sops-lambda.zip'),
+      runtime: Runtime.GO_1_X,
+      handler: 'cdk-sops-secrets',
+      uuid: 'cdk-sops-secrets',
+      environment: {
+        SOPS_AGE_KEY: Lazy.string({
+          produce: () =>
+            (this.sopsAgeKeys.map((secret) => secret.toString()) ?? []).join(
+              '\n',
+            ),
+        }),
+      },
+    });
+    this.sopsAgeKeys = [];
+  }
+
+  public addAgeKey(key: SecretValue) {
+    this.sopsAgeKeys.push(key);
   }
 }
 

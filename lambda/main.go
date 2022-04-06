@@ -6,7 +6,6 @@ import (
 	"errors"
 	"fmt"
 	"log"
-	"os"
 	"regexp"
 	"strconv"
 
@@ -32,7 +31,6 @@ type SopsS3File struct {
 type SopsSyncResourcePropertys struct {
 	SecretARN       string     `json:"SecretARN"`
 	SopsS3File      SopsS3File `json:"SopsS3File"`
-	SopsAgeKey      string     `json:"SopsAgeKey,omitempty"`
 	Format          string     `json:"Format"`
 	ConvertToJSON   string     `json:"ConvertToJSON,omitempty"`
 	Flatten         string     `json:"Flatten,omitempty"`
@@ -102,11 +100,6 @@ func (a AWS) syncSopsToSecretsmanager(ctx context.Context, event cfn.Event) (phy
 		resourceProperties := SopsSyncResourcePropertys{}
 		if err := json.Unmarshal(jsonResourceProps, &resourceProperties); err != nil {
 			return "", nil, err
-		}
-
-		// Enable AGE Support
-		if resourceProperties.SopsAgeKey != "" {
-			os.Setenv("SOPS_AGE_KEY", resourceProperties.SopsAgeKey)
 		}
 
 		sopsFile := resourceProperties.SopsS3File

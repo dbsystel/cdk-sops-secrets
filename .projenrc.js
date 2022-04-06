@@ -4,6 +4,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
   authorAddress: 'dev@markussiebert.com',
   cdkVersion: '1.0.0',
   cdkVersionPinning: false,
+  cdkDependenciesAsDeps: false,
   defaultReleaseBranch: 'main',
   npmignoreEnabled: true,
   name: 'cdk-sops-secrets',
@@ -13,24 +14,20 @@ const project = new awscdk.AwsCdkConstructLibrary({
     '@aws-cdk/aws-iam@^1.0.0',
     '@aws-cdk/aws-lambda@^1.0.0',
     '@aws-cdk/aws-logs@^1.0.0',
-    '@aws-cdk/custom-resources@^1.0.0',
     '@aws-cdk/aws-s3-assets@^1.0.0',
     '@aws-cdk/aws-kms@^1.0.0',
-    '@aws-cdk/aws-ssm@^1.0.0',
   ],
   // deps: [],                /* Runtime dependencies of this module. */
   // description: undefined,  /* The description is just a string that helps people understand the purpose of the package. */
   // devDeps: [],             /* Build dependencies for this module. */
   devDeps: [
-    '@aws-cdk/aws-secretsmanager@^1.0.0',
-    '@aws-cdk/aws-iam@^1.0.0',
-    '@aws-cdk/aws-lambda@^1.0.0',
-    '@aws-cdk/aws-logs@^1.0.0',
-    '@aws-cdk/custom-resources@^1.0.0',
-    '@aws-cdk/aws-s3-assets@^1.0.0',
-    '@aws-cdk/aws-kms@^1.0.0',
-    '@aws-cdk/assertions@^1.0.0',
-    '@aws-cdk/aws-ssm@^1.0.0',
+    '@aws-cdk/aws-secretsmanager',
+    '@aws-cdk/aws-iam',
+    '@aws-cdk/aws-lambda',
+    '@aws-cdk/aws-logs',
+    '@aws-cdk/aws-s3-assets',
+    '@aws-cdk/aws-kms',
+    '@aws-cdk/assertions',
   ],
   integrationTestAutoDiscover: true,
   prettier: true,
@@ -46,7 +43,6 @@ const project = new awscdk.AwsCdkConstructLibrary({
   eslint: true,
   eslintOptions: { prettier: true },
 });
-
 project.prettier.addIgnorePattern('/test-secrets/');
 project.prettier.addIgnorePattern('/test/*snapshot');
 project.prettier.addIgnorePattern('API.md');
