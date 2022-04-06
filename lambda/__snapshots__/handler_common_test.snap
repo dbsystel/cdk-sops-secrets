@@ -1,0 +1,7 @@
+
+[Test_FullWorkflow_Delete - 1]
+>>>syncSopsToSecretsmanager
+
+map[string]interface {}{}
+nil
+---

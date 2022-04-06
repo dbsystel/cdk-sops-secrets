@@ -1,0 +1,25 @@
+hello: ENC[AES256_GCM,data:sswbRHccIuisbGyO+mG/EWb+1JctqNUorOzQUaMRn3HkAyWtreNuZyhYYlkvcg==,iv:XpHilhyCRXa8clGiEckpquCqSZGWA80H0eDUmR80xhE=,tag:WsuxI4lUHwJEas76ODQxUA==,type:str]
+example_key: ENC[AES256_GCM,data:/4OtiH3nooTVZuzC+g==,iv:R6qrNY7GAxcIwR42bvE2774uf+IfQ9pv9UA78LmitU0=,tag:jFogVsycufSXRvBKXLVA9g==,type:str]
+#ENC[AES256_GCM,data:aFjHl+KK37OIsFkhBqbWAa0=,iv:ZSQP65Qh6isgQL6aQqk9Q4bPCxqd/k0w+9qznaum1PA=,tag:7CUuqndG4b3J3v/g5OKO2Q==,type:comment]
+example_array:
+    - ENC[AES256_GCM,data:UxWfsBaGcgregmDfKMI=,iv:XBs2OCoHWOmobj1OPd/clbUJFbPTdAdotFHVGQm1TP0=,tag:CTT15ZYd1nG8kJarDDLZLA==,type:str]
+    - ENC[AES256_GCM,data:QP8ZKa88n7SnJaK/ZLk=,iv:Q7aBsWrIv0G8D33Iw65KRqORwqyUWjaAvIBSbWNHAWw=,tag:wBB7tRcc6yRv5cA53k5jog==,type:str]
+example_number: ENC[AES256_GCM,data:41QvJoCJ5MuELQ==,iv:QexJM+rwhuZcxDL3TDEswpk8qwUeU6bGk5i5TCduiEk=,tag:rzykMYrmHyv3UHjEGRrNHg==,type:float]
+example_booleans:
+    - ENC[AES256_GCM,data:2sFhDg==,iv:hBMZ0x/1RJC/2NeQ/BEugPDVCConvVHCZk1Tak9vln8=,tag:CJqyx7yAtNnFADvDakfXbA==,type:bool]
+    - ENC[AES256_GCM,data:51T3h9A=,iv:0VuwMJwURT8AyZEAptQC5kd5k+dfZDHR58Mr4Z4TVII=,tag:mTK1vQE9eXlhAkLQogjdfw==,type:bool]
+sops:
+    kms:
+        - arn: arn:aws:kms:aws-region-1:123456789011:key/00000000-1234-4321-abcd-1234abcd12ab
+          created_at: "2022-04-03T17:34:45Z"
+          enc: AQICAHiSgZoLP6fDrUBYYPU2oJOB/3qFAR5mEYuZY2DQqzYrBgGAPS+SiO5yb/bXbUdoUPeZAAAAfjB8BgkqhkiG9w0BBwagbzBtAgEAMGgGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMXZPpPU3GibIONK6VAgEQgDu154YpnYoe2f8YFuWeBpGXfDdaud5oMDfquwqY2UWG8clnZV9355z+V7cqCi+4PEBoaveMLLcLYsLOAA==
+          aws_profile: ""
+    gcp_kms: []
+    azure_kv: []
+    hc_vault: []
+    age: []
+    lastmodified: "2022-04-03T17:34:56Z"
+    mac: ENC[AES256_GCM,data:qDi/CaAGfXbcCxPXxHRVnDiP3ayLhL5+Ordv+rCyF/M0iBlO6PEBez4mW+0JE4F8E8a3lMJORhaEGTmRtGyzPXm62DoNLpVepqj8fdBNgzxDQdbTX2yfPoSltSmyCp7lpnbUjGwSHVHsGK8+1EEoocTn81efP0hytRSocYEKONY=,iv:8vZ417Nhp6BO2kE5Ic4HRkzKjS79enrfVJlsYeq59Fo=,tag:mpE+Oto+HPLd2tsWuteuSA==,type:str]
+    pgp: []
+    unencrypted_suffix: _unencrypted
+    version: 3.7.2
