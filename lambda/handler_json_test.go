@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"os"
 	"testing"
 	"time"
 
@@ -12,6 +13,7 @@ import (
 )
 
 func Test_FullWorkflow_Create_S3_JSON_Simple(t *testing.T) {
+	os.Setenv("SOPS_AGE_KEY", "AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3")
 	mocks := &AWS{
 		secretsmanager: &SecretsManagerMockClient{
 			t: t,
@@ -36,6 +38,7 @@ func Test_FullWorkflow_Create_S3_JSON_Simple(t *testing.T) {
 }
 
 func Test_FullWorkflow_Create_S3_JSON_Complex(t *testing.T) {
+	os.Setenv("SOPS_AGE_KEY", "AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3")
 	mocks := &AWS{
 		secretsmanager: &SecretsManagerMockClient{
 			t: t,
@@ -60,6 +63,7 @@ func Test_FullWorkflow_Create_S3_JSON_Complex(t *testing.T) {
 }
 
 func Test_FullWorkflow_Create_S3_JSON_Complex_StringifyValues(t *testing.T) {
+	os.Setenv("SOPS_AGE_KEY", "AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3")
 	mocks := &AWS{
 		secretsmanager: &SecretsManagerMockClient{
 			t: t,
@@ -83,6 +87,7 @@ func Test_FullWorkflow_Create_S3_JSON_Complex_StringifyValues(t *testing.T) {
 	snaps.MatchSnapshot(t, ">>>syncSopsToSecretsmanager", phys, data, err)
 }
 func Test_FullWorkflow_Create_S3_JSON_Complex_Flat(t *testing.T) {
+	os.Setenv("SOPS_AGE_KEY", "AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3")
 	mocks := &AWS{
 		secretsmanager: &SecretsManagerMockClient{
 			t: t,

@@ -113,7 +113,7 @@ func (a AWS) syncSopsToSecretsmanager(ctx context.Context, event cfn.Event) (phy
 		if err != nil {
 			return "", nil, err
 		}
-		log.Println(string(decryptedContent))
+		//log.Println(string(decryptedContent))
 		var decryptedInterface interface{}
 		switch resourceProperties.Format {
 		case "json":
