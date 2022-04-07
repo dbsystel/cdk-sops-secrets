@@ -190,7 +190,7 @@ test('secretValueFromJson(...)', () => {
               [
                 '{{resolve:secretsmanager:',
                 {
-                  Ref: 'SopsSecretBBFD4AF3',
+                  Ref: 'SopsSecretF929FB43',
                 },
                 ':SecretString:test::',
                 {
