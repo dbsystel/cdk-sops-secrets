@@ -43,4 +43,7 @@ Other than that, or perhaps more importantly, my goal was to learn new things:
 
 # Other Tools like this
 
-* [sops-secretsmanager-cdk](https://github.com/isotoma/sops-secretsmanager-cdk): Does nearly the same (really, found it after this was already done). Less options than this construct.
+The problem this Construct addresses is so good, already two other implementations exist:
+
+* [isotoma/sops-secretsmanager-cdk](https://github.com/isotoma/sops-secretsmanager-cdk): Does nearly the same. Uses CustomResource, wraps the sops cli, does not support flatten. Found it after I published my solution to npm :-/ 
+* [taimos/secretsmanager-versioning](https://github.com/taimos/secretsmanager-versioning): Different approach on the same problem. This is a cli tool with very nice integration into cdk and also handles git versioning information.
