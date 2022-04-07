@@ -12,7 +12,7 @@ Secrets filled in this way can be used immediately within the CloudFormation sta
 
 This way, secrets can be securely stored in git repositories and easily synchronized into AWS SecretsManager Secrets.
 
-# Getting started
+## Getting started
 
 1. Create a mozilla sops secrets file (with kms) and place it somewhere in your git repository
 2. Create a secret with the SopsSecret construct
@@ -27,7 +27,7 @@ This way, secrets can be securely stored in git repositories and easily synchron
    ```
 
 
-# Motivation
+## Motivation
 
 This project was created to solve a recurring problem of syncing mozilla/sops secrets into AWS SecretsManager in a convenient, secure way.
  
@@ -41,6 +41,26 @@ Other than that, or perhaps more importantly, my goal was to learn new things:
 - CI/CD with github actions
 - CDK unit and integration tests
 
-# Other Tools like this
+## Other Tools like this
 
 * [sops-secretsmanager-cdk](https://github.com/isotoma/sops-secretsmanager-cdk): Does nearly the same (really, found it after this was already done). Less options than this construct.
+
+## Advanced Configuration
+
+There are more options to configure the Construct which will be explained in the further chapters
+
+### Access the Lambda Role
+
+You can access the Lambda Role by creating your own Provider
+
+```typescript
+    const myExtraKmsKey = Key.fromKeyArn(this, 'MyExtraKmsKey', 'YourKeyArn');
+    const provider = new SopsSyncProvider(this, 'CustomSopsSyncProvider')
+    myExtraKmsKey.grantDecrypt(provider.role!)
+    const secret = new SopsSecret(this, 'SopsComplexSecretJSON', {
+        sopsProvider: provider,
+        secretName: 'myCoolSecret',
+        description: "its extra cool",
+        sopsFilePath: 'secrets/sopsfile-encrypted.json',
+    });
+```
