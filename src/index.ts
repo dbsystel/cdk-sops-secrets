@@ -1,15 +1,31 @@
 import * as fs from 'fs';
 import * as path from 'path';
+import {
+  IGrantable,
+  Grant,
+  PolicyStatement,
+  AddToResourcePolicyResult,
+} from '@aws-cdk/aws-iam';
 import { IKey, Key } from '@aws-cdk/aws-kms';
 import { Code, Runtime, SingletonFunction } from '@aws-cdk/aws-lambda';
 import { Asset } from '@aws-cdk/aws-s3-assets';
-import { ISecret, Secret, SecretProps } from '@aws-cdk/aws-secretsmanager';
+import {
+  ISecret,
+  ISecretAttachmentTarget,
+  RotationSchedule,
+  RotationScheduleOptions,
+  Secret,
+  SecretProps,
+} from '@aws-cdk/aws-secretsmanager';
 import {
   Annotations,
   Construct,
   CustomResource,
   Lazy,
+  RemovalPolicy,
+  ResourceEnvironment,
   SecretValue,
+  Stack,
 } from '@aws-cdk/core';
 
 /**
@@ -230,14 +246,74 @@ export interface SopsSecretProps extends SecretProps, SopsSyncOptions {}
  * A drop in replacement for the normal Secret, that is populated with the encrypted
  * content of the given sops file.
  */
-export class SopsSecret extends Secret {
+export class SopsSecret extends Construct implements ISecret {
+  private readonly secret: Secret;
+  readonly encryptionKey?: IKey | undefined;
+  readonly secretArn: string;
+  readonly secretFullArn?: string | undefined;
+  readonly secretName: string;
+  readonly stack: Stack;
+  readonly env: ResourceEnvironment;
+
   readonly sync: SopsSync;
   public constructor(scope: Construct, id: string, props: SopsSecretProps) {
-    super(scope, id, props as SecretProps);
+    super(scope, id);
+    this.secret = new Secret(this, 'Resource', props as SecretProps);
+
+    // Fullfill secret Interface
+    this.encryptionKey = this.secret.encryptionKey;
+    this.secretArn = this.secret.secretArn;
+    this.secretName = this.secret.secretName;
+    this.stack = Stack.of(scope);
+    this.env = {
+      account: this.stack.account,
+      region: this.stack.region,
+    };
+
     this.sync = new SopsSync(this, 'SopsSync', {
-      secret: this,
+      secret: this.secret,
       ...(props as SopsSyncOptions),
     });
+  }
+
+  /**
+   * Returns the current versionId that was created via the SopsSync
+   */
+  public currentVersionId(): string {
+    return this.sync.versionId;
+  }
+
+  public grantRead(grantee: IGrantable, versionStages?: string[]): Grant {
+    return this.secret.grantRead(grantee, versionStages);
+  }
+  public grantWrite(grantee: IGrantable): Grant {
+    return this.secret.grantWrite(grantee);
+  }
+  public addRotationSchedule(
+    id: string,
+    options: RotationScheduleOptions,
+  ): RotationSchedule {
+    throw new Error(
+      `Method not allowed as this secret is managed by SopsSync!\nid: ${id}\noptions: ${JSON.stringify(
+        options,
+        null,
+        2,
+      )}`,
+    );
+  }
+  public addToResourcePolicy(
+    statement: PolicyStatement,
+  ): AddToResourcePolicyResult {
+    return this.secret.addToResourcePolicy(statement);
+  }
+  public denyAccountRootDelete(): void {
+    return this.secret.denyAccountRootDelete();
+  }
+  public attach(target: ISecretAttachmentTarget): ISecret {
+    return this.secret.attach(target);
+  }
+  public applyRemovalPolicy(policy: RemovalPolicy): void {
+    return this.secret.applyRemovalPolicy(policy);
   }
 
   public secretValueFromJson(jsonField: string) {
@@ -245,5 +321,9 @@ export class SopsSecret extends Secret {
       jsonField,
       versionId: this.sync.versionId,
     });
+  }
+
+  public get secretValue(): SecretValue {
+    return this.secretValueFromJson('');
   }
 }
