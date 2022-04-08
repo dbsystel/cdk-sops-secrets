@@ -5,7 +5,7 @@ go 1.18
 require (
 	github.com/aws/aws-lambda-go v1.15.0
 	github.com/aws/aws-sdk-go v1.37.18
-	github.com/gkampitakis/go-snaps v0.2.3
+	github.com/gkampitakis/go-snaps v0.2.4
 	github.com/go-test/deep v1.0.2-0.20181118220953-042da051cf31
 	go.mozilla.org/sops/v3 v3.7.2
 	gopkg.in/yaml.v3 v3.0.0-20210107172259-749611fa9fcc
@@ -57,7 +57,7 @@ require (
 	github.com/mitchellh/mapstructure v1.1.2 // indirect
 	github.com/pierrec/lz4 v2.0.5+incompatible // indirect
 	github.com/pkg/errors v0.9.1 // indirect
-	github.com/rogpeppe/go-internal v1.8.0 // indirect
+	github.com/rogpeppe/go-internal v1.8.1 // indirect
 	github.com/ryanuber/go-glob v1.0.0 // indirect
 	github.com/sergi/go-diff v1.2.0 // indirect
 	github.com/sirupsen/logrus v1.8.1 // indirect
