@@ -1,4 +1,4 @@
-# <table cellspacing="0" cellpadding="0" border="0"><tr><td><img src="img/icon.png" alt="icon" width="100"/></td><td valign="center">Sops Secrets Construct Library</td></tr></table>
+# <div><img tyle="vertical-align:middle" src="img/icon.png" alt="icon" width="100"/><span style="">Sops Secrets Construct Library</span></td></div>
 
 [![npm](https://img.shields.io/npm/v/cdk-sops-secrets.svg)](https://www.npmjs.com/package/cdk-sops-secrets)&nbsp;&nbsp;
 [![release](https://github.com/markussiebert/cdk-sops-secrets/actions/workflows/release.yml/badge.svg)](https://github.com/markussiebert/cdk-sops-secrets/actions/workflows/release.yml)
