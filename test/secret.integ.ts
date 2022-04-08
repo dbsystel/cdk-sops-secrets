@@ -1,5 +1,5 @@
-import { Code, Function, Runtime } from '@aws-cdk/aws-lambda';
-import { App, SecretValue, Stack } from '@aws-cdk/core';
+import { App, SecretValue, Stack } from 'aws-cdk-lib';
+import { Code, Function, Runtime } from 'aws-cdk-lib/aws-lambda';
 import { SopsSecret } from '../src/index';
 
 const app = new App();
