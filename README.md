@@ -1,17 +1,7 @@
-<style>
-   @media (prefers-color-scheme: dark) {
-    .light-mode-only {
-        display: none;
-    }
-}
-@media (prefers-color-scheme: light) {
-    .dark-mode-only {
-        display: none;
-    }
-}
-</style>
-<img class="dark-mode-only" src="img/banner-dark.png#gh-dark-mode-only"/>
-<img class="light-mode-only" src="img/banner.png#gh-light-mode-only"/><p/>
+<div style="display: grid; grid-template-columns: [first-col] 100%; grid-template-rows: [first-row] 300px">
+  <img src="img/banner-dark.png#gh-dark-mode-only" style="grid-column-start: first-col; grid-row-start: first-row">
+  <img src="img/banner.png#gh-light-mode-only" style="grid-column-start: first-col; grid-row-start: first-row">
+</div>
 
 [![npm](https://img.shields.io/npm/v/cdk-sops-secrets.svg)](https://www.npmjs.com/package/cdk-sops-secrets)&nbsp;&nbsp;
 [![release](https://github.com/markussiebert/cdk-sops-secrets/actions/workflows/release.yml/badge.svg)](https://github.com/markussiebert/cdk-sops-secrets/actions/workflows/release.yml)&nbsp;&nbsp;
