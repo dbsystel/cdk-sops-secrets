@@ -4,7 +4,6 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
-	"strings"
 	"testing"
 
 	"github.com/gkampitakis/go-snaps/snaps"
@@ -36,7 +35,7 @@ func Test_GetS3FileContent(t *testing.T) {
 		Key:    "../test-secrets/json/sopsfile.enc-age.json",
 	})
 	check(err)
-	snaps.MatchSnapshot(t, strings.ReplaceAll(string(data), "-----", ""))
+	snaps.MatchSnapshot(t, string(data))
 }
 
 func Test_UpdateSecret(t *testing.T) {
