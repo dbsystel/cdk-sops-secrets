@@ -62,7 +62,7 @@
     "eslint-plugin-import": "^2.25.4",
     "eslint-plugin-prettier": "^4.0.0",
     "jest": "^27.5.1",
-    "jest-junit": "^13",
+    "jest-junit": "13.1.0",
     "jsii": "^1.55.1",
     "jsii-diff": "^1.55.1",
     "jsii-docgen": "^6.2.4",
