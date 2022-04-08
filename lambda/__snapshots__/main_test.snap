@@ -36,7 +36,7 @@
 >>>SecretsManagerMockClient.PutSecretValue.Input
 {
   ClientRequestToken: "4547532a137611d83958d17095c6c2d38ae0036a760c3b79c9dd5957d1c20cf2",
-  SecretId: "arn::secretsmanager:::secret:",
+  SecretId: "arn:${Partition}:secretsmanager:${Region}:${Account}:secret:${SecretId}",
   SecretString: "some-secret-data"
 }
 ---
