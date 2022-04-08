@@ -1,4 +1,4 @@
-<img style="text-align: center !important;" width=200 src="img/banner.png" alt="icon"/><br>
+<img style="text-align: center !important;" width=100% src="img/banner.png" alt="icon"/><br>
 
 ## Introducation
 
