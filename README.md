@@ -1,9 +1,8 @@
 <img style="text-align: center !important;" width=100% src="img/banner.png" alt="icon"/><br>
 
-## Introducation
-
 [![npm](https://img.shields.io/npm/v/cdk-sops-secrets.svg)](https://www.npmjs.com/package/cdk-sops-secrets)&nbsp;&nbsp;
 [![release](https://github.com/markussiebert/cdk-sops-secrets/actions/workflows/release.yml/badge.svg)](https://github.com/markussiebert/cdk-sops-secrets/actions/workflows/release.yml)
+## Introducation
 
 This construct library provides a replacement for CDK SecretsManager Secrets, with extended functionality for mozilla/sops.
 
