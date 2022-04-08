@@ -48,10 +48,11 @@ func Test_UpdateSecret(t *testing.T) {
 			t: t,
 		},
 	}
+	fileName := "4547532a137611d83958d17095c6c2d38ae0036a760c3b79c9dd5957d1c20cf2.yaml"
 	inputArn := "arn:${Partition}:secretsmanager:${Region}:${Account}:secret:${SecretId}"
 	secretValue := []byte("some-secret-data")
 
-	response, err := mocks.updateSecret(inputArn, secretValue)
+	response, err := mocks.updateSecret(fileName, inputArn, secretValue)
 	check(err)
 
 	snaps.MatchSnapshot(t, response)

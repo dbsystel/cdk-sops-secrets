@@ -8,6 +8,7 @@ import (
 	"log"
 	"regexp"
 	"strconv"
+	"strings"
 
 	runtime "github.com/aws/aws-lambda-go/lambda"
 	"github.com/aws/aws-sdk-go/aws"
@@ -66,21 +67,27 @@ func decryptSopsFileContent(content []byte, format string) (data []byte, err err
 	return resp, nil
 }
 
-func (a AWS) updateSecret(secretArn string, secretContent []byte) (data *secretsmanager.PutSecretValueOutput, err error) {
+func (a AWS) updateSecret(sopsFileName string, secretArn string, secretContent []byte) (data *secretsmanager.PutSecretValueOutput, err error) {
 	secretContentString := string(secretContent)
+	clientRequestToken := strings.Split(sopsFileName, ".")[0]
 	input := &secretsmanager.PutSecretValueInput{
-		SecretId:     &secretArn,
-		SecretString: &secretContentString,
+		SecretId:           &secretArn,
+		SecretString:       &secretContentString,
+		ClientRequestToken: &clientRequestToken,
 	}
 	secretResp, secretErr := a.secretsmanager.PutSecretValue(input)
 	if secretErr != nil {
-		return nil, errors.New(fmt.Sprintf("Failed to store secret value:\n%v\n", secretErr))
+		return nil, errors.New(fmt.Sprintf("Failed to store secret value:\nsecretArn: %s\nClientRequestToken: %s\n%v\n", secretArn, clientRequestToken, err))
 	}
-	re := regexp.MustCompile(`(^arn:.*:secretsmanager:)(.*)`)
-	arn := re.ReplaceAllString(*secretResp.ARN, `arn:custom:sopssync:$2`)
+	arn := generatePhysicalResourceId(*secretResp.ARN)
 	secretResp.ARN = &arn
 	log.Printf("Succesfully stored secret:\n%v\n", secretResp)
 	return secretResp, nil
+}
+
+func generatePhysicalResourceId(input string) string {
+	re := regexp.MustCompile(`(^arn:.*:secretsmanager:)(.*)`)
+	return re.ReplaceAllString(input, `arn:custom:sopssync:$2`)
 }
 
 func (a AWS) syncSopsToSecretsmanager(ctx context.Context, event cfn.Event) (physicalResourceID string, data map[string]interface{}, err error) {
@@ -94,7 +101,7 @@ func (a AWS) syncSopsToSecretsmanager(ctx context.Context, event cfn.Event) (phy
 
 		jsonResourceProps, err := json.Marshal(event.ResourceProperties)
 		if err != nil {
-			return "", nil, err
+			return "error", nil, err
 		}
 
 		resourceProperties := SopsSyncResourcePropertys{}
@@ -102,16 +109,18 @@ func (a AWS) syncSopsToSecretsmanager(ctx context.Context, event cfn.Event) (phy
 			return "", nil, err
 		}
 
+		tempArn := generatePhysicalResourceId(resourceProperties.SecretARN)
+
 		sopsFile := resourceProperties.SopsS3File
 
 		// This is where the magic happens
 		ecnryptedContent, err := a.getS3FileContent(sopsFile)
 		if err != nil {
-			return "", nil, err
+			return tempArn, nil, err
 		}
 		decryptedContent, err := decryptSopsFileContent(ecnryptedContent, resourceProperties.Format)
 		if err != nil {
-			return "", nil, err
+			return tempArn, nil, err
 		}
 		//log.Println(string(decryptedContent))
 		var decryptedInterface interface{}
@@ -120,14 +129,14 @@ func (a AWS) syncSopsToSecretsmanager(ctx context.Context, event cfn.Event) (phy
 			{
 				err := json.Unmarshal(decryptedContent, &decryptedInterface)
 				if err != nil {
-					return "", nil, err
+					return tempArn, nil, err
 				}
 			}
 		case "yaml":
 			{
 				err := yaml.Unmarshal(decryptedContent, &decryptedInterface)
 				if err != nil {
-					return "", nil, err
+					return tempArn, nil, err
 				}
 			}
 		default:
@@ -139,7 +148,7 @@ func (a AWS) syncSopsToSecretsmanager(ctx context.Context, event cfn.Event) (phy
 		}
 		resourcePropertiesFlatten, err := strconv.ParseBool(resourceProperties.Flatten)
 		if err != nil {
-			return "", nil, err
+			return tempArn, nil, err
 		}
 
 		var finalInterface interface{}
@@ -148,7 +157,7 @@ func (a AWS) syncSopsToSecretsmanager(ctx context.Context, event cfn.Event) (phy
 			flattenedInterface := make(map[string]interface{})
 			err := flatten("", decryptedInterface, flattenedInterface)
 			if err != nil {
-				return "", nil, err
+				return tempArn, nil, err
 			}
 			finalInterface = flattenedInterface
 		} else {
@@ -160,12 +169,12 @@ func (a AWS) syncSopsToSecretsmanager(ctx context.Context, event cfn.Event) (phy
 		}
 		resourcePropertiesStringifyValues, err := strconv.ParseBool(resourceProperties.StringifyValues)
 		if err != nil {
-			return "", nil, err
+			return tempArn, nil, err
 		}
 		if resourcePropertiesStringifyValues {
 			finalInterface, _, err = stringifyValues(finalInterface)
 			if err != nil {
-				return "", nil, err
+				return tempArn, nil, err
 			}
 		}
 
@@ -174,23 +183,23 @@ func (a AWS) syncSopsToSecretsmanager(ctx context.Context, event cfn.Event) (phy
 		}
 		resourcePropertieConvertToJSON, err := strconv.ParseBool(resourceProperties.ConvertToJSON)
 		if err != nil {
-			return "", nil, err
+			return tempArn, nil, err
 		}
 		if resourcePropertieConvertToJSON || resourceProperties.Format == "json" {
 			decryptedContent, err = toJSON(finalInterface)
 			if err != nil {
-				return "", nil, err
+				return tempArn, nil, err
 			}
 		} else if resourceProperties.Format == "yaml" {
 			decryptedContent, err = toYAML(finalInterface)
 			if err != nil {
-				return "", nil, err
+				return tempArn, nil, err
 			}
 		}
 		// Write the secret
-		updateSecretResp, err := a.updateSecret(resourceProperties.SecretARN, decryptedContent)
+		updateSecretResp, err := a.updateSecret(sopsFile.Key, resourceProperties.SecretARN, decryptedContent)
 		if err != nil {
-			return "", nil, err
+			return tempArn, nil, err
 		}
 
 		returnData := make(map[string]interface{})
@@ -204,6 +213,7 @@ func (a AWS) syncSopsToSecretsmanager(ctx context.Context, event cfn.Event) (phy
 	} else if event.RequestType == cfn.RequestDelete {
 		return "", nil, nil
 	} else {
+		// Should never happen ...
 		return "", nil, errors.New(fmt.Sprintf("RequestType '%s' not supported", event.RequestType))
 	}
 }
