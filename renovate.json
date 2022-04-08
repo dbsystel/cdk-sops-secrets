@@ -3,5 +3,12 @@
   "extends": [
     "config:base"
   ],
-  "enabledManagers": ["gomod"]
+  "enabledManagers": ["gomod"],
+  "packageRules": [
+    {
+      "matchPackagePatterns": ["go"],
+      "groupName": "go-deps"
+    }
+  ]
+
 }
