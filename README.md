@@ -1,5 +1,5 @@
-<img style="text-align: center !important;" width=100% src="img/banner.png" alt="icon"/><br>
-
+![banner-dark](img/banner-dark.png#gh-dark-mode-only)
+![banner](img/banner.png#gh-light-mode-only)<br><br>
 [![npm](https://img.shields.io/npm/v/cdk-sops-secrets.svg)](https://www.npmjs.com/package/cdk-sops-secrets)&nbsp;&nbsp;
 [![release](https://github.com/markussiebert/cdk-sops-secrets/actions/workflows/release.yml/badge.svg)](https://github.com/markussiebert/cdk-sops-secrets/actions/workflows/release.yml)&nbsp;&nbsp;
 [![security-vulnerabilities](

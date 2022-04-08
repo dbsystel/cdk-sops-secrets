@@ -20,7 +20,7 @@
         "age": [
             {
                 "recipient": "age1djllw2pzuprrqc0en5m8vc8k5ge3tm0f6g7cj0c0glfzp44vdc4ql8ngvu",
-                "enc": "BEGIN AGE ENCRYPTED FILE\nYWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBOWlAxekVNNXdjenV5cmdR\nZDlQU3N5WC9oeENUbUpYcWxkeU9kVS9TeUR3Cm5zbGhIL0J6WG9TWi9KR3ZUTVph\nblpiUDZtQklnWlRrSGZzTXlZN2Z6WjgKLS0tIDI3ZHNHR0NmWTMzdTg0dEtXcU93\nbEdNWndKdWROWGdLdHAwTGFtRGlsaDQKV7HJG629rPWDBY046Hxj4utxUkex3SwU\nVUQRX00p6r9ffc+iC5DGUm/KOketAHunO4Kn0uOS4WHg+Jg2Cwu72Q==\nEND AGE ENCRYPTED FILE\n"
+                "enc": "-----BEGIN AGE ENCRYPTED FILE-----\nYWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBOWlAxekVNNXdjenV5cmdR\nZDlQU3N5WC9oeENUbUpYcWxkeU9kVS9TeUR3Cm5zbGhIL0J6WG9TWi9KR3ZUTVph\nblpiUDZtQklnWlRrSGZzTXlZN2Z6WjgKLS0tIDI3ZHNHR0NmWTMzdTg0dEtXcU93\nbEdNWndKdWROWGdLdHAwTGFtRGlsaDQKV7HJG629rPWDBY046Hxj4utxUkex3SwU\nVUQRX00p6r9ffc+iC5DGUm/KOketAHunO4Kn0uOS4WHg+Jg2Cwu72Q==\n-----END AGE ENCRYPTED FILE-----\n"
             }
         ],
         "lastmodified": "2022-03-29T21:02:32Z",
@@ -37,7 +37,7 @@
 {
   ClientRequestToken: "4547532a137611d83958d17095c6c2d38ae0036a760c3b79c9dd5957d1c20cf2",
   SecretId: "arn:${Partition}:secretsmanager:${Region}:${Account}:secret:${SecretId}",
-  SecretString: "some-secret-data"
+  SecretString: <sensitive>
 }
 ---
 
