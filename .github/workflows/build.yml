@@ -54,7 +54,9 @@ jobs:
     container:
       image: jsii/superchain:1-buster-slim-node16
   self-mutation:
-    needs: zipper
+    needs:
+      - build
+      - zipper
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -88,7 +90,9 @@ jobs:
             git commit -s -m "chore: self mutation"
             git push origin HEAD:${{ github.event.pull_request.head.ref }}
   package-js:
-    needs: zipper
+    needs:
+      - build
+      - zipper
     runs-on: ubuntu-latest
     permissions: {}
     if: "! needs.build.outputs.self_mutation_happened"
@@ -126,10 +130,8 @@ jobs:
           fetch-depth: 0
       - name: Fetch all tags
         run: git fetch --force --tags
-      - name: Debug1
-        run: pwd
-      - name: Debug2
-        run: scripts/check-sums.sh
+      - name: Test
+        run: scripts/lambda-test.sh
       - name: Build
         run: scripts/lambda-build.sh
       - name: Upload artifact

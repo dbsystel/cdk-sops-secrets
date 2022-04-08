@@ -90,7 +90,10 @@ fixme.forEach((wf) => {
         container: { image: 'jsii/superchain:1-buster-slim-node16' },
       };
     }
-    wf.jobs[key] = { ...wf.jobs[key], needs: 'zipper' };
+    wf.jobs[key] = {
+      ...wf.jobs[key],
+      needs: [...(wf.jobs[key].needs || []), 'zipper'],
+    };
   });
   wf.addJob('gobuild', {
     name: 'gobuild',
@@ -118,12 +121,8 @@ fixme.forEach((wf) => {
         run: 'git fetch --force --tags',
       },
       {
-        name: 'Debug1',
-        run: 'pwd',
-      },
-      {
-        name: 'Debug2',
-        run: 'scripts/check-sums.sh',
+        name: 'Test',
+        run: 'scripts/lambda-test.sh',
       },
       {
         name: 'Build',
