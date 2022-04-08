@@ -4186,10 +4186,10 @@ jsii-diff@^1.55.1:
     typescript "~3.9.10"
     yargs "^16.2.0"
 
-jsii-docgen@^6.2.4:
-  version "6.3.0"
-  resolved "https://registry.yarnpkg.com/jsii-docgen/-/jsii-docgen-6.3.0.tgz#005863c358e534c9aded8f53dd1736c54f07fd10"
-  integrity sha512-lNje9eRRBXrMXPdzYUefALkoX9WMbB+64yG7vXccXbKkVwzuyWkTlfZQ63o8FbNTHAiJKb207pnDKo3o4w/z7w==
+jsii-docgen@6.3.1:
+  version "6.3.1"
+  resolved "https://registry.yarnpkg.com/jsii-docgen/-/jsii-docgen-6.3.1.tgz#0e5469b06813da6fae5b55cc086e9ad12ef3b22d"
+  integrity sha512-Te01AMnUYWkXYZFArgKQncBEOI2En/WdWmNwr+r/dS9vF7Znzv6tEvGcKPsA4hm2//368s3dUWr90mxCkJ8HDA==
   dependencies:
     "@jsii/spec" "^1.55.1"
     case "^1.6.3"
