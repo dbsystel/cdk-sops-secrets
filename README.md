@@ -1,7 +1,6 @@
-# 🔑 Sops Secrets Construct Library
+# <table><tr><td><img src="img/icon.png" alt="icon" width="100"/></td><td valign="center">Sops Secrets Construct Library</td></tr></table>
 
 [![npm](https://img.shields.io/npm/v/cdk-sops-secrets.svg)](https://www.npmjs.com/package/cdk-sops-secrets)&nbsp;&nbsp;
-[![Known Vulnerabilities](https://snyk.io/test/github/markussiebert/cdk-sops-secrets/badge.svg)](https://snyk.io/test/github/markussiebert/cdk-sops-secrets)&nbsp;&nbsp;
 [![release](https://github.com/markussiebert/cdk-sops-secrets/actions/workflows/release.yml/badge.svg)](https://github.com/markussiebert/cdk-sops-secrets/actions/workflows/release.yml)
 
 This construct library provides a replacement for CDK SecretsManager Secrets, with extended functionality for mozilla/sops.
@@ -12,7 +11,7 @@ Secrets filled in this way can be used immediately within the CloudFormation sta
 
 This way, secrets can be securely stored in git repositories and easily synchronized into AWS SecretsManager Secrets.
 
-# Getting started
+## Getting started
 
 1. Create a mozilla sops secrets file (with kms) and place it somewhere in your git repository
 2. Create a secret with the SopsSecret construct
@@ -27,7 +26,7 @@ This way, secrets can be securely stored in git repositories and easily synchron
    ```
 
 
-# Motivation
+## Motivation
 
 This project was created to solve a recurring problem of syncing mozilla/sops secrets into AWS SecretsManager in a convenient, secure way.
  
@@ -41,7 +40,7 @@ Other than that, or perhaps more importantly, my goal was to learn new things:
 - CI/CD with github actions
 - CDK unit and integration tests
 
-# Other Tools like this
+## Other Tools like this
 
 The problem this Construct addresses is so good, already two other implementations exist:
 
