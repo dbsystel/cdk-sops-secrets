@@ -1,14 +1,23 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import {
+  Annotations,
+  CustomResource,
+  Lazy,
+  RemovalPolicy,
+  ResourceEnvironment,
+  SecretValue,
+  Stack,
+} from 'aws-cdk-lib';
+import {
   IGrantable,
   Grant,
   PolicyStatement,
   AddToResourcePolicyResult,
-} from '@aws-cdk/aws-iam';
-import { IKey, Key } from '@aws-cdk/aws-kms';
-import { Code, Runtime, SingletonFunction } from '@aws-cdk/aws-lambda';
-import { Asset } from '@aws-cdk/aws-s3-assets';
+} from 'aws-cdk-lib/aws-iam';
+import { IKey, Key } from 'aws-cdk-lib/aws-kms';
+import { Code, Runtime, SingletonFunction } from 'aws-cdk-lib/aws-lambda';
+import { Asset } from 'aws-cdk-lib/aws-s3-assets';
 import {
   ISecret,
   ISecretAttachmentTarget,
@@ -16,17 +25,8 @@ import {
   RotationScheduleOptions,
   Secret,
   SecretProps,
-} from '@aws-cdk/aws-secretsmanager';
-import {
-  Annotations,
-  Construct,
-  CustomResource,
-  Lazy,
-  RemovalPolicy,
-  ResourceEnvironment,
-  SecretValue,
-  Stack,
-} from '@aws-cdk/core';
+} from 'aws-cdk-lib/aws-secretsmanager';
+import { Construct } from 'constructs';
 
 /**
  * Configuration options for the SopsSync

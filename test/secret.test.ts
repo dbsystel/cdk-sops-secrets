@@ -1,7 +1,7 @@
-import { Match, Template } from '@aws-cdk/assertions';
-import { Key } from '@aws-cdk/aws-kms';
-import { Function, InlineCode, Runtime } from '@aws-cdk/aws-lambda';
-import { App, Stack } from '@aws-cdk/core';
+import { App, Stack } from 'aws-cdk-lib';
+import { Match, Template } from 'aws-cdk-lib/assertions';
+import { Key } from 'aws-cdk-lib/aws-kms';
+import { Function, InlineCode, Runtime } from 'aws-cdk-lib/aws-lambda';
 import { SopsSecret } from '../src';
 
 const keyStatements = [
