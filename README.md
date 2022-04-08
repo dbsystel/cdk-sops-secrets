@@ -1,4 +1,8 @@
-# <div><img style="vertical-align:-50% !important;" src="img/icon.png" alt="icon"/><span style=""> Sops Secrets Construct</span></td></div>
+
+<center><img style="text-align: center !important;" width=200 src="img/icon.png" alt="icon"/><br><br>
+
+# Sops Secrets Construct
+</center>
 
 [![npm](https://img.shields.io/npm/v/cdk-sops-secrets.svg)](https://www.npmjs.com/package/cdk-sops-secrets)&nbsp;&nbsp;
 [![release](https://github.com/markussiebert/cdk-sops-secrets/actions/workflows/release.yml/badge.svg)](https://github.com/markussiebert/cdk-sops-secrets/actions/workflows/release.yml)
