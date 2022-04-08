@@ -1,5 +1,5 @@
 
-<p align="center"><img style="text-align: center !important;" width=200 src="img/icon.png" alt="icon"/><br><br></p>
+<p align="center"><img style="text-align: center !important;" width=200 src="img/icon.png" alt="icon"/><br></p>
 
 # Sops Secrets Construct
 
