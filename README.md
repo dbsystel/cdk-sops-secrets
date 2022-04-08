@@ -1,7 +1,11 @@
-# <div><img style="vertical-align:-50% !important;" src="img/icon.png" alt="icon"/><span style=""> Sops Secrets Construct Library</span></td></div>
+<img style="text-align: center !important;" width=100% src="img/banner.png" alt="icon"/><br>
 
 [![npm](https://img.shields.io/npm/v/cdk-sops-secrets.svg)](https://www.npmjs.com/package/cdk-sops-secrets)&nbsp;&nbsp;
-[![release](https://github.com/markussiebert/cdk-sops-secrets/actions/workflows/release.yml/badge.svg)](https://github.com/markussiebert/cdk-sops-secrets/actions/workflows/release.yml)
+[![release](https://github.com/markussiebert/cdk-sops-secrets/actions/workflows/release.yml/badge.svg)](https://github.com/markussiebert/cdk-sops-secrets/actions/workflows/release.yml)&nbsp;&nbsp;
+[![security-vulnerabilities](
+https://img.shields.io/github/issues-search/markussiebert/cdk-sops-secrets?color=%23ff0000&label=security-vulnerabilities&query=is%3Aissue%20is%3Aopen%20label%3A%22security%20vulnerability%22)](https://github.com/markussiebert/cdk-sops-secrets/issues?q=is%3Aissue+is%3Aopen+label%3A%22security+vulnerability%22)&nbsp;&nbsp;
+
+## Introducation
 
 This construct library provides a replacement for CDK SecretsManager Secrets, with extended functionality for mozilla/sops.
 
