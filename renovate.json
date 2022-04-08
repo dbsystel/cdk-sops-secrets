@@ -1,5 +1,17 @@
 {
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "config:base"
+  ],
+  "ignoreDeps": [
+    "@aws-cdk/aws-secretsmanager",
+    "@aws-cdk/aws-iam",
+    "@aws-cdk/aws-lambda",
+    "@aws-cdk/aws-logs",
+    "@aws-cdk/aws-s3-assets",
+    "@aws-cdk/aws-kms",
+    "@aws-cdk/assert",
+    "@aws-cdk/assertions",
+    "aws-cdk"
   ]
 }
