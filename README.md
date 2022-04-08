@@ -1,5 +1,5 @@
-![Fancy logo](img/banner-dark.png#gh-dark-mode-only | height=200)
-![Fancy logo](img/banner.png#gh-light-mode-only | height=200)
+[![banner-dark](img/banner-dark.png#gh-dark-mode-only|height=200)]
+[![banner](img/banner.png#gh-light-mode-only|height=200)]
 
 [![npm](https://img.shields.io/npm/v/cdk-sops-secrets.svg)](https://www.npmjs.com/package/cdk-sops-secrets)&nbsp;&nbsp;
 [![release](https://github.com/markussiebert/cdk-sops-secrets/actions/workflows/release.yml/badge.svg)](https://github.com/markussiebert/cdk-sops-secrets/actions/workflows/release.yml)&nbsp;&nbsp;
