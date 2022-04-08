@@ -1,8 +1,6 @@
+<img style="text-align: center !important;" width=200 src="img/banner.png" alt="icon"/><br>
 
-<p align="center"><img style="text-align: center !important;" width=200 src="img/icon.png" alt="icon"/><br></p>
-
-# Sops Secrets Construct
-
+## Introducation
 
 [![npm](https://img.shields.io/npm/v/cdk-sops-secrets.svg)](https://www.npmjs.com/package/cdk-sops-secrets)&nbsp;&nbsp;
 [![release](https://github.com/markussiebert/cdk-sops-secrets/actions/workflows/release.yml/badge.svg)](https://github.com/markussiebert/cdk-sops-secrets/actions/workflows/release.yml)
