@@ -6,7 +6,7 @@ require (
 	github.com/aws/aws-lambda-go v1.15.0
 	github.com/aws/aws-sdk-go v1.37.18
 	github.com/gkampitakis/go-snaps v0.2.3
-	github.com/go-test/deep v1.0.2-0.20181118220953-042da051cf31
+	github.com/go-test/deep v1.0.8
 	go.mozilla.org/sops/v3 v3.7.2
 	gopkg.in/yaml.v3 v3.0.0-20210107172259-749611fa9fcc
 )
