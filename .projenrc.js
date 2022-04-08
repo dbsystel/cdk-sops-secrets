@@ -90,7 +90,10 @@ fixme.forEach((wf) => {
         container: { image: 'jsii/superchain:1-buster-slim-node16' },
       };
     }
-    wf.jobs[key] = { ...wf.jobs[key], needs: [ ...wf.jobs[key].needs || [], 'zipper' ] };
+    wf.jobs[key] = {
+      ...wf.jobs[key],
+      needs: [...(wf.jobs[key].needs || []), 'zipper'],
+    };
   });
   wf.addJob('gobuild', {
     name: 'gobuild',
