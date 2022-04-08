@@ -39,7 +39,7 @@ jobs:
         run: echo ::set-output name=latest_commit::"$(git ls-remote origin -h ${{ github.ref }} | cut -f1)"
       - name: Upload artifact
         if: ${{ steps.git_remote.outputs.latest_commit == github.sha }}
-        uses: actions/upload-artifact@v2.1.1
+        uses: actions/upload-artifact@v2.3.1
         with:
           name: build-artifact
           path: dist
@@ -62,7 +62,7 @@ jobs:
       - name: Build
         run: scripts/lambda-build.sh
       - name: Upload artifact
-        uses: actions/upload-artifact@v2.1.1
+        uses: actions/upload-artifact@v2.3.1
         with:
           name: gobuild
           path: lambda/cdk-sops-secrets
@@ -89,7 +89,7 @@ jobs:
       - name: Zip
         run: scripts/lambda-zip.sh
       - name: Upload artifact
-        uses: actions/upload-artifact@v2.1.1
+        uses: actions/upload-artifact@v2.3.1
         with:
           name: zipper
           path: assets/cdk-sops-lambda.zip
