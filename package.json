@@ -32,7 +32,6 @@
     "test:watch": "npx projen test:watch",
     "unbump": "npx projen unbump",
     "upgrade": "npx projen upgrade",
-    "upgrade-projen": "npx projen upgrade-projen",
     "watch": "npx projen watch",
     "projen": "npx projen"
   },
@@ -42,19 +41,13 @@
     "organization": false
   },
   "devDependencies": {
-    "@aws-cdk/assert": "^1.0.0",
-    "@aws-cdk/assertions": "^1.151.0",
-    "@aws-cdk/aws-iam": "^1.0.0",
-    "@aws-cdk/aws-kms": "^1.0.0",
-    "@aws-cdk/aws-lambda": "^1.0.0",
-    "@aws-cdk/aws-logs": "^1.0.0",
-    "@aws-cdk/aws-s3-assets": "^1.0.0",
-    "@aws-cdk/aws-secretsmanager": "^1.0.0",
     "@types/jest": "^27.4.1",
     "@types/node": "^12",
     "@typescript-eslint/eslint-plugin": "^5",
     "@typescript-eslint/parser": "^5",
-    "aws-cdk": "^1",
+    "aws-cdk": "^2",
+    "aws-cdk-lib": "2.1.0",
+    "constructs": "10.0.5",
     "eslint": "^8",
     "eslint-config-prettier": "^8.5.0",
     "eslint-import-resolver-node": "^0.3.6",
@@ -70,21 +63,15 @@
     "json-schema": "^0.4.0",
     "npm-check-updates": "^12",
     "prettier": "^2.6.2",
-    "projen": "^0.53.15",
+    "projen": "^0.54.11",
     "standard-version": "^9",
     "ts-jest": "^27.1.4",
     "ts-node": "^10.7.0",
     "typescript": "^4.6.3"
   },
   "peerDependencies": {
-    "@aws-cdk/aws-iam": "^1.0.0",
-    "@aws-cdk/aws-kms": "^1.0.0",
-    "@aws-cdk/aws-lambda": "^1.0.0",
-    "@aws-cdk/aws-logs": "^1.0.0",
-    "@aws-cdk/aws-s3-assets": "^1.0.0",
-    "@aws-cdk/aws-secretsmanager": "^1.0.0",
-    "@aws-cdk/core": "^1.0.0",
-    "constructs": "^3.2.27"
+    "aws-cdk-lib": "^2.1.0",
+    "constructs": "^10.0.5"
   },
   "keywords": [
     "cdk",
