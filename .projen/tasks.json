@@ -138,7 +138,7 @@
           "exec": "[ -d \"test/secret.integ.snapshot\" ] || (echo \"No snapshot available for integration test 'secret'. Run 'projen integ:secret:deploy' to capture.\" && exit 1)"
         },
         {
-          "exec": "cdk synth --app \"ts-node -P tsconfig.dev.json test/secret.integ.ts\" --no-version-reporting --no-asset-metadata --no-path-metadata --context aws-cdk:enableDiffNoFail=true --context @aws-cdk/aws-apigateway:usagePlanKeyOrderInsensitiveId=true --context @aws-cdk/core:enableStackNameDuplicates=true --context @aws-cdk/core:stackRelativeExports=true --context @aws-cdk/aws-ecr-assets:dockerIgnoreSupport=true --context @aws-cdk/aws-secretsmanager:parseOwnedSecretName=true --context @aws-cdk/aws-kms:defaultKeyPolicies=true --context @aws-cdk/aws-s3:grantWriteWithoutAcl=true --context @aws-cdk/aws-ecs-patterns:removeDefaultDesiredCount=true --context @aws-cdk/aws-rds:lowercaseDbIdentifier=true --context @aws-cdk/aws-efs:defaultEncryptionAtRest=true --context @aws-cdk/aws-lambda:recognizeVersionProps=true --context @aws-cdk/aws-cloudfront:defaultSecurityPolicyTLSv1.2_2021=true --context @aws-cdk/core:newStyleStackSynthesis=true -o test/.tmp/secret.integ/assert.cdk.out > /dev/null"
+          "exec": "cdk synth --app \"ts-node -P tsconfig.dev.json test/secret.integ.ts\" --no-version-reporting --no-asset-metadata --no-path-metadata -o test/.tmp/secret.integ/assert.cdk.out > /dev/null"
         },
         {
           "exec": "diff -r -x asset.* -x cdk.out -x manifest.json -x tree.json test/secret.integ.snapshot/ test/.tmp/secret.integ/assert.cdk.out/"
@@ -153,7 +153,7 @@
           "exec": "rm -fr test/.tmp/secret.integ/deploy.cdk.out"
         },
         {
-          "exec": "cdk deploy --app \"ts-node -P tsconfig.dev.json test/secret.integ.ts\" --no-version-reporting --no-asset-metadata --no-path-metadata --context aws-cdk:enableDiffNoFail=true --context @aws-cdk/aws-apigateway:usagePlanKeyOrderInsensitiveId=true --context @aws-cdk/core:enableStackNameDuplicates=true --context @aws-cdk/core:stackRelativeExports=true --context @aws-cdk/aws-ecr-assets:dockerIgnoreSupport=true --context @aws-cdk/aws-secretsmanager:parseOwnedSecretName=true --context @aws-cdk/aws-kms:defaultKeyPolicies=true --context @aws-cdk/aws-s3:grantWriteWithoutAcl=true --context @aws-cdk/aws-ecs-patterns:removeDefaultDesiredCount=true --context @aws-cdk/aws-rds:lowercaseDbIdentifier=true --context @aws-cdk/aws-efs:defaultEncryptionAtRest=true --context @aws-cdk/aws-lambda:recognizeVersionProps=true --context @aws-cdk/aws-cloudfront:defaultSecurityPolicyTLSv1.2_2021=true --context @aws-cdk/core:newStyleStackSynthesis=true '**' --require-approval=never -o test/.tmp/secret.integ/deploy.cdk.out"
+          "exec": "cdk deploy --app \"ts-node -P tsconfig.dev.json test/secret.integ.ts\" --no-version-reporting --no-asset-metadata --no-path-metadata '**' --require-approval=never -o test/.tmp/secret.integ/deploy.cdk.out"
         },
         {
           "exec": "rm -fr test/secret.integ.snapshot"
@@ -180,7 +180,7 @@
       "description": "update snapshot for integration test \"secret\"",
       "steps": [
         {
-          "exec": "cdk synth --app \"ts-node -P tsconfig.dev.json test/secret.integ.ts\" --no-version-reporting --no-asset-metadata --no-path-metadata --context aws-cdk:enableDiffNoFail=true --context @aws-cdk/aws-apigateway:usagePlanKeyOrderInsensitiveId=true --context @aws-cdk/core:enableStackNameDuplicates=true --context @aws-cdk/core:stackRelativeExports=true --context @aws-cdk/aws-ecr-assets:dockerIgnoreSupport=true --context @aws-cdk/aws-secretsmanager:parseOwnedSecretName=true --context @aws-cdk/aws-kms:defaultKeyPolicies=true --context @aws-cdk/aws-s3:grantWriteWithoutAcl=true --context @aws-cdk/aws-ecs-patterns:removeDefaultDesiredCount=true --context @aws-cdk/aws-rds:lowercaseDbIdentifier=true --context @aws-cdk/aws-efs:defaultEncryptionAtRest=true --context @aws-cdk/aws-lambda:recognizeVersionProps=true --context @aws-cdk/aws-cloudfront:defaultSecurityPolicyTLSv1.2_2021=true --context @aws-cdk/core:newStyleStackSynthesis=true -o test/secret.integ.snapshot > /dev/null"
+          "exec": "cdk synth --app \"ts-node -P tsconfig.dev.json test/secret.integ.ts\" --no-version-reporting --no-asset-metadata --no-path-metadata -o test/secret.integ.snapshot > /dev/null"
         }
       ]
     },
@@ -189,7 +189,7 @@
       "description": "watch integration test 'secret' (without updating snapshots)",
       "steps": [
         {
-          "exec": "cdk watch --app \"ts-node -P tsconfig.dev.json test/secret.integ.ts\" --no-version-reporting --no-asset-metadata --no-path-metadata --context aws-cdk:enableDiffNoFail=true --context @aws-cdk/aws-apigateway:usagePlanKeyOrderInsensitiveId=true --context @aws-cdk/core:enableStackNameDuplicates=true --context @aws-cdk/core:stackRelativeExports=true --context @aws-cdk/aws-ecr-assets:dockerIgnoreSupport=true --context @aws-cdk/aws-secretsmanager:parseOwnedSecretName=true --context @aws-cdk/aws-kms:defaultKeyPolicies=true --context @aws-cdk/aws-s3:grantWriteWithoutAcl=true --context @aws-cdk/aws-ecs-patterns:removeDefaultDesiredCount=true --context @aws-cdk/aws-rds:lowercaseDbIdentifier=true --context @aws-cdk/aws-efs:defaultEncryptionAtRest=true --context @aws-cdk/aws-lambda:recognizeVersionProps=true --context @aws-cdk/aws-cloudfront:defaultSecurityPolicyTLSv1.2_2021=true --context @aws-cdk/core:newStyleStackSynthesis=true '**' -o test/.tmp/secret.integ/deploy.cdk.out"
+          "exec": "cdk watch --app \"ts-node -P tsconfig.dev.json test/secret.integ.ts\" --no-version-reporting --no-asset-metadata --no-path-metadata '**' -o test/.tmp/secret.integ/deploy.cdk.out"
         }
       ]
     },
@@ -330,64 +330,25 @@
           "exec": "yarn upgrade npm-check-updates"
         },
         {
-          "exec": "npm-check-updates --dep dev --upgrade --target=minor --reject='projen'"
+          "exec": "npm-check-updates --dep dev --upgrade --target=minor --reject='aws-cdk-lib,constructs'"
         },
         {
-          "exec": "npm-check-updates --dep optional --upgrade --target=minor --reject='projen'"
+          "exec": "npm-check-updates --dep optional --upgrade --target=minor --reject='aws-cdk-lib,constructs'"
         },
         {
-          "exec": "npm-check-updates --dep peer --upgrade --target=minor --reject='projen'"
+          "exec": "npm-check-updates --dep peer --upgrade --target=minor --reject='aws-cdk-lib,constructs'"
         },
         {
-          "exec": "npm-check-updates --dep prod --upgrade --target=minor --reject='projen'"
+          "exec": "npm-check-updates --dep prod --upgrade --target=minor --reject='aws-cdk-lib,constructs'"
         },
         {
-          "exec": "npm-check-updates --dep bundle --upgrade --target=minor --reject='projen'"
-        },
-        {
-          "exec": "yarn install --check-files"
-        },
-        {
-          "exec": "yarn upgrade @aws-cdk/assertions @aws-cdk/aws-iam @aws-cdk/aws-kms @aws-cdk/aws-lambda @aws-cdk/aws-logs @aws-cdk/aws-s3-assets @aws-cdk/aws-secretsmanager @types/jest @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser aws-cdk eslint-config-prettier eslint-import-resolver-node eslint-import-resolver-typescript eslint-plugin-import eslint-plugin-prettier eslint jest jest-junit jsii jsii-diff jsii-docgen jsii-pacmak json-schema npm-check-updates prettier standard-version ts-jest ts-node typescript @aws-cdk/aws-iam @aws-cdk/aws-kms @aws-cdk/aws-lambda @aws-cdk/aws-logs @aws-cdk/aws-s3-assets @aws-cdk/aws-secretsmanager @aws-cdk/core constructs @aws-cdk/assert"
-        },
-        {
-          "exec": "npx projen"
-        },
-        {
-          "spawn": "post-upgrade"
-        }
-      ]
-    },
-    "upgrade-projen": {
-      "name": "upgrade-projen",
-      "description": "upgrade projen",
-      "env": {
-        "CI": "0"
-      },
-      "steps": [
-        {
-          "exec": "yarn upgrade npm-check-updates"
-        },
-        {
-          "exec": "npm-check-updates --dep dev --upgrade --target=minor --filter='projen'"
-        },
-        {
-          "exec": "npm-check-updates --dep optional --upgrade --target=minor --filter='projen'"
-        },
-        {
-          "exec": "npm-check-updates --dep peer --upgrade --target=minor --filter='projen'"
-        },
-        {
-          "exec": "npm-check-updates --dep prod --upgrade --target=minor --filter='projen'"
-        },
-        {
-          "exec": "npm-check-updates --dep bundle --upgrade --target=minor --filter='projen'"
+          "exec": "npm-check-updates --dep bundle --upgrade --target=minor --reject='aws-cdk-lib,constructs'"
         },
         {
           "exec": "yarn install --check-files"
         },
         {
-          "exec": "yarn upgrade projen"
+          "exec": "yarn upgrade"
         },
         {
           "exec": "npx projen"
