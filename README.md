@@ -50,3 +50,23 @@ The problem this Construct addresses is so good, already two other implementatio
 
 * [isotoma/sops-secretsmanager-cdk](https://github.com/isotoma/sops-secretsmanager-cdk): Does nearly the same. Uses CustomResource, wraps the sops cli, does not support flatten. Found it after I published my solution to npm :-/ 
 * [taimos/secretsmanager-versioning](https://github.com/taimos/secretsmanager-versioning): Different approach on the same problem. This is a cli tool with very nice integration into cdk and also handles git versioning information.
+
+## Advanced Configuration
+
+There are more options to configure the Construct which will be explained in the further chapters
+
+### Access the Lambda Role
+
+You can access the Lambda Role by creating your own Provider
+
+```typescript
+    const myExtraKmsKey = Key.fromKeyArn(this, 'MyExtraKmsKey', 'YourKeyArn');
+    const provider = new SopsSyncProvider(this, 'CustomSopsSyncProvider')
+    myExtraKmsKey.grantDecrypt(provider.role!)
+    const secret = new SopsSecret(this, 'SopsComplexSecretJSON', {
+        sopsProvider: provider,
+        secretName: 'myCoolSecret',
+        description: "its extra cool",
+        sopsFilePath: 'secrets/sopsfile-encrypted.json',
+    });
+```
