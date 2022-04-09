@@ -209,7 +209,7 @@ export class SopsSync extends Construct {
   }
 }
 
-export class SopsSyncProvider extends SingletonFunction {
+export class SopsSyncProvider extends SingletonFunction implements IGrantable {
   private sopsAgeKeys: SecretValue[];
 
   constructor(scope: Construct, id?: string) {

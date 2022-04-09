@@ -1,0 +1,5 @@
+SecretsManager
+SopsSecret
+SopsSync
+projen
+stringify
