@@ -7,20 +7,27 @@
 https://img.shields.io/github/issues-search/markussiebert/cdk-sops-secrets?color=%23ff0000&label=security-vulnerabilities&query=is%3Aissue%20is%3Aopen%20label%3A%22security%20vulnerability%22)](https://github.com/markussiebert/cdk-sops-secrets/issues?q=is%3Aissue+is%3Aopen+label%3A%22security+vulnerability%22)&nbsp;&nbsp;
 [![cdk-construct-hub](https://img.shields.io/badge/CDK-ConstructHub-blue)](https://constructs.dev/packages/cdk-sops-secrets)&nbsp;&nbsp;
 
-## Introducation
+## Introduction
 
-This construct library provides a replacement for CDK SecretsManager Secrets, with extended functionality for mozilla/sops.
+This construct library provides a replacement for CDK SecretsManager secrets, with extended functionality for Mozilla/sops.
 
-Using this library it is possible to populate Secrets with values from a mozilla/sops file without additional scripts and steps in the CI stage. Thereby transformations like JSON conversion of YAML files and transformation into a flat, JSONPath like structure can be done.
+Using this library it is possible to populate Secrets with values from a Mozilla/sops file without additional scripts and steps in the CI stage. Thereby transformations like JSON conversion of YAML files and transformation into a flat, JSONPath like structure will be performed, but can be disabled.
 
-Secrets filled in this way can be used immediately within the CloudFormation stack and dynamic references. This construct should handle all dependencies, if you use the ```secretValueFromJson``` call. 
+Secrets filled in this way can be used immediately within the CloudFormation stack and dynamic references. This construct should handle all dependencies, if you use the ```secretValueFromJson``` or ```secretValue``` call to access secret values. 
 
-This way, secrets can be securely stored in git repositories and easily synchronized into AWS SecretsManager Secrets.
+This way, secrets can be securely stored in git repositories and easily synchronized into AWS SecretsManager secrets.
+
+## Prerequisites
+
++ [AWS](https://aws.amazon.com/): I think you already knew it, but this construct will only work with an AWS account.
+* [KMS Key](https://aws.amazon.com/kms/?nc1=h_ls): It makes most sense to encrypt your secrets with AWS KMS if you want to sync and use the secret content afterwards in your AWS account.
+* [mozilla/sops](https://github.com/mozilla/sops): This construct assumes that you store your secrets encrypted via sops in your git repository.
+* [CDK](https://aws.amazon.com/cdk/?nc1=h_ls): As this is a CDK construct, it's only useful if you use the CloudDevelopmentToolkit. 
 
 ## Getting started
 
-1. Create a mozilla sops secrets file (with kms) and place it somewhere in your git repository
-2. Create a secret with the SopsSecret construct
+1. Create a Mozilla/sops secrets file (encrypted with an already existing KMS key) and place it somewhere in your git repository
+2. Create a secret with the SopsSecret construct inside your app
    ```ts
     const secret = new SopsSecret(stack, 'SopsComplexSecretJSON', {
         sopsFilePath: 'secets/sopsfile-encrypted.json',
@@ -31,44 +38,58 @@ This way, secrets can be securely stored in git repositories and easily synchron
    secret.secretValueFromJson('json.path.dotted.notation.accessor[0]').toString(),
    ```
 
+## Advanced configuration examples
+
+Even if using the main functionality should be done in 3 lines of code, there are more options to configure the constructs of this library. The most useful settings will be explained in the further chapters:
+
+### I don't want any conversion magic on my secret content — How can I disable it?
+
+As default behavior, the SopsSecret (via the SopsSync) will convert all content to JSON and flatten its structure. This is useful, because the AWS SecretsManager has some limitations if it comes to YAML and/or complex objects and decimal values. Even if you can store YAML, complex objects and even binaries in AWS SecretsManager secrets, you can't access their values via the SecretsManager API — you can only return them as is. So accessing (nested) values or values from YAML files won't be possible via [dynamic references](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/dynamic-references.html) in CloudFormation (and CDK). That's why I decided that conversion to JSON, flatten the structure and stringify all values should be the default behavior. But you can turn off all of these conversion steps:
+
+```typescript
+   const secret = new SopsSecret(this, 'SopsComplexSecretJSON', {
+      secretName: 'myCoolSecret',
+      convertToJSON: false, // disable converting the encrypted content to JSON
+      stringify: false, // disable stringifying all values
+      flatten: false, // disable flattening of the object structure
+   });
+```
+
+### There are missing permissions — How can I modify the provider permissions?
+
+Sometimes it can be necessary to access the IAM role of the SopsSync provider. If this is the case, you should create the provider before creating the SopsSecret, and pass the provider to it like this:
+
+```typescript
+    // Create the provider 
+    const provider = new SopsSyncProvider(this, 'CustomSopsSyncProvider')
+    // Grant whatever you need to the provider
+    const myExtraKmsKey = Key.fromKeyArn(this, 'MyExtraKmsKey', 'YourKeyArn');
+    myExtraKmsKey.grantDecrypt(provider)
+    // create the secret and pass the the provider to it
+    const secret = new SopsSecret(this, 'SopsComplexSecretJSON', {
+        sopsProvider: provider,
+        secretName: 'myCoolSecret',
+        sopsFilePath: 'secrets/sopsfile-encrypted.json',
+    });
+```
 
 ## Motivation
 
-This project was created to solve a recurring problem of syncing mozilla/sops secrets into AWS SecretsManager in a convenient, secure way.
+I have created this project to solve a recurring problem of syncing Mozilla/sops secrets into AWS SecretsManager in a convenient, secure way.
  
 Other than that, or perhaps more importantly, my goal was to learn new things:
-- Write a golang lambda
-- Writing unit tests incl. mocks in golang
-- Reproducible builds of golang binaries (byte-by-byte identical)
+- Write a Golang lambda
+- Writing unit tests incl. mocks in Golang
+- Reproducible builds of Golang binaries (byte-by-byte identical)
 - Build reproducible zips (byte-by-byte identical)
-- Release an npm package
+- Release a NPM package
 - Setting up projects with projen
-- CI/CD with github actions
+- CI/CD with GitHub actions
 - CDK unit and integration tests
 
 ## Other Tools like this
 
 The problem this Construct addresses is so good, already two other implementations exist:
 
-* [isotoma/sops-secretsmanager-cdk](https://github.com/isotoma/sops-secretsmanager-cdk): Does nearly the same. Uses CustomResource, wraps the sops cli, does not support flatten. Found it after I published my solution to npm :-/ 
-* [taimos/secretsmanager-versioning](https://github.com/taimos/secretsmanager-versioning): Different approach on the same problem. This is a cli tool with very nice integration into cdk and also handles git versioning information.
-
-## Advanced Configuration
-
-There are more options to configure the Construct which will be explained in the further chapters
-
-### Access the Lambda Role
-
-You can access the Lambda Role by creating your own Provider
-
-```typescript
-    const myExtraKmsKey = Key.fromKeyArn(this, 'MyExtraKmsKey', 'YourKeyArn');
-    const provider = new SopsSyncProvider(this, 'CustomSopsSyncProvider')
-    myExtraKmsKey.grantDecrypt(provider.role!)
-    const secret = new SopsSecret(this, 'SopsComplexSecretJSON', {
-        sopsProvider: provider,
-        secretName: 'myCoolSecret',
-        description: "its extra cool",
-        sopsFilePath: 'secrets/sopsfile-encrypted.json',
-    });
-```
+* [isotoma/sops-secretsmanager-cdk](https://github.com/isotoma/sops-secretsmanager-cdk): Does nearly the same. Uses CustomResource, wraps the sops CLI, does not support flatten. Found it after I published my solution to NPM :-/ 
+* [taimos/secretsmanager-versioning](https://github.com/taimos/secretsmanager-versioning): Different approach on the same problem. This is a CLI tool with very nice integration into CDK and also handles git versioning information.
