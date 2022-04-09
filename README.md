@@ -40,7 +40,9 @@ This way, secrets can be securely stored in git repositories and easily synchron
 
 ## Advanced configuration examples
 
-Even if using the main functionality should be done in 3 lines of code, there are more options to configure the constructs of this library. The most useful settings will be explained in the further chapters:
+Even if using the main functionality should be done in 3 lines of code, there are more options to configure the constructs of this library. If you want to get an Overview of all available configuration options take a look at the [documentation at the CDK ConstructHub](https://constructs.dev/packages/cdk-sops-secrets).
+
+The most useful settings will be explained in the further chapters:
 
 ### I don't want any conversion magic on my secret content — How can I disable it?
 
@@ -48,10 +50,10 @@ As default behavior, the SopsSecret (via the SopsSync) will convert all content 
 
 ```typescript
    const secret = new SopsSecret(this, 'SopsComplexSecretJSON', {
-      secretName: 'myCoolSecret',
       convertToJSON: false, // disable converting the encrypted content to JSON
       stringify: false, // disable stringifying all values
       flatten: false, // disable flattening of the object structure
+      sopsFilePath: 'secrets/sopsfile-encrypted.json',
    });
 ```
 
