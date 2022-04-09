@@ -1,5 +1,6 @@
 {
   "name": "cdk-sops-secrets",
+  "description": "CDK Constructs that syncs your sops secrets into AWS SecretsManager secrets.",
   "repository": {
     "type": "git",
     "url": "https://github.com/markussiebert/cdk-sops-secrets.git"
