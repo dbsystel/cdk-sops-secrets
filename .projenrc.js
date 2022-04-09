@@ -15,6 +15,10 @@ const project = new awscdk.AwsCdkConstructLibrary({
   ],
   defaultReleaseBranch: 'main',
   npmignoreEnabled: true,
+  autoApproveUpgrades: true,
+  autoApproveOptions: {
+    allowedUsernames: ['markussiebert']
+  },
   name: 'cdk-sops-secrets',
   repositoryUrl: 'https://github.com/markussiebert/cdk-sops-secrets.git',
   // deps: [],                /* Runtime dependencies of this module. */
