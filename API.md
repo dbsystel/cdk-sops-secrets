@@ -540,6 +540,8 @@ The current versionId of the secret populated via this resource.
 
 ### SopsSyncProvider <a name="SopsSyncProvider" id="cdk-sops-secrets.SopsSyncProvider"></a>
 
+- *Implements:* aws-cdk-lib.aws_iam.IGrantable
+
 #### Initializers <a name="Initializers" id="cdk-sops-secrets.SopsSyncProvider.Initializer"></a>
 
 ```typescript
