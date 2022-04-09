@@ -6,7 +6,7 @@
 [![security-vulnerabilities](
 https://img.shields.io/github/issues-search/markussiebert/cdk-sops-secrets?color=%23ff0000&label=security-vulnerabilities&query=is%3Aissue%20is%3Aopen%20label%3A%22security%20vulnerability%22)](https://github.com/markussiebert/cdk-sops-secrets/issues?q=is%3Aissue+is%3Aopen+label%3A%22security+vulnerability%22)&nbsp;&nbsp;
 [![cdk-construct-hub](https://img.shields.io/badge/CDK-ConstructHub-blue)](https://constructs.dev/packages/cdk-sops-secrets)&nbsp;&nbsp;
-[![stability](https://img.shields.io/badge/Stability-experimental-red)]&nbsp;&nbsp;
+![stability](https://img.shields.io/badge/Stability-experimental-red)&nbsp;&nbsp;
 ## Introduction
 
 This construct library provides a replacement for CDK SecretsManager secrets, with extended functionality for Mozilla/sops.
