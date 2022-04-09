@@ -1,4 +1,4 @@
-<img src="img/banner-dl.png">
+<img src="img/banner-dl.png" style="max-height:200px;max-width:900px;height:auto;width:auto;">
 <p/>
 
 [![npm](https://img.shields.io/npm/v/cdk-sops-secrets.svg)](https://www.npmjs.com/package/cdk-sops-secrets)&nbsp;&nbsp;
@@ -6,16 +6,20 @@
 [![security-vulnerabilities](
 https://img.shields.io/github/issues-search/markussiebert/cdk-sops-secrets?color=%23ff0000&label=security-vulnerabilities&query=is%3Aissue%20is%3Aopen%20label%3A%22security%20vulnerability%22)](https://github.com/markussiebert/cdk-sops-secrets/issues?q=is%3Aissue+is%3Aopen+label%3A%22security+vulnerability%22)&nbsp;&nbsp;
 [![cdk-construct-hub](https://img.shields.io/badge/CDK-ConstructHub-blue)](https://constructs.dev/packages/cdk-sops-secrets)&nbsp;&nbsp;
-
+[![stability](https://img.shields.io/badge/Stability-experimental-red)]&nbsp;&nbsp;
 ## Introduction
 
 This construct library provides a replacement for CDK SecretsManager secrets, with extended functionality for Mozilla/sops.
 
 Using this library it is possible to populate Secrets with values from a Mozilla/sops file without additional scripts and steps in the CI stage. Thereby transformations like JSON conversion of YAML files and transformation into a flat, JSONPath like structure will be performed, but can be disabled.
 
-Secrets filled in this way can be used immediately within the CloudFormation stack and dynamic references. This construct should handle all dependencies, if you use the ```secretValueFromJson``` or ```secretValue``` call to access secret values. 
+Secrets filled in this way can be used immediately within the CloudFormation stack and dynamic references. This construct should handle all dependencies, if you use the ```secretValueFromJson()``` or ```secretValue()``` call to access secret values. 
 
 This way, secrets can be securely stored in git repositories and easily synchronized into AWS SecretsManager secrets.
+
+## Stability
+
+This is an early version of the package. At the moment, I would classify this library as experimental — API changes or changes to the default behavior may occur and may not follow semver. Please pin the exact version of this library in your ```package.json```.
 
 ## Prerequisites
 
@@ -40,7 +44,9 @@ This way, secrets can be securely stored in git repositories and easily synchron
 
 ## Advanced configuration examples
 
-Even if using the main functionality should be done in 3 lines of code, there are more options to configure the constructs of this library. The most useful settings will be explained in the further chapters:
+Even if using the main functionality should be done in 3 lines of code, there are more options to configure the constructs of this library. If you want to get an Overview of all available configuration options take a look at the [documentation at the CDK ConstructHub](https://constructs.dev/packages/cdk-sops-secrets).
+
+The most useful settings will be explained in the further chapters:
 
 ### I don't want any conversion magic on my secret content — How can I disable it?
 
@@ -48,10 +54,10 @@ As default behavior, the SopsSecret (via the SopsSync) will convert all content 
 
 ```typescript
    const secret = new SopsSecret(this, 'SopsComplexSecretJSON', {
-      secretName: 'myCoolSecret',
       convertToJSON: false, // disable converting the encrypted content to JSON
       stringify: false, // disable stringifying all values
       flatten: false, // disable flattening of the object structure
+      sopsFilePath: 'secrets/sopsfile-encrypted.json',
    });
 ```
 
