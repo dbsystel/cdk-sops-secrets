@@ -3,7 +3,8 @@ const project = new awscdk.AwsCdkConstructLibrary({
   author: 'Markus Siebert',
   authorAddress: 'dev@markussiebert.com',
   cdkVersion: '2.1.0',
-  description: 'CDK Constructs that syncs your sops secrets into AWS SecretsManager secrets.',
+  description:
+    'CDK Constructs that syncs your sops secrets into AWS SecretsManager secrets.',
   keywords: [
     'mozilla/sops',
     'sops',
