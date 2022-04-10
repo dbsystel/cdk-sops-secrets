@@ -79,6 +79,23 @@ Sometimes it can be necessary to access the IAM role of the SopsSync provider. I
     });
 ```
 
+### UploadType: INLINE / ASSET — What when why?
+
+I decided, that the default behavior should be "INLINE" because of the following consideration:
+
+* Fewer permissions: If we use inline content instead of a S3 asset, the SopsSyncProvider does not need permissions to access the asset bucket and its KMS key.
+* Faster: If we don't have to upload and download things from and to S3, it should be a little faster.
+* Interchangeable: As we use the same information to generate the version of the secret, no new version of the secret should be created, if you change from INLINE to ASSET or vice versa, even if the CloudFormation resource updates.
+* I personally think sops files are not that big, that we should run into limits, but if so — we can change to asset ```uploadType```. 
+
+You can change the uplaodType via the properties:
+
+```typescript
+const secret = new SopsSecret(this, 'SopsWithAssetUpload', {
+   sopsFilePath: 'secrets/sopsfile-encrypted.json',
+   uploadType: UploadType.ASSET // instead of the default UploadType.INLINE
+});
+```
 ## Motivation
 
 I have created this project to solve a recurring problem of syncing Mozilla/sops secrets into AWS SecretsManager in a convenient, secure way.
