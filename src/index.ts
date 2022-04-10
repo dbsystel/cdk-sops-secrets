@@ -29,6 +29,7 @@ import {
   SecretProps,
 } from 'aws-cdk-lib/aws-secretsmanager';
 import { Construct } from 'constructs';
+import { execSync } from 'child_process';
 
 export enum UploadType {
   /**
@@ -179,6 +180,17 @@ export class SopsSync extends Construct {
     if (!fs.existsSync(props.sopsFilePath)) {
       throw new Error(`File ${props.sopsFilePath} does not exist!`);
     }
+    
+
+    let fileHash:string = FileSystem.fingerprint(props.sopsFilePath);
+    try {
+      const commit = execSync(`git log -n 1 --pretty=format:%H -- ${props.sopsFilePath}`).toString()
+      // Check if the result is a valid git commit
+      if (commit.match("^[a-fA-F0-9]{40}$")?.length == 1) {
+        fileHash = commit
+      }
+    } catch (e) {}
+  
 
     /**
      * Handle uploadType INLINE or ASSET
@@ -243,6 +255,7 @@ export class SopsSync extends Construct {
         SecretARN: props.secret.secretArn,
         SopsS3File: sopsS3File,
         SopsInline: sopsInline,
+        Hash: fileHash,
         ConvertToJSON: this.converToJSON,
         Flatten: this.flatten,
         Format: this.sopsFileFormat,
