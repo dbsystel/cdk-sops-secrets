@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"encoding/base64"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -25,13 +26,18 @@ import (
 )
 
 type SopsS3File struct {
-	Bucket string `json:"Bucket"`
-	Key    string `json:"Key"`
+	Bucket string `json:"Bucket,omitempty"`
+	Key    string `json:"Key,omitempty"`
 }
 
+type SopsInline struct {
+	Content string `json:"Content,omitempty"`
+	Hash    string `json:"Hash,omitempty"`
+}
 type SopsSyncResourcePropertys struct {
 	SecretARN       string     `json:"SecretARN"`
-	SopsS3File      SopsS3File `json:"SopsS3File"`
+	SopsS3File      SopsS3File `json:"SopsS3File,omitempty"`
+	SopsInline      SopsInline `json:"SopsInline,omitempty"`
 	Format          string     `json:"Format"`
 	ConvertToJSON   string     `json:"ConvertToJSON,omitempty"`
 	Flatten         string     `json:"Flatten,omitempty"`
@@ -67,17 +73,16 @@ func decryptSopsFileContent(content []byte, format string) (data []byte, err err
 	return resp, nil
 }
 
-func (a AWS) updateSecret(sopsFileName string, secretArn string, secretContent []byte) (data *secretsmanager.PutSecretValueOutput, err error) {
+func (a AWS) updateSecret(sopsHash string, secretArn string, secretContent []byte) (data *secretsmanager.PutSecretValueOutput, err error) {
 	secretContentString := string(secretContent)
-	clientRequestToken := strings.Split(sopsFileName, ".")[0]
 	input := &secretsmanager.PutSecretValueInput{
 		SecretId:           &secretArn,
 		SecretString:       &secretContentString,
-		ClientRequestToken: &clientRequestToken,
+		ClientRequestToken: &sopsHash,
 	}
 	secretResp, secretErr := a.secretsmanager.PutSecretValue(input)
 	if secretErr != nil {
-		return nil, errors.New(fmt.Sprintf("Failed to store secret value:\nsecretArn: %s\nClientRequestToken: %s\n%v\n", secretArn, clientRequestToken, err))
+		return nil, errors.New(fmt.Sprintf("Failed to store secret value:\nsecretArn: %s\nClientRequestToken: %s\n%v\n", secretArn, sopsHash, err))
 	}
 	arn := generatePhysicalResourceId(*secretResp.ARN)
 	secretResp.ARN = &arn
@@ -112,13 +117,41 @@ func (a AWS) syncSopsToSecretsmanager(ctx context.Context, event cfn.Event) (phy
 		tempArn := generatePhysicalResourceId(resourceProperties.SecretARN)
 
 		sopsFile := resourceProperties.SopsS3File
+		sopsInline := resourceProperties.SopsInline
 
-		// This is where the magic happens
-		ecnryptedContent, err := a.getS3FileContent(sopsFile)
-		if err != nil {
-			return tempArn, nil, err
+		var encryptedContent []byte
+		var sopsHash string
+
+		// If SopsS3File is provided, we have to download this file
+		if sopsFile != (SopsS3File{}) {
+			encryptedContent, err = a.getS3FileContent(sopsFile)
+			fileNameParts := strings.Split(sopsFile.Key, ".")
+			fileNameParts = fileNameParts[:len(fileNameParts)-1]
+			fileNameWithoutEnding := strings.Join(fileNameParts, ".")
+			sopsHash = fileNameWithoutEnding
+			log.Println(sopsHash)
+			if err != nil {
+				return tempArn, nil, err
+			}
 		}
-		decryptedContent, err := decryptSopsFileContent(ecnryptedContent, resourceProperties.Format)
+
+		// If SopsInline is provbided, we have to base64 decode this content
+		if sopsInline != (SopsInline{}) {
+			encryptedContent, err = base64.StdEncoding.DecodeString(sopsInline.Content)
+			sopsHash = sopsInline.Hash
+			if err != nil {
+				return tempArn, nil, err
+			}
+		}
+
+		if encryptedContent == nil {
+			return tempArn, nil, errors.New("No encrypted content found! Did you pass SopsS3File or SopsInline?")
+		}
+		if sopsHash == "" {
+			return tempArn, nil, errors.New("No sopsHash found! Did you pass SopsS3File or SopsInline?")
+		}
+
+		decryptedContent, err := decryptSopsFileContent(encryptedContent, resourceProperties.Format)
 		if err != nil {
 			return tempArn, nil, err
 		}
@@ -197,7 +230,7 @@ func (a AWS) syncSopsToSecretsmanager(ctx context.Context, event cfn.Event) (phy
 			}
 		}
 		// Write the secret
-		updateSecretResp, err := a.updateSecret(sopsFile.Key, resourceProperties.SecretARN, decryptedContent)
+		updateSecretResp, err := a.updateSecret(sopsHash, resourceProperties.SecretARN, decryptedContent)
 		if err != nil {
 			return tempArn, nil, err
 		}

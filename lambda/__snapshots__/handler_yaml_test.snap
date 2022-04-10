@@ -10,7 +10,7 @@
 [Test_FullWorkflow_Create_S3_YAML_Simple - 2]
 >>>SecretsManagerMockClient.PutSecretValue.Input
 {
-  ClientRequestToken: "",
+  ClientRequestToken: "../test-secrets/yaml/sopsfile.enc-age",
   SecretId: "arn:aws:secretsmanager:eu-central-1:123456789012:secret:testsecret",
   SecretString: <sensitive>
 }
@@ -41,7 +41,7 @@ nil
 [Test_FullWorkflow_Create_S3_YAML_as_JSON_Simple - 2]
 >>>SecretsManagerMockClient.PutSecretValue.Input
 {
-  ClientRequestToken: "",
+  ClientRequestToken: "../test-secrets/yaml/sopsfile.enc-age",
   SecretId: "arn:aws:secretsmanager:eu-central-1:123456789012:secret:testsecret",
   SecretString: <sensitive>
 }
@@ -72,7 +72,7 @@ nil
 [Test_FullWorkflow_Create_S3_YAML_Complex - 2]
 >>>SecretsManagerMockClient.PutSecretValue.Input
 {
-  ClientRequestToken: "",
+  ClientRequestToken: "../test-secrets/yaml/sopsfile-complex.enc-age",
   SecretId: "arn:aws:secretsmanager:eu-central-1:123456789012:secret:testsecret",
   SecretString: <sensitive>
 }
@@ -103,7 +103,7 @@ nil
 [Test_FullWorkflow_Create_S3_YAML_as_JSON_Complex - 2]
 >>>SecretsManagerMockClient.PutSecretValue.Input
 {
-  ClientRequestToken: "",
+  ClientRequestToken: "../test-secrets/yaml/sopsfile-complex.enc-age",
   SecretId: "arn:aws:secretsmanager:eu-central-1:123456789012:secret:testsecret",
   SecretString: <sensitive>
 }
@@ -134,7 +134,7 @@ nil
 [Test_FullWorkflow_Create_S3_YAML_Complex_Flat - 2]
 >>>SecretsManagerMockClient.PutSecretValue.Input
 {
-  ClientRequestToken: "",
+  ClientRequestToken: "../test-secrets/yaml/sopsfile-complex.enc-age",
   SecretId: "arn:aws:secretsmanager:eu-central-1:123456789012:secret:testsecret",
   SecretString: <sensitive>
 }
@@ -165,7 +165,7 @@ nil
 [Test_FullWorkflow_Create_S3_YAML_as_JSON_Complex_Flat - 2]
 >>>SecretsManagerMockClient.PutSecretValue.Input
 {
-  ClientRequestToken: "",
+  ClientRequestToken: "../test-secrets/yaml/sopsfile-complex.enc-age",
   SecretId: "arn:aws:secretsmanager:eu-central-1:123456789012:secret:testsecret",
   SecretString: <sensitive>
 }
