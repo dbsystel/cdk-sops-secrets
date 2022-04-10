@@ -21,8 +21,9 @@ dist
 tsconfig.tsbuildinfo
 /.eslintrc.json
 !.jsii
+test/secret-asset.integ.snapshot
 test/.tmp
-test/secret.integ.snapshot
+test/secret-inline.integ.snapshot
 /lambda
 /dist-lambda
 !/assets

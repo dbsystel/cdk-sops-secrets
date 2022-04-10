@@ -373,3 +373,16 @@ func flatten(parentkey string, input any, output map[string]interface{}) error {
 
 	return nil
 }
+
+func toSopsSyncResourcePropertys(input *map[string]interface{}) (*SopsSyncResourcePropertys, error) {
+	jsonResourceProps, err := json.Marshal(&input)
+	if err != nil {
+		return nil, err
+	}
+
+	resourceProperties := SopsSyncResourcePropertys{}
+	if err := json.Unmarshal(jsonResourceProps, &resourceProperties); err != nil {
+		return nil, err
+	}
+	return &resourceProperties, nil
+}

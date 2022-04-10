@@ -184,3 +184,149 @@ map[string]interface {}{
 }
 nil
 ---
+
+[Test_FullWorkflow_Create_INLINE_YAML_Simple - 1]
+>>>SecretsManagerMockClient.PutSecretValue.Input
+{
+  ClientRequestToken: "MyHash",
+  SecretId: "arn:aws:secretsmanager:eu-central-1:123456789012:secret:testsecret",
+  SecretString: <sensitive>
+}
+---
+
+[Test_FullWorkflow_Create_INLINE_YAML_Simple - 2]
+>>>syncSopsToSecretsmanager
+arn:custom:sopssync:eu-central-1:123456789012:secret:testsecret
+map[string]interface {}{
+    "ARN":           "arn:custom:sopssync:eu-central-1:123456789012:secret:testsecret",
+    "Name":          "dfb70680d326c245dbdd113d635caa16113e78b1eb8b7447f10eeb861e491724",
+    "VersionId":     "656f2d935b86bfbefbd97f1c55c1578aef8d96c5647a6161e37f94fb34a84d61",
+    "VersionStages": []*string{
+        &"dfb70680d326c245dbdd113d635caa16113e78b1eb8b7447f10eeb861e491724",
+    },
+}
+nil
+---
+
+[Test_FullWorkflow_Create_INLINE_YAML_as_JSON_Simple - 1]
+>>>SecretsManagerMockClient.PutSecretValue.Input
+{
+  ClientRequestToken: "MyHash",
+  SecretId: "arn:aws:secretsmanager:eu-central-1:123456789012:secret:testsecret",
+  SecretString: <sensitive>
+}
+---
+
+[Test_FullWorkflow_Create_INLINE_YAML_as_JSON_Simple - 2]
+>>>syncSopsToSecretsmanager
+arn:custom:sopssync:eu-central-1:123456789012:secret:testsecret
+map[string]interface {}{
+    "ARN":           "arn:custom:sopssync:eu-central-1:123456789012:secret:testsecret",
+    "Name":          "dfb70680d326c245dbdd113d635caa16113e78b1eb8b7447f10eeb861e491724",
+    "VersionId":     "46b116fd9409581eb2623320d877cfa1f46cb2487bc3cd0672b1eb95554e65d3",
+    "VersionStages": []*string{
+        &"dfb70680d326c245dbdd113d635caa16113e78b1eb8b7447f10eeb861e491724",
+    },
+}
+nil
+---
+
+[Test_FullWorkflow_Create_INLINE_YAML_Complex - 1]
+>>>SecretsManagerMockClient.PutSecretValue.Input
+{
+  ClientRequestToken: "MyHash",
+  SecretId: "arn:aws:secretsmanager:eu-central-1:123456789012:secret:testsecret",
+  SecretString: <sensitive>
+}
+---
+
+[Test_FullWorkflow_Create_INLINE_YAML_Complex - 2]
+>>>syncSopsToSecretsmanager
+arn:custom:sopssync:eu-central-1:123456789012:secret:testsecret
+map[string]interface {}{
+    "ARN":           "arn:custom:sopssync:eu-central-1:123456789012:secret:testsecret",
+    "Name":          "dfb70680d326c245dbdd113d635caa16113e78b1eb8b7447f10eeb861e491724",
+    "VersionId":     "99d08789c0db731bcf0f3a467759c84c11e1b18253f9d614be55c817a410e088",
+    "VersionStages": []*string{
+        &"dfb70680d326c245dbdd113d635caa16113e78b1eb8b7447f10eeb861e491724",
+    },
+}
+nil
+---
+
+[Test_FullWorkflow_Create_INLINE_YAML_as_JSON_Complex - 1]
+>>>S3MAnagerMockClient.Download.Input
+{
+  Bucket: "..",
+  Key: "../test-secrets/yaml/sopsfile-complex.enc-age.yaml"
+}
+---
+
+[Test_FullWorkflow_Create_INLINE_YAML_as_JSON_Complex - 2]
+>>>SecretsManagerMockClient.PutSecretValue.Input
+{
+  ClientRequestToken: "../test-secrets/yaml/sopsfile-complex.enc-age",
+  SecretId: "arn:aws:secretsmanager:eu-central-1:123456789012:secret:testsecret",
+  SecretString: <sensitive>
+}
+---
+
+[Test_FullWorkflow_Create_INLINE_YAML_as_JSON_Complex - 3]
+>>>syncSopsToSecretsmanager
+arn:custom:sopssync:eu-central-1:123456789012:secret:testsecret
+map[string]interface {}{
+    "ARN":           "arn:custom:sopssync:eu-central-1:123456789012:secret:testsecret",
+    "Name":          "dfb70680d326c245dbdd113d635caa16113e78b1eb8b7447f10eeb861e491724",
+    "VersionId":     "28e49c30b2d8af77e323b63c5c9e90ec2cf1385ab330eb674695ee065b1252f2",
+    "VersionStages": []*string{
+        &"dfb70680d326c245dbdd113d635caa16113e78b1eb8b7447f10eeb861e491724",
+    },
+}
+nil
+---
+
+[Test_FullWorkflow_Create_INLINE_YAML_Complex_Flat - 1]
+>>>SecretsManagerMockClient.PutSecretValue.Input
+{
+  ClientRequestToken: "MyHash",
+  SecretId: "arn:aws:secretsmanager:eu-central-1:123456789012:secret:testsecret",
+  SecretString: <sensitive>
+}
+---
+
+[Test_FullWorkflow_Create_INLINE_YAML_Complex_Flat - 2]
+>>>syncSopsToSecretsmanager
+arn:custom:sopssync:eu-central-1:123456789012:secret:testsecret
+map[string]interface {}{
+    "ARN":           "arn:custom:sopssync:eu-central-1:123456789012:secret:testsecret",
+    "Name":          "dfb70680d326c245dbdd113d635caa16113e78b1eb8b7447f10eeb861e491724",
+    "VersionId":     "9383dcb62f4f91358496ec0e473c605325cf76d5162b1432f3efaaac14e6d07f",
+    "VersionStages": []*string{
+        &"dfb70680d326c245dbdd113d635caa16113e78b1eb8b7447f10eeb861e491724",
+    },
+}
+nil
+---
+
+[Test_FullWorkflow_Create_INLINE_YAML_as_JSON_Complex_Flat - 1]
+>>>SecretsManagerMockClient.PutSecretValue.Input
+{
+  ClientRequestToken: "MyHash",
+  SecretId: "arn:aws:secretsmanager:eu-central-1:123456789012:secret:testsecret",
+  SecretString: <sensitive>
+}
+---
+
+[Test_FullWorkflow_Create_INLINE_YAML_as_JSON_Complex_Flat - 2]
+>>>syncSopsToSecretsmanager
+arn:custom:sopssync:eu-central-1:123456789012:secret:testsecret
+map[string]interface {}{
+    "ARN":           "arn:custom:sopssync:eu-central-1:123456789012:secret:testsecret",
+    "Name":          "dfb70680d326c245dbdd113d635caa16113e78b1eb8b7447f10eeb861e491724",
+    "VersionId":     "e9a8d3ab5715c1120faae25b669e5905a92fe4b261ae97eb1e65ad9ba52f9ee6",
+    "VersionStages": []*string{
+        &"dfb70680d326c245dbdd113d635caa16113e78b1eb8b7447f10eeb861e491724",
+    },
+}
+nil
+---
