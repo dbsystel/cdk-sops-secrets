@@ -1,8 +1,6 @@
 package main
 
 import (
-	"io/ioutil"
-	"log"
 	"os"
 	"testing"
 
@@ -12,7 +10,7 @@ import (
 
 func TestMain(t *testing.M) {
 
-	log.SetOutput(ioutil.Discard)
+	//log.SetOutput(ioutil.Discard)
 
 	v := t.Run()
 	// After all tests have run `go-snaps` can check for not used snapshots
