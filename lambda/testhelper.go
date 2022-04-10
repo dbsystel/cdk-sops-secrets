@@ -59,10 +59,8 @@ func fileToInline(event cfn.Event) cfn.Event {
 	delete(event.ResourceProperties, "SopsS3File")
 	return event
 }
-
-func prepareHandler(t *testing.T, eventFile string) (*AWS, context.Context, cfn.Event) {
-	os.Setenv("SOPS_AGE_KEY", "AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3")
-	mocks := &AWS{
+func getMocks(t *testing.T) *AWS {
+	return &AWS{
 		secretsmanager: &SecretsManagerMockClient{
 			t: t,
 		},
@@ -70,6 +68,10 @@ func prepareHandler(t *testing.T, eventFile string) (*AWS, context.Context, cfn.
 			t: t,
 		},
 	}
+}
+func prepareHandler(t *testing.T, eventFile string) (*AWS, context.Context, cfn.Event) {
+	os.Setenv("SOPS_AGE_KEY", "AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3")
+	mocks := getMocks(t)
 	d := time.Now().Add(50 * time.Millisecond)
 	ctx, _ := context.WithDeadline(context.Background(), d)
 	ctx = lambdacontext.NewContext(ctx, &lambdacontext.LambdaContext{
