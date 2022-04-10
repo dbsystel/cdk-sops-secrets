@@ -1197,6 +1197,7 @@ const sopsSecretProps: SopsSecretProps = { ... }
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.sopsKmsKey">sopsKmsKey</a></code> | <code>aws-cdk-lib.aws_kms.IKey[]</code> | The kmsKey used to encrypt the sops file. |
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.sopsProvider">sopsProvider</a></code> | <code><a href="#cdk-sops-secrets.SopsSyncProvider">SopsSyncProvider</a></code> | The custom resource provider to use. |
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.stringifyValues">stringifyValues</a></code> | <code>boolean</code> | Shall all values be flattened? |
+| <code><a href="#cdk-sops-secrets.SopsSecretProps.property.uploadType">uploadType</a></code> | <code><a href="#cdk-sops-secrets.UploadType">UploadType</a></code> | How should the secret be passed to the CustomResource? |
 
 ---
 
@@ -1397,6 +1398,19 @@ are lookup errors for certain float types
 
 ---
 
+##### `uploadType`<sup>Optional</sup> <a name="uploadType" id="cdk-sops-secrets.SopsSecretProps.property.uploadType"></a>
+
+```typescript
+public readonly uploadType: UploadType;
+```
+
+- *Type:* <a href="#cdk-sops-secrets.UploadType">UploadType</a>
+- *Default:* INLINE
+
+How should the secret be passed to the CustomResource?
+
+---
+
 ### SopsSyncOptions <a name="SopsSyncOptions" id="cdk-sops-secrets.SopsSyncOptions"></a>
 
 Configuration options for the SopsSync.
@@ -1421,6 +1435,7 @@ const sopsSyncOptions: SopsSyncOptions = { ... }
 | <code><a href="#cdk-sops-secrets.SopsSyncOptions.property.sopsKmsKey">sopsKmsKey</a></code> | <code>aws-cdk-lib.aws_kms.IKey[]</code> | The kmsKey used to encrypt the sops file. |
 | <code><a href="#cdk-sops-secrets.SopsSyncOptions.property.sopsProvider">sopsProvider</a></code> | <code><a href="#cdk-sops-secrets.SopsSyncProvider">SopsSyncProvider</a></code> | The custom resource provider to use. |
 | <code><a href="#cdk-sops-secrets.SopsSyncOptions.property.stringifyValues">stringifyValues</a></code> | <code>boolean</code> | Shall all values be flattened? |
+| <code><a href="#cdk-sops-secrets.SopsSyncOptions.property.uploadType">uploadType</a></code> | <code><a href="#cdk-sops-secrets.UploadType">UploadType</a></code> | How should the secret be passed to the CustomResource? |
 
 ---
 
@@ -1540,6 +1555,19 @@ are lookup errors for certain float types
 
 ---
 
+##### `uploadType`<sup>Optional</sup> <a name="uploadType" id="cdk-sops-secrets.SopsSyncOptions.property.uploadType"></a>
+
+```typescript
+public readonly uploadType: UploadType;
+```
+
+- *Type:* <a href="#cdk-sops-secrets.UploadType">UploadType</a>
+- *Default:* INLINE
+
+How should the secret be passed to the CustomResource?
+
+---
+
 ### SopsSyncProps <a name="SopsSyncProps" id="cdk-sops-secrets.SopsSyncProps"></a>
 
 The configuration options extended by the target Secret.
@@ -1564,6 +1592,7 @@ const sopsSyncProps: SopsSyncProps = { ... }
 | <code><a href="#cdk-sops-secrets.SopsSyncProps.property.sopsKmsKey">sopsKmsKey</a></code> | <code>aws-cdk-lib.aws_kms.IKey[]</code> | The kmsKey used to encrypt the sops file. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProps.property.sopsProvider">sopsProvider</a></code> | <code><a href="#cdk-sops-secrets.SopsSyncProvider">SopsSyncProvider</a></code> | The custom resource provider to use. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProps.property.stringifyValues">stringifyValues</a></code> | <code>boolean</code> | Shall all values be flattened? |
+| <code><a href="#cdk-sops-secrets.SopsSyncProps.property.uploadType">uploadType</a></code> | <code><a href="#cdk-sops-secrets.UploadType">UploadType</a></code> | How should the secret be passed to the CustomResource? |
 | <code><a href="#cdk-sops-secrets.SopsSyncProps.property.secret">secret</a></code> | <code>aws-cdk-lib.aws_secretsmanager.ISecret</code> | The secret that will be populated with the encrypted sops file content. |
 
 ---
@@ -1684,6 +1713,19 @@ are lookup errors for certain float types
 
 ---
 
+##### `uploadType`<sup>Optional</sup> <a name="uploadType" id="cdk-sops-secrets.SopsSyncProps.property.uploadType"></a>
+
+```typescript
+public readonly uploadType: UploadType;
+```
+
+- *Type:* <a href="#cdk-sops-secrets.UploadType">UploadType</a>
+- *Default:* INLINE
+
+How should the secret be passed to the CustomResource?
+
+---
+
 ##### `secret`<sup>Required</sup> <a name="secret" id="cdk-sops-secrets.SopsSyncProps.property.secret"></a>
 
 ```typescript
@@ -1697,4 +1739,30 @@ The secret that will be populated with the encrypted sops file content.
 ---
 
 
+
+## Enums <a name="Enums" id="Enums"></a>
+
+### UploadType <a name="UploadType" id="cdk-sops-secrets.UploadType"></a>
+
+#### Members <a name="Members" id="Members"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#cdk-sops-secrets.UploadType.INLINE">INLINE</a></code> | Pass the secret data inline (base64 encoded and compressed). |
+| <code><a href="#cdk-sops-secrets.UploadType.ASSET">ASSET</a></code> | Uplaod the secert data as asset. |
+
+---
+
+##### `INLINE` <a name="INLINE" id="cdk-sops-secrets.UploadType.INLINE"></a>
+
+Pass the secret data inline (base64 encoded and compressed).
+
+---
+
+
+##### `ASSET` <a name="ASSET" id="cdk-sops-secrets.UploadType.ASSET"></a>
+
+Uplaod the secert data as asset.
+
+---
 
