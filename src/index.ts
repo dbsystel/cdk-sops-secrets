@@ -1,8 +1,10 @@
 import * as fs from 'fs';
 import * as path from 'path';
+//import * as crypto from 'crypto';
 import {
   Annotations,
   CustomResource,
+  FileSystem,
   Lazy,
   RemovalPolicy,
   ResourceEnvironment,
@@ -28,6 +30,17 @@ import {
 } from 'aws-cdk-lib/aws-secretsmanager';
 import { Construct } from 'constructs';
 
+export enum UploadType {
+  /**
+   * Pass the secret data inline (base64 encoded and compressed)
+   */
+  INLINE = 'INLINE',
+  /**
+   * Uplaod the secert data as asset
+   */
+  ASSET = 'ASSET',
+}
+
 /**
  * Configuration options for the SopsSync
  */
@@ -44,6 +57,12 @@ export interface SopsSyncOptions {
    * The filepath to the sops file
    */
   readonly sopsFilePath: string;
+
+  /**
+   * How should the secret be passed to the CustomResource?
+   * @default INLINE
+   */
+  readonly uploadType?: UploadType;
 
   /**
    * The format of the sops file.
@@ -161,9 +180,30 @@ export class SopsSync extends Construct {
       throw new Error(`File ${props.sopsFilePath} does not exist!`);
     }
 
-    const sopsAsset = new Asset(this, 'Asset', {
-      path: props.sopsFilePath,
-    });
+    /**
+     * Handle uploadType INLINE or ASSET
+     */
+    const uploadType = props.uploadType ?? UploadType.INLINE;
+    let sopsAsset: Asset | undefined = undefined;
+    let sopsInline: { Content: string; Hash: string } | undefined = undefined;
+    let sopsS3File: { Bucket: string; Key: string } | undefined = undefined;
+    if (uploadType === UploadType.INLINE) {
+      sopsInline = {
+        Content: fs.readFileSync(props.sopsFilePath).toString('base64'),
+        // We calculate the hash the same way as it would be done by new Asset(..) - so we can ensure stable version names even if switching from INLINE to ASSET and viceversa.
+        Hash: FileSystem.fingerprint(props.sopsFilePath),
+      };
+    } else if (uploadType === UploadType.ASSET) {
+      sopsAsset = new Asset(this, 'Asset', {
+        path: props.sopsFilePath,
+      });
+      sopsS3File = {
+        Bucket: sopsAsset.bucket.bucketName,
+        Key: sopsAsset.s3ObjectKey,
+      };
+    } else {
+      throw new Error(`Unsupported UploadType: ${uploadType}`);
+    }
 
     if (provider.role !== undefined) {
       if (props.sopsKmsKey !== undefined) {
@@ -180,10 +220,16 @@ export class SopsSync extends Construct {
         );
       }
       props.secret.grantWrite(provider);
-      sopsAsset.bucket.grantRead(provider);
+      if (sopsAsset !== undefined) {
+        sopsAsset.bucket.grantRead(provider);
+      }
     } else {
       Annotations.of(this).addWarning(
-        'Please ensure propper permissions for the passed lambda function:\n  - write Access to the secret\n  - encrypt with the sopsKmsKey\n  - download from asset bucket',
+        `Please ensure propper permissions for the passed lambda function:\n  - write Access to the secret\n  - encrypt with the sopsKmsKey${
+          uploadType === UploadType.ASSET
+            ? '\n  - download from asset bucket'
+            : ''
+        }`,
       );
     }
     if (props.sopsAgeKey !== undefined) {
@@ -195,10 +241,8 @@ export class SopsSync extends Construct {
       resourceType: 'Custom::SopsSync',
       properties: {
         SecretARN: props.secret.secretArn,
-        SopsS3File: {
-          Bucket: sopsAsset.s3BucketName,
-          Key: sopsAsset.s3ObjectKey,
-        },
+        SopsS3File: sopsS3File,
+        SopsInline: sopsInline,
         ConvertToJSON: this.converToJSON,
         Flatten: this.flatten,
         Format: this.sopsFileFormat,

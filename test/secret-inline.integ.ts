@@ -4,7 +4,7 @@ import { SopsSecret } from '../src/index';
 
 const app = new App();
 
-const stack = new Stack(app, 'SecretIntegration');
+const stack = new Stack(app, 'SecretIntegrationInline');
 
 new SopsSecret(stack, 'SopsSecretJSON', {
   sopsFilePath: 'test-secrets/json/sopsfile.enc-age.json',
