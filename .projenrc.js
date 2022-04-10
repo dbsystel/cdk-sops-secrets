@@ -44,7 +44,7 @@ project.prettier.addIgnorePattern('API.md');
 project.prettier.addIgnorePattern('package.json');
 project.jest.addIgnorePattern('/lambda/');
 project.gitignore.addPatterns('/assets');
-project.npmignore.addPatterns('/lambda', '/dist-lambda', '!/assets');
+project.npmignore.addPatterns('/lambda', '/dist-lambda', '/scripts', '!/assets');
 
 goreleaserArtifactsNamespace = 'build-artifact-goreleaser';
 

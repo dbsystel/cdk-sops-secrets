@@ -26,4 +26,5 @@ test/.tmp
 test/secret-inline.integ.snapshot
 /lambda
 /dist-lambda
+/scripts
 !/assets

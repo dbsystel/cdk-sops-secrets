@@ -20,14 +20,7 @@ func TestMain(t *testing.M) {
 }
 
 func Test_GetS3FileContent(t *testing.T) {
-	mocks := &AWS{
-		secretsmanager: &SecretsManagerMockClient{
-			t: t,
-		},
-		s3downlaoder: &S3ManagerMockClient{
-			t: t,
-		},
-	}
+	mocks := getMocks(t)
 	data, err := mocks.getS3FileContent(SopsS3File{
 		Bucket: "..",
 		Key:    "../test-secrets/json/sopsfile.enc-age.json",
@@ -37,14 +30,7 @@ func Test_GetS3FileContent(t *testing.T) {
 }
 
 func Test_UpdateSecret(t *testing.T) {
-	mocks := &AWS{
-		secretsmanager: &SecretsManagerMockClient{
-			t: t,
-		},
-		s3downlaoder: &S3ManagerMockClient{
-			t: t,
-		},
-	}
+	mocks := getMocks(t)
 	fileName := "4547532a137611d83958d17095c6c2d38ae0036a760c3b79c9dd5957d1c20cf2.yaml"
 	inputArn := "arn:${Partition}:secretsmanager:${Region}:${Account}:secret:${SecretId}"
 	secretValue := []byte("some-secret-data")
