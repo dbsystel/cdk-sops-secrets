@@ -183,13 +183,13 @@ export class SopsSync extends Construct {
     
 
     let fileHash:string = FileSystem.fingerprint(props.sopsFilePath);
-    try {
+    //try {
       const commit = execSync(`git rev-list ${ process.env.GITHUB_REF_NAME ?? '--all'} --no-merges -1 ${props.sopsFilePath}`).toString().replace('\n','');
       // Check if the result is a valid git commit
-      if (commit.match("^[a-fA-F0-9]{40}$")?.length == 1) {
+    //  if (commit.match("^[a-fA-F0-9]{40}$")?.length == 1) {
         fileHash = commit
-      }
-    } catch (e) {}
+    //  }
+    //} catch (e) {}
   
 
     /**
