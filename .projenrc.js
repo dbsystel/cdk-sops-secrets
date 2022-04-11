@@ -113,6 +113,10 @@ fixme.forEach((wf) => {
         run: 'git fetch --force --tags',
       },
       {
+        name: 'env',
+        run: 'env',
+      },
+      {
         name: 'Test',
         run: 'scripts/lambda-test.sh',
       },
