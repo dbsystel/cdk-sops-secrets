@@ -64,7 +64,18 @@ additionalActions = [
   },
 ];
 
+
+
 project.buildWorkflow.preBuildSteps.unshift(...additionalActions);
+project.buildWorkflow.preBuildSteps.unshift({
+  name: 'Checkout',
+  uses: 'actions/checkout@v2',
+  with: {
+    ref: '${{ github.event.pull_request.head.ref }}',
+    repository: '${{ github.event.pull_request.head.repo.full_name }}',
+    'fetch-depth': 0,
+  }
+})
 
 console.log(project.github.workflows.map((wr) => wr.name));
 
