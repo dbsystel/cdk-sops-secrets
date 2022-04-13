@@ -102,6 +102,10 @@ fixme.forEach((wf) => {
     },
     steps: [
       {
+        name: 'Temporary workaround Checkout Issue #760 ',
+        run: 'git config --global --add safe.directory /__w/cdk-sops-secrets/cdk-sops-secrets',
+      },
+      {
         name: 'Checkout',
         uses: 'actions/checkout@v2',
         with: {
@@ -148,6 +152,10 @@ fixme.forEach((wf) => {
       {
         name: 'Prepare',
         run: 'apk add zip git',
+      },
+      {
+        name: 'Temporary workaround',
+        run: 'git config --global --add safe.directory /__w/cdk-sops-secrets/cdk-sops-secrets',
       },
       {
         name: 'Checkout',
