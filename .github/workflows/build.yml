@@ -128,8 +128,6 @@ jobs:
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - name: Fetch all tags
-        run: git fetch --force --tags
       - name: env
         run: env
       - name: Test
@@ -151,7 +149,7 @@ jobs:
       contents: write
     steps:
       - name: Prepare
-        run: apk add zip git
+        run: apk add zip git@2.34.1-r0
       - name: Checkout
         uses: actions/checkout@v2
         with:

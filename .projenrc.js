@@ -111,10 +111,6 @@ fixme.forEach((wf) => {
         },
       },
       {
-        name: 'Fetch all tags',
-        run: 'git fetch --force --tags',
-      },
-      {
         name: 'env',
         run: 'env',
       },
@@ -153,7 +149,7 @@ fixme.forEach((wf) => {
     steps: [
       {
         name: 'Prepare',
-        run: 'apk add zip git',
+        run: 'apk add zip git@2.34.1-r0',
       },
       {
         name: 'Checkout',
