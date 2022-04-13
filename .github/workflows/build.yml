@@ -149,7 +149,7 @@ jobs:
       contents: write
     steps:
       - name: Prepare
-        run: apk add zip git@2.34.1-r0
+        run: apk add zip git@2.34.1
       - name: Checkout
         uses: actions/checkout@v2
         with:
