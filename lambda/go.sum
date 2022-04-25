@@ -49,10 +49,14 @@ github.com/aws/aws-lambda-go v1.15.0 h1:QAhRWvXttl8TtBsODN+NzZETkci2mdN/paJ0+1hX
 github.com/aws/aws-lambda-go v1.15.0/go.mod h1:FEwgPLE6+8wcGBTe5cJN3JWurd1Ztm9zN4jsXsjzKKw=
 github.com/aws/aws-lambda-go v1.29.0 h1:u+sfZkvNBUgt0ZkO8Q/jOMBV22DqMDMbZu04oomM2no=
 github.com/aws/aws-lambda-go v1.29.0/go.mod h1:aakqVz9vDHhtbt0U2zegh/z9SI2+rJ+yRREZYNQLmWY=
+github.com/aws/aws-lambda-go v1.30.0 h1:qelHgOUidrQmrfFTLiC7u6wWuuwBJ9yKcjVRkIy7834=
+github.com/aws/aws-lambda-go v1.30.0/go.mod h1:IF5Q7wj4VyZyUFnZ54IQqeWtctHQ9tz+KhcbDenr220=
 github.com/aws/aws-sdk-go v1.37.18 h1:SRdWLg+DqMFWX8HB3UvXyAoZpw9IDIUYnSTwgzOYbqg=
 github.com/aws/aws-sdk-go v1.37.18/go.mod h1:hcU610XS61/+aQV88ixoOzUoG7v3b31pl2zKMmprdro=
 github.com/aws/aws-sdk-go v1.43.35 h1:Ko1HiU7c7C8cZ5nvwp4GoLl08nmdQtZVZHxhrD8icwk=
 github.com/aws/aws-sdk-go v1.43.35/go.mod h1:y4AeaBuwd2Lk+GepC1E9v0qOiTws0MIWAX4oIKwKHZo=
+github.com/aws/aws-sdk-go v1.43.45 h1:2708Bj4uV+ym62MOtBnErm/CDX61C4mFe9V2gXy1caE=
+github.com/aws/aws-sdk-go v1.43.45/go.mod h1:y4AeaBuwd2Lk+GepC1E9v0qOiTws0MIWAX4oIKwKHZo=
 github.com/beorn7/perks v0.0.0-20180321164747-3a771d992973/go.mod h1:Dwedo/Wpr24TaqPxmxbtue+5NUziq4I4S80YR8gNf3Q=
 github.com/bgentry/speakeasy v0.1.0/go.mod h1:+zsyZBPWlz7T6j88CTgSN5bM796AkVf0kBD4zp0CCIs=
 github.com/blang/semver v3.5.1+incompatible h1:cQNTCjp13qL8KC3Nbxr/y2Bqb63oX6wdnnjpJbkM4JQ=
@@ -89,6 +93,8 @@ github.com/gkampitakis/go-snaps v0.2.3 h1:4pQiQ9GbxlWps/LSR/I72CDWXVQs2lpxEHqhZi
 github.com/gkampitakis/go-snaps v0.2.3/go.mod h1:0HSAq6psKeEEgZJpcBcYjEwYVqCh4ZDHbSV2+SH0V84=
 github.com/gkampitakis/go-snaps v0.2.4 h1:4/oliCnlnxDZlSo/ulMtMC08zfgA2xn4j06xmL1AhFI=
 github.com/gkampitakis/go-snaps v0.2.4/go.mod h1:q5aO5iv3BALma1z3nysRSu3vliaHDrHv9XZmvUxXXGw=
+github.com/gkampitakis/go-snaps v0.3.2 h1:Hm/zhPa8esP2epzP/bFhtWJjTnyTFPvCOd2mB83SNCM=
+github.com/gkampitakis/go-snaps v0.3.2/go.mod h1:q5aO5iv3BALma1z3nysRSu3vliaHDrHv9XZmvUxXXGw=
 github.com/go-kit/kit v0.8.0/go.mod h1:xBxKIO96dXMWWy0MnWVtmwkA9/13aqxPnvrjFYMA2as=
 github.com/go-ldap/ldap v3.0.2+incompatible/go.mod h1:qfd9rJvER9Q0/D/Sqn1DfHRoBp40uXYvFoEVrNEPqRc=
 github.com/go-logfmt/logfmt v0.3.0/go.mod h1:Qt1PoO58o5twSAckw1HlFXLmHsOX5/0LbT9GBnD5lWE=
