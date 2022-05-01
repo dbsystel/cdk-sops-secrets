@@ -39,9 +39,9 @@ const project = new awscdk.AwsCdkConstructLibrary({
   eslint: true,
   eslintOptions: { prettier: true },
   publishToPypi: {
-    distName: "cdk-sops-secrets",
-    module: "cdk_sops_secrets",
-  }
+    distName: 'cdk-sops-secrets',
+    module: 'cdk_sops_secrets',
+  },
 });
 
 project.prettier.addIgnorePattern('/test-secrets/');
