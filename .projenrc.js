@@ -3,6 +3,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
   author: 'Markus Siebert',
   authorAddress: 'dev@markussiebert.com',
   cdkVersion: '2.1.0',
+  stability: 'experimental',
   description:
     'CDK Constructs that syncs your sops secrets into AWS SecretsManager secrets.',
   keywords: [
@@ -37,7 +38,12 @@ const project = new awscdk.AwsCdkConstructLibrary({
   },
   eslint: true,
   eslintOptions: { prettier: true },
+  publishToPypi: {
+    distName: "cdk-sops-secrets",
+    module: "cdk_sops_secrets",
+  }
 });
+
 project.prettier.addIgnorePattern('/test-secrets/');
 project.prettier.addIgnorePattern('/test/*snapshot');
 project.prettier.addIgnorePattern('API.md');
@@ -66,11 +72,10 @@ additionalActions = [
 
 project.buildWorkflow.preBuildSteps.unshift(...additionalActions);
 
-console.log(project.github.workflows.map((wr) => wr.name));
-
 const fixme = project.github.workflows.filter((wf) =>
   ['build', 'release'].includes(wf.name),
 );
+
 fixme.forEach((wf) => {
   Object.keys(wf.jobs).forEach((key) => {
     if (key !== 'build') {
@@ -87,6 +92,7 @@ fixme.forEach((wf) => {
       needs: [...(wf.jobs[key].needs || []), 'zipper'],
     };
   });
+
   wf.addJob('gobuild', {
     name: 'gobuild',
     runsOn: 'ubuntu-latest',
@@ -134,6 +140,7 @@ fixme.forEach((wf) => {
       },
     ],
   });
+
   wf.addJob('zipper', {
     name: 'zipper',
     needs: 'gobuild',
