@@ -1,4 +1,4 @@
-<img src="img/banner-dl-small.png">
+<img src="https://github.com/markussiebert/cdk-sops-secrets/raw/main/img/banner-dl-small.png">
 <p/>
 
 [![npm](https://img.shields.io/npm/v/cdk-sops-secrets.svg)](https://www.npmjs.com/package/cdk-sops-secrets)&nbsp;&nbsp;
