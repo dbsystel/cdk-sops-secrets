@@ -27,6 +27,10 @@ jobs:
           path: assets
       - name: Install dependencies
         run: yarn install --check-files
+      - name: "Update snapshots: secret-inline"
+        run: yarn run projen integ:secret-inline:snapshot
+      - name: "Update snapshots: secret-asset"
+        run: yarn run projen integ:secret-asset:snapshot
       - name: build
         run: npx projen build
       - id: self_mutation
