@@ -71,18 +71,14 @@ additionalActions = [
 ];
 
 project.buildWorkflow.preBuildSteps.unshift(...additionalActions);
-project.buildWorkflow.preBuildSteps.push(
-  {
-    name: 'Update snapshots: secret-inline',
-    run: 'yarn run projen integ:secret-inline:snapshot'
-  },
-)
-project.buildWorkflow.preBuildSteps.push(
-  {
-    name: 'Update snapshots: secret-asset',
-    run: 'yarn run projen integ:secret-asset:snapshot'
-  },
-)
+project.buildWorkflow.preBuildSteps.push({
+  name: 'Update snapshots: secret-inline',
+  run: 'yarn run projen integ:secret-inline:snapshot',
+});
+project.buildWorkflow.preBuildSteps.push({
+  name: 'Update snapshots: secret-asset',
+  run: 'yarn run projen integ:secret-asset:snapshot',
+});
 const fixme = project.github.workflows.filter((wf) =>
   ['build', 'release'].includes(wf.name),
 );
