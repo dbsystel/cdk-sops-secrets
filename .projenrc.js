@@ -101,7 +101,7 @@ fixme.forEach((wf) => {
         ...wf.jobs[key],
         container: { image: 'jsii/superchain:1-buster-slim-node16' },
       };
-      wf.jobs[key].steps
+      wf.jobs[key].steps;
     }
     wf.jobs[key] = {
       ...wf.jobs[key],
