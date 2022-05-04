@@ -76,7 +76,7 @@ additionalActions = [
       name: 'coverage',
       path: 'coverage',
     },
-  }
+  },
 ];
 
 project.buildWorkflow.preBuildSteps.unshift(...additionalActions);
