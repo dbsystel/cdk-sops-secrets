@@ -1,4 +1,4 @@
 fixes:
-  - "main.go::lambda/main.go"
-  - "testhelper.go::lambda/testhelper.go"
-  - "mocks.go::lambda/mocks.go"
+  - "github.com/markussiebert/cdk-sops-secrets/main.go::lambda/main.go"
+  - "github.com/markussiebert/cdk-sops-secrets/testhelper.go::lambda/testhelper.go"
+  - "github.com/markussiebert/cdk-sops-secrets/mocks.go::lambda/mocks.go"
