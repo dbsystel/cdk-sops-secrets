@@ -1,3 +1,4 @@
 fixes:
   - "main.go::lambda/main.go"
   - "testhelper.go::lambda/testhelper.go"
+  - "mocks.go::lambda/mocks.go"
