@@ -1,2 +1,3 @@
 fixes:
-  - "*.go::lambda/"
+  - "main.go::lambda/main.go"
+  - "testhelper.go::lambda/testhelper.go"
