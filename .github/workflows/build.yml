@@ -25,11 +25,6 @@ jobs:
         with:
           name: zipper
           path: assets
-      - name: Download coverage report
-        uses: actions/download-artifact@v2
-        with:
-          name: coverage
-          path: coverage
       - name: Install dependencies
         run: yarn install --check-files
       - name: "Update snapshots: secret-inline"
@@ -86,11 +81,6 @@ jobs:
         with:
           name: zipper
           path: assets
-      - name: Download coverage report
-        uses: actions/download-artifact@v2
-        with:
-          name: coverage
-          path: coverage
       - name: Download patch
         uses: actions/download-artifact@v2
         with:
@@ -128,11 +118,6 @@ jobs:
         with:
           name: zipper
           path: assets
-      - name: Download coverage report
-        uses: actions/download-artifact@v2
-        with:
-          name: coverage
-          path: coverage
       - name: Prepare Repository
         run: mv dist .repo
       - name: Install Dependencies
@@ -165,11 +150,6 @@ jobs:
         with:
           name: zipper
           path: assets
-      - name: Download coverage report
-        uses: actions/download-artifact@v2
-        with:
-          name: coverage
-          path: coverage
       - name: Prepare Repository
         run: mv dist .repo
       - name: Install Dependencies
@@ -194,11 +174,11 @@ jobs:
         run: git fetch --force --tags
       - name: Test
         run: scripts/lambda-test.sh
-      - name: Upload coverage
-        uses: actions/upload-artifact@v2.1.1
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v2
         with:
-          name: coverage
-          path: coverage
+          files: ./coverage/coverage.out
+          flags: go-lambda
       - name: Build
         run: scripts/lambda-build.sh
       - name: Upload artifact

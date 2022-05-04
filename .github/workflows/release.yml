@@ -26,11 +26,6 @@ jobs:
         with:
           name: zipper
           path: assets
-      - name: Download coverage report
-        uses: actions/download-artifact@v2
-        with:
-          name: coverage
-          path: coverage
       - name: Set git identity
         run: |-
           git config user.name "github-actions"
@@ -66,11 +61,11 @@ jobs:
         run: git fetch --force --tags
       - name: Test
         run: scripts/lambda-test.sh
-      - name: Upload coverage
-        uses: actions/upload-artifact@v2.1.1
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v2
         with:
-          name: coverage
-          path: coverage
+          files: ./coverage/coverage.out
+          flags: go-lambda
       - name: Build
         run: scripts/lambda-build.sh
       - name: Upload artifact
