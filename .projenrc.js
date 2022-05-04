@@ -69,6 +69,14 @@ additionalActions = [
       path: 'assets',
     },
   },
+  {
+    name: 'Download coverage report',
+    uses: 'actions/download-artifact@v2',
+    with: {
+      name: 'coverage',
+      path: 'coverage',
+    },
+  }
 ];
 
 project.buildWorkflow.preBuildSteps.unshift(...additionalActions);
@@ -135,10 +143,11 @@ fixme.forEach((wf) => {
         run: 'scripts/lambda-test.sh',
       },
       {
-        name: 'Upload coverage to Codecov',
-        uses: 'codecov/codecov-action@v2',
+        name: 'Upload coverage',
+        uses: 'actions/upload-artifact@v2.1.1',
         with: {
-          files: './lambda/coverage.out',
+          name: 'coverage',
+          path: 'coverage',
         },
       },
       {
