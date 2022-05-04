@@ -34,8 +34,10 @@ jobs:
       - name: build
         run: npx projen build
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v1
+        uses: codecov/codecov-action@v2
         with:
+          files: ./coverage/coverage.out
+          flags: cdk
           directory: coverage
       - id: self_mutation
         name: Find mutations

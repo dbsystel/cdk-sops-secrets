@@ -14,7 +14,6 @@ const project = new awscdk.AwsCdkConstructLibrary({
     'secrets management',
     'secrets',
   ],
-  codeCov: true,
   defaultReleaseBranch: 'main',
   npmignoreEnabled: true,
   autoApproveUpgrades: true,
@@ -80,6 +79,15 @@ project.buildWorkflow.preBuildSteps.push({
   name: 'Update snapshots: secret-asset',
   run: 'yarn run projen integ:secret-asset:snapshot',
 });
+project.buildWorkflow.addPostBuildSteps({
+  name: 'Upload coverage to Codecov',
+  uses: 'codecov/codecov-action@v2',
+  with: {
+    files: './coverage/coverage.out',
+    flags: 'cdk',
+    directory: 'coverage',
+  },
+});
 const fixme = project.github.workflows.filter((wf) =>
   ['build', 'release'].includes(wf.name),
 );
@@ -94,6 +102,7 @@ fixme.forEach((wf) => {
         ...wf.jobs[key],
         container: { image: 'jsii/superchain:1-buster-slim-node16' },
       };
+      wf.jobs[key].steps
     }
     wf.jobs[key] = {
       ...wf.jobs[key],
