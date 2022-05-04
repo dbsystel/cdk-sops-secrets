@@ -14,6 +14,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
     'secrets management',
     'secrets',
   ],
+  codeCov: true,
   defaultReleaseBranch: 'main',
   npmignoreEnabled: true,
   autoApproveUpgrades: true,
@@ -134,8 +135,15 @@ fixme.forEach((wf) => {
         run: 'scripts/lambda-test.sh',
       },
       {
+        name: 'Upload coverage to Codecov',
+        uses: 'codecov/codecov-action@v2',
+      },
+      {
         name: 'Build',
         run: 'scripts/lambda-build.sh',
+        with: {
+          files: './lambda/coverage.out',
+        }
       },
       {
         name: 'Upload artifact',
