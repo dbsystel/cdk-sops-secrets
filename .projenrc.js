@@ -83,7 +83,6 @@ project.buildWorkflow.addPostBuildSteps({
   name: 'Upload coverage to Codecov',
   uses: 'codecov/codecov-action@v2',
   with: {
-    files: './coverage/coverage.out',
     flags: 'cdk',
     directory: 'coverage',
   },
