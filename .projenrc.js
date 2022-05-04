@@ -137,13 +137,13 @@ fixme.forEach((wf) => {
       {
         name: 'Upload coverage to Codecov',
         uses: 'codecov/codecov-action@v2',
+        with: {
+          files: './lambda/coverage.out',
+        },
       },
       {
         name: 'Build',
         run: 'scripts/lambda-build.sh',
-        with: {
-          files: './lambda/coverage.out',
-        }
       },
       {
         name: 'Upload artifact',
