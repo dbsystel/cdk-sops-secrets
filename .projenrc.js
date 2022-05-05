@@ -106,6 +106,16 @@ fixme.forEach((wf) => {
       ...wf.jobs[key],
       needs: [...(wf.jobs[key].needs || []), 'zipper'],
     };
+    if (['release'].includes(key)) {
+      wf.jobs[key].steps.splice(5, 0, {
+        name: 'Upload coverage to Codecov',
+        uses: 'codecov/codecov-action@v2',
+        with: {
+          flags: 'cdk',
+          directory: 'coverage',
+        },
+      });
+    }
   });
 
   wf.addJob('gobuild', {
