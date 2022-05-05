@@ -187,22 +187,26 @@ export class SopsSync extends Construct {
     let sopsAsset: Asset | undefined = undefined;
     let sopsInline: { Content: string; Hash: string } | undefined = undefined;
     let sopsS3File: { Bucket: string; Key: string } | undefined = undefined;
-    if (uploadType === UploadType.INLINE) {
-      sopsInline = {
-        Content: fs.readFileSync(props.sopsFilePath).toString('base64'),
-        // We calculate the hash the same way as it would be done by new Asset(..) - so we can ensure stable version names even if switching from INLINE to ASSET and viceversa.
-        Hash: FileSystem.fingerprint(props.sopsFilePath),
-      };
-    } else if (uploadType === UploadType.ASSET) {
-      sopsAsset = new Asset(this, 'Asset', {
-        path: props.sopsFilePath,
-      });
-      sopsS3File = {
-        Bucket: sopsAsset.bucket.bucketName,
-        Key: sopsAsset.s3ObjectKey,
-      };
-    } else {
-      throw new Error(`Unsupported UploadType: ${uploadType}`);
+
+    switch (uploadType) {
+      case UploadType.INLINE: {
+        sopsInline = {
+          Content: fs.readFileSync(props.sopsFilePath).toString('base64'),
+          // We calculate the hash the same way as it would be done by new Asset(..) - so we can ensure stable version names even if switching from INLINE to ASSET and viceversa.
+          Hash: FileSystem.fingerprint(props.sopsFilePath),
+        };
+        break;
+      }
+      case UploadType.ASSET: {
+        sopsAsset = new Asset(this, 'Asset', {
+          path: props.sopsFilePath,
+        });
+        sopsS3File = {
+          Bucket: sopsAsset.bucket.bucketName,
+          Key: sopsAsset.s3ObjectKey,
+        };
+        break;
+      }
     }
 
     if (provider.role !== undefined) {
@@ -330,19 +334,19 @@ export class SopsSecret extends Construct implements ISecret {
   public grantRead(grantee: IGrantable, versionStages?: string[]): Grant {
     return this.secret.grantRead(grantee, versionStages);
   }
-  public grantWrite(grantee: IGrantable): Grant {
-    return this.secret.grantWrite(grantee);
+  public grantWrite(_grantee: IGrantable): Grant {
+    throw new Error(
+      `Method grantWrite(...) not allowed as this secret is managed by SopsSync`,
+    );
   }
   public addRotationSchedule(
     id: string,
     options: RotationScheduleOptions,
   ): RotationSchedule {
     throw new Error(
-      `Method not allowed as this secret is managed by SopsSync!\nid: ${id}\noptions: ${JSON.stringify(
+      `Method addTotationSchedule('${id}', ${JSON.stringify(
         options,
-        null,
-        2,
-      )}`,
+      )}) not allowed as this secret is managed by SopsSync`,
     );
   }
   public addToResourcePolicy(
