@@ -34,6 +34,11 @@ jobs:
         run: yarn install --check-files --frozen-lockfile
       - name: release
         run: npx projen release
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v2
+        with:
+          flags: cdk
+          directory: coverage
       - name: Check for new commits
         id: git_remote
         run: echo ::set-output name=latest_commit::"$(git ls-remote origin -h ${{ github.ref }} | cut -f1)"
@@ -61,6 +66,11 @@ jobs:
         run: git fetch --force --tags
       - name: Test
         run: scripts/lambda-test.sh
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v2
+        with:
+          files: ./coverage/coverage.out
+          flags: go-lambda
       - name: Build
         run: scripts/lambda-build.sh
       - name: Upload artifact
