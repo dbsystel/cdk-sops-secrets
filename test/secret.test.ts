@@ -1,5 +1,6 @@
 import { App, SecretValue, Stack } from 'aws-cdk-lib';
-import { Match, Template,  } from 'aws-cdk-lib/assertions';
+import { Match, Template } from 'aws-cdk-lib/assertions';
+import { Role } from 'aws-cdk-lib/aws-iam';
 import { Key } from 'aws-cdk-lib/aws-kms';
 import { Function, InlineCode, Runtime } from 'aws-cdk-lib/aws-lambda';
 import { SopsSecret, SopsSyncProvider } from '../src';
@@ -182,7 +183,7 @@ test('Exception when set format: notsupported', () => {
   ).toThrowError('Unsupported sopsFileFormat notsupported');
 });
 
-test('secretValueFromJson(...)', () => {
+test('Methods of SopsSync implemented', () => {
   const app = new App();
   const stack = new Stack(app, 'SecretIntegration');
   const secret = new SopsSecret(stack, 'SopsSecret', {
@@ -194,7 +195,9 @@ test('secretValueFromJson(...)', () => {
     runtime: Runtime.NODEJS_14_X,
     handler: 'test',
     environment: {
-      stringValue: secret.secretValueFromJson('test').toString(),
+      secretValueFromJson: secret.secretValueFromJson('test').toString(),
+      currentVersionId: secret.currentVersionId().toString(),
+      secretValue: secret.secretValue.toString(),
     },
   });
 
@@ -204,7 +207,7 @@ test('secretValueFromJson(...)', () => {
       Runtime: 'nodejs14.x',
       Environment: {
         Variables: {
-          stringValue: {
+          secretValueFromJson: {
             'Fn::Join': [
               '',
               [
@@ -220,13 +223,38 @@ test('secretValueFromJson(...)', () => {
               ],
             ],
           },
+          currentVersionId: {
+            "Fn::GetAtt": [
+              "SopsSecretSopsSync7D825417",
+              "VersionId"
+            ],
+          },
+          secretValue: {
+            "Fn::Join": [
+              "",
+              [
+                "{{resolve:secretsmanager:",
+                {
+                  "Ref": "SopsSecretF929FB43"
+                },
+                ":SecretString:::",
+                {
+                  "Fn::GetAtt": [
+                    "SopsSecretSopsSync7D825417",
+                    "VersionId"
+                  ]
+                },
+                "}}"
+              ]
+            ]
+          },
         },
       },
     }),
   });
 });
 
-test('Methods of SopsSync', () => {
+test('Methods of SopsSync not implemented', () => {
   const app = new App();
   const stack = new Stack(app, 'SecretIntegration');
   const secret = new SopsSecret(stack, 'SopsSecret', {
@@ -235,5 +263,8 @@ test('Methods of SopsSync', () => {
 
   expect(() => secret.addRotationSchedule('something', {})).toThrowError(
     `Method addTotationSchedule('something', {}) not allowed as this secret is managed by SopsSync`,
+  );
+  expect(() => secret.grantWrite(Role.fromRoleArn(stack,'Role', 'arn:aws:iam::123456789012:role/SecretAccess'))).toThrowError(
+    `Method grantWrite(...) not allowed as this secret is managed by SopsSync`,
   );
 });

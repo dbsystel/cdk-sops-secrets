@@ -334,8 +334,10 @@ export class SopsSecret extends Construct implements ISecret {
   public grantRead(grantee: IGrantable, versionStages?: string[]): Grant {
     return this.secret.grantRead(grantee, versionStages);
   }
-  public grantWrite(grantee: IGrantable): Grant {
-    return this.secret.grantWrite(grantee);
+  public grantWrite(_grantee: IGrantable): Grant {
+    throw new Error(
+      `Method grantWrite(...) not allowed as this secret is managed by SopsSync`,
+    );
   }
   public addRotationSchedule(
     id: string,
