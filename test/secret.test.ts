@@ -162,6 +162,18 @@ test('Derive correct format: json', () => {
   });
 });
 
+test('Exception when derive format: notsupported', () => {
+  const app = new App();
+  const stack = new Stack(app, 'SecretIntegration');
+
+  expect(
+    () =>
+      new SopsSecret(stack, 'SopsSecret', {
+        sopsFilePath: 'test-secrets/json/sopsfile.enc-age.notsupported',
+      }),
+  ).toThrowError('Unsupported sopsFileFormat notsupported');
+});
+
 test('Set format: json', () => {
   const app = new App();
   const stack = new Stack(app, 'SecretIntegration');
@@ -188,18 +200,6 @@ test('Set format: yaml', () => {
       Format: 'yaml',
     }),
   });
-});
-
-test('Exception when set format: notsupported', () => {
-  const app = new App();
-  const stack = new Stack(app, 'SecretIntegration');
-
-  expect(
-    () =>
-      new SopsSecret(stack, 'SopsSecret', {
-        sopsFilePath: 'test-secrets/json/sopsfile.enc-age.notsupported',
-      }),
-  ).toThrowError('Unsupported sopsFileFormat notsupported');
 });
 
 test('Methods of SopsSync implemented', () => {
