@@ -37,7 +37,7 @@ test('Age Key add', () => {
     Properties: Match.objectLike({
       Environment: Match.objectLike({
         Variables: Match.objectLike({
-          "SOPS_AGE_KEY": "SOME-KEY",
+          SOPS_AGE_KEY: 'SOME-KEY',
         }),
       }),
     }),

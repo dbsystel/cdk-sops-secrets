@@ -188,14 +188,14 @@ export class SopsSync extends Construct {
     let sopsInline: { Content: string; Hash: string } | undefined = undefined;
     let sopsS3File: { Bucket: string; Key: string } | undefined = undefined;
 
-    switch(uploadType) {
-      case UploadType.INLINE: { 
+    switch (uploadType) {
+      case UploadType.INLINE: {
         sopsInline = {
           Content: fs.readFileSync(props.sopsFilePath).toString('base64'),
           // We calculate the hash the same way as it would be done by new Asset(..) - so we can ensure stable version names even if switching from INLINE to ASSET and viceversa.
           Hash: FileSystem.fingerprint(props.sopsFilePath),
         };
-        break; 
+        break;
       }
       case UploadType.ASSET: {
         sopsAsset = new Asset(this, 'Asset', {
