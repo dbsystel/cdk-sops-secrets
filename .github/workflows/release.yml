@@ -61,6 +61,11 @@ jobs:
         run: git fetch --force --tags
       - name: Test
         run: scripts/lambda-test.sh
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v2
+        with:
+          files: ./coverage/coverage.out
+          flags: go-lambda
       - name: Build
         run: scripts/lambda-build.sh
       - name: Upload artifact

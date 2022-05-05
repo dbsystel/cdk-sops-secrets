@@ -79,6 +79,14 @@ project.buildWorkflow.preBuildSteps.push({
   name: 'Update snapshots: secret-asset',
   run: 'yarn run projen integ:secret-asset:snapshot',
 });
+project.buildWorkflow.addPostBuildSteps({
+  name: 'Upload coverage to Codecov',
+  uses: 'codecov/codecov-action@v2',
+  with: {
+    flags: 'cdk',
+    directory: 'coverage',
+  },
+});
 const fixme = project.github.workflows.filter((wf) =>
   ['build', 'release'].includes(wf.name),
 );
@@ -132,6 +140,14 @@ fixme.forEach((wf) => {
       {
         name: 'Test',
         run: 'scripts/lambda-test.sh',
+      },
+      {
+        name: 'Upload coverage to Codecov',
+        uses: 'codecov/codecov-action@v2',
+        with: {
+          files: './coverage/coverage.out',
+          flags: 'go-lambda',
+        },
       },
       {
         name: 'Build',
