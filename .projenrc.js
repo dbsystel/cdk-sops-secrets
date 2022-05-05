@@ -95,17 +95,28 @@ fixme.forEach((wf) => {
   Object.keys(wf.jobs).forEach((key) => {
     if (key !== 'build') {
       wf.jobs[key].steps.splice(1, 0, ...additionalActions);
-    }
+    };
     if (['build', 'release'].includes(key)) {
       wf.jobs[key] = {
         ...wf.jobs[key],
         container: { image: 'jsii/superchain:1-buster-slim-node16' },
       };
-    }
+    };
     wf.jobs[key] = {
       ...wf.jobs[key],
       needs: [...(wf.jobs[key].needs || []), 'zipper'],
     };
+    if (['release'].includes(key)) {
+      wf.jobs[key].steps.splice(5, 0,
+      {
+        name: 'Upload coverage to Codecov',
+        uses: 'codecov/codecov-action@v2',
+        with: {
+          flags: 'cdk',
+          directory: 'coverage',
+        },
+      });
+    }
   });
 
   wf.addJob('gobuild', {
