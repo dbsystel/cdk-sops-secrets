@@ -25,6 +25,25 @@ test('Throw exception on non existent sops secret', () => {
   ).toThrowError('File test-secrets/does-not-exist.json does not exist!');
 });
 
+test('Age Key passed', () => {
+  const app = new App();
+  const stack = new Stack(app, 'SecretIntegration');
+
+  new SopsSecret(stack, 'SopsSecret', {
+    sopsFilePath: 'test-secrets/yaml/sopsfile.enc-kms.yaml',
+    sopsAgeKey: SecretValue.plainText('SOME-KEY'),
+  });
+  Template.fromStack(stack).hasResource('AWS::Lambda::Function', {
+    Properties: Match.objectLike({
+      Environment: Match.objectLike({
+        Variables: Match.objectLike({
+          SOPS_AGE_KEY: 'SOME-KEY',
+        }),
+      }),
+    }),
+  });
+});
+
 test('Age Key add', () => {
   const app = new App();
   const stack = new Stack(app, 'SecretIntegration');
