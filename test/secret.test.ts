@@ -20,6 +20,19 @@ test('Throw exception on non existent sops secret', () => {
     () =>
       new SopsSecret(stack, 'SopsSecret', {
         sopsFilePath: 'test-secrets/does-not-exist.json',
+        uploadType: 'SOMETHING',
+      }),
+  ).toThrowError('File test-secrets/does-not-exist.json does not exist!');
+});
+
+
+test('Throw exception on non existent sops secret', () => {
+  const app = new App();
+  const stack = new Stack(app, 'SecretIntegration');
+  expect(
+    () =>
+      new SopsSecret(stack, 'SopsSecret', {
+        sopsFilePath: 'test-secrets/does-not-exist.json',
       }),
   ).toThrowError('File test-secrets/does-not-exist.json does not exist!');
 });
