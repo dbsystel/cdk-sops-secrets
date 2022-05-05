@@ -344,7 +344,9 @@ export class SopsSecret extends Construct implements ISecret {
     options: RotationScheduleOptions,
   ): RotationSchedule {
     throw new Error(
-      `Method addTotationSchedule('${id}', ${JSON.stringify(options)}) not allowed as this secret is managed by SopsSync`,
+      `Method addTotationSchedule('${id}', ${JSON.stringify(
+        options,
+      )}) not allowed as this secret is managed by SopsSync`,
     );
   }
   public addToResourcePolicy(
