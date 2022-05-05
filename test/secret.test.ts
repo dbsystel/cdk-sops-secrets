@@ -3,7 +3,7 @@ import { Match, Template } from 'aws-cdk-lib/assertions';
 import { Role } from 'aws-cdk-lib/aws-iam';
 import { Key } from 'aws-cdk-lib/aws-kms';
 import { Function, InlineCode, Runtime } from 'aws-cdk-lib/aws-lambda';
-import { SopsSecret, SopsSyncProvider } from '../src';
+import { SopsSecret, SopsSyncProvider, UploadType } from '../src';
 
 const keyStatements = [
   {
@@ -13,6 +13,44 @@ const keyStatements = [
       'arn:aws:kms:aws-region-1:123456789011:key/00000000-1234-4321-abcd-1234abcd12ab',
   },
 ];
+
+test('Upload type ASSET', () => {
+  const app = new App();
+  const stack = new Stack(app, 'SecretIntegration');
+
+  new SopsSecret(stack, 'SopsSecret', {
+    sopsFilePath: 'test-secrets/yaml/sopsfile.enc-kms.yaml',
+    uploadType: UploadType.ASSET
+  });
+  Template.fromStack(stack).hasResource('Custom::SopsSync', {
+    Properties: Match.objectLike({
+      SopsS3File: {
+        Bucket: {
+          'Fn::Sub': 'cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}'
+        },
+        Key: '6d7a109a504c02a3455d09067a3695a4355cf3c2c914b6f3e949e20d6a741128.yaml'
+      },
+    }),
+  });
+});
+
+test('Upload type INLINE', () => {
+  const app = new App();
+  const stack = new Stack(app, 'SecretIntegration');
+
+  new SopsSecret(stack, 'SopsSecret', {
+    sopsFilePath: 'test-secrets/yaml/sopsfile.enc-kms.yaml',
+    uploadType: UploadType.INLINE
+  });
+  Template.fromStack(stack).hasResource('Custom::SopsSync', {
+    Properties: Match.objectLike({
+      SopsInline: {
+        Content: "aGVsbG86IEVOQ1tBRVMyNTZfR0NNLGRhdGE6c3N3YlJIY2NJdWlzYkd5TyttRy9FV2IrMUpjdHFOVW9yT3pRVWFNUm4zSGtBeVd0cmVOdVp5aFlZbGt2Y2c9PSxpdjpYcEhpbGh5Q1JYYThjbEdpRWNrcHF1Q3FTWkdXQTgwSDBlRFVtUjgweGhFPSx0YWc6V3N1eEk0bFVId0pFYXM3Nk9EUXhVQT09LHR5cGU6c3RyXQpleGFtcGxlX2tleTogRU5DW0FFUzI1Nl9HQ00sZGF0YTovNE90aUgzbm9vVFZadXpDK2c9PSxpdjpSNnFyTlk3R0F4Y0l3UjQyYnZFMjc3NHVmK0lmUTlwdjlVQTc4TG1pdFUwPSx0YWc6akZvZ1ZzeWN1ZlNYUnZCS1hMVkE5Zz09LHR5cGU6c3RyXQojRU5DW0FFUzI1Nl9HQ00sZGF0YTphRmpIbCtLSzM3T0lzRmtoQnFiV0FhMD0saXY6WlNRUDY1UWg2aXNnUUw2YVFxazlRNGJQQ3hxZC9rMHcrOXF6bmF1bTFQQT0sdGFnOjdDVXVxbmRHNGIzSjN2L2c1T0tPMlE9PSx0eXBlOmNvbW1lbnRdCmV4YW1wbGVfYXJyYXk6CiAgICAtIEVOQ1tBRVMyNTZfR0NNLGRhdGE6VXhXZnNCYUdjZ3JlZ21EZktNST0saXY6WEJzMk9Db0hXT21vYmoxT1BkL2NsYlVKRmJQVGRBZG90RkhWR1FtMVRQMD0sdGFnOkNUVDE1WllkMW5HOGtKYXJERExaTEE9PSx0eXBlOnN0cl0KICAgIC0gRU5DW0FFUzI1Nl9HQ00sZGF0YTpRUDhaS2E4OG43U25KYUsvWkxrPSxpdjpRN2FCc1dySXYwRzhEMzNJdzY1S1JxT1J3cXlVV2phQXZJQlNiV05IQVd3PSx0YWc6d0JCN3RSY2M2eVJ2NWNBNTNrNWpvZz09LHR5cGU6c3RyXQpleGFtcGxlX251bWJlcjogRU5DW0FFUzI1Nl9HQ00sZGF0YTo0MVF2Sm9DSjVNdUVMUT09LGl2OlFleEpNK3J3aHVaY3hETDNUREVzd3BrOHF3VWVVNmJHazVpNVRDZHVpRWs9LHRhZzpyenlrTVlybUh5djNVSGpFR1JyTkhnPT0sdHlwZTpmbG9hdF0KZXhhbXBsZV9ib29sZWFuczoKICAgIC0gRU5DW0FFUzI1Nl9HQ00sZGF0YToyc0ZoRGc9PSxpdjpoQk1aMHgvMVJKQy8yTmVRL0JFdWdQRFZDQ29udlZIQ1prMVRhazl2bG44PSx0YWc6Q0pxeXg3eUF0Tm5GQUR2RGFrZlhiQT09LHR5cGU6Ym9vbF0KICAgIC0gRU5DW0FFUzI1Nl9HQ00sZGF0YTo1MVQzaDlBPSxpdjowVnV3TUp3VVJUOEF5WkVBcHRRQzVrZDVrK2RmWkRIUjU4TXI0WjRUVklJPSx0YWc6bVRLMXZRRTllWGxoQWtMUW9namRmdz09LHR5cGU6Ym9vbF0Kc29wczoKICAgIGttczoKICAgICAgICAtIGFybjogYXJuOmF3czprbXM6YXdzLXJlZ2lvbi0xOjEyMzQ1Njc4OTAxMTprZXkvMDAwMDAwMDAtMTIzNC00MzIxLWFiY2QtMTIzNGFiY2QxMmFiCiAgICAgICAgICBjcmVhdGVkX2F0OiAiMjAyMi0wNC0wM1QxNzozNDo0NVoiCiAgICAgICAgICBlbmM6IEFRSUNBSGlTZ1pvTFA2ZkRyVUJZWVBVMm9KT0IvM3FGQVI1bUVZdVpZMkRRcXpZckJnR0FQUytTaU81eWIvYlhiVWRvVVBlWkFBQUFmakI4QmdrcWhraUc5dzBCQndhZ2J6QnRBZ0VBTUdnR0NTcUdTSWIzRFFFSEFUQWVCZ2xnaGtnQlpRTUVBUzR3RVFRTVhaUHBQVTNHaWJJT05LNlZBZ0VRZ0R1MTU0WXBuWW9lMmY4WUZ1V2VCcEdYZkRkYXVkNW9NRGZxdXdxWTJVV0c4Y2xuWlY5MzU1eitWN2NxQ2krNFBFQm9hdmVNTExjTFlzTE9BQT09CiAgICAgICAgICBhd3NfcHJvZmlsZTogIiIKICAgIGdjcF9rbXM6IFtdCiAgICBhenVyZV9rdjogW10KICAgIGhjX3ZhdWx0OiBbXQogICAgYWdlOiBbXQogICAgbGFzdG1vZGlmaWVkOiAiMjAyMi0wNC0wM1QxNzozNDo1NloiCiAgICBtYWM6IEVOQ1tBRVMyNTZfR0NNLGRhdGE6cURpL0NhQUdmWGJjQ3hQWHhIUlZuRGlQM2F5TGhMNStPcmR2K3JDeUYvTTBpQmxPNlBFQmV6NG1XKzBKRTRGOEU4YTNsTUpPUmhhRUdUbVJ0R3l6UFhtNjJEb05McFZlcHFqOGZkQk5nenhEUWRiVFgyeWZQb1NsdFNteUNwN2xwbmJVakd3U0hWSHNHSzgrMUVFb29jVG44MWVmUDBoeXRSU29jWUVLT05ZPSxpdjo4dlo0MTdOaHA2Qk8ya0U1SWM0SFJrektqUzc5ZW5yZlZKbHNZZXE1OUZvPSx0YWc6bXBFK090bytIUExkMnRzV3V0ZXVTQT09LHR5cGU6c3RyXQogICAgcGdwOiBbXQogICAgdW5lbmNyeXB0ZWRfc3VmZml4OiBfdW5lbmNyeXB0ZWQKICAgIHZlcnNpb246IDMuNy4yCg==",
+        Hash: "6d7a109a504c02a3455d09067a3695a4355cf3c2c914b6f3e949e20d6a741128"
+      },
+    }),
+  });
+});
 
 test('Throw exception on non existent sops secret', () => {
   const app = new App();
