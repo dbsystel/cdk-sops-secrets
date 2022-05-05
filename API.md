@@ -180,12 +180,12 @@ Grants reading the secret value to some role.
 ##### `grantWrite` <a name="grantWrite" id="cdk-sops-secrets.SopsSecret.grantWrite"></a>
 
 ```typescript
-public grantWrite(grantee: IGrantable): Grant
+public grantWrite(_grantee: IGrantable): Grant
 ```
 
 Grants writing and updating the secret value to some role.
 
-###### `grantee`<sup>Required</sup> <a name="grantee" id="cdk-sops-secrets.SopsSecret.grantWrite.parameter.grantee"></a>
+###### `_grantee`<sup>Required</sup> <a name="_grantee" id="cdk-sops-secrets.SopsSecret.grantWrite.parameter._grantee"></a>
 
 - *Type:* aws-cdk-lib.aws_iam.IGrantable
 
