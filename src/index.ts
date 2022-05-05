@@ -342,11 +342,7 @@ export class SopsSecret extends Construct implements ISecret {
     options: RotationScheduleOptions,
   ): RotationSchedule {
     throw new Error(
-      `Method not allowed as this secret is managed by SopsSync!\nid: ${id}\noptions: ${JSON.stringify(
-        options,
-        null,
-        2,
-      )}`,
+      `Method addTotationSchedule('${id}', ${JSON.stringify(options)}) not allowed as this secret is managed by SopsSync`,
     );
   }
   public addToResourcePolicy(

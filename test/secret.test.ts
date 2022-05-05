@@ -1,5 +1,5 @@
 import { App, SecretValue, Stack } from 'aws-cdk-lib';
-import { Match, Template } from 'aws-cdk-lib/assertions';
+import { Match, Template,  } from 'aws-cdk-lib/assertions';
 import { Key } from 'aws-cdk-lib/aws-kms';
 import { Function, InlineCode, Runtime } from 'aws-cdk-lib/aws-lambda';
 import { SopsSecret, SopsSyncProvider } from '../src';
@@ -37,7 +37,7 @@ test('Age Key add', () => {
     Properties: Match.objectLike({
       Environment: Match.objectLike({
         Variables: Match.objectLike({
-          "SOPS_AGE_KEY": "SOME-KEY",
+          SOPS_AGE_KEY: 'SOME-KEY',
         }),
       }),
     }),
@@ -224,4 +224,16 @@ test('secretValueFromJson(...)', () => {
       },
     }),
   });
+});
+
+test('Methods of SopsSync', () => {
+  const app = new App();
+  const stack = new Stack(app, 'SecretIntegration');
+  const secret = new SopsSecret(stack, 'SopsSecret', {
+    sopsFilePath: 'test-secrets/json/sopsfile.enc-age.json',
+  });
+
+  expect(() => secret.addRotationSchedule('something', {})).toThrowError(
+    `Method addTotationSchedule('something', {}) not allowed as this secret is managed by SopsSync`,
+  );
 });
