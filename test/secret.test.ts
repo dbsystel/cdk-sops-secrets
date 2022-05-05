@@ -243,29 +243,23 @@ test('Methods of SopsSync implemented', () => {
             ],
           },
           currentVersionId: {
-            "Fn::GetAtt": [
-              "SopsSecretSopsSync7D825417",
-              "VersionId"
-            ],
+            'Fn::GetAtt': ['SopsSecretSopsSync7D825417', 'VersionId'],
           },
           secretValue: {
-            "Fn::Join": [
-              "",
+            'Fn::Join': [
+              '',
               [
-                "{{resolve:secretsmanager:",
+                '{{resolve:secretsmanager:',
                 {
-                  "Ref": "SopsSecretF929FB43"
+                  Ref: 'SopsSecretF929FB43',
                 },
-                ":SecretString:::",
+                ':SecretString:::',
                 {
-                  "Fn::GetAtt": [
-                    "SopsSecretSopsSync7D825417",
-                    "VersionId"
-                  ]
+                  'Fn::GetAtt': ['SopsSecretSopsSync7D825417', 'VersionId'],
                 },
-                "}}"
-              ]
-            ]
+                '}}',
+              ],
+            ],
           },
         },
       },
@@ -283,7 +277,15 @@ test('Methods of SopsSync not implemented', () => {
   expect(() => secret.addRotationSchedule('something', {})).toThrowError(
     `Method addTotationSchedule('something', {}) not allowed as this secret is managed by SopsSync`,
   );
-  expect(() => secret.grantWrite(Role.fromRoleArn(stack,'Role', 'arn:aws:iam::123456789012:role/SecretAccess'))).toThrowError(
+  expect(() =>
+    secret.grantWrite(
+      Role.fromRoleArn(
+        stack,
+        'Role',
+        'arn:aws:iam::123456789012:role/SecretAccess',
+      ),
+    ),
+  ).toThrowError(
     `Method grantWrite(...) not allowed as this secret is managed by SopsSync`,
   );
 });
