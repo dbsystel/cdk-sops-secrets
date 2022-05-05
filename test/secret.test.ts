@@ -1,8 +1,8 @@
-import { App, Stack } from 'aws-cdk-lib';
+import { App, SecretValue, Stack } from 'aws-cdk-lib';
 import { Match, Template } from 'aws-cdk-lib/assertions';
 import { Key } from 'aws-cdk-lib/aws-kms';
 import { Function, InlineCode, Runtime } from 'aws-cdk-lib/aws-lambda';
-import { SopsSecret } from '../src';
+import { SopsSecret, SopsSyncProvider } from '../src';
 
 const keyStatements = [
   {
@@ -20,21 +20,28 @@ test('Throw exception on non existent sops secret', () => {
     () =>
       new SopsSecret(stack, 'SopsSecret', {
         sopsFilePath: 'test-secrets/does-not-exist.json',
-        uploadType: 'SOMETHING',
       }),
   ).toThrowError('File test-secrets/does-not-exist.json does not exist!');
 });
 
-
-test('Throw exception on non existent sops secret', () => {
+test('Age Key add', () => {
   const app = new App();
   const stack = new Stack(app, 'SecretIntegration');
-  expect(
-    () =>
-      new SopsSecret(stack, 'SopsSecret', {
-        sopsFilePath: 'test-secrets/does-not-exist.json',
+
+  const provider = new SopsSyncProvider(stack, 'Provider');
+  provider.addAgeKey(SecretValue.plainText('SOME-KEY'));
+  new SopsSecret(stack, 'SopsSecret', {
+    sopsFilePath: 'test-secrets/yaml/sopsfile.enc-kms.yaml',
+  });
+  Template.fromStack(stack).hasResource('AWS::Lambda::Function', {
+    Properties: Match.objectLike({
+      Environment: Match.objectLike({
+        Variables: Match.objectLike({
+          "SOPS_AGE_KEY": "SOME-KEY",
+        }),
       }),
-  ).toThrowError('File test-secrets/does-not-exist.json does not exist!');
+    }),
+  });
 });
 
 test('KMS Key lookup from sopsfile: json', () => {
