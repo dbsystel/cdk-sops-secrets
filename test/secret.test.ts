@@ -1,5 +1,5 @@
 import { App, SecretValue, Stack } from 'aws-cdk-lib';
-import { Match, Template,  } from 'aws-cdk-lib/assertions';
+import { Match, Template } from 'aws-cdk-lib/assertions';
 import { Key } from 'aws-cdk-lib/aws-kms';
 import { Function, InlineCode, Runtime } from 'aws-cdk-lib/aws-lambda';
 import { SopsSecret, SopsSyncProvider } from '../src';
