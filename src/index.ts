@@ -4,6 +4,7 @@ import * as path from 'path';
 import {
   Annotations,
   CustomResource,
+  Duration,
   FileSystem,
   Lazy,
   RemovalPolicy,
@@ -268,6 +269,7 @@ export class SopsSyncProvider extends SingletonFunction implements IGrantable {
       runtime: Runtime.GO_1_X,
       handler: 'cdk-sops-secrets',
       uuid: 'SopsSyncProvider',
+      timeout: Duration.seconds(60),
       environment: {
         SOPS_AGE_KEY: Lazy.string({
           produce: () =>
