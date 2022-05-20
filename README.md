@@ -53,7 +53,7 @@ Even if using the main functionality should be done in 3 lines of code, there ar
 
 The most useful settings will be explained in the further chapters:
 
-### I don't want any conversion magic on my secret content — How can I disable it?
+### Default conversions and how to disable them?
 
 As default behavior, the SopsSecret (via the SopsSync) will convert all content to JSON and flatten its structure. This is useful, because the AWS SecretsManager has some limitations if it comes to YAML and/or complex objects and decimal values. Even if you can store YAML, complex objects and even binaries in AWS SecretsManager secrets, you can't access their values via the SecretsManager API — you can only return them as is. So accessing (nested) values or values from YAML files won't be possible via [dynamic references](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/dynamic-references.html) in CloudFormation (and CDK). That's why I decided that conversion to JSON, flatten the structure and stringify all values should be the default behavior. But you can turn off all of these conversion steps:
 
@@ -66,7 +66,7 @@ const secret = new SopsSecret(this, 'SopsComplexSecretJSON', {
 });
 ```
 
-### There are missing permissions — How can I modify the provider permissions?
+### Resource provider is missing permissions
 
 Sometimes it can be necessary to access the IAM role of the SopsSync provider. If this is the case, you should create the provider before creating the SopsSecret, and pass the provider to it like this:
 
@@ -84,7 +84,7 @@ const secret = new SopsSecret(this, 'SopsComplexSecretJSON', {
 });
 ```
 
-### UploadType: INLINE / ASSET — What when why?
+### UploadType: INLINE / ASSET
 
 I decided, that the default behavior should be "INLINE" because of the following consideration:
 
@@ -102,6 +102,17 @@ const secret = new SopsSecret(this, 'SopsWithAssetUpload', {
 });
 ```
 
+## FAQ
+
+### It does not work, what can I do?
+
+Even if this construct has some unit and integration tests performed, there can be bugs and issues. As everything is performed by a cloudformation custom resource provider, a good starting point is the log of the corresponding lambda function. It should be located in your AWS Account under Cloudwatch -> Log groups: 
+
+```/aws/lambda/<YOUR-STACK-NAME>-SingletonLambdaSopsSyncProvider<SOMETHINGsomething1234>```
+
+### Error getting data key: 0 successful groups required, got 0
+
+This error message (and failed sync) is related to the  mozilla/sops issues [#948](https://github.com/mozilla/sops/issues/948) and [#634](https://github.com/mozilla/sops/issues/634). You must not create your secret with the ```--aws-profile``` flag. This profile will be written to your sops filed and is required in every runtime environment. You have to define the profile to use via the environment variable ```AWS_PROFILE``` instead, to avoid this.
 ## Motivation
 
 I have created this project to solve a recurring problem of syncing Mozilla/sops secrets into AWS SecretsManager in a convenient, secure way.
