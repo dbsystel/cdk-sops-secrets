@@ -1,6 +1,12 @@
 import { App, SecretValue, Stack } from 'aws-cdk-lib';
 import { Match, Template } from 'aws-cdk-lib/assertions';
-import { Role } from 'aws-cdk-lib/aws-iam';
+import {
+  AnyPrincipal,
+  Effect,
+  PolicyStatement,
+  Role,
+  ServicePrincipal,
+} from 'aws-cdk-lib/aws-iam';
 import { Key } from 'aws-cdk-lib/aws-kms';
 import { Function, InlineCode, Runtime } from 'aws-cdk-lib/aws-lambda';
 import { SopsSecret, SopsSyncProvider, UploadType } from '../src';
@@ -259,6 +265,21 @@ test('Methods of SopsSync implemented', () => {
     },
   });
 
+  secret.addToResourcePolicy(
+    new PolicyStatement({
+      actions: ['*'],
+      effect: Effect.ALLOW,
+      principals: [new AnyPrincipal()],
+      resources: ['*'],
+    }),
+  );
+  const testRole = new Role(stack, 'TestRole', {
+    roleName: 'GrantReadRole',
+    assumedBy: new ServicePrincipal('testservice'),
+  });
+
+  secret.grantRead(testRole);
+
   Template.fromStack(stack).hasResource('AWS::Lambda::Function', {
     Properties: Match.objectLike({
       Handler: 'test',
@@ -303,6 +324,45 @@ test('Methods of SopsSync implemented', () => {
         },
       },
     }),
+  });
+
+  Template.fromStack(stack).hasResource('AWS::SecretsManager::ResourcePolicy', {
+    Properties: {
+      ResourcePolicy: {
+        Statement: [
+          {
+            Action: '*',
+            Effect: 'Allow',
+            Principal: {
+              AWS: '*',
+            },
+            Resource: '*',
+          },
+        ],
+        Version: '2012-10-17',
+      },
+      SecretId: {
+        Ref: 'SopsSecretF929FB43',
+      },
+    },
+  });
+
+  Template.fromStack(stack).hasResource('AWS::IAM::Role', {
+    Properties: {
+      RoleName: 'GrantReadRole',
+      AssumeRolePolicyDocument: {
+        Statement: [
+          {
+            Action: 'sts:AssumeRole',
+            Effect: 'Allow',
+            Principal: {
+              Service: 'testservice.amazonaws.com',
+            },
+          },
+        ],
+      },
+      some: 'thing',
+    },
   });
 });
 
