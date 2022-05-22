@@ -273,6 +273,9 @@ test('Methods of SopsSync implemented', () => {
       resources: ['*'],
     }),
   );
+
+  secret.denyAccountRootDelete();
+
   const testRole = new Role(stack, 'TestRole', {
     roleName: 'GrantReadRole',
     assumedBy: new ServicePrincipal('testservice'),
@@ -330,11 +333,36 @@ test('Methods of SopsSync implemented', () => {
     Properties: {
       ResourcePolicy: {
         Statement: [
+          // addToResourcePolicy
           {
             Action: '*',
             Effect: 'Allow',
             Principal: {
               AWS: '*',
+            },
+            Resource: '*',
+          },
+          // denyAccountRootDelete
+          {
+            Action: 'secretsmanager:DeleteSecret',
+            Effect: 'Deny',
+            Principal: {
+              AWS: {
+                'Fn::Join': [
+                  '',
+                  [
+                    'arn:',
+                    {
+                      Ref: 'AWS::Partition',
+                    },
+                    ':iam::',
+                    {
+                      Ref: 'AWS::AccountId',
+                    },
+                    ':root',
+                  ],
+                ],
+              },
             },
             Resource: '*',
           },
