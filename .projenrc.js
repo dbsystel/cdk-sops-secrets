@@ -55,6 +55,14 @@ project.npmignore.addPatterns(
   '/dist-lambda',
   '/scripts',
   '!/assets',
+  '/lambda/',
+  '/img/',
+  '/test-secrets/',
+  '/renovate.json',
+  '/codecov.yaml',
+  '/.prettier*',
+  '/.whitesource',
+  '/.gitattributes',
 );
 
 goreleaserArtifactsNamespace = 'build-artifact-goreleaser';
