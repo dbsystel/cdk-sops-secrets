@@ -1,6 +1,12 @@
-import { App, SecretValue, Stack } from 'aws-cdk-lib';
+import { App, RemovalPolicy, SecretValue, Stack } from 'aws-cdk-lib';
 import { Match, Template } from 'aws-cdk-lib/assertions';
-import { Role } from 'aws-cdk-lib/aws-iam';
+import {
+  AnyPrincipal,
+  Effect,
+  PolicyStatement,
+  Role,
+  ServicePrincipal,
+} from 'aws-cdk-lib/aws-iam';
 import { Key } from 'aws-cdk-lib/aws-kms';
 import { Function, InlineCode, Runtime } from 'aws-cdk-lib/aws-lambda';
 import { SopsSecret, SopsSyncProvider, UploadType } from '../src';
@@ -259,6 +265,31 @@ test('Methods of SopsSync implemented', () => {
     },
   });
 
+  secret.addToResourcePolicy(
+    new PolicyStatement({
+      actions: ['*'],
+      effect: Effect.ALLOW,
+      principals: [new AnyPrincipal()],
+      resources: ['*'],
+    }),
+  );
+
+  secret.denyAccountRootDelete();
+
+  const testRole = new Role(stack, 'TestRole', {
+    roleName: 'GrantReadRole',
+    assumedBy: new ServicePrincipal('testservice'),
+  });
+
+  secret.grantRead(testRole);
+
+  secret.applyRemovalPolicy(RemovalPolicy.DESTROY);
+
+  Template.fromStack(stack).hasResource('AWS::SecretsManager::Secret', {
+    UpdateReplacePolicy: 'Delete',
+    DeletionPolicy: 'Delete',
+  });
+
   Template.fromStack(stack).hasResource('AWS::Lambda::Function', {
     Properties: Match.objectLike({
       Handler: 'test',
@@ -303,6 +334,95 @@ test('Methods of SopsSync implemented', () => {
         },
       },
     }),
+  });
+
+  Template.fromStack(stack).hasResource('AWS::SecretsManager::ResourcePolicy', {
+    Properties: {
+      ResourcePolicy: {
+        Statement: [
+          // addToResourcePolicy
+          {
+            Action: '*',
+            Effect: 'Allow',
+            Principal: {
+              AWS: '*',
+            },
+            Resource: '*',
+          },
+          // denyAccountRootDelete
+          {
+            Action: 'secretsmanager:DeleteSecret',
+            Effect: 'Deny',
+            Principal: {
+              AWS: {
+                'Fn::Join': [
+                  '',
+                  [
+                    'arn:',
+                    {
+                      Ref: 'AWS::Partition',
+                    },
+                    ':iam::',
+                    {
+                      Ref: 'AWS::AccountId',
+                    },
+                    ':root',
+                  ],
+                ],
+              },
+            },
+            Resource: '*',
+          },
+        ],
+        Version: '2012-10-17',
+      },
+      SecretId: {
+        Ref: 'SopsSecretF929FB43',
+      },
+    },
+  });
+
+  Template.fromStack(stack).hasResource('AWS::IAM::Role', {
+    Properties: {
+      RoleName: 'GrantReadRole',
+      AssumeRolePolicyDocument: {
+        Statement: [
+          {
+            Action: 'sts:AssumeRole',
+            Effect: 'Allow',
+            Principal: {
+              Service: 'testservice.amazonaws.com',
+            },
+          },
+        ],
+      },
+    },
+  });
+
+  Template.fromStack(stack).hasResource('AWS::IAM::Policy', {
+    Type: 'AWS::IAM::Policy',
+    Properties: {
+      PolicyDocument: {
+        Statement: [
+          {
+            Action: [
+              'secretsmanager:GetSecretValue',
+              'secretsmanager:DescribeSecret',
+            ],
+            Effect: 'Allow',
+            Resource: {
+              Ref: 'SopsSecretF929FB43',
+            },
+          },
+        ],
+        Version: '2012-10-17',
+      },
+      Roles: [
+        {
+          Ref: 'TestRole6C9272DF',
+        },
+      ],
+    },
   });
 });
 
