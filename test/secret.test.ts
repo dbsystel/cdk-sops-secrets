@@ -361,7 +361,32 @@ test('Methods of SopsSync implemented', () => {
           },
         ],
       },
-      some: 'thing',
+    },
+  });
+
+  Template.fromStack(stack).hasResource('AWS::IAM::Policy', {
+    Type: 'AWS::IAM::Policy',
+    Properties: {
+      PolicyDocument: {
+        Statement: [
+          {
+            Action: [
+              'secretsmanager:GetSecretValue',
+              'secretsmanager:DescribeSecret',
+            ],
+            Effect: 'Allow',
+            Resource: {
+              Ref: 'SopsSecretF929FB43',
+            },
+          },
+        ],
+        Version: '2012-10-17',
+      },
+      Roles: [
+        {
+          Ref: 'TestRole6C9272DF',
+        },
+      ],
     },
   });
 });
