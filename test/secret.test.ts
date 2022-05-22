@@ -1,4 +1,4 @@
-import { App, SecretValue, Stack } from 'aws-cdk-lib';
+import { App, RemovalPolicy, SecretValue, Stack } from 'aws-cdk-lib';
 import { Match, Template } from 'aws-cdk-lib/assertions';
 import {
   AnyPrincipal,
@@ -282,6 +282,13 @@ test('Methods of SopsSync implemented', () => {
   });
 
   secret.grantRead(testRole);
+
+  secret.applyRemovalPolicy(RemovalPolicy.DESTROY);
+
+  Template.fromStack(stack).hasResource('AWS::SecretsManager::Secret', {
+    UpdateReplacePolicy: 'Delete',
+    DeletionPolicy: 'Delete',
+  });
 
   Template.fromStack(stack).hasResource('AWS::Lambda::Function', {
     Properties: Match.objectLike({
