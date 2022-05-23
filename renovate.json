@@ -10,5 +10,6 @@
   ],
   "postUpdateOptions": [
     "gomodTidy"
-  ]
+  ],
+  "labels": ["auto-approve"]
 }
