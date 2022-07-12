@@ -48,7 +48,7 @@
     "organization": false
   },
   "devDependencies": {
-    "@types/jest": "^27.5.2",
+    "@types/jest": "^27",
     "@types/node": "^14",
     "@typescript-eslint/eslint-plugin": "^5",
     "@typescript-eslint/parser": "^5",
@@ -70,7 +70,7 @@
     "json-schema": "^0.4.0",
     "npm-check-updates": "^12",
     "prettier": "^2.7.1",
-    "projen": "^0.58.21",
+    "projen": "^0.58.27",
     "standard-version": "^9",
     "ts-jest": "^27",
     "ts-node": "^10.8.2",
@@ -95,7 +95,7 @@
   "jest": {
     "testMatch": [
       "<rootDir>/src/**/__tests__/**/*.ts?(x)",
-      "<rootDir>/(test|src)/**/?(*.)+(spec|test).ts?(x)"
+      "<rootDir>/(test|src)/**/*(*.)@(spec|test).ts?(x)"
     ],
     "clearMocks": true,
     "collectCoverage": true,
