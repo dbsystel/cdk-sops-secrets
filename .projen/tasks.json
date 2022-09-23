@@ -138,7 +138,7 @@
           "exec": "[ -d \"test/secret-asset.integ.snapshot\" ] || (echo \"No snapshot available for integration test 'secret-asset'. Run 'projen integ:secret-asset:deploy' to capture.\" && exit 1)"
         },
         {
-          "exec": "cdk synth --app \"ts-node -P tsconfig.dev.json test/secret-asset.integ.ts\" --no-version-reporting --no-asset-metadata --no-path-metadata -o test/.tmp/secret-asset.integ/assert.cdk.out > /dev/null"
+          "exec": "cdk synth --app \"ts-node -P tsconfig.dev.json test/secret-asset.integ.ts\" --no-notices --no-version-reporting --no-asset-metadata --no-path-metadata -o test/.tmp/secret-asset.integ/assert.cdk.out > /dev/null"
         },
         {
           "exec": "diff -r -x asset.* -x cdk.out -x manifest.json -x tree.json test/secret-asset.integ.snapshot/ test/.tmp/secret-asset.integ/assert.cdk.out/"
@@ -153,7 +153,7 @@
           "exec": "rm -fr test/.tmp/secret-asset.integ/deploy.cdk.out"
         },
         {
-          "exec": "cdk deploy --app \"ts-node -P tsconfig.dev.json test/secret-asset.integ.ts\" --no-version-reporting --no-asset-metadata --no-path-metadata '**' --require-approval=never -o test/.tmp/secret-asset.integ/deploy.cdk.out"
+          "exec": "cdk deploy --app \"ts-node -P tsconfig.dev.json test/secret-asset.integ.ts\" --no-notices --no-version-reporting --no-asset-metadata --no-path-metadata '**' --require-approval=never -o test/.tmp/secret-asset.integ/deploy.cdk.out"
         },
         {
           "exec": "rm -fr test/secret-asset.integ.snapshot"
@@ -180,7 +180,7 @@
       "description": "update snapshot for integration test \"secret-asset\"",
       "steps": [
         {
-          "exec": "cdk synth --app \"ts-node -P tsconfig.dev.json test/secret-asset.integ.ts\" --no-version-reporting --no-asset-metadata --no-path-metadata -o test/secret-asset.integ.snapshot > /dev/null"
+          "exec": "cdk synth --app \"ts-node -P tsconfig.dev.json test/secret-asset.integ.ts\" --no-notices --no-version-reporting --no-asset-metadata --no-path-metadata -o test/secret-asset.integ.snapshot > /dev/null"
         }
       ]
     },
@@ -189,7 +189,7 @@
       "description": "watch integration test 'secret-asset' (without updating snapshots)",
       "steps": [
         {
-          "exec": "cdk watch --app \"ts-node -P tsconfig.dev.json test/secret-asset.integ.ts\" --no-version-reporting --no-asset-metadata --no-path-metadata '**' -o test/.tmp/secret-asset.integ/deploy.cdk.out"
+          "exec": "cdk watch --app \"ts-node -P tsconfig.dev.json test/secret-asset.integ.ts\" --no-notices --no-version-reporting --no-asset-metadata --no-path-metadata '**' -o test/.tmp/secret-asset.integ/deploy.cdk.out"
         }
       ]
     },
@@ -201,7 +201,7 @@
           "exec": "[ -d \"test/secret-inline.integ.snapshot\" ] || (echo \"No snapshot available for integration test 'secret-inline'. Run 'projen integ:secret-inline:deploy' to capture.\" && exit 1)"
         },
         {
-          "exec": "cdk synth --app \"ts-node -P tsconfig.dev.json test/secret-inline.integ.ts\" --no-version-reporting --no-asset-metadata --no-path-metadata -o test/.tmp/secret-inline.integ/assert.cdk.out > /dev/null"
+          "exec": "cdk synth --app \"ts-node -P tsconfig.dev.json test/secret-inline.integ.ts\" --no-notices --no-version-reporting --no-asset-metadata --no-path-metadata -o test/.tmp/secret-inline.integ/assert.cdk.out > /dev/null"
         },
         {
           "exec": "diff -r -x asset.* -x cdk.out -x manifest.json -x tree.json test/secret-inline.integ.snapshot/ test/.tmp/secret-inline.integ/assert.cdk.out/"
@@ -216,7 +216,7 @@
           "exec": "rm -fr test/.tmp/secret-inline.integ/deploy.cdk.out"
         },
         {
-          "exec": "cdk deploy --app \"ts-node -P tsconfig.dev.json test/secret-inline.integ.ts\" --no-version-reporting --no-asset-metadata --no-path-metadata '**' --require-approval=never -o test/.tmp/secret-inline.integ/deploy.cdk.out"
+          "exec": "cdk deploy --app \"ts-node -P tsconfig.dev.json test/secret-inline.integ.ts\" --no-notices --no-version-reporting --no-asset-metadata --no-path-metadata '**' --require-approval=never -o test/.tmp/secret-inline.integ/deploy.cdk.out"
         },
         {
           "exec": "rm -fr test/secret-inline.integ.snapshot"
@@ -243,7 +243,7 @@
       "description": "update snapshot for integration test \"secret-inline\"",
       "steps": [
         {
-          "exec": "cdk synth --app \"ts-node -P tsconfig.dev.json test/secret-inline.integ.ts\" --no-version-reporting --no-asset-metadata --no-path-metadata -o test/secret-inline.integ.snapshot > /dev/null"
+          "exec": "cdk synth --app \"ts-node -P tsconfig.dev.json test/secret-inline.integ.ts\" --no-notices --no-version-reporting --no-asset-metadata --no-path-metadata -o test/secret-inline.integ.snapshot > /dev/null"
         }
       ]
     },
@@ -252,7 +252,7 @@
       "description": "watch integration test 'secret-inline' (without updating snapshots)",
       "steps": [
         {
-          "exec": "cdk watch --app \"ts-node -P tsconfig.dev.json test/secret-inline.integ.ts\" --no-version-reporting --no-asset-metadata --no-path-metadata '**' -o test/.tmp/secret-inline.integ/deploy.cdk.out"
+          "exec": "cdk watch --app \"ts-node -P tsconfig.dev.json test/secret-inline.integ.ts\" --no-notices --no-version-reporting --no-asset-metadata --no-path-metadata '**' -o test/.tmp/secret-inline.integ/deploy.cdk.out"
         }
       ]
     },
