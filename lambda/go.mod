@@ -4,8 +4,8 @@ go 1.19
 
 require (
 	github.com/aws/aws-lambda-go v1.34.1
-	github.com/aws/aws-sdk-go v1.44.92
-	github.com/gkampitakis/go-snaps v0.3.6
+	github.com/aws/aws-sdk-go v1.44.101
+	github.com/gkampitakis/go-snaps v0.3.7
 	github.com/go-test/deep v1.0.8
 	go.mozilla.org/sops/v3 v3.7.3
 	gopkg.in/yaml.v3 v3.0.1
