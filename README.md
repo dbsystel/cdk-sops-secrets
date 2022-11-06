@@ -60,7 +60,7 @@ Therefore it is possible to reference the entries from a specific AWS SecretsMan
 
 Example:
 ```typescript
-const versionId = cdk.FileSystem.fingerprint(`./sops/${props.environment}Secrets.json`)
+const versionId = cdk.FileSystem.fingerprint(`./sops/SomeSecrets.json`)
 const passphrase = ecs.Secret.fromSecretsManagerVersion(secretMgmt, { versionId: versionId }, 'MY_PRIVATE_PASSPHRASE')
 ...
 const container = TaskDef.addContainer('FTP-Adapter', {
