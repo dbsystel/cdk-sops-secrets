@@ -54,7 +54,8 @@ Even if using the main functionality should be done in 3 lines of code, there ar
 The most useful settings will be explained in the further chapters:
 
 ### Useage of secretsmanager with version in cdk
-While creating the secret/updating the entries within the secret the nativ cdk function (cdk.FileSystem.fingerprint).
+
+While creating the secret or updating the entries of a secret,  the nativ cdk function (cdk.FileSystem.fingerprint) is used to generate the version information of the AWS SecretsManager secret.
 Therefore it is possible to reference the entries from a specific AWS SecretsManager version.
 
 Example:
