@@ -53,6 +53,24 @@ Even if using the main functionality should be done in 3 lines of code, there ar
 
 The most useful settings will be explained in the further chapters:
 
+### Useage of secretsmanager with version in cdk
+
+While creating the secret or updating the entries of a secret,  the nativ cdk function (cdk.FileSystem.fingerprint) is used to generate the version information of the AWS SecretsManager secret.
+Therefore it is possible to reference the entries from a specific AWS SecretsManager version.
+
+Example:
+```typescript
+const versionId = cdk.FileSystem.fingerprint(`./sops/SomeSecrets.json`)
+const passphrase = ecs.Secret.fromSecretsManagerVersion(secretMgmt, { versionId: versionId }, 'MY_PRIVATE_PASSPHRASE')
+...
+const container = TaskDef.addContainer('FTP-Adapter', {
+   ...
+   secrets: {
+     MY_PRIVATE_PASSPHRASE: passphrase,
+   },
+});
+```
+
 ### Default conversions and how to disable them?
 
 As default behavior, the SopsSecret (via the SopsSync) will convert all content to JSON and flatten its structure. This is useful, because the AWS SecretsManager has some limitations if it comes to YAML and/or complex objects and decimal values. Even if you can store YAML, complex objects and even binaries in AWS SecretsManager secrets, you can't access their values via the SecretsManager API — you can only return them as is. So accessing (nested) values or values from YAML files won't be possible via [dynamic references](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/dynamic-references.html) in CloudFormation (and CDK). That's why I decided that conversion to JSON, flatten the structure and stringify all values should be the default behavior. But you can turn off all of these conversion steps:
