@@ -65,10 +65,7 @@ const passphrase = ecs.Secret.fromSecretsManagerVersion(secretMgmt, { versionId:
 const TaskDef = new ecs.FargateTaskDefinition(this, 'FTP-Adapter', {
     });
 const container = TaskDef.addContainer('FTP-Adapter', {
-   memoryLimitMiB: ct.ContainerMemory,
-   readonlyRootFilesystem: true,
-   cpu: ct.ContainerCPU,
-   image: ecs.ContainerImage.fromEcrRepository(ecrRepo, imageTag),
+   ...
    secrets: {
      MY_PRIVATE_PASSPHRASE: passphrase,
    },
