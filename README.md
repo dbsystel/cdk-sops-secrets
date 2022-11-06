@@ -62,8 +62,7 @@ Example:
 ```typescript
 const versionId = cdk.FileSystem.fingerprint(`./sops/${props.environment}Secrets.json`)
 const passphrase = ecs.Secret.fromSecretsManagerVersion(secretMgmt, { versionId: versionId }, 'MY_PRIVATE_PASSPHRASE')
-const TaskDef = new ecs.FargateTaskDefinition(this, 'FTP-Adapter', {
-    });
+...
 const container = TaskDef.addContainer('FTP-Adapter', {
    ...
    secrets: {
