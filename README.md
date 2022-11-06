@@ -55,7 +55,7 @@ The most useful settings will be explained in the further chapters:
 
 ### Useage of secretsmanager with version in cdk
 While creating the secret/updating the entries within the secret the nativ cdk function (cdk.FileSystem.fingerprint).
-Therefore it is possible to get the entries from a specific secretsmanager version, because the fingerprint of the file does match the version within SecretsManager.
+Therefore it is possible to reference the entries from a specific AWS SecretsManager version.
 
 Example for ECS
 ```typescript
