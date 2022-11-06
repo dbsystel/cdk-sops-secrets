@@ -61,7 +61,6 @@ The most useful settings will be explained in the further chapters:
 While creating the secret or updating the entries of a secret, the native CDK function ```cdk.FileSystem.fingerprint(...)``` is used to generate the version information of the AWS SecretsManager secret.
 Therefore, it is possible to reference the entries from a specific AWS SecretsManager version.
 
-Example:
 ```typescript
 const versionId = cdk.FileSystem.fingerprint(`./sops/SomeSecrets.json`)
 const passphrase = ecs.Secret.fromSecretsManagerVersion(secretMgmt, { versionId: versionId }, 'MY_PRIVATE_PASSPHRASE')
