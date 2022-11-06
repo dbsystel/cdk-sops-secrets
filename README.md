@@ -57,7 +57,7 @@ The most useful settings will be explained in the further chapters:
 While creating the secret/updating the entries within the secret the nativ cdk function (cdk.FileSystem.fingerprint).
 Therefore it is possible to reference the entries from a specific AWS SecretsManager version.
 
-Example for ECS
+Example:
 ```typescript
 const versionId = cdk.FileSystem.fingerprint(`./sops/${props.environment}Secrets.json`)
 const passphrase = ecs.Secret.fromSecretsManagerVersion(secretMgmt, { versionId: versionId }, 'MY_PRIVATE_PASSPHRASE')
