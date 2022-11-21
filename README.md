@@ -17,7 +17,7 @@
 
 This construct library provides a replacement for CDK SecretsManager secrets, with extended functionality for Mozilla/sops.
 
-<p/><img src="img/flow.drawio.svg"><p/>
+<p/><center><img src="img/flow.drawio.svg"></center><p/>
 Using this library it is possible to populate Secrets with values from a Mozilla/sops file without additional scripts and steps in the CI stage. Thereby transformations like JSON conversion of YAML files and transformation into a flat, JSONPath like structure will be performed, but can be disabled.
 
 Secrets filled in this way can be used immediately within the CloudFormation stack and dynamic references. This construct should handle all dependencies, if you use the `secretValueFromJson()` or `secretValue()` call to access secret values.
