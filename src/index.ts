@@ -228,6 +228,13 @@ export class SopsSync extends Construct {
       if (sopsAsset !== undefined) {
         sopsAsset.bucket.grantRead(provider);
       }
+      // fixes #234
+      if (
+        props.secret.encryptionKey !== undefined &&
+        !(props.secret.encryptionKey instanceof Key)
+      ) {
+        props.secret.encryptionKey.grantEncryptDecrypt(provider);
+      }
     } else {
       Annotations.of(this).addWarning(
         `Please ensure propper permissions for the passed lambda function:\n  - write Access to the secret\n  - encrypt with the sopsKmsKey${
