@@ -247,6 +247,39 @@ test('Set format: yaml', () => {
   });
 });
 
+test('Correct Lambda Policy if KMS key for secrets encryption is an IKey ', () => {
+  const app = new App();
+  const stack = new Stack(app, 'SecretIntegration');
+  new SopsSecret(stack, 'SopsSecret', {
+    sopsFilePath: 'test-secrets/json/sopsfile.enc-age.json',
+    sopsFileFormat: 'yaml',
+    encryptionKey: Key.fromKeyArn(
+      stack,
+      'EncryptionKey',
+      'arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab',
+    ),
+  });
+  Template.fromStack(stack).hasResource('AWS::IAM::Policy', {
+    Properties: Match.objectLike({
+      PolicyDocument: Match.objectLike({
+        Statement: Match.arrayWith([
+          {
+            Action: [
+              'kms:Decrypt',
+              'kms:Encrypt',
+              'kms:ReEncrypt*',
+              'kms:GenerateDataKey*',
+            ],
+            Effect: 'Allow',
+            Resource:
+              'arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab',
+          },
+        ]),
+      }),
+    }),
+  });
+});
+
 test('Methods of SopsSync implemented', () => {
   const app = new App();
   const stack = new Stack(app, 'SecretIntegration');

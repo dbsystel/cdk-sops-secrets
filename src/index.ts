@@ -228,7 +228,11 @@ export class SopsSync extends Construct {
       if (sopsAsset !== undefined) {
         sopsAsset.bucket.grantRead(provider);
       }
-      // fixes #234
+      /**
+       * fixes #234
+       * If the kms key for secrets encryption is an IKey
+       * there will be no permissions otherwise
+       */
       if (
         props.secret.encryptionKey !== undefined &&
         !(props.secret.encryptionKey instanceof Key)
