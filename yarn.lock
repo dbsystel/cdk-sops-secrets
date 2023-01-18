@@ -4474,9 +4474,9 @@ minimatch@^3.0.4, minimatch@^3.0.5, minimatch@^3.1.1, minimatch@^3.1.2:
     brace-expansion "^1.1.7"
 
 minimatch@^5.0.1, minimatch@^5.1.2:
-  version "5.1.4"
-  resolved "https://registry.yarnpkg.com/minimatch/-/minimatch-5.1.4.tgz#4e2d39d872684e97b309a9104251c3f1aa4e9d1c"
-  integrity sha512-U0iNYXt9wALljzfnGkhFSy5sAC6/SCR3JrHrlsdJz4kF8MvhTRQNiC59iUi1iqsitV7abrNAJWElVL9pdnoUgw==
+  version "5.1.6"
+  resolved "https://registry.yarnpkg.com/minimatch/-/minimatch-5.1.6.tgz#1cfcb8cf5522ea69952cd2af95ae09477f122a96"
+  integrity sha512-lKwV/1brpG6mBUFHtb7NUmtABCb2WZZmm2wNiOA5hAb8VdCS4B3dtMWyvcoViccwAW/COERjXLt0zP1zXUN26g==
   dependencies:
     brace-expansion "^2.0.1"
 
@@ -5129,10 +5129,10 @@ progress@^2.0.3:
   resolved "https://registry.yarnpkg.com/progress/-/progress-2.0.3.tgz#7e8cf8d8f5b8f239c1bc68beb4eb78567d572ef8"
   integrity sha512-7PiHtLll5LdnKIMw100I+8xJXR5gW2QwWYkT6iJva0bXitZKa/XMrSbdmg3r2Xnaidz9Qumd0VPaMrZlF9V9sA==
 
-projen@^0.67.1:
-  version "0.67.1"
-  resolved "https://registry.yarnpkg.com/projen/-/projen-0.67.1.tgz#52c8da7605e008da9401f7bc397ec4b1e606a05d"
-  integrity sha512-v12WnywxqxgoAr2XaPdlacZGyCF4xYPLmQ1GYUhyhh0IIvoHlACb/kMYbJOStgFS5BvqoHyXofIWDM2kIDBLUA==
+projen@^0.67.4:
+  version "0.67.4"
+  resolved "https://registry.yarnpkg.com/projen/-/projen-0.67.4.tgz#a40fb5f25320e9f7f4acc7dcc147aa535a73e409"
+  integrity sha512-NhqLrhD/yR8r5NyXrMKtrDcj21IT7/F52c+0GREe46mNdEAZee5Fcyh+HbSUk/OL8TC3cMLLhnwj2lQ+fnP+oQ==
   dependencies:
     "@iarna/toml" "^2.2.5"
     case "^1.6.3"
