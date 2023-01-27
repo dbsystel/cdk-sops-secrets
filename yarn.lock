@@ -1288,9 +1288,9 @@ aws-cdk-lib@2.1.0:
     yaml "1.10.2"
 
 aws-cdk@^2:
-  version "2.62.0"
-  resolved "https://registry.yarnpkg.com/aws-cdk/-/aws-cdk-2.62.0.tgz#7c9be256a827a4a67e90d5c70e16418a5dfd65c3"
-  integrity sha512-CkUynyMxoOxDmMV3Y2nsoUGmXgDUQkAf72b7/+rxfRJvIdd8jQTqslei1EgZXgmoHiqYrCDcu7jYJipxWDtxMA==
+  version "2.62.1"
+  resolved "https://registry.yarnpkg.com/aws-cdk/-/aws-cdk-2.62.1.tgz#c86022124dc5d0583e8305548fb6a65fb085b292"
+  integrity sha512-r1EnkR8nKfNIlW7BC46b+w7EEb9+Jy/Mgf0s62vdbj1BSNgl1ZdfW2mOe1Ra2FjDC5jhFUX8t+t5+E6eA8vdZA==
   optionalDependencies:
     fsevents "2.3.2"
 
@@ -5129,10 +5129,10 @@ progress@^2.0.3:
   resolved "https://registry.yarnpkg.com/progress/-/progress-2.0.3.tgz#7e8cf8d8f5b8f239c1bc68beb4eb78567d572ef8"
   integrity sha512-7PiHtLll5LdnKIMw100I+8xJXR5gW2QwWYkT6iJva0bXitZKa/XMrSbdmg3r2Xnaidz9Qumd0VPaMrZlF9V9sA==
 
-projen@^0.67.14:
-  version "0.67.14"
-  resolved "https://registry.yarnpkg.com/projen/-/projen-0.67.14.tgz#80dc1a270b50bbf3600162478fa6467b7c31691a"
-  integrity sha512-It5dpX0Pa74VZzpenkaVVIuw/Jw4aVQRxz6JgasJAzB83LzlSu102P/y4yo2l+gkOKyULXIBWqiQARJpsbBZOA==
+projen@^0.67.15:
+  version "0.67.15"
+  resolved "https://registry.yarnpkg.com/projen/-/projen-0.67.15.tgz#bc2b002411a2dba18efa791a18f0fe3e9b2f5127"
+  integrity sha512-HDLTVN/3tiNPcCR5tu8c34fuJuWV7B8hh43ndJFmK/r50MCumxWsOTz6HULb/rsOtNy4QEiMunHpRo6lSA/baQ==
   dependencies:
     "@iarna/toml" "^2.2.5"
     case "^1.6.3"
