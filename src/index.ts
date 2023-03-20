@@ -275,7 +275,8 @@ export class SopsSyncProvider extends SingletonFunction implements IGrantable {
   constructor(scope: Construct, id?: string) {
     super(scope, id ?? 'SopsSyncProvider', {
       code: Code.fromAsset(
-        path.join(__dirname, '../assets/cdk-sops-lambda.zip'),
+        scope.node.tryGetContext('sops_sync_provider_asset_path') ||
+          path.join(__dirname, '../assets/cdk-sops-lambda.zip'),
       ),
       runtime: Runtime.GO_1_X,
       handler: 'cdk-sops-secrets',
