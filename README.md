@@ -133,6 +133,31 @@ Even if this construct has some unit and integration tests performed, there can 
 ### Error getting data key: 0 successful groups required, got 0
 
 This error message (and failed sync) is related to the  mozilla/sops issues [#948](https://github.com/mozilla/sops/issues/948) and [#634](https://github.com/mozilla/sops/issues/634). You must not create your secret with the ```--aws-profile``` flag. This profile will be written to your sops filed and is required in every runtime environment. You have to define the profile to use via the environment variable ```AWS_PROFILE``` instead, to avoid this.
+
+### Asset of sync lambda not found
+
+The lambda asset code is generated relative to the path of the index.ts in this package. With tools like nx this can lead to wrong results, so that the asset could not be found.
+
+You can override the asset path via the [cdk.json](https://docs.aws.amazon.com/cdk/v2/guide/get_context_var.html) or via the flag ```-c```of the cdk cli.
+
+The context used for this override is ```sops_sync_provider_asset_path```.
+
+So for example you can use 
+
+```bash
+cdk deploy -c "sops_sync_provider_asset_path=some/path/asset.zip"
+```
+
+or in your cdk.json
+
+```json
+{
+  "context": {
+    "sops_sync_provider_asset_path": "some/path/asset.zip"
+  } 
+}
+```
+
 ## Motivation
 
 I have created this project to solve a recurring problem of syncing Mozilla/sops secrets into AWS SecretsManager in a convenient, secure way.
