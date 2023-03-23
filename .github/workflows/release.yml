@@ -30,15 +30,19 @@ jobs:
         run: |-
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
       - name: Install dependencies
         run: yarn install --check-files --frozen-lockfile
-      - name: release
-        run: npx projen release
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v2
         with:
           flags: cdk
           directory: coverage
+      - name: release
+        run: npx projen release
       - name: Check for new commits
         id: git_remote
         run: echo "latest_commit=$(git ls-remote origin -h ${{ github.ref }} | cut -f1)" >> $GITHUB_OUTPUT
@@ -123,7 +127,7 @@ jobs:
     steps:
       - uses: actions/setup-node@v3
         with:
-          node-version: 14.x
+          node-version: 16.x
       - name: Download build artifacts
         uses: actions/download-artifact@v3
         with:
@@ -152,7 +156,7 @@ jobs:
     steps:
       - uses: actions/setup-node@v3
         with:
-          node-version: 14.x
+          node-version: 16.x
       - name: Download build artifacts
         uses: actions/download-artifact@v3
         with:
@@ -185,7 +189,7 @@ jobs:
     steps:
       - uses: actions/setup-node@v3
         with:
-          node-version: 14.x
+          node-version: 16.x
       - uses: actions/setup-python@v4
         with:
           python-version: 3.x
