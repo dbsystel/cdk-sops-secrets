@@ -25,6 +25,10 @@ jobs:
         with:
           name: zipper
           path: assets
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
       - name: Install dependencies
         run: yarn install --check-files
       - name: "Update snapshots: secret-inline"
@@ -111,7 +115,7 @@ jobs:
     steps:
       - uses: actions/setup-node@v3
         with:
-          node-version: 14.x
+          node-version: 16.x
       - name: Download build artifacts
         uses: actions/download-artifact@v3
         with:
@@ -143,7 +147,7 @@ jobs:
     steps:
       - uses: actions/setup-node@v3
         with:
-          node-version: 14.x
+          node-version: 16.x
       - uses: actions/setup-python@v4
         with:
           python-version: 3.x
