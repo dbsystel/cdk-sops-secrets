@@ -1337,9 +1337,9 @@ aws-cdk-lib@2.1.0:
     yaml "1.10.2"
 
 aws-cdk@^2:
-  version "2.70.0"
-  resolved "https://registry.yarnpkg.com/aws-cdk/-/aws-cdk-2.70.0.tgz#95377f7ddc8f5a0a625f5feb15e610b32b70e3cf"
-  integrity sha512-B12e+h8FNNS2BGgBKzKrU541shC/9CWeC1Z/CwX2NKxPgbeP2eGtgR1hCfT/VaotcfJ8+dSd4I32nNNc+wz+QA==
+  version "2.72.0"
+  resolved "https://registry.yarnpkg.com/aws-cdk/-/aws-cdk-2.72.0.tgz#84cc5291c82b3fbfd9e06ca98bf7d9fedec3c28b"
+  integrity sha512-Dpqw3qBob//8QuNquzxlfAKrTXA5oDj25GptigDq2X6bh5Ho1WBiN1C71zngwiR3OPEC5CXcYKiqxBXtXd9JiQ==
   optionalDependencies:
     fsevents "2.3.2"
 
@@ -2215,9 +2215,9 @@ eastasianwidth@^0.2.0:
   integrity sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==
 
 electron-to-chromium@^1.4.284:
-  version "1.4.342"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.342.tgz#3c7e199c3aa89c993df4b6f5223d6d26988f58e6"
-  integrity sha512-dTei3VResi5bINDENswBxhL+N0Mw5YnfWyTqO75KGsVldurEkhC9+CelJVAse8jycWyP8pv3VSj4BSyP8wTWJA==
+  version "1.4.343"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.343.tgz#90f85c4c67aec42b3d076e597911b7b6a2d026fd"
+  integrity sha512-22C6pOljO+QQ/yeBZJkxewjsGwSKCXymng7dF8lir3m8iJGi6guoLVkK8jghCf3o0/tARFASAgLP8OzR9SKRCA==
 
 emittery@^0.8.1:
   version "0.8.1"
@@ -4745,9 +4745,9 @@ npm-bundled@^3.0.0:
     npm-normalize-package-bin "^3.0.0"
 
 npm-check-updates@^16:
-  version "16.8.2"
-  resolved "https://registry.yarnpkg.com/npm-check-updates/-/npm-check-updates-16.8.2.tgz#1dfc6e766bf9f0d6738ff720ad890bf7aabafd05"
-  integrity sha512-6eOHZdS+u8ZLc1qCDfU04uedWjVOgBbvGKWodc9j4QjT2GbVW9mGYcSUvFYLu/jaXSb1YxfwC6HfFr7h8txWmg==
+  version "16.9.0"
+  resolved "https://registry.yarnpkg.com/npm-check-updates/-/npm-check-updates-16.9.0.tgz#eead7405cc272ca11ae18408f6007afe4d75479d"
+  integrity sha512-AOAAre4AAPzB5p41E8vbkisx7FypdNCy4mkiF4mMUl6ptOUVkaMGlWVx1eqgmaoraeAnvhyByIGS+4LN7U+XHg==
   dependencies:
     chalk "^5.2.0"
     cli-table3 "^0.6.3"
@@ -5189,10 +5189,10 @@ progress@^2.0.3:
   resolved "https://registry.yarnpkg.com/progress/-/progress-2.0.3.tgz#7e8cf8d8f5b8f239c1bc68beb4eb78567d572ef8"
   integrity sha512-7PiHtLll5LdnKIMw100I+8xJXR5gW2QwWYkT6iJva0bXitZKa/XMrSbdmg3r2Xnaidz9Qumd0VPaMrZlF9V9sA==
 
-projen@^0.69.16:
-  version "0.69.16"
-  resolved "https://registry.yarnpkg.com/projen/-/projen-0.69.16.tgz#0a8e93c3d9220db0874c5d454cecb99edf190f39"
-  integrity sha512-Cb+/IQJTfP1DoVfBe94iZf1Rpl6zA0F2jKuNIK0kcwP6b0udlbUrYx6HfiE4FLnAtG0FuDuYHl5OVKuXAshMZw==
+projen@^0.70.1:
+  version "0.70.1"
+  resolved "https://registry.yarnpkg.com/projen/-/projen-0.70.1.tgz#35d214f430427fc29f48e4bef4341cf12933524e"
+  integrity sha512-gDoOAcaKa79pzpozgNlhx+eUoThfSGg6zdTb0OZu1rvEwytbtFoLSxYGfddX+KGSuTWqSJVF8JnakeqvvI/0vA==
   dependencies:
     "@iarna/toml" "^2.2.5"
     case "^1.6.3"
