@@ -68,7 +68,7 @@
     "jsii-pacmak": "^1.80.0",
     "npm-check-updates": "^16",
     "prettier": "^2.8.8",
-    "projen": "^0.71.29",
+    "projen": "^0.71.32",
     "standard-version": "^9",
     "ts-jest": "^27",
     "ts-node": "^10.9.1",
