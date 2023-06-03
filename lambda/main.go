@@ -82,7 +82,7 @@ func (a AWS) updateSecret(sopsHash string, secretArn string, secretContent []byt
 	}
 	secretResp, secretErr := a.secretsmanager.PutSecretValue(input)
 	if secretErr != nil {
-		return nil, errors.New(fmt.Sprintf("Failed to store secret value:\nsecretArn: %s\nClientRequestToken: %s\n%v\n", secretArn, sopsHash, err))
+		return nil, errors.New(fmt.Sprintf("Failed to store secret value:\nsecretArn: %s\nClientRequestToken: %s\n%v\n", secretArn, sopsHash, secretErr))
 	}
 	arn := generatePhysicalResourceId(*secretResp.ARN)
 	secretResp.ARN = &arn
