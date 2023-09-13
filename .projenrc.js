@@ -182,7 +182,7 @@ fixme.forEach((wf) => {
         uses: 'actions/upload-artifact@v2.1.1',
         with: {
           name: 'gobuild',
-          path: 'lambda/cdk-sops-secrets',
+          path: 'lambda/bootstrap',
         },
       },
     ],

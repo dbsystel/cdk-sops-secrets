@@ -201,7 +201,7 @@ jobs:
         uses: actions/upload-artifact@v2.1.1
         with:
           name: gobuild
-          path: lambda/cdk-sops-secrets
+          path: lambda/bootstrap
     container:
       image: golang:1.18.0-buster
   zipper:
