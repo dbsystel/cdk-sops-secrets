@@ -203,7 +203,7 @@ jobs:
           name: gobuild
           path: lambda/bootstrap
     container:
-      image: golang:1.18.0-buster
+      image: golang:1.21-bullseye
   zipper:
     name: zipper
     needs: gobuild
