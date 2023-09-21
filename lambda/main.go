@@ -19,7 +19,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/s3/s3manager/s3manageriface"
 	"github.com/aws/aws-sdk-go/service/secretsmanager"
 	"github.com/aws/aws-sdk-go/service/secretsmanager/secretsmanageriface"
-	"go.mozilla.org/sops/v3/decrypt"
+	"github.com/getsops/sops/v3/decrypt"
 	"gopkg.in/yaml.v3"
 
 	"github.com/aws/aws-lambda-go/cfn"
