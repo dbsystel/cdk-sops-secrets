@@ -68,7 +68,7 @@ jobs:
           name: build-artifact
           path: dist
     container:
-      image: jsii/superchain:1-buster-slim-node16
+      image: jsii/superchain:1-buster-slim-node18
   self-mutation:
     needs:
       - build

@@ -57,7 +57,7 @@ jobs:
           name: build-artifact
           path: dist
     container:
-      image: jsii/superchain:1-buster-slim-node16
+      image: jsii/superchain:1-buster-slim-node18
   gobuild:
     name: gobuild
     runs-on: ubuntu-latest

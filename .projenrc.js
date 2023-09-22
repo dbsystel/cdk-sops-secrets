@@ -113,7 +113,7 @@ fixme.forEach((wf) => {
     if (['build', 'release'].includes(key)) {
       wf.jobs[key] = {
         ...wf.jobs[key],
-        container: { image: 'jsii/superchain:1-buster-slim-node16' },
+        container: { image: 'jsii/superchain:1-buster-slim-node18' },
       };
     }
     wf.jobs[key] = {
