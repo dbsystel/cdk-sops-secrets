@@ -274,6 +274,69 @@
         }
       ]
     },
+    "integ:secret-multikms:assert": {
+      "name": "integ:secret-multikms:assert",
+      "description": "assert the snapshot of integration test 'secret-multikms'",
+      "steps": [
+        {
+          "exec": "[ -d \"test/secret-multikms.integ.snapshot\" ] || (echo \"No snapshot available for integration test 'secret-multikms'. Run 'projen integ:secret-multikms:deploy' to capture.\" && exit 1)"
+        },
+        {
+          "exec": "cdk synth --app \"ts-node -P tsconfig.dev.json test/secret-multikms.integ.ts\" --no-notices --no-version-reporting --no-asset-metadata --no-path-metadata -o test/.tmp/secret-multikms.integ/assert.cdk.out > /dev/null"
+        },
+        {
+          "exec": "diff -r -x asset.* -x cdk.out -x manifest.json -x tree.json test/secret-multikms.integ.snapshot/ test/.tmp/secret-multikms.integ/assert.cdk.out/"
+        }
+      ]
+    },
+    "integ:secret-multikms:deploy": {
+      "name": "integ:secret-multikms:deploy",
+      "description": "deploy integration test 'secret-multikms' and capture snapshot",
+      "steps": [
+        {
+          "exec": "rm -fr test/.tmp/secret-multikms.integ/deploy.cdk.out"
+        },
+        {
+          "exec": "cdk deploy --app \"ts-node -P tsconfig.dev.json test/secret-multikms.integ.ts\" --no-notices --no-version-reporting --no-asset-metadata --no-path-metadata '**' --require-approval=never -o test/.tmp/secret-multikms.integ/deploy.cdk.out"
+        },
+        {
+          "exec": "rm -fr test/secret-multikms.integ.snapshot"
+        },
+        {
+          "exec": "mv test/.tmp/secret-multikms.integ/deploy.cdk.out test/secret-multikms.integ.snapshot"
+        },
+        {
+          "spawn": "integ:secret-multikms:destroy"
+        }
+      ]
+    },
+    "integ:secret-multikms:destroy": {
+      "name": "integ:secret-multikms:destroy",
+      "description": "destroy integration test 'secret-multikms'",
+      "steps": [
+        {
+          "exec": "cdk destroy --app test/secret-multikms.integ.snapshot '**' --no-version-reporting"
+        }
+      ]
+    },
+    "integ:secret-multikms:snapshot": {
+      "name": "integ:secret-multikms:snapshot",
+      "description": "update snapshot for integration test \"secret-multikms\"",
+      "steps": [
+        {
+          "exec": "cdk synth --app \"ts-node -P tsconfig.dev.json test/secret-multikms.integ.ts\" --no-notices --no-version-reporting --no-asset-metadata --no-path-metadata -o test/secret-multikms.integ.snapshot > /dev/null"
+        }
+      ]
+    },
+    "integ:secret-multikms:watch": {
+      "name": "integ:secret-multikms:watch",
+      "description": "watch integration test 'secret-multikms' (without updating snapshots)",
+      "steps": [
+        {
+          "exec": "cdk watch --app \"ts-node -P tsconfig.dev.json test/secret-multikms.integ.ts\" --no-notices --no-version-reporting --no-asset-metadata --no-path-metadata '**' -o test/.tmp/secret-multikms.integ/deploy.cdk.out"
+        }
+      ]
+    },
     "integ:snapshot-all": {
       "name": "integ:snapshot-all",
       "description": "update snapshot for all integration tests",
@@ -283,6 +346,9 @@
         },
         {
           "spawn": "integ:secret-inline:snapshot"
+        },
+        {
+          "spawn": "integ:secret-multikms:snapshot"
         }
       ]
     },
@@ -382,6 +448,9 @@
         },
         {
           "spawn": "integ:secret-inline:assert"
+        },
+        {
+          "spawn": "integ:secret-multikms:assert"
         }
       ]
     },

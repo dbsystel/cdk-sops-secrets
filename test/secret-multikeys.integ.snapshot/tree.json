@@ -1,0 +1,325 @@
+{
+  "version": "tree-0.1",
+  "tree": {
+    "id": "App",
+    "path": "",
+    "children": {
+      "Tree": {
+        "id": "Tree",
+        "path": "Tree",
+        "constructInfo": {
+          "fqn": "constructs.Construct",
+          "version": "10.0.5"
+        }
+      },
+      "SecretIntegrationInline": {
+        "id": "SecretIntegrationInline",
+        "path": "SecretIntegrationInline",
+        "children": {
+          "SopsSecretJSON": {
+            "id": "SopsSecretJSON",
+            "path": "SecretIntegrationInline/SopsSecretJSON",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "SecretIntegrationInline/SopsSecretJSON/Resource",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "SecretIntegrationInline/SopsSecretJSON/Resource/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::SecretsManager::Secret",
+                      "aws:cdk:cloudformation:props": {
+                        "generateSecretString": {}
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_secretsmanager.CfnSecret",
+                      "version": "2.1.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_secretsmanager.Secret",
+                  "version": "2.1.0"
+                }
+              },
+              "SopsSync": {
+                "id": "SopsSync",
+                "path": "SecretIntegrationInline/SopsSecretJSON/SopsSync",
+                "children": {
+                  "SopsKey0": {
+                    "id": "SopsKey0",
+                    "path": "SecretIntegrationInline/SopsSecretJSON/SopsSync/SopsKey0",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.Resource",
+                      "version": "2.1.0"
+                    }
+                  },
+                  "SopsKey1": {
+                    "id": "SopsKey1",
+                    "path": "SecretIntegrationInline/SopsSecretJSON/SopsSync/SopsKey1",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.Resource",
+                      "version": "2.1.0"
+                    }
+                  },
+                  "SopsKey2": {
+                    "id": "SopsKey2",
+                    "path": "SecretIntegrationInline/SopsSecretJSON/SopsSync/SopsKey2",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.Resource",
+                      "version": "2.1.0"
+                    }
+                  },
+                  "SopsKey3": {
+                    "id": "SopsKey3",
+                    "path": "SecretIntegrationInline/SopsSecretJSON/SopsSync/SopsKey3",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.Resource",
+                      "version": "2.1.0"
+                    }
+                  },
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "SecretIntegrationInline/SopsSecretJSON/SopsSync/Resource",
+                    "children": {
+                      "Default": {
+                        "id": "Default",
+                        "path": "SecretIntegrationInline/SopsSecretJSON/SopsSync/Resource/Default",
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.CfnResource",
+                          "version": "2.1.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.CustomResource",
+                      "version": "2.1.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.0.5"
+                }
+              },
+              "SopsSyncProvider": {
+                "id": "SopsSyncProvider",
+                "path": "SecretIntegrationInline/SopsSecretJSON/SopsSyncProvider",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_lambda.SingletonFunction",
+                  "version": "2.1.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.0.5"
+            }
+          },
+          "SingletonLambdaSopsSyncProvider": {
+            "id": "SingletonLambdaSopsSyncProvider",
+            "path": "SecretIntegrationInline/SingletonLambdaSopsSyncProvider",
+            "children": {
+              "ServiceRole": {
+                "id": "ServiceRole",
+                "path": "SecretIntegrationInline/SingletonLambdaSopsSyncProvider/ServiceRole",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "SecretIntegrationInline/SingletonLambdaSopsSyncProvider/ServiceRole/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                      "aws:cdk:cloudformation:props": {
+                        "assumeRolePolicyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "sts:AssumeRole",
+                              "Effect": "Allow",
+                              "Principal": {
+                                "Service": "lambda.amazonaws.com"
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        },
+                        "managedPolicyArns": [
+                          {
+                            "Fn::Join": [
+                              "",
+                              [
+                                "arn:",
+                                {
+                                  "Ref": "AWS::Partition"
+                                },
+                                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+                              ]
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                      "version": "2.1.0"
+                    }
+                  },
+                  "DefaultPolicy": {
+                    "id": "DefaultPolicy",
+                    "path": "SecretIntegrationInline/SingletonLambdaSopsSyncProvider/ServiceRole/DefaultPolicy",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "SecretIntegrationInline/SingletonLambdaSopsSyncProvider/ServiceRole/DefaultPolicy/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                          "aws:cdk:cloudformation:props": {
+                            "policyDocument": {
+                              "Statement": [
+                                {
+                                  "Action": "kms:Decrypt",
+                                  "Effect": "Allow",
+                                  "Resource": "arn:aws:kms:aws-region-1:123456789011:key/00000000-1234-4321-abcd-1234abcd12ab"
+                                },
+                                {
+                                  "Action": "kms:Decrypt",
+                                  "Effect": "Allow",
+                                  "Resource": "arn:aws:kms:aws-region-1:123456789011:key/00000001-1234-4321-abcd-1234abcd12ab"
+                                },
+                                {
+                                  "Action": "kms:Decrypt",
+                                  "Effect": "Allow",
+                                  "Resource": "arn:aws:kms:aws-region-1:123456789011:key/00000002-1234-4321-abcd-1234abcd12ab"
+                                },
+                                {
+                                  "Action": "kms:Decrypt",
+                                  "Effect": "Allow",
+                                  "Resource": "arn:aws:kms:aws-region-1:123456789011:key/00000003-1234-4321-abcd-1234abcd12ab"
+                                },
+                                {
+                                  "Action": [
+                                    "secretsmanager:PutSecretValue",
+                                    "secretsmanager:UpdateSecret"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": {
+                                    "Ref": "SopsSecretJSON72040543"
+                                  }
+                                }
+                              ],
+                              "Version": "2012-10-17"
+                            },
+                            "policyName": "SingletonLambdaSopsSyncProviderServiceRoleDefaultPolicy45D64FF6",
+                            "roles": [
+                              {
+                                "Ref": "SingletonLambdaSopsSyncProviderServiceRoleC45BBD25"
+                              }
+                            ]
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
+                          "version": "2.1.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.Policy",
+                      "version": "2.1.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.Role",
+                  "version": "2.1.0"
+                }
+              },
+              "Code": {
+                "id": "Code",
+                "path": "SecretIntegrationInline/SingletonLambdaSopsSyncProvider/Code",
+                "children": {
+                  "Stage": {
+                    "id": "Stage",
+                    "path": "SecretIntegrationInline/SingletonLambdaSopsSyncProvider/Code/Stage",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.AssetStaging",
+                      "version": "2.1.0"
+                    }
+                  },
+                  "AssetBucket": {
+                    "id": "AssetBucket",
+                    "path": "SecretIntegrationInline/SingletonLambdaSopsSyncProvider/Code/AssetBucket",
+                    "children": {
+                      "Notifications": {
+                        "id": "Notifications",
+                        "path": "SecretIntegrationInline/SingletonLambdaSopsSyncProvider/Code/AssetBucket/Notifications",
+                        "constructInfo": {
+                          "fqn": "constructs.Construct",
+                          "version": "10.0.5"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_s3.BucketBase",
+                      "version": "2.1.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_s3_assets.Asset",
+                  "version": "2.1.0"
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "SecretIntegrationInline/SingletonLambdaSopsSyncProvider/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
+                  "aws:cdk:cloudformation:props": {
+                    "code": {
+                      "s3Bucket": {
+                        "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+                      },
+                      "s3Key": "1958f3b74ddec39c9be7bd7c2a63b695ff7a23d6679fedb63ac8ce9ada1d5f02.zip"
+                    },
+                    "role": {
+                      "Fn::GetAtt": [
+                        "SingletonLambdaSopsSyncProviderServiceRoleC45BBD25",
+                        "Arn"
+                      ]
+                    },
+                    "environment": {
+                      "variables": {
+                        "SOPS_AGE_KEY": ""
+                      }
+                    },
+                    "handler": "bootstrap",
+                    "runtime": "provided.al2",
+                    "timeout": 60
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_lambda.CfnFunction",
+                  "version": "2.1.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_lambda.Function",
+              "version": "2.1.0"
+            }
+          }
+        },
+        "constructInfo": {
+          "fqn": "aws-cdk-lib.Stack",
+          "version": "2.1.0"
+        }
+      }
+    },
+    "constructInfo": {
+      "fqn": "aws-cdk-lib.App",
+      "version": "2.1.0"
+    }
+  }
+}

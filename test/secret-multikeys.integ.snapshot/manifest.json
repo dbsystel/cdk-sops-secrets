@@ -1,0 +1,83 @@
+{
+  "version": "15.0.0",
+  "artifacts": {
+    "Tree": {
+      "type": "cdk:tree",
+      "properties": {
+        "file": "tree.json"
+      }
+    },
+    "SecretIntegrationInline.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "SecretIntegrationInline.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "SecretIntegrationInline": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://unknown-account/unknown-region",
+      "properties": {
+        "templateFile": "SecretIntegrationInline.template.json",
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-deploy-role-${AWS::AccountId}-${AWS::Region}",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-${AWS::Region}",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/cb564296f0fc0188fe727b85d412ba888c1b1a1fa5ec6db622cc2366729b612e.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "SecretIntegrationInline.assets"
+        ]
+      },
+      "dependencies": [
+        "SecretIntegrationInline.assets"
+      ],
+      "metadata": {
+        "/SecretIntegrationInline/SopsSecretJSON/Resource/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SopsSecretJSON72040543"
+          }
+        ],
+        "/SecretIntegrationInline/SopsSecretJSON/SopsSync/Resource/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SopsSecretJSONSopsSync701F9A56"
+          }
+        ],
+        "/SecretIntegrationInline/SingletonLambdaSopsSyncProvider/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SingletonLambdaSopsSyncProviderServiceRoleC45BBD25"
+          }
+        ],
+        "/SecretIntegrationInline/SingletonLambdaSopsSyncProvider/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SingletonLambdaSopsSyncProviderServiceRoleDefaultPolicy45D64FF6"
+          }
+        ],
+        "/SecretIntegrationInline/SingletonLambdaSopsSyncProvider/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SingletonLambdaSopsSyncProviderAA18D140"
+          }
+        ],
+        "/SecretIntegrationInline/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/SecretIntegrationInline/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "SecretIntegrationInline"
+    }
+  }
+}

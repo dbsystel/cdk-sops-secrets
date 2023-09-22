@@ -23,8 +23,9 @@ tsconfig.tsbuildinfo
 /.eslintrc.json
 !.jsii
 test/secret-asset.integ.snapshot
-test/.tmp
 test/secret-inline.integ.snapshot
+test/.tmp
+test/secret-multikms.integ.snapshot
 /lambda
 /dist-lambda
 /scripts
