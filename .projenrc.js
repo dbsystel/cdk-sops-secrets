@@ -2,6 +2,8 @@ const { awscdk } = require('projen');
 const project = new awscdk.AwsCdkConstructLibrary({
   author: 'Markus Siebert',
   authorAddress: 'dev@markussiebert.com',
+  minNodeVersion: '18.0.0',
+  workflowNodeVersion: '18.x',
   cdkVersion: '2.1.0',
   stability: 'experimental',
   homepage: 'https://constructs.dev/packages/cdk-sops-secrets',
