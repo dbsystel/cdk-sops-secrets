@@ -2,8 +2,6 @@ const { awscdk } = require('projen');
 const project = new awscdk.AwsCdkConstructLibrary({
   author: 'Markus Siebert',
   authorAddress: 'dev@markussiebert.com',
-  minNodeVersion: '18.0.0',
-  workflowNodeVersion: '18.x',
   cdkVersion: '2.1.0',
   stability: 'experimental',
   homepage: 'https://constructs.dev/packages/cdk-sops-secrets',
@@ -95,6 +93,10 @@ project.buildWorkflow.preBuildSteps.push({
   name: 'Update snapshots: secret-asset',
   run: 'yarn run projen integ:secret-asset:snapshot',
 });
+project.buildWorkflow.preBuildSteps.push({
+  name: 'Update snapshots: secret-multikms',
+  run: 'yarn run projen integ:secret-multikms:snapshot',
+});
 project.buildWorkflow.addPostBuildSteps({
   name: 'Upload coverage to Codecov',
   uses: 'codecov/codecov-action@v2',
@@ -115,7 +117,7 @@ fixme.forEach((wf) => {
     if (['build', 'release'].includes(key)) {
       wf.jobs[key] = {
         ...wf.jobs[key],
-        container: { image: 'jsii/superchain:1-buster-slim-node18' },
+        container: { image: 'jsii/superchain:1-buster-slim-node16' },
       };
     }
     wf.jobs[key] = {

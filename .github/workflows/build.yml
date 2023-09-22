@@ -28,13 +28,15 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 18.x
+          node-version: 16.x
       - name: Install dependencies
         run: yarn install --check-files
       - name: "Update snapshots: secret-inline"
         run: yarn run projen integ:secret-inline:snapshot
       - name: "Update snapshots: secret-asset"
         run: yarn run projen integ:secret-asset:snapshot
+      - name: "Update snapshots: secret-multikms"
+        run: yarn run projen integ:secret-multikms:snapshot
       - name: build
         run: npx projen build
       - name: Upload coverage to Codecov
@@ -68,7 +70,7 @@ jobs:
           name: build-artifact
           path: dist
     container:
-      image: jsii/superchain:1-buster-slim-node18
+      image: jsii/superchain:1-buster-slim-node16
   self-mutation:
     needs:
       - build
@@ -117,7 +119,7 @@ jobs:
     steps:
       - uses: actions/setup-node@v3
         with:
-          node-version: 18.x
+          node-version: 16.x
       - name: Download build artifacts
         uses: actions/download-artifact@v3
         with:
@@ -149,7 +151,7 @@ jobs:
     steps:
       - uses: actions/setup-node@v3
         with:
-          node-version: 18.x
+          node-version: 16.x
       - uses: actions/setup-python@v4
         with:
           python-version: 3.x
