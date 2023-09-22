@@ -1,3 +1,6 @@
+/**
+ * Caution - this test can only be used for snapshots - you can't deploy this
+ */
 import { App, Stack } from 'aws-cdk-lib';
 import { SopsSecret } from '../src/index';
 
