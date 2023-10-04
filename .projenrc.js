@@ -93,6 +93,10 @@ project.buildWorkflow.preBuildSteps.push({
   name: 'Update snapshots: secret-asset',
   run: 'yarn run projen integ:secret-asset:snapshot',
 });
+project.buildWorkflow.preBuildSteps.push({
+  name: 'Update snapshots: secret-multikms',
+  run: 'yarn run projen integ:secret-multikms:snapshot',
+});
 project.buildWorkflow.addPostBuildSteps({
   name: 'Upload coverage to Codecov',
   uses: 'codecov/codecov-action@v2',

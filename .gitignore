@@ -62,7 +62,6 @@ test/secret-asset.integ.snapshot/manifest.json
 test/secret-asset.integ.snapshot/**/manifest.json
 test/secret-asset.integ.snapshot/tree.json
 test/secret-asset.integ.snapshot/**/tree.json
-test/.tmp
 test/secret-inline.integ.snapshot/asset.*
 test/secret-inline.integ.snapshot/**/asset.*
 test/secret-inline.integ.snapshot/cdk.out
@@ -71,4 +70,13 @@ test/secret-inline.integ.snapshot/manifest.json
 test/secret-inline.integ.snapshot/**/manifest.json
 test/secret-inline.integ.snapshot/tree.json
 test/secret-inline.integ.snapshot/**/tree.json
+test/.tmp
+test/secret-multikms.integ.snapshot/asset.*
+test/secret-multikms.integ.snapshot/**/asset.*
+test/secret-multikms.integ.snapshot/cdk.out
+test/secret-multikms.integ.snapshot/**/cdk.out
+test/secret-multikms.integ.snapshot/manifest.json
+test/secret-multikms.integ.snapshot/**/manifest.json
+test/secret-multikms.integ.snapshot/tree.json
+test/secret-multikms.integ.snapshot/**/tree.json
 /assets
