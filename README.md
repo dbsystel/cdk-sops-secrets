@@ -13,6 +13,10 @@
 [![codecov](https://codecov.io/gh/markussiebert/cdk-sops-secrets/branch/main/graph/badge.svg?token=OT7P7HQHXB)](https://codecov.io/gh/markussiebert/cdk-sops-secrets)&nbsp;&nbsp;
 [![security-vulnerabilities](https://img.shields.io/github/issues-search/markussiebert/cdk-sops-secrets?color=%23ff0000&label=security-vulnerabilities&query=is%3Aissue%20is%3Aopen%20label%3A%22Mend%3A%20dependency%20security%20vulnerability%22)](https://github.com/markussiebert/cdk-sops-secrets/issues?q=is%3Aissue+is%3Aopen+label%3A%22security+vulnerability%22)&nbsp;
 
+# Announcement: Project will move into https://github.com/dbsystel organization
+
+This project will move in the near future into the dbsystel organization.
+
 ## Introduction
 
 This construct library provides a replacement for CDK SecretsManager secrets, with extended functionality for Mozilla/sops.
