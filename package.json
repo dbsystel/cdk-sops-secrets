@@ -3,7 +3,7 @@
   "description": "CDK Constructs that syncs your sops secrets into AWS SecretsManager secrets.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/markussiebert/cdk-sops-secrets.git"
+    "url": "https://github.com/dbsystel/cdk-sops-secrets.git"
   },
   "scripts": {
     "build": "npx projen build",
@@ -48,7 +48,7 @@
   },
   "author": {
     "name": "Markus Siebert",
-    "email": "dev@markussiebert.com",
+    "email": "markus.siebert@deutschebahn.com",
     "organization": false
   },
   "devDependencies": {
