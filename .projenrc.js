@@ -1,7 +1,7 @@
 const { awscdk } = require('projen');
 const project = new awscdk.AwsCdkConstructLibrary({
   author: 'Markus Siebert',
-  authorAddress: 'dev@markussiebert.com',
+  authorAddress: 'markus.siebert@deutschebahn.com',
   cdkVersion: '2.1.0',
   stability: 'experimental',
   homepage: 'https://constructs.dev/packages/cdk-sops-secrets',
@@ -27,7 +27,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
     ],
   },
   name: 'cdk-sops-secrets',
-  repositoryUrl: 'https://github.com/markussiebert/cdk-sops-secrets.git',
+  repositoryUrl: 'https://github.com/dbsystel/cdk-sops-secrets.git',
   // deps: [],                /* Runtime dependencies of this module. */
   // description: undefined,  /* The description is just a string that helps people understand the purpose of the package. */
   // devDeps: [],             /* Build dependencies for this module. */
