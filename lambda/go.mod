@@ -1,10 +1,10 @@
 module github.com/markussiebert/cdk-sops-secrets
 
-go 1.21.0
+go 1.21.3
 
 require (
 	github.com/aws/aws-lambda-go v1.41.0
-	github.com/aws/aws-sdk-go v1.47.1
+	github.com/aws/aws-sdk-go v1.47.3
 	github.com/getsops/sops/v3 v3.8.1
 	github.com/gkampitakis/go-snaps v0.4.11
 	github.com/go-test/deep v1.1.0
