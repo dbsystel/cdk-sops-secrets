@@ -1431,9 +1431,9 @@ aws-cdk-lib@2.1.0:
     yaml "1.10.2"
 
 aws-cdk@^2:
-  version "2.108.0"
-  resolved "https://registry.yarnpkg.com/aws-cdk/-/aws-cdk-2.108.0.tgz#ffd54892fe76c650d5ea90ef097f23f1867b7d32"
-  integrity sha512-qpBAtEGudaO7EVuGfur+lIpoh+JeWVgnvQ7z8MBtr7LEzolQf/9Cebovx/+KCUI3VnK/jsL/+3ixYwraaT/y2A==
+  version "2.109.0"
+  resolved "https://registry.yarnpkg.com/aws-cdk/-/aws-cdk-2.109.0.tgz#048078e151b0b88e3e826103c35cd630cbc0f764"
+  integrity sha512-e06YlA4HsKZCOdh3ApynZauJ3/224o/q5vOso3Fs5ksLkYhfXREl+O7UmAOZ1Nenq5ADNgccvNwuChQWbNSvSg==
   optionalDependencies:
     fsevents "2.3.2"
 
@@ -1679,9 +1679,9 @@ camelcase@^7.0.1:
   integrity sha512-xlx1yCK2Oc1APsPXDL2LdlNP6+uu8OCDdhOBSVT279M/S+y75O30C2VuD8T2ogdePBBl7PfPF4504tnLgX3zfw==
 
 caniuse-lite@^1.0.30001541:
-  version "1.0.30001561"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001561.tgz#752f21f56f96f1b1a52e97aae98c57c562d5d9da"
-  integrity sha512-NTt0DNoKe958Q0BE0j0c1V9jbUzhBxHIEJy7asmGrpE0yG63KTV7PLHPnK2E1O9RsQrQ081I3NLuXGS6zht3cw==
+  version "1.0.30001562"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001562.tgz#9d16c5fd7e9c592c4cd5e304bc0f75b0008b2759"
+  integrity sha512-kfte3Hym//51EdX4239i+Rmp20EsLIYGdPkERegTgU19hQWCRhsRFGKHTliUlsry53tv17K7n077Kqa0WJU4ng==
 
 case@1.6.3, case@^1.6.3:
   version "1.6.3"
@@ -2333,9 +2333,9 @@ eastasianwidth@^0.2.0:
   integrity sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==
 
 electron-to-chromium@^1.4.535:
-  version "1.4.582"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.582.tgz#4908215182266793499ac57d80e2680d7dd9b3db"
-  integrity sha512-89o0MGoocwYbzqUUjc+VNpeOFSOK9nIdC5wY4N+PVUarUK0MtjyTjks75AZS2bW4Kl8MdewdFsWaH0jLy+JNoA==
+  version "1.4.585"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.585.tgz#7b3cb6846bb5cc10a8d5904c351a9b8aaa76ea90"
+  integrity sha512-B4yBlX0azdA3rVMxpYwLQfDpdwOgcnLCkpvSOd68iFmeedo+WYjaBJS3/W58LVD8CB2nf+o7C4K9xz1l09RkWg==
 
 emittery@^0.8.1:
   version "0.8.1"
