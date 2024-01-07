@@ -31,7 +31,6 @@ jspm_packages/
 *.tgz
 .yarn-integrity
 .cache
-!/.projenrc.js
 /test-reports/
 junit.xml
 /coverage/
@@ -79,3 +78,4 @@ test/secret-multikms.integ.snapshot/**/manifest.json
 test/secret-multikms.integ.snapshot/tree.json
 test/secret-multikms.integ.snapshot/**/tree.json
 /assets
+!/.projenrc.js
