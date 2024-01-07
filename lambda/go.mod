@@ -4,7 +4,7 @@ go 1.21.5
 
 require (
 	github.com/aws/aws-lambda-go v1.43.0
-	github.com/aws/aws-sdk-go v1.49.6
+	github.com/aws/aws-sdk-go v1.49.7
 	github.com/getsops/sops/v3 v3.8.1
 	github.com/gkampitakis/go-snaps v0.4.12
 	github.com/go-test/deep v1.1.0
