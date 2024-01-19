@@ -815,9 +815,9 @@
   integrity sha512-hov8bUuiLiyFPGyFPE1lwWhmzYbirOXQNNo40+y3zow8aFVTeyn3VWL0VFFfdNddA8S4Vf0Tc062rzyNr7Paag==
 
 "@types/node@*":
-  version "20.11.4"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-20.11.4.tgz#c724a5d6723182af758b91b994209336f4439cb7"
-  integrity sha512-6I0fMH8Aoy2lOejL3s4LhyIYX34DPwY8bl5xlNjBvUEk8OHrcuzsFt+Ied4LvJihbtXPM+8zUqdydfIti86v9g==
+  version "20.11.5"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-20.11.5.tgz#be10c622ca7fcaa3cf226cf80166abc31389d86e"
+  integrity sha512-g557vgQjUUfN76MZAN/dt1z3dzcUsimuysco0KeluHgrPdJXkP/XdAURgyO2W9fZWHRtRBiVKzKn8vyOAwlG+w==
   dependencies:
     undici-types "~5.26.4"
 
@@ -1202,9 +1202,9 @@ aws-cdk-lib@2.1.0:
     yaml "1.10.2"
 
 aws-cdk@^2:
-  version "2.121.1"
-  resolved "https://registry.yarnpkg.com/aws-cdk/-/aws-cdk-2.121.1.tgz#fbc84ff0e8b72298e45a5e787dab95819662c134"
-  integrity sha512-T8UFuNGDnXNmcHagCGeQ8xQA3zU/o2ENuyGXO/ho+U3KyYs7tnWIr++ovrp2FvhiBpmBv6SuKiueBA6OW7utBw==
+  version "2.122.0"
+  resolved "https://registry.yarnpkg.com/aws-cdk/-/aws-cdk-2.122.0.tgz#f5d3f2cf70c5ae4ea50dd84b7fa9c9c39eb99cd4"
+  integrity sha512-WqiVTedcuW4LjH4WqtQncliUdeDa9j9xgu3II8Qd1HmCZotbzBorYIHDvOJ+m3ovIzd9DL+hNq9PPUqxtBe0VQ==
   optionalDependencies:
     fsevents "2.3.2"
 
@@ -1364,9 +1364,9 @@ camelcase@^6.2.0, camelcase@^6.3.0:
   integrity sha512-Gmy6FhYlCY7uOElZUSbxo2UCDH8owEk996gkbrpsgGtrJLM3J7jGxl9Ic7Qwwj4ivOE5AWZWRMecDdF7hqGjFA==
 
 caniuse-lite@^1.0.30001565:
-  version "1.0.30001577"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001577.tgz#a24991eb4ad67324ba8b96716340d53151f2f6f8"
-  integrity sha512-rs2ZygrG1PNXMfmncM0B5H1hndY5ZCC9b5TkFaVNfZ+AUlyqcMyVIQtc3fsezi0NUCk5XZfDf9WS6WxMxnfdrg==
+  version "1.0.30001579"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001579.tgz#45c065216110f46d6274311a4b3fcf6278e0852a"
+  integrity sha512-u5AUVkixruKHJjw/pj9wISlcMpgFWzSrczLZbrqBSxukQixmg0SJ5sZTpvaFvxU0HoQKd4yoyAogyrAz9pzJnA==
 
 case@1.6.3, case@^1.6.3:
   version "1.6.3"
@@ -1914,9 +1914,9 @@ dotgitignore@^2.1.0:
     minimatch "^3.0.4"
 
 electron-to-chromium@^1.4.601:
-  version "1.4.633"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.633.tgz#df8831d2fef994fe9c013e61db6cfb98eeebf52d"
-  integrity sha512-7BvxzXrHFliyQ1oZc6NRMjyEaKOO1Ma1NY98sFZofogWlm+klLWSgrDw7EhatiMgi4R4NV+iWxDdxuIKXtPbOw==
+  version "1.4.638"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.638.tgz#5564b750c2ceb64c0d2ef5a22b0748f63b66e0a3"
+  integrity sha512-gpmbAG2LbfPKcDaL5m9IKutKjUx4ZRkvGNkgL/8nKqxkXsBVYykVULboWlqCrHsh3razucgDJDuKoWJmGPdItA==
 
 emittery@^0.8.1:
   version "0.8.1"
@@ -4278,10 +4278,10 @@ process-nextick-args@~2.0.0:
   resolved "https://registry.yarnpkg.com/process-nextick-args/-/process-nextick-args-2.0.1.tgz#7820d9b16120cc55ca9ae7792680ae7dba6d7fe2"
   integrity sha512-3ouUOpQhtgrbOa17J7+uxOTpITYWaGP7/AhoR3+A+/1e9skrzelGi/dXzEYyvbxubEF6Wn2ypscTKiKJFFn1ag==
 
-projen@^0.79.0:
-  version "0.79.0"
-  resolved "https://registry.yarnpkg.com/projen/-/projen-0.79.0.tgz#5751e023d3fa11ff9d883187e0f672d37738c088"
-  integrity sha512-Kuj/NLMmt+zx0VlC++jv5OH8Kv8tqrEBhawQHMI6lI16CusRdSPWo2JI906yj5Wvqqb3n7taflqPe7IzxE/xkw==
+projen@^0.79.2:
+  version "0.79.2"
+  resolved "https://registry.yarnpkg.com/projen/-/projen-0.79.2.tgz#ac1d51a07ad3fcb503ca712055b430042ccab853"
+  integrity sha512-ZKO2GDsJyU+MfsQAcvpMKPrWcuS2rPPCpqf2biZ7rcBVdYnDiOn03G1Gm9G/wRereMdDTciL6DYqsxTF4UvfqA==
   dependencies:
     "@iarna/toml" "^2.2.5"
     case "^1.6.3"
