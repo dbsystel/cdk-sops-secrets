@@ -4,9 +4,9 @@ go 1.21.6
 
 require (
 	github.com/aws/aws-lambda-go v1.45.0
-	github.com/aws/aws-sdk-go v1.50.0
+	github.com/aws/aws-sdk-go v1.50.2
 	github.com/getsops/sops/v3 v3.8.1
-	github.com/gkampitakis/go-snaps v0.4.12
+	github.com/gkampitakis/go-snaps v0.5.0
 	github.com/go-test/deep v1.1.0
 	gopkg.in/yaml.v3 v3.0.1
 )
@@ -70,7 +70,7 @@ require (
 	github.com/kr/text v0.2.0 // indirect
 	github.com/kylelemons/godebug v1.1.0 // indirect
 	github.com/lib/pq v1.10.9 // indirect
-	github.com/maruel/natural v1.1.0 // indirect
+	github.com/maruel/natural v1.1.1 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.17 // indirect
 	github.com/mitchellh/go-homedir v1.1.0 // indirect
@@ -78,7 +78,7 @@ require (
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/pkg/browser v0.0.0-20210911075715-681adbf594b8 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
-	github.com/rogpeppe/go-internal v1.11.0 // indirect
+	github.com/rogpeppe/go-internal v1.12.0 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/ryanuber/go-glob v1.0.0 // indirect
 	github.com/sirupsen/logrus v1.9.3 // indirect
