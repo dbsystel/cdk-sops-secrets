@@ -173,6 +173,9 @@ fixme.forEach((wf) => {
       {
         name: 'Upload coverage to Codecov',
         uses: 'codecov/codecov-action@v4',
+        env: {
+          CODECOV_TOKEN: '${{ secrets.CODECOV_TOKEN }}',
+        },
         with: {
           files: './coverage/coverage.out',
           flags: 'go-lambda',
