@@ -23,7 +23,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Download zipper artifacts
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: zipper
           path: assets
@@ -76,7 +76,7 @@ jobs:
       - name: "Temporary workaround Checkout Issue #760 "
         run: git config --global --add safe.directory /__w/cdk-sops-secrets/cdk-sops-secrets
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - name: Fetch all tags
@@ -91,12 +91,12 @@ jobs:
       - name: Build
         run: scripts/lambda-build.sh
       - name: Upload artifact
-        uses: actions/upload-artifact@v2.1.1
+        uses: actions/upload-artifact@v4
         with:
           name: gobuild
           path: lambda/bootstrap
     container:
-      image: golang:1.21-bullseye
+      image: golang:1.22-bullseye
   zipper:
     name: zipper
     needs: gobuild
@@ -109,18 +109,18 @@ jobs:
       - name: Temporary workaround
         run: git config --global --add safe.directory /__w/cdk-sops-secrets/cdk-sops-secrets
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - name: Download gobuild artifacts
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: gobuild
           path: lambda
       - name: Zip
         run: scripts/lambda-zip.sh
       - name: Upload artifact
-        uses: actions/upload-artifact@v2.1.1
+        uses: actions/upload-artifact@v4
         with:
           name: zipper
           path: assets/cdk-sops-lambda.zip
