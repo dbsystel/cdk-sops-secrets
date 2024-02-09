@@ -76,7 +76,7 @@ goreleaserArtifactsNamespace = 'build-artifact-goreleaser';
 additionalActions = [
   {
     name: 'Download zipper artifacts',
-    uses: 'actions/download-artifact@v2',
+    uses: 'actions/download-artifact@v4',
     with: {
       name: 'zipper',
       path: 'assets',
@@ -156,7 +156,7 @@ fixme.forEach((wf) => {
       },
       {
         name: 'Checkout',
-        uses: 'actions/checkout@v2',
+        uses: 'actions/checkout@v4',
         with: {
           'fetch-depth': 0,
         },
@@ -183,7 +183,7 @@ fixme.forEach((wf) => {
       },
       {
         name: 'Upload artifact',
-        uses: 'actions/upload-artifact@v2.1.1',
+        uses: 'actions/upload-artifact@v4.1.1',
         with: {
           name: 'gobuild',
           path: 'lambda/bootstrap',
@@ -217,14 +217,14 @@ fixme.forEach((wf) => {
       },
       {
         name: 'Checkout',
-        uses: 'actions/checkout@v2',
+        uses: 'actions/checkout@v4',
         with: {
           'fetch-depth': 0,
         },
       },
       {
         name: 'Download gobuild artifacts',
-        uses: 'actions/download-artifact@v2',
+        uses: 'actions/download-artifact@v4',
         with: {
           name: 'gobuild',
           path: 'lambda',
@@ -236,7 +236,7 @@ fixme.forEach((wf) => {
       },
       {
         name: 'Upload artifact',
-        uses: 'actions/upload-artifact@v2.1.1',
+        uses: 'actions/upload-artifact@v4.1.1',
         with: {
           name: 'zipper',
           path: 'assets/cdk-sops-lambda.zip',
