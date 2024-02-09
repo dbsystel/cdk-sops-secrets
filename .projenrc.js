@@ -183,7 +183,7 @@ fixme.forEach((wf) => {
       },
       {
         name: 'Upload artifact',
-        uses: 'actions/upload-artifact@v4.1.1',
+        uses: 'actions/upload-artifact@v4',
         with: {
           name: 'gobuild',
           path: 'lambda/bootstrap',
@@ -236,7 +236,7 @@ fixme.forEach((wf) => {
       },
       {
         name: 'Upload artifact',
-        uses: 'actions/upload-artifact@v4.1.1',
+        uses: 'actions/upload-artifact@v4',
         with: {
           name: 'zipper',
           path: 'assets/cdk-sops-lambda.zip',
