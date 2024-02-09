@@ -26,6 +26,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
       'renovate[bot]',
     ],
   },
+
   name: 'cdk-sops-secrets',
   repositoryUrl: 'https://github.com/dbsystel/cdk-sops-secrets.git',
   // deps: [],                /* Runtime dependencies of this module. */
@@ -99,7 +100,7 @@ project.buildWorkflow.preBuildSteps.push({
 });
 project.buildWorkflow.addPostBuildSteps({
   name: 'Upload coverage to Codecov',
-  uses: 'codecov/codecov-action@v2',
+  uses: 'codecov/codecov-action@v4',
   with: {
     flags: 'cdk',
     directory: 'coverage',
@@ -127,7 +128,7 @@ fixme.forEach((wf) => {
     if (['release'].includes(key)) {
       wf.jobs[key].steps.splice(5, 0, {
         name: 'Upload coverage to Codecov',
-        uses: 'codecov/codecov-action@v2',
+        uses: 'codecov/codecov-action@v4',
         with: {
           flags: 'cdk',
           directory: 'coverage',
@@ -171,7 +172,7 @@ fixme.forEach((wf) => {
       },
       {
         name: 'Upload coverage to Codecov',
-        uses: 'codecov/codecov-action@v2',
+        uses: 'codecov/codecov-action@v4',
         with: {
           files: './coverage/coverage.out',
           flags: 'go-lambda',
