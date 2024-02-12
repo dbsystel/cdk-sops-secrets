@@ -40,7 +40,7 @@ jobs:
       - name: build
         run: npx projen build
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v2
+        uses: codecov/codecov-action@v4
         with:
           flags: cdk
           directory: coverage
@@ -195,7 +195,9 @@ jobs:
       - name: Test
         run: scripts/lambda-test.sh
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v2
+        uses: codecov/codecov-action@v4
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
         with:
           files: ./coverage/coverage.out
           flags: go-lambda
