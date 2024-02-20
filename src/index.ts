@@ -230,7 +230,7 @@ export class SopsSync extends Construct {
       if (resultsAlias !== undefined) {
         resultsAlias?.forEach((result, index) =>
           Key.fromLookup(this, `SopsAlias${index}`, {
-            aliasName: `alias/${result.split('/').slice(9).join('/')}`,
+            aliasName: `alias/${result.split('/').slice(1).join('/')}`,
           }).grantDecrypt(provider.role!),
         );
       }
