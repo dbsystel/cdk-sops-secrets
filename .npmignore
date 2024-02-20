@@ -26,6 +26,7 @@ tsconfig.tsbuildinfo
 !.jsii
 test/secret-asset.integ.snapshot
 test/secret-inline.integ.snapshot
+test/secret-kms-alias.integ.snapshot
 test/.tmp
 test/secret-multikms.integ.snapshot
 /lambda

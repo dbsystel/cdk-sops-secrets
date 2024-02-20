@@ -215,7 +215,7 @@ export class SopsSync extends Construct {
         props.sopsKmsKey.forEach((key) => key.grantDecrypt(provider.role!));
       }
       const fileContent = fs.readFileSync(props.sopsFilePath);
-      const regex = /arn:aws:kms:[a-z0-9-]+:[\d]+:key\/[a-z0-9-]+/g;
+      const regex = /arn:aws:kms:[a-z0-9-]+:[\d]+:(key|alias)\/[a-z0-9-]+/g;
       const results = fileContent.toString().match(regex);
       if (results !== undefined) {
         results?.forEach((result, index) =>
