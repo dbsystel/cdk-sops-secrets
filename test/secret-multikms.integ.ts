@@ -6,7 +6,7 @@ import { SopsSecret } from '../src/index';
 
 const app = new App();
 
-const stack = new Stack(app, 'SecretIntegrationInline');
+const stack = new Stack(app, 'SecretMultiKms');
 
 new SopsSecret(stack, 'SopsSecret', {
   sopsFilePath: 'test-secrets/yaml/sopsfile.enc-multikms.yaml',
