@@ -40,6 +40,24 @@ test('Upload type ASSET', () => {
   });
 });
 
+test('Add ExpireNotification', () => {
+  const app = new App();
+  const stack = new Stack(app, 'SecretIntegration');
+
+  new SopsSecret(stack, 'SopsSecret', {
+    sopsFilePath: 'test-secrets/yaml/sopsfile.enc-kms.yaml',
+    uploadType: UploadType.ASSET,
+  }).addExpireNotification('expire', {
+    expireDate: new Date('2024-12-31'),
+    mail: 'no-reply@no.reply',
+  });
+  Template.fromStack(stack).hasResource('AWS::Scheduler::Schedule', {
+    Properties: Match.objectLike({
+      ScheduleExpression: 'at(2024-12-24T00:00:00)',
+    }),
+  });
+});
+
 test('Upload type INLINE', () => {
   const app = new App();
   const stack = new Stack(app, 'SecretIntegration');
@@ -76,7 +94,7 @@ test('Age Key passed', () => {
 
   new SopsSecret(stack, 'SopsSecret', {
     sopsFilePath: 'test-secrets/yaml/sopsfile.enc-kms.yaml',
-    sopsAgeKey: SecretValue.plainText('SOME-KEY'),
+    sopsAgeKey: SecretValue.unsafePlainText('SOME-KEY'),
   });
   Template.fromStack(stack).hasResource('AWS::Lambda::Function', {
     Properties: Match.objectLike({
@@ -94,7 +112,7 @@ test('Age Key add', () => {
   const stack = new Stack(app, 'SecretIntegration');
 
   const provider = new SopsSyncProvider(stack, 'Provider');
-  provider.addAgeKey(SecretValue.plainText('SOME-KEY'));
+  provider.addAgeKey(SecretValue.unsafePlainText('SOME-KEY'));
   new SopsSecret(stack, 'SopsSecret', {
     sopsFilePath: 'test-secrets/yaml/sopsfile.enc-kms.yaml',
   });

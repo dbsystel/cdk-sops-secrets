@@ -17,10 +17,13 @@ import {
   Grant,
   PolicyStatement,
   AddToResourcePolicyResult,
+  Role,
+  ServicePrincipal,
 } from 'aws-cdk-lib/aws-iam';
 import { IKey, Key } from 'aws-cdk-lib/aws-kms';
 import { Code, Runtime, SingletonFunction } from 'aws-cdk-lib/aws-lambda';
 import { Asset } from 'aws-cdk-lib/aws-s3-assets';
+import { CfnSchedule } from 'aws-cdk-lib/aws-scheduler';
 import {
   ISecret,
   ISecretAttachmentTarget,
@@ -29,6 +32,7 @@ import {
   Secret,
   SecretProps,
 } from 'aws-cdk-lib/aws-secretsmanager';
+import { Subscription, SubscriptionProtocol, Topic } from 'aws-cdk-lib/aws-sns';
 import { Construct } from 'constructs';
 
 export enum UploadType {
@@ -117,6 +121,25 @@ export interface SopsSyncProps extends SopsSyncOptions {
    * The secret that will be populated with the encrypted sops file content.
    */
   readonly secret: ISecret;
+}
+
+/**
+ * The configuration options for ExpireNotification
+ */
+export interface ExpireNotificationProps {
+  /**
+   * To which mail address should the notification be sent?
+   */
+  readonly mail: string;
+  /**
+   * The expire date of the secret
+   */
+  readonly expireDate: Date;
+  /**
+   * When should the notification be sent?
+   * @default - 7 days before expire
+   */
+  readonly notifyBeforeExpire?: Duration;
 }
 
 /**
@@ -397,5 +420,38 @@ export class SopsSecret extends Construct implements ISecret {
 
   public get secretValue(): SecretValue {
     return this.secretValueFromJson('');
+  }
+
+  public addExpireNotification(id: string, props: ExpireNotificationProps) {
+    const topic = new Topic(this, `Notification${id}`, {
+      displayName: `SopsSecretExpireNotification ${id} for ${this.secretName}`,
+      topicName: `${this.secretName}-${id}`,
+    });
+
+    new Subscription(this, 'subscription', {
+      protocol: SubscriptionProtocol.EMAIL,
+      topic,
+      endpoint: props.mail,
+    });
+
+    const duration = props.notifyBeforeExpire ?? Duration.days(7);
+    const schedule = new Date(
+      props.expireDate.getTime() - duration.toMilliseconds(),
+    );
+
+    const notificationRole = new Role(this, 'notificationRole', {
+      assumedBy: new ServicePrincipal('scheduler.amazonaws.com'),
+    });
+    new CfnSchedule(this, 'schedule', {
+      flexibleTimeWindow: {
+        mode: 'OFF',
+      },
+      scheduleExpression: `at(${schedule.toISOString().split('.')[0]})`,
+      target: {
+        arn: topic.topicArn,
+        roleArn: notificationRole.roleArn,
+        input: 'Secret will expire soon',
+      },
+    });
   }
 }
