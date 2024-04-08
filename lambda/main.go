@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/joho/godotenv"
 	"log"
 	"regexp"
 	"strconv"
@@ -168,6 +169,13 @@ func (a AWS) syncSopsToSecretsmanager(ctx context.Context, event cfn.Event) (phy
 		case "yaml":
 			{
 				err := yaml.Unmarshal(decryptedContent, &decryptedInterface)
+				if err != nil {
+					return tempArn, nil, err
+				}
+			}
+		case "dotenv":
+			{
+				decryptedInterface, err = godotenv.Unmarshal(string(decryptedContent))
 				if err != nil {
 					return tempArn, nil, err
 				}
