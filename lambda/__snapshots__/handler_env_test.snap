@@ -1,0 +1,68 @@
+
+[Test_FullWorkflow_Create_S3_ENV_Simple - 1]
+>>>S3MAnagerMockClient.Download.Input
+{
+  Bucket: "..",
+  Key: "../test-secrets/dotenv/encrypted-best-secret.env"
+}
+---
+
+[Test_FullWorkflow_Create_S3_ENV_Simple - 2]
+>>>SecretsManagerMockClient.PutSecretValue.Input
+main.putSecretValueInputNotSecure{
+    _:                  struct {}{},
+    ClientRequestToken: &"../test-secrets/dotenv/encrypted-best-secret",
+    SecretBinary:       nil,
+    SecretId:           &"arn:aws:secretsmanager:eu-central-1:123456789012:secret:testsecret",
+    SecretString:       &"banane=yellow\ncrypt=\"\\\"ajkscbuiuXA34%%&&=\"\n",
+    VersionStages:      nil,
+}
+---
+
+[Test_FullWorkflow_Create_S3_ENV_Simple - 3]
+>>>syncSopsToSecretsmanager
+arn:custom:sopssync:eu-central-1:123456789012:secret:testsecret
+map[string]interface {}{
+    "ARN":           "arn:custom:sopssync:eu-central-1:123456789012:secret:testsecret",
+    "Name":          "dfb70680d326c245dbdd113d635caa16113e78b1eb8b7447f10eeb861e491724",
+    "VersionId":     "58957a9ecae29959fe87a2d9e40ff5898fa614c593a0d30d0bae18f0c0f752ac",
+    "VersionStages": []*string{
+        &"dfb70680d326c245dbdd113d635caa16113e78b1eb8b7447f10eeb861e491724",
+    },
+}
+nil
+---
+
+[Test_FullWorkflow_Create_S3_ENV_as_JSON_Simple - 1]
+>>>S3MAnagerMockClient.Download.Input
+{
+  Bucket: "..",
+  Key: "../test-secrets/dotenv/encrypted-best-secret.env"
+}
+---
+
+[Test_FullWorkflow_Create_S3_ENV_as_JSON_Simple - 2]
+>>>SecretsManagerMockClient.PutSecretValue.Input
+main.putSecretValueInputNotSecure{
+    _:                  struct {}{},
+    ClientRequestToken: &"../test-secrets/dotenv/encrypted-best-secret",
+    SecretBinary:       nil,
+    SecretId:           &"arn:aws:secretsmanager:eu-central-1:123456789012:secret:testsecret",
+    SecretString:       &"{\n  \"\": {\n    \"banane\": \"yellow\",\n    \"crypt\": \"\\\"ajkscbuiuXA34%%\\u0026\\u0026=\"\n  }\n}",
+    VersionStages:      nil,
+}
+---
+
+[Test_FullWorkflow_Create_S3_ENV_as_JSON_Simple - 3]
+>>>syncSopsToSecretsmanager
+arn:custom:sopssync:eu-central-1:123456789012:secret:testsecret
+map[string]interface {}{
+    "ARN":           "arn:custom:sopssync:eu-central-1:123456789012:secret:testsecret",
+    "Name":          "dfb70680d326c245dbdd113d635caa16113e78b1eb8b7447f10eeb861e491724",
+    "VersionId":     "ce469f0b053e86201d389bfa76ef5a8a62fbfc15dd7c29c19eb97217099bfaed",
+    "VersionStages": []*string{
+        &"dfb70680d326c245dbdd113d635caa16113e78b1eb8b7447f10eeb861e491724",
+    },
+}
+nil
+---

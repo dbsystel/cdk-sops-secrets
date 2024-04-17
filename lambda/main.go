@@ -6,11 +6,12 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/joho/godotenv"
 	"log"
 	"regexp"
 	"strconv"
 	"strings"
+
+	"github.com/joho/godotenv"
 
 	runtime "github.com/aws/aws-lambda-go/lambda"
 	"github.com/aws/aws-sdk-go/aws"
@@ -163,21 +164,22 @@ func (a AWS) syncSopsToSecretsmanager(ctx context.Context, event cfn.Event) (phy
 			{
 				err := json.Unmarshal(decryptedContent, &decryptedInterface)
 				if err != nil {
-					return tempArn, nil, err
+					return tempArn, nil, fmt.Errorf("Failed to parse json content: %v", err)
 				}
 			}
 		case "yaml":
 			{
 				err := yaml.Unmarshal(decryptedContent, &decryptedInterface)
 				if err != nil {
-					return tempArn, nil, err
+					return tempArn, nil, fmt.Errorf("Failed to parse yaml content: %v", err)
 				}
 			}
 		case "dotenv":
 			{
 				decryptedInterface, err = godotenv.Unmarshal(string(decryptedContent))
+
 				if err != nil {
-					return tempArn, nil, err
+					return tempArn, nil, fmt.Errorf("Failed to parse dotenv content: %v", err)
 				}
 			}
 		default:
