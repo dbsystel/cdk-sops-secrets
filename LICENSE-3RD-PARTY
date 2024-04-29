@@ -31,7 +31,3 @@ the individual licenses apply.
 * go-yaml/yaml
     https://github.com/go-yaml/yaml/tree/v3
     MIT License, https://github.com/go-yaml/yaml/blob/v3/LICENSE
-
-* joho/godotenv
-    https://github.com/joho/godotenv
-    MIT License, https://github.com/joho/godotenv/blob/main/LICENCE
