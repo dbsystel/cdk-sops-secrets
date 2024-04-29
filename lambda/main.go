@@ -11,8 +11,6 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/joho/godotenv"
-
 	runtime "github.com/aws/aws-lambda-go/lambda"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
@@ -176,11 +174,19 @@ func (a AWS) syncSopsToSecretsmanager(ctx context.Context, event cfn.Event) (phy
 			}
 		case "dotenv":
 			{
-				decryptedInterface, err = godotenv.Unmarshal(string(decryptedContent))
-
-				if err != nil {
-					return tempArn, nil, fmt.Errorf("Failed to parse dotenv content: %v", err)
+				var dotEnvMap = make(map[string]string)
+				dotenvLines := strings.Split(string(decryptedContent), "\n")
+				for _, line := range dotenvLines {
+					if line != "" && !strings.HasPrefix(line, "#") {
+						parts := strings.SplitN(line, "=", 2)
+						if len(parts) == 2 {
+							key := strings.TrimSpace(parts[0])
+							value := strings.TrimSpace(parts[1])
+							dotEnvMap[key] = value
+						}
+					}
 				}
+				decryptedInterface = dotEnvMap
 			}
 		default:
 			return "", nil, errors.New(fmt.Sprintf("Format %s not supported", resourceProperties.Format))

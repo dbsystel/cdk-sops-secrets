@@ -14,7 +14,7 @@ main.putSecretValueInputNotSecure{
     ClientRequestToken: &"../test-secrets/dotenv/encrypted-best-secret",
     SecretBinary:       nil,
     SecretId:           &"arn:aws:secretsmanager:eu-central-1:123456789012:secret:testsecret",
-    SecretString:       &"banane=yellow\ncrypt=\"\\\"ajkscbuiuXA34%%&&=\"\n",
+    SecretString:       &"banane=yellow\ncrypt=\"ajkscbuiuXA34%%&&=\n",
     VersionStages:      nil,
 }
 ---
@@ -25,7 +25,7 @@ arn:custom:sopssync:eu-central-1:123456789012:secret:testsecret
 map[string]interface {}{
     "ARN":           "arn:custom:sopssync:eu-central-1:123456789012:secret:testsecret",
     "Name":          "dfb70680d326c245dbdd113d635caa16113e78b1eb8b7447f10eeb861e491724",
-    "VersionId":     "58957a9ecae29959fe87a2d9e40ff5898fa614c593a0d30d0bae18f0c0f752ac",
+    "VersionId":     "6e5c42133fbe7c37503ffbd8e2c4dd792b6800a7aa022e5ee9d70892c3be4205",
     "VersionStages": []*string{
         &"dfb70680d326c245dbdd113d635caa16113e78b1eb8b7447f10eeb861e491724",
     },
