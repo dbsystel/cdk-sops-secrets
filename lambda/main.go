@@ -162,15 +162,31 @@ func (a AWS) syncSopsToSecretsmanager(ctx context.Context, event cfn.Event) (phy
 			{
 				err := json.Unmarshal(decryptedContent, &decryptedInterface)
 				if err != nil {
-					return tempArn, nil, err
+					return tempArn, nil, fmt.Errorf("Failed to parse json content: %v", err)
 				}
 			}
 		case "yaml":
 			{
 				err := yaml.Unmarshal(decryptedContent, &decryptedInterface)
 				if err != nil {
-					return tempArn, nil, err
+					return tempArn, nil, fmt.Errorf("Failed to parse yaml content: %v", err)
 				}
+			}
+		case "dotenv":
+			{
+				var dotEnvMap = make(map[string]string)
+				dotenvLines := strings.Split(string(decryptedContent), "\n")
+				for _, line := range dotenvLines {
+					if line != "" && !strings.HasPrefix(line, "#") {
+						parts := strings.SplitN(line, "=", 2)
+						if len(parts) == 2 {
+							key := strings.TrimSpace(parts[0])
+							value := strings.TrimSpace(parts[1])
+							dotEnvMap[key] = value
+						}
+					}
+				}
+				decryptedInterface = dotEnvMap
 			}
 		default:
 			return "", nil, errors.New(fmt.Sprintf("Format %s not supported", resourceProperties.Format))

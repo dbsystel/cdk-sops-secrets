@@ -70,7 +70,7 @@ export interface SopsSyncOptions {
    *
    * @default - The fileformat will be derived from the file ending
    */
-  readonly sopsFileFormat?: undefined | 'json' | 'yaml';
+  readonly sopsFileFormat?: undefined | 'json' | 'yaml' | 'dotenv';
 
   /**
    * The kmsKey used to encrypt the sops file. Encrypt permissions
@@ -131,7 +131,7 @@ export class SopsSync extends Construct {
   /**
    * The format of the input file
    */
-  readonly sopsFileFormat: 'json' | 'yaml';
+  readonly sopsFileFormat: 'json' | 'yaml' | 'dotenv';
 
   /**
    * Was the format converted to json?
@@ -168,6 +168,10 @@ export class SopsSync extends Construct {
       }
       case 'yml': {
         this.sopsFileFormat = 'yaml';
+        break;
+      }
+      case 'env': {
+        this.sopsFileFormat = 'dotenv';
         break;
       }
       default: {

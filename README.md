@@ -130,6 +130,16 @@ Even if this construct has some unit and integration tests performed, there can 
 
 ```/aws/lambda/<YOUR-STACK-NAME>-SingletonLambdaSopsSyncProvider<SOMETHINGsomething1234>```
 
+### I get errors with dotenv formatted files
+
+Only very basic dotenv syntax is working right now. Only single line values are accepted. The format must match:
+
+```dotenv
+key=value
+```
+
+comments must be a single line, not after value assignments.
+
 ### Error getting data key: 0 successful groups required, got 0
 
 This error message (and failed sync) is related to the  mozilla/sops issues [#948](https://github.com/mozilla/sops/issues/948) and [#634](https://github.com/mozilla/sops/issues/634). You must not create your secret with the ```--aws-profile``` flag. This profile will be written to your sops filed and is required in every runtime environment. You have to define the profile to use via the environment variable ```AWS_PROFILE``` instead, to avoid this.

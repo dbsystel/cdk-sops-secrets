@@ -32,6 +32,24 @@ new SopsSecret(stack, 'SopsSecretYAMLasJSON', {
   ),
 });
 
+new SopsSecret(stack, 'SopsSecretDOTENV', {
+  sopsFilePath: 'test-secrets/dotenv/encrypted-best-secret.env',
+  convertToJSON: false,
+  // see test-secrets/README.md for further information regarding the test file
+  sopsAgeKey: SecretValue.plainText(
+    'AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3',
+  ),
+});
+
+new SopsSecret(stack, 'SopsSecretDOTENVasJSON', {
+  sopsFilePath: 'test-secrets/dotenv/encrypted-best-secret.env',
+  convertToJSON: true,
+  // see test-secrets/README.md for further information regarding the test file
+  sopsAgeKey: SecretValue.plainText(
+    'AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3',
+  ),
+});
+
 new SopsSecret(stack, 'SopsComplexSecretJSON', {
   sopsFilePath: 'test-secrets/json/sopsfile-complex.enc-age.json',
   flatten: false,
