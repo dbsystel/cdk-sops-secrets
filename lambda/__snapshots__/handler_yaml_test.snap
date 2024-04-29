@@ -9,10 +9,13 @@
 
 [Test_FullWorkflow_Create_S3_YAML_Simple - 2]
 >>>SecretsManagerMockClient.PutSecretValue.Input
-{
-  ClientRequestToken: "../test-secrets/yaml/sopsfile.enc-age",
-  SecretId: "arn:aws:secretsmanager:eu-central-1:123456789012:secret:testsecret",
-  SecretString: <sensitive>
+main.putSecretValueInputNotSecure{
+    _:                  struct {}{},
+    ClientRequestToken: &"../test-secrets/yaml/sopsfile.enc-age",
+    SecretBinary:       nil,
+    SecretId:           &"arn:aws:secretsmanager:eu-central-1:123456789012:secret:testsecret",
+    SecretString:       &"key1: value1\nkey2: 12345\nkey3: false\n",
+    VersionStages:      nil,
 }
 ---
 
@@ -40,10 +43,13 @@ nil
 
 [Test_FullWorkflow_Create_S3_YAML_as_JSON_Simple - 2]
 >>>SecretsManagerMockClient.PutSecretValue.Input
-{
-  ClientRequestToken: "../test-secrets/yaml/sopsfile.enc-age",
-  SecretId: "arn:aws:secretsmanager:eu-central-1:123456789012:secret:testsecret",
-  SecretString: <sensitive>
+main.putSecretValueInputNotSecure{
+    _:                  struct {}{},
+    ClientRequestToken: &"../test-secrets/yaml/sopsfile.enc-age",
+    SecretBinary:       nil,
+    SecretId:           &"arn:aws:secretsmanager:eu-central-1:123456789012:secret:testsecret",
+    SecretString:       &"{\n  \"key1\": \"value1\",\n  \"key2\": 12345,\n  \"key3\": false\n}",
+    VersionStages:      nil,
 }
 ---
 
@@ -71,10 +77,13 @@ nil
 
 [Test_FullWorkflow_Create_S3_YAML_Complex - 2]
 >>>SecretsManagerMockClient.PutSecretValue.Input
-{
-  ClientRequestToken: "../test-secrets/yaml/sopsfile-complex.enc-age",
-  SecretId: "arn:aws:secretsmanager:eu-central-1:123456789012:secret:testsecret",
-  SecretString: <sensitive>
+main.putSecretValueInputNotSecure{
+    _:                  struct {}{},
+    ClientRequestToken: &"../test-secrets/yaml/sopsfile-complex.enc-age",
+    SecretBinary:       nil,
+    SecretId:           &"arn:aws:secretsmanager:eu-central-1:123456789012:secret:testsecret",
+    SecretString:       &"and now:\n    some:\n        - basic: false\n        - nested: 12345\n        - type: 1.2345\n        - tests: Finish!\nsome:\n    deep:\n        nested:\n            arrays:\n                - with\n                - several\n                - values:\n                    and: objects\n            object: structure\n    notsodeep: struct\n",
+    VersionStages:      nil,
 }
 ---
 
@@ -102,10 +111,13 @@ nil
 
 [Test_FullWorkflow_Create_S3_YAML_as_JSON_Complex - 2]
 >>>SecretsManagerMockClient.PutSecretValue.Input
-{
-  ClientRequestToken: "../test-secrets/yaml/sopsfile-complex.enc-age",
-  SecretId: "arn:aws:secretsmanager:eu-central-1:123456789012:secret:testsecret",
-  SecretString: <sensitive>
+main.putSecretValueInputNotSecure{
+    _:                  struct {}{},
+    ClientRequestToken: &"../test-secrets/yaml/sopsfile-complex.enc-age",
+    SecretBinary:       nil,
+    SecretId:           &"arn:aws:secretsmanager:eu-central-1:123456789012:secret:testsecret",
+    SecretString:       &"{\n  \"and now\": {\n    \"some\": [\n      {\n        \"basic\": false\n      },\n      {\n        \"nested\": 12345\n      },\n      {\n        \"type\": 1.2345\n      },\n      {\n        \"tests\": \"Finish!\"\n      }\n    ]\n  },\n  \"some\": {\n    \"deep\": {\n      \"nested\": {\n        \"arrays\": [\n          \"with\",\n          \"several\",\n          {\n            \"values\": {\n              \"and\": \"objects\"\n            }\n          }\n        ],\n        \"object\": \"structure\"\n      }\n    },\n    \"notsodeep\": \"struct\"\n  }\n}",
+    VersionStages:      nil,
 }
 ---
 
@@ -133,10 +145,13 @@ nil
 
 [Test_FullWorkflow_Create_S3_YAML_Complex_Flat - 2]
 >>>SecretsManagerMockClient.PutSecretValue.Input
-{
-  ClientRequestToken: "../test-secrets/yaml/sopsfile-complex.enc-age",
-  SecretId: "arn:aws:secretsmanager:eu-central-1:123456789012:secret:testsecret",
-  SecretString: <sensitive>
+main.putSecretValueInputNotSecure{
+    _:                  struct {}{},
+    ClientRequestToken: &"../test-secrets/yaml/sopsfile-complex.enc-age",
+    SecretBinary:       nil,
+    SecretId:           &"arn:aws:secretsmanager:eu-central-1:123456789012:secret:testsecret",
+    SecretString:       &"and now.some[0].basic: false\nand now.some[1].nested: 12345\nand now.some[2].type: 1.2345\nand now.some[3].tests: Finish!\nsome.deep.nested.arrays[0]: with\nsome.deep.nested.arrays[1]: several\nsome.deep.nested.arrays[2].values.and: objects\nsome.deep.nested.object: structure\nsome.notsodeep: struct\n",
+    VersionStages:      nil,
 }
 ---
 
@@ -164,10 +179,13 @@ nil
 
 [Test_FullWorkflow_Create_S3_YAML_as_JSON_Complex_Flat - 2]
 >>>SecretsManagerMockClient.PutSecretValue.Input
-{
-  ClientRequestToken: "../test-secrets/yaml/sopsfile-complex.enc-age",
-  SecretId: "arn:aws:secretsmanager:eu-central-1:123456789012:secret:testsecret",
-  SecretString: <sensitive>
+main.putSecretValueInputNotSecure{
+    _:                  struct {}{},
+    ClientRequestToken: &"../test-secrets/yaml/sopsfile-complex.enc-age",
+    SecretBinary:       nil,
+    SecretId:           &"arn:aws:secretsmanager:eu-central-1:123456789012:secret:testsecret",
+    SecretString:       &"{\n  \"and now.some[0].basic\": false,\n  \"and now.some[1].nested\": 12345,\n  \"and now.some[2].type\": 1.2345,\n  \"and now.some[3].tests\": \"Finish!\",\n  \"some.deep.nested.arrays[0]\": \"with\",\n  \"some.deep.nested.arrays[1]\": \"several\",\n  \"some.deep.nested.arrays[2].values.and\": \"objects\",\n  \"some.deep.nested.object\": \"structure\",\n  \"some.notsodeep\": \"struct\"\n}",
+    VersionStages:      nil,
 }
 ---
 
@@ -187,10 +205,13 @@ nil
 
 [Test_FullWorkflow_Create_INLINE_YAML_Simple - 1]
 >>>SecretsManagerMockClient.PutSecretValue.Input
-{
-  ClientRequestToken: "MyHash",
-  SecretId: "arn:aws:secretsmanager:eu-central-1:123456789012:secret:testsecret",
-  SecretString: <sensitive>
+main.putSecretValueInputNotSecure{
+    _:                  struct {}{},
+    ClientRequestToken: &"MyHash",
+    SecretBinary:       nil,
+    SecretId:           &"arn:aws:secretsmanager:eu-central-1:123456789012:secret:testsecret",
+    SecretString:       &"key1: value1\nkey2: 12345\nkey3: false\n",
+    VersionStages:      nil,
 }
 ---
 
@@ -210,10 +231,13 @@ nil
 
 [Test_FullWorkflow_Create_INLINE_YAML_as_JSON_Simple - 1]
 >>>SecretsManagerMockClient.PutSecretValue.Input
-{
-  ClientRequestToken: "MyHash",
-  SecretId: "arn:aws:secretsmanager:eu-central-1:123456789012:secret:testsecret",
-  SecretString: <sensitive>
+main.putSecretValueInputNotSecure{
+    _:                  struct {}{},
+    ClientRequestToken: &"MyHash",
+    SecretBinary:       nil,
+    SecretId:           &"arn:aws:secretsmanager:eu-central-1:123456789012:secret:testsecret",
+    SecretString:       &"{\n  \"key1\": \"value1\",\n  \"key2\": 12345,\n  \"key3\": false\n}",
+    VersionStages:      nil,
 }
 ---
 
@@ -233,10 +257,13 @@ nil
 
 [Test_FullWorkflow_Create_INLINE_YAML_Complex - 1]
 >>>SecretsManagerMockClient.PutSecretValue.Input
-{
-  ClientRequestToken: "MyHash",
-  SecretId: "arn:aws:secretsmanager:eu-central-1:123456789012:secret:testsecret",
-  SecretString: <sensitive>
+main.putSecretValueInputNotSecure{
+    _:                  struct {}{},
+    ClientRequestToken: &"MyHash",
+    SecretBinary:       nil,
+    SecretId:           &"arn:aws:secretsmanager:eu-central-1:123456789012:secret:testsecret",
+    SecretString:       &"and now:\n    some:\n        - basic: false\n        - nested: 12345\n        - type: 1.2345\n        - tests: Finish!\nsome:\n    deep:\n        nested:\n            arrays:\n                - with\n                - several\n                - values:\n                    and: objects\n            object: structure\n    notsodeep: struct\n",
+    VersionStages:      nil,
 }
 ---
 
@@ -264,10 +291,13 @@ nil
 
 [Test_FullWorkflow_Create_INLINE_YAML_as_JSON_Complex - 2]
 >>>SecretsManagerMockClient.PutSecretValue.Input
-{
-  ClientRequestToken: "../test-secrets/yaml/sopsfile-complex.enc-age",
-  SecretId: "arn:aws:secretsmanager:eu-central-1:123456789012:secret:testsecret",
-  SecretString: <sensitive>
+main.putSecretValueInputNotSecure{
+    _:                  struct {}{},
+    ClientRequestToken: &"../test-secrets/yaml/sopsfile-complex.enc-age",
+    SecretBinary:       nil,
+    SecretId:           &"arn:aws:secretsmanager:eu-central-1:123456789012:secret:testsecret",
+    SecretString:       &"{\n  \"and now\": {\n    \"some\": [\n      {\n        \"basic\": false\n      },\n      {\n        \"nested\": 12345\n      },\n      {\n        \"type\": 1.2345\n      },\n      {\n        \"tests\": \"Finish!\"\n      }\n    ]\n  },\n  \"some\": {\n    \"deep\": {\n      \"nested\": {\n        \"arrays\": [\n          \"with\",\n          \"several\",\n          {\n            \"values\": {\n              \"and\": \"objects\"\n            }\n          }\n        ],\n        \"object\": \"structure\"\n      }\n    },\n    \"notsodeep\": \"struct\"\n  }\n}",
+    VersionStages:      nil,
 }
 ---
 
@@ -287,10 +317,13 @@ nil
 
 [Test_FullWorkflow_Create_INLINE_YAML_Complex_Flat - 1]
 >>>SecretsManagerMockClient.PutSecretValue.Input
-{
-  ClientRequestToken: "MyHash",
-  SecretId: "arn:aws:secretsmanager:eu-central-1:123456789012:secret:testsecret",
-  SecretString: <sensitive>
+main.putSecretValueInputNotSecure{
+    _:                  struct {}{},
+    ClientRequestToken: &"MyHash",
+    SecretBinary:       nil,
+    SecretId:           &"arn:aws:secretsmanager:eu-central-1:123456789012:secret:testsecret",
+    SecretString:       &"and now.some[0].basic: false\nand now.some[1].nested: 12345\nand now.some[2].type: 1.2345\nand now.some[3].tests: Finish!\nsome.deep.nested.arrays[0]: with\nsome.deep.nested.arrays[1]: several\nsome.deep.nested.arrays[2].values.and: objects\nsome.deep.nested.object: structure\nsome.notsodeep: struct\n",
+    VersionStages:      nil,
 }
 ---
 
@@ -310,10 +343,13 @@ nil
 
 [Test_FullWorkflow_Create_INLINE_YAML_as_JSON_Complex_Flat - 1]
 >>>SecretsManagerMockClient.PutSecretValue.Input
-{
-  ClientRequestToken: "MyHash",
-  SecretId: "arn:aws:secretsmanager:eu-central-1:123456789012:secret:testsecret",
-  SecretString: <sensitive>
+main.putSecretValueInputNotSecure{
+    _:                  struct {}{},
+    ClientRequestToken: &"MyHash",
+    SecretBinary:       nil,
+    SecretId:           &"arn:aws:secretsmanager:eu-central-1:123456789012:secret:testsecret",
+    SecretString:       &"{\n  \"and now.some[0].basic\": false,\n  \"and now.some[1].nested\": 12345,\n  \"and now.some[2].type\": 1.2345,\n  \"and now.some[3].tests\": \"Finish!\",\n  \"some.deep.nested.arrays[0]\": \"with\",\n  \"some.deep.nested.arrays[1]\": \"several\",\n  \"some.deep.nested.arrays[2].values.and\": \"objects\",\n  \"some.deep.nested.object\": \"structure\",\n  \"some.notsodeep\": \"struct\"\n}",
+    VersionStages:      nil,
 }
 ---
 
