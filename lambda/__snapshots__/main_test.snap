@@ -34,10 +34,13 @@
 
 [Test_UpdateSecret - 1]
 >>>SecretsManagerMockClient.PutSecretValue.Input
-{
-  ClientRequestToken: "4547532a137611d83958d17095c6c2d38ae0036a760c3b79c9dd5957d1c20cf2.yaml",
-  SecretId: "arn:${Partition}:secretsmanager:${Region}:${Account}:secret:${SecretId}",
-  SecretString: <sensitive>
+main.putSecretValueInputNotSecure{
+    _:                  struct {}{},
+    ClientRequestToken: &"4547532a137611d83958d17095c6c2d38ae0036a760c3b79c9dd5957d1c20cf2.yaml",
+    SecretBinary:       nil,
+    SecretId:           &"arn:${Partition}:secretsmanager:${Region}:${Account}:secret:${SecretId}",
+    SecretString:       &"some-secret-data",
+    VersionStages:      nil,
 }
 ---
 
