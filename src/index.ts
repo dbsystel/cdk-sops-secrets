@@ -62,11 +62,13 @@ export interface SopsSyncOptions {
   /**
    * If you want to pass the sops file via s3, you can specify the bucket
    * you can use cfn parameter here
+   * Both, sopsS3Bucket and sopsS3Key have to be specified
    */
   readonly sopsS3Bucket?: string;
   /**
-   * If you want to pass the sops file via s3, you can specify the bucket
+   * If you want to pass the sops file via s3, you can specify the key inside the bucket
    * you can use cfn parameter here
+   * Both, sopsS3Bucket and sopsS3Key have to be specified
    */
   readonly sopsS3Key?: string;
 
