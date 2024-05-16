@@ -57,7 +57,18 @@ export interface SopsSyncOptions {
   /**
    * The filepath to the sops file
    */
-  readonly sopsFilePath: string;
+  readonly sopsFilePath?: string;
+
+  /**
+   * If you want to pass the sops file via s3, you can specify the bucket
+   * you can use cfn parameter here
+   */
+  readonly sopsS3Bucket?: string;
+  /**
+   * If you want to pass the sops file via s3, you can specify the bucket
+   * you can use cfn parameter here
+   */
+  readonly sopsS3Key?: string;
 
   /**
    * How should the secret be passed to the CustomResource?
@@ -129,11 +140,6 @@ export class SopsSync extends Construct {
   readonly versionId: string;
 
   /**
-   * The format of the input file
-   */
-  readonly sopsFileFormat: 'json' | 'yaml' | 'dotenv';
-
-  /**
    * Was the format converted to json?
    */
   readonly converToJSON: boolean;
@@ -155,115 +161,145 @@ export class SopsSync extends Construct {
     this.flatten = props.flatten ?? true;
     this.stringifiedValues = props.stringifyValues ?? true;
 
-    const sopsFileFormat =
-      props.sopsFileFormat ?? props.sopsFilePath.split('.').pop();
-    switch (sopsFileFormat) {
-      case 'json': {
-        this.sopsFileFormat = 'json';
-        break;
-      }
-      case 'yaml': {
-        this.sopsFileFormat = 'yaml';
-        break;
-      }
-      case 'yml': {
-        this.sopsFileFormat = 'yaml';
-        break;
-      }
-      case 'env': {
-        this.sopsFileFormat = 'dotenv';
-        break;
-      }
-      default: {
-        throw new Error(`Unsupported sopsFileFormat ${sopsFileFormat}`);
-      }
-    }
-
     const provider = props.sopsProvider ?? new SopsSyncProvider(scope);
 
-    if (!fs.existsSync(props.sopsFilePath)) {
-      throw new Error(`File ${props.sopsFilePath} does not exist!`);
-    }
-
-    /**
-     * Handle uploadType INLINE or ASSET
-     */
-    const uploadType = props.uploadType ?? UploadType.INLINE;
+    let uploadType = props.uploadType ?? UploadType.INLINE;
+    let sopsFileFormat: 'json' | 'yaml' | 'dotenv' | undefined =
+      props.sopsFileFormat;
     let sopsAsset: Asset | undefined = undefined;
     let sopsInline: { Content: string; Hash: string } | undefined = undefined;
     let sopsS3File: { Bucket: string; Key: string } | undefined = undefined;
 
-    switch (uploadType) {
-      case UploadType.INLINE: {
-        sopsInline = {
-          Content: fs.readFileSync(props.sopsFilePath).toString('base64'),
-          // We calculate the hash the same way as it would be done by new Asset(..) - so we can ensure stable version names even if switching from INLINE to ASSET and viceversa.
-          Hash: FileSystem.fingerprint(props.sopsFilePath),
-        };
-        break;
-      }
-      case UploadType.ASSET: {
-        sopsAsset = new Asset(this, 'Asset', {
-          path: props.sopsFilePath,
-        });
-        sopsS3File = {
-          Bucket: sopsAsset.bucket.bucketName,
-          Key: sopsAsset.s3ObjectKey,
-        };
-        break;
-      }
-    }
-
-    if (provider.role !== undefined) {
-      if (props.sopsKmsKey !== undefined) {
-        props.sopsKmsKey.forEach((key) => key.grantDecrypt(provider.role!));
-      }
-      const fileContent = fs.readFileSync(props.sopsFilePath);
-      // Handle keys
-      const regexKey = /arn:aws:kms:[a-z0-9-]+:[\d]+:key\/[a-z0-9-]+/g;
-      const resultsKey = fileContent.toString().match(regexKey);
-      if (resultsKey !== undefined) {
-        resultsKey?.forEach((result, index) =>
-          Key.fromKeyArn(this, `SopsKey${index}`, result).grantDecrypt(
-            provider.role!,
-          ),
-        );
-      }
-      const regexAlias = /arn:aws:kms:[a-z0-9-]+:[\d]+:alias\/[a-z0-9-]+/g;
-      const resultsAlias = fileContent.toString().match(regexAlias);
-      if (resultsAlias !== undefined) {
-        resultsAlias?.forEach((result, index) =>
-          Key.fromLookup(this, `SopsAlias${index}`, {
-            aliasName: `alias/${result.split('/').slice(1).join('/')}`,
-          }).grantDecrypt(provider.role!),
-        );
-      }
-      props.secret.grantWrite(provider);
-      if (sopsAsset !== undefined) {
-        sopsAsset.bucket.grantRead(provider);
-      }
-      /**
-       * fixes #234
-       * If the kms key for secrets encryption is an IKey
-       * there will be no permissions otherwise
-       */
-      if (
-        props.secret.encryptionKey !== undefined &&
-        !(props.secret.encryptionKey instanceof Key)
-      ) {
-        props.secret.encryptionKey.grantEncryptDecrypt(provider);
-      }
-    } else {
-      Annotations.of(this).addWarning(
-        `Please ensure propper permissions for the passed lambda function:\n  - write Access to the secret\n  - encrypt with the sopsKmsKey${
-          uploadType === UploadType.ASSET
-            ? '\n  - download from asset bucket'
-            : ''
-        }`,
+    if (
+      props.sopsFilePath !== undefined &&
+      (props.sopsS3Bucket !== undefined || props.sopsS3Key !== undefined)
+    ) {
+      throw new Error(
+        'You can either specify sopsFilePath or sopsS3Bucket and sopsS3Key!',
       );
     }
-    if (props.sopsAgeKey !== undefined) {
-      provider.addAgeKey(props.sopsAgeKey);
+
+    if (props.sopsFilePath !== undefined) {
+      const _sopsFileFormat =
+        props.sopsFileFormat ?? props.sopsFilePath.split('.').pop();
+      switch (_sopsFileFormat) {
+        case 'json': {
+          sopsFileFormat = 'json';
+          break;
+        }
+        case 'yaml': {
+          sopsFileFormat = 'yaml';
+          break;
+        }
+        case 'yml': {
+          sopsFileFormat = 'yaml';
+          break;
+        }
+        case 'env': {
+          sopsFileFormat = 'dotenv';
+          break;
+        }
+        default: {
+          throw new Error(`Unsupported sopsFileFormat ${_sopsFileFormat}`);
+        }
+      }
+
+      if (!fs.existsSync(props.sopsFilePath)) {
+        throw new Error(`File ${props.sopsFilePath} does not exist!`);
+      }
+
+      switch (uploadType) {
+        case UploadType.INLINE: {
+          sopsInline = {
+            Content: fs.readFileSync(props.sopsFilePath).toString('base64'),
+            // We calculate the hash the same way as it would be done by new Asset(..) - so we can ensure stable version names even if switching from INLINE to ASSET and viceversa.
+            Hash: FileSystem.fingerprint(props.sopsFilePath),
+          };
+          break;
+        }
+        case UploadType.ASSET: {
+          sopsAsset = new Asset(this, 'Asset', {
+            path: props.sopsFilePath,
+          });
+          sopsS3File = {
+            Bucket: sopsAsset.bucket.bucketName,
+            Key: sopsAsset.s3ObjectKey,
+          };
+          break;
+        }
+      }
+
+      if (provider.role !== undefined) {
+        if (props.sopsKmsKey !== undefined) {
+          props.sopsKmsKey.forEach((key) => key.grantDecrypt(provider.role!));
+        }
+        const fileContent = fs.readFileSync(props.sopsFilePath);
+        // Handle keys
+        const regexKey = /arn:aws:kms:[a-z0-9-]+:[\d]+:key\/[a-z0-9-]+/g;
+        const resultsKey = fileContent.toString().match(regexKey);
+        if (resultsKey !== undefined) {
+          resultsKey?.forEach((result, index) =>
+            Key.fromKeyArn(this, `SopsKey${index}`, result).grantDecrypt(
+              provider.role!,
+            ),
+          );
+        }
+        const regexAlias = /arn:aws:kms:[a-z0-9-]+:[\d]+:alias\/[a-z0-9-]+/g;
+        const resultsAlias = fileContent.toString().match(regexAlias);
+        if (resultsAlias !== undefined) {
+          resultsAlias?.forEach((result, index) =>
+            Key.fromLookup(this, `SopsAlias${index}`, {
+              aliasName: `alias/${result.split('/').slice(1).join('/')}`,
+            }).grantDecrypt(provider.role!),
+          );
+        }
+        props.secret.grantWrite(provider);
+        if (sopsAsset !== undefined) {
+          sopsAsset.bucket.grantRead(provider);
+        }
+        /**
+         * fixes #234
+         * If the kms key for secrets encryption is an IKey
+         * there will be no permissions otherwise
+         */
+        if (
+          props.secret.encryptionKey !== undefined &&
+          !(props.secret.encryptionKey instanceof Key)
+        ) {
+          props.secret.encryptionKey.grantEncryptDecrypt(provider);
+        }
+      } else {
+        Annotations.of(this).addWarning(
+          `Please ensure propper permissions for the passed lambda function:\n  - write Access to the secret\n  - encrypt with the sopsKmsKey${
+            uploadType === UploadType.ASSET
+              ? '\n  - download from asset bucket'
+              : ''
+          }`,
+        );
+      }
+      if (props.sopsAgeKey !== undefined) {
+        provider.addAgeKey(props.sopsAgeKey);
+      }
+    } else if (
+      props.sopsS3Bucket !== undefined &&
+      props.sopsS3Key !== undefined
+    ) {
+      sopsS3File = {
+        Bucket: props.sopsS3Bucket,
+        Key: props.sopsS3Key,
+      };
+      uploadType = UploadType.ASSET;
+      Annotations.of(this).addWarning(
+        'You have to manually add permissions to the sops provider to (permission to download file, to decrypt sops file)!',
+      );
+    } else {
+      throw new Error(
+        'You have to specify both sopsS3Bucket and sopsS3Key or neither!',
+      );
+    }
+
+    if (sopsFileFormat === undefined) {
+      throw new Error('You have to specify sopsFileFormat!');
     }
 
     const cr = new CustomResource(this, 'Resource', {
@@ -275,7 +311,7 @@ export class SopsSync extends Construct {
         SopsInline: sopsInline,
         ConvertToJSON: this.converToJSON,
         Flatten: this.flatten,
-        Format: this.sopsFileFormat,
+        Format: sopsFileFormat,
         StringifiedValues: this.stringifiedValues,
       },
     });
