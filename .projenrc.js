@@ -47,6 +47,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
   eslintOptions: { prettier: true },
   publishToGo: {
     moduleName: 'github.com/dbsystel/cdk-sops-secrets',
+    githubTokenSecret: 'GITHUB_TOKEN',
   },
   publishToMaven: {
     javaPackage: 'de.db.systel.cdkSopsSecrets',
@@ -58,7 +59,8 @@ const project = new awscdk.AwsCdkConstructLibrary({
   publishToNuget: {
     dotNetNamespace: 'Db.De.Systel',
     packageId: 'Db.De.Systel.CdkSopsSecrets',
-    registry: 'npm.pkg.github.com',
+    registry: 'https://nuget.pkg.github.com/dbsystel/index.json',
+    nugetApiKeySecret: 'GITHUB_TOKEN',
   },
   publishToPypi: {
     distName: 'cdk-sops-secrets',
