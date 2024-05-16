@@ -481,3 +481,41 @@ test('Methods of SopsSync not implemented', () => {
     `Method grantWrite(...) not allowed as this secret is managed by SopsSync`,
   );
 });
+
+test('Allowed options for SopsSync', () => {
+  const app = new App();
+  const stack = new Stack(app, 'SecretIntegration');
+  expect(
+    () =>
+      new SopsSecret(stack, 'SopsSecret1', {
+        sopsFilePath: 'test-secrets/json/sopsfile.enc-age.json',
+        sopsS3Key: 'test',
+        sopsS3Bucket: 'test',
+      }),
+  ).toThrowError(
+    'You can either specify sopsFilePath or sopsS3Bucket and sopsS3Key!',
+  );
+  expect(
+    () =>
+      new SopsSecret(stack, 'SopsSecret2', {
+        sopsS3Key: 'test',
+      }),
+  ).toThrowError(
+    'You have to specify both sopsS3Bucket and sopsS3Key or neither!',
+  );
+  expect(
+    () =>
+      new SopsSecret(stack, 'SopsSecret3', {
+        sopsS3Bucket: 'test',
+      }),
+  ).toThrowError(
+    'You have to specify both sopsS3Bucket and sopsS3Key or neither!',
+  );
+  expect(
+    () =>
+      new SopsSecret(stack, 'SopsSecret4', {
+        sopsS3Key: 'test',
+        sopsS3Bucket: 'test',
+      }),
+  ).toThrowError('You have to specify sopsFileFormat!');
+});

@@ -167,6 +167,38 @@ or in your cdk.json
   } 
 }
 ```
+### I want to upload the sops file myself and only want to reference it
+
+That's possible since version 1.8.0. You can reference the file in S3 like:
+
+```typescript
+new SopsSecret(stack, 'SopsSecret', {
+  sopsS3Bucket: 'testbucket',
+  sopsS3Key: 'secret.json',
+  sopsFileFormat: 'json',
+  // ... 
+});
+```
+
+Passing those values as CloudFormation parameters should also be possible:
+
+```typescript
+
+const sopsS3BucketParam = new CfnParameter(this, "s3BucketName", {
+  type: "String",
+  description: "The name of the Amazon S3 bucket where your sopsFile was uploaded."});
+
+const sopsS3KeyParam = new CfnParameter(this, "s3KeyName", {
+  type: "String",
+  description: "The name of the key of the sopsFile inside the Amazon S3 bucket."});
+
+new SopsSecret(stack, 'SopsSecret', {
+  sopsS3Bucket: sopsS3BucketParam.valueAsString,
+  sopsS3Key: sopsS3KeyParam.valueAsString,
+  sopsFileFormat: 'json',
+  // ... 
+});
+```
 
 ## Motivation
 
