@@ -275,6 +275,69 @@
         }
       ]
     },
+    "integ:secret-manual:assert": {
+      "name": "integ:secret-manual:assert",
+      "description": "assert the snapshot of integration test 'secret-manual'",
+      "steps": [
+        {
+          "exec": "[ -d \"test/secret-manual.integ.snapshot\" ] || (echo \"No snapshot available for integration test 'secret-manual'. Run 'projen integ:secret-manual:deploy' to capture.\" && exit 1)"
+        },
+        {
+          "exec": "cdk synth --app \"ts-node -P tsconfig.dev.json test/secret-manual.integ.ts\" --no-notices --no-version-reporting --no-asset-metadata --no-path-metadata -o test/.tmp/secret-manual.integ/assert.cdk.out > /dev/null"
+        },
+        {
+          "exec": "diff -r -x asset.* -x cdk.out -x manifest.json -x tree.json test/secret-manual.integ.snapshot/ test/.tmp/secret-manual.integ/assert.cdk.out/"
+        }
+      ]
+    },
+    "integ:secret-manual:deploy": {
+      "name": "integ:secret-manual:deploy",
+      "description": "deploy integration test 'secret-manual' and capture snapshot",
+      "steps": [
+        {
+          "exec": "rm -fr test/.tmp/secret-manual.integ/deploy.cdk.out"
+        },
+        {
+          "exec": "cdk deploy --app \"ts-node -P tsconfig.dev.json test/secret-manual.integ.ts\" --no-notices --no-version-reporting --no-asset-metadata --no-path-metadata '**' --require-approval=never -o test/.tmp/secret-manual.integ/deploy.cdk.out"
+        },
+        {
+          "exec": "rm -fr test/secret-manual.integ.snapshot"
+        },
+        {
+          "exec": "mv test/.tmp/secret-manual.integ/deploy.cdk.out test/secret-manual.integ.snapshot"
+        },
+        {
+          "spawn": "integ:secret-manual:destroy"
+        }
+      ]
+    },
+    "integ:secret-manual:destroy": {
+      "name": "integ:secret-manual:destroy",
+      "description": "destroy integration test 'secret-manual'",
+      "steps": [
+        {
+          "exec": "cdk destroy --app test/secret-manual.integ.snapshot '**' --no-version-reporting"
+        }
+      ]
+    },
+    "integ:secret-manual:snapshot": {
+      "name": "integ:secret-manual:snapshot",
+      "description": "update snapshot for integration test \"secret-manual\"",
+      "steps": [
+        {
+          "exec": "cdk synth --app \"ts-node -P tsconfig.dev.json test/secret-manual.integ.ts\" --no-notices --no-version-reporting --no-asset-metadata --no-path-metadata -o test/secret-manual.integ.snapshot > /dev/null"
+        }
+      ]
+    },
+    "integ:secret-manual:watch": {
+      "name": "integ:secret-manual:watch",
+      "description": "watch integration test 'secret-manual' (without updating snapshots)",
+      "steps": [
+        {
+          "exec": "cdk watch --app \"ts-node -P tsconfig.dev.json test/secret-manual.integ.ts\" --no-notices --no-version-reporting --no-asset-metadata --no-path-metadata '**' -o test/.tmp/secret-manual.integ/deploy.cdk.out"
+        }
+      ]
+    },
     "integ:secret-multikms:assert": {
       "name": "integ:secret-multikms:assert",
       "description": "assert the snapshot of integration test 'secret-multikms'",
@@ -347,6 +410,9 @@
         },
         {
           "spawn": "integ:secret-inline:snapshot"
+        },
+        {
+          "spawn": "integ:secret-manual:snapshot"
         },
         {
           "spawn": "integ:secret-multikms:snapshot"
@@ -451,6 +517,9 @@
           "spawn": "integ:secret-inline:assert"
         },
         {
+          "spawn": "integ:secret-manual:assert"
+        },
+        {
           "spawn": "integ:secret-multikms:assert"
         }
       ]
@@ -488,7 +557,7 @@
       },
       "steps": [
         {
-          "exec": "npx npm-check-updates@16 --upgrade --target=minor --peer --dep=dev,peer,prod,optional --filter=eslint-config-prettier,eslint-import-resolver-typescript,eslint-plugin-import,eslint-plugin-prettier,jsii-diff,jsii-docgen,jsii-pacmak,prettier,projen,ts-node,typescript"
+          "exec": "npx npm-check-updates@16 --upgrade --target=minor --peer --dep=dev,peer,prod,optional --filter=eslint-config-prettier,eslint-import-resolver-typescript,eslint-plugin-import,eslint-plugin-prettier,jsii-diff,jsii-docgen,jsii-pacmak,jsii-rosetta,jsii,prettier,projen,ts-node,typescript"
         },
         {
           "exec": "yarn install --check-files"
