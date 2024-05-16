@@ -85,5 +85,7 @@ test/secret-multikms.integ.snapshot/manifest.json
 test/secret-multikms.integ.snapshot/**/manifest.json
 test/secret-multikms.integ.snapshot/tree.json
 test/secret-multikms.integ.snapshot/**/tree.json
+*.iml
+.idea
 /assets
 !/.projenrc.js
