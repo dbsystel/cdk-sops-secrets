@@ -45,10 +45,11 @@ const project = new awscdk.AwsCdkConstructLibrary({
   },
   eslint: true,
   eslintOptions: { prettier: true },
-  publishToGo: {
-    moduleName: 'github.com/dbsystel/cdk-sops-secrets',
-    githubTokenSecret: 'PROJEN_GITHUB_TOKEN',
-  },
+  // seems to overwrite the wohle repository ... maybe another repository needed?
+  //publishToGo: {
+  //  moduleName: 'github.com/dbsystel/cdk-sops-secrets',
+  //  githubTokenSecret: 'PROJEN_GITHUB_TOKEN',
+  //},
   publishToMaven: {
     javaPackage: 'de.db.systel.cdkSopsSecrets',
     mavenGroupId: 'de.db.systel',
@@ -59,7 +60,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
   publishToNuget: {
     dotNetNamespace: 'Db.De.Systel',
     packageId: 'Db.De.Systel.CdkSopsSecrets',
-    registry: 'npm.pkg.github.com',
+    nugetServer: 'https://nuget.pkg.github.com/dbsystel/index.json',
     nugetApiKeySecret: 'PROJEN_GITHUB_TOKEN',
   },
   publishToPypi: {
