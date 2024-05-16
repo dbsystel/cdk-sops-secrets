@@ -37,6 +37,8 @@ jobs:
         run: yarn run projen integ:secret-asset:snapshot
       - name: "Update snapshots: secret-multikms"
         run: yarn run projen integ:secret-multikms:snapshot
+      - name: "Update snapshots: secret-manual"
+        run: yarn run projen integ:secret-manual:snapshot
       - name: build
         run: npx projen build
       - name: Upload coverage to Codecov
