@@ -52,10 +52,13 @@ const project = new awscdk.AwsCdkConstructLibrary({
     javaPackage: 'de.db.systel.cdkSopsSecrets',
     mavenGroupId: 'de.db.systel',
     mavenArtifactId: 'cdk-sops-secrets',
+    mavenRepositoryUrl:
+      'https://maven.pkg.github.com/dbsystel/cdk-sops-secrets',
   },
   publishToNuget: {
     dotNetNamespace: 'Db.De.Systel',
     packageId: 'Db.De.Systel.CdkSopsSecrets',
+    registry: 'npm.pkg.github.com',
   },
   publishToPypi: {
     distName: 'cdk-sops-secrets',
