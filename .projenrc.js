@@ -45,6 +45,21 @@ const project = new awscdk.AwsCdkConstructLibrary({
   },
   eslint: true,
   eslintOptions: { prettier: true },
+  publishToGo: {
+    moduleName: 'github.com/dbsystel/cdk-sops-secrets',
+  },
+  publishToMaven: {
+    javaPackage: 'de.db.systel.cdkSopsSecrets',
+    mavenGroupId: 'de.db.systel',
+    mavenArtifactId: 'cdk-sops-secrets',
+    mavenRepositoryUrl:
+      'https://maven.pkg.github.com/dbsystel/cdk-sops-secrets',
+  },
+  publishToNuget: {
+    dotNetNamespace: 'Db.De.Systel',
+    packageId: 'Db.De.Systel.CdkSopsSecrets',
+    registry: 'npm.pkg.github.com',
+  },
   publishToPypi: {
     distName: 'cdk-sops-secrets',
     module: 'cdk_sops_secrets',
@@ -56,7 +71,7 @@ project.prettier.addIgnorePattern('/test/*snapshot');
 project.prettier.addIgnorePattern('API.md');
 project.prettier.addIgnorePattern('package.json');
 project.jest.addIgnorePattern('/lambda/');
-project.gitignore.addPatterns('/assets');
+project.gitignore.addPatterns('*.iml', '.idea', '/assets');
 project.npmignore.addPatterns(
   '/lambda',
   '/dist-lambda',
