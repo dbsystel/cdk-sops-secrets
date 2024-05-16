@@ -1,14 +1,15 @@
 import { App, SecretValue, Stack } from 'aws-cdk-lib';
 import { Code, Function, Runtime } from 'aws-cdk-lib/aws-lambda';
-import { SopsSecret, UploadType } from '../src/index';
+import { SopsSecret } from '../src/index';
 
 const app = new App();
 
 const stack = new Stack(app, 'SecretIntegrationAsset');
 
 new SopsSecret(stack, 'SopsSecretJSON', {
-  sopsFilePath: 'test-secrets/json/sopsfile.enc-age.json',
-  uploadType: UploadType.ASSET,
+  sopsS3Bucket: 'testbucket',
+  sopsS3Key: 'secret.json',
+  sopsFileFormat: 'json',
   // see test-secrets/README.md for further information regarding the test file
   sopsAgeKey: SecretValue.plainText(
     'AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3',
@@ -16,9 +17,10 @@ new SopsSecret(stack, 'SopsSecretJSON', {
 });
 
 new SopsSecret(stack, 'SopsSecretYAML', {
-  sopsFilePath: 'test-secrets/yaml/sopsfile.enc-age.yaml',
+  sopsS3Bucket: 'testbucket',
+  sopsS3Key: 'secret.json',
+  sopsFileFormat: 'json',
   convertToJSON: false,
-  uploadType: UploadType.ASSET,
   // see test-secrets/README.md for further information regarding the test file
   sopsAgeKey: SecretValue.plainText(
     'AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3',
@@ -26,9 +28,10 @@ new SopsSecret(stack, 'SopsSecretYAML', {
 });
 
 new SopsSecret(stack, 'SopsSecretYAMLasJSON', {
-  sopsFilePath: 'test-secrets/yaml/sopsfile.enc-age.yaml',
+  sopsS3Bucket: 'testbucket',
+  sopsS3Key: 'secret.json',
+  sopsFileFormat: 'yaml',
   convertToJSON: true,
-  uploadType: UploadType.ASSET,
   // see test-secrets/README.md for further information regarding the test file
   sopsAgeKey: SecretValue.plainText(
     'AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3',
@@ -36,9 +39,10 @@ new SopsSecret(stack, 'SopsSecretYAMLasJSON', {
 });
 
 new SopsSecret(stack, 'SopsComplexSecretJSON', {
-  sopsFilePath: 'test-secrets/json/sopsfile-complex.enc-age.json',
+  sopsS3Bucket: 'testbucket',
+  sopsS3Key: 'secret.json',
+  sopsFileFormat: 'json',
   flatten: false,
-  uploadType: UploadType.ASSET,
   // see test-secrets/README.md for further information regarding the test file
   sopsAgeKey: SecretValue.plainText(
     'AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3',
@@ -49,8 +53,9 @@ const sopsComplexSecretJSONFlat = new SopsSecret(
   stack,
   'SopsComplexSecretJSONFlat',
   {
-    sopsFilePath: 'test-secrets/json/sopsfile-complex.enc-age.json',
-    uploadType: UploadType.ASSET,
+    sopsS3Bucket: 'testbucket',
+    sopsS3Key: 'secret.json',
+    sopsFileFormat: 'json',
     flatten: true,
     // see test-secrets/README.md for further information regarding the test file
     sopsAgeKey: SecretValue.plainText(
@@ -60,9 +65,10 @@ const sopsComplexSecretJSONFlat = new SopsSecret(
 );
 
 new SopsSecret(stack, 'SopComplexSecretYAML', {
-  sopsFilePath: 'test-secrets/yaml/sopsfile-complex.enc-age.yaml',
+  sopsS3Bucket: 'testbucket',
+  sopsS3Key: 'secret.yaml',
+  sopsFileFormat: 'yaml',
   convertToJSON: false,
-  uploadType: UploadType.ASSET,
   flatten: false,
   // see test-secrets/README.md for further information regarding the test file
   sopsAgeKey: SecretValue.plainText(
@@ -71,9 +77,10 @@ new SopsSecret(stack, 'SopComplexSecretYAML', {
 });
 
 new SopsSecret(stack, 'SopComplexSecretYAMLFlat', {
-  sopsFilePath: 'test-secrets/yaml/sopsfile-complex.enc-age.yaml',
+  sopsS3Bucket: 'testbucket',
+  sopsS3Key: 'secret.yaml',
+  sopsFileFormat: 'yaml',
   convertToJSON: false,
-  uploadType: UploadType.ASSET,
   flatten: true,
   // see test-secrets/README.md for further information regarding the test file
   sopsAgeKey: SecretValue.plainText(
@@ -82,9 +89,10 @@ new SopsSecret(stack, 'SopComplexSecretYAMLFlat', {
 });
 
 new SopsSecret(stack, 'SopsComplexSecretYAMLasJSON', {
-  sopsFilePath: 'test-secrets/yaml/sopsfile-complex.enc-age.yaml',
+  sopsS3Bucket: 'testbucket',
+  sopsS3Key: 'secret.yaml',
+  sopsFileFormat: 'yaml',
   convertToJSON: true,
-  uploadType: UploadType.ASSET,
   flatten: false,
   // see test-secrets/README.md for further information regarding the test file
   sopsAgeKey: SecretValue.plainText(
@@ -96,8 +104,9 @@ const sopsComplexSecretYAMLasJSONFlat = new SopsSecret(
   stack,
   'SopsComplexSecretYAMLasJSONFlat',
   {
-    sopsFilePath: 'test-secrets/yaml/sopsfile-complex.enc-age.yaml',
-    uploadType: UploadType.ASSET,
+    sopsS3Bucket: 'testbucket',
+    sopsS3Key: 'secret.yaml',
+    sopsFileFormat: 'yaml',
     convertToJSON: true,
     flatten: true,
     // see test-secrets/README.md for further information regarding the test file
