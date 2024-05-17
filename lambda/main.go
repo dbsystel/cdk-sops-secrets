@@ -187,6 +187,9 @@ func (a AWS) syncSopsToSecretsmanager(ctx context.Context, event cfn.Event) (phy
 					}
 				}
 				decryptedInterface = dotEnvMap
+
+				// No need to flatten, because dotenv is already flat
+				resourceProperties.Flatten = "false"
 			}
 		default:
 			return "", nil, errors.New(fmt.Sprintf("Format %s not supported", resourceProperties.Format))
