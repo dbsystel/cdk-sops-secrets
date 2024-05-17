@@ -189,11 +189,13 @@ export class SopsSync extends Construct {
           sopsFileFormat = 'json';
           break;
         }
-        case 'yaml' || 'yml': {
+        case 'yaml':
+        case 'yml': {
           sopsFileFormat = 'yaml';
           break;
         }
-        case 'dotenv' || 'env': {
+        case 'dotenv':
+        case 'env': {
           sopsFileFormat = 'dotenv';
           break;
         }
