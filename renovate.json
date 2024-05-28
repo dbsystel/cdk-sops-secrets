@@ -5,7 +5,8 @@
   "packageRules": [
     {
       "matchPackagePatterns": ["go"],
-      "groupName": "go-deps"
+      "groupName": "go-deps",
+      "automerge": true
     }
   ],
   "postUpdateOptions": [
