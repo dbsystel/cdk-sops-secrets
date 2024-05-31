@@ -107,6 +107,15 @@ const sopsComplexSecretYAMLasJSONFlat = new SopsSecret(
   },
 );
 
+new SopsSecret(stack, 'SopsRawAsRaw', {
+  sopsFilePath: 'test-secrets/raw/sopsfile.enc-age.raw',
+  uploadType: UploadType.ASSET,
+  // see test-secrets/README.md for further information regarding the test file
+  sopsAgeKey: SecretValue.plainText(
+    'AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3',
+  ),
+});
+
 new Function(stack, 'TestFunction', {
   code: Code.fromInline('test'),
   handler: 'test',

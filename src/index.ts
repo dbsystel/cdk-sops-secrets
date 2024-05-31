@@ -83,7 +83,7 @@ export interface SopsSyncOptions {
    *
    * @default - The fileformat will be derived from the file ending
    */
-  readonly sopsFileFormat?: undefined | 'json' | 'yaml' | 'dotenv';
+  readonly sopsFileFormat?: undefined | 'json' | 'yaml' | 'dotenv' | 'raw';
 
   /**
    * The kmsKey used to encrypt the sops file. Encrypt permissions
@@ -166,7 +166,7 @@ export class SopsSync extends Construct {
     const provider = props.sopsProvider ?? new SopsSyncProvider(scope);
 
     let uploadType = props.uploadType ?? UploadType.INLINE;
-    let sopsFileFormat: 'json' | 'yaml' | 'dotenv' | undefined =
+    let sopsFileFormat: 'json' | 'yaml' | 'dotenv' | 'raw' | undefined =
       props.sopsFileFormat;
     let sopsAsset: Asset | undefined = undefined;
     let sopsInline: { Content: string; Hash: string } | undefined = undefined;
@@ -203,6 +203,10 @@ export class SopsSync extends Construct {
         }
         case 'env': {
           sopsFileFormat = 'dotenv';
+          break;
+        }
+        case 'raw': {
+          sopsFileFormat = 'raw';
           break;
         }
         default: {
