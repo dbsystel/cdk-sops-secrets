@@ -5,7 +5,7 @@
     "SecretARN": "arn:aws:secretsmanager:eu-central-1:123456789012:secret:testsecret",
     "SopsS3File": {
       "Bucket": "..",
-      "Key": "../test-secrets/binary/sopsfile.enc-age.raw"
+      "Key": "../test-secrets/binary/sopsfile.enc-age.binary"
     },
     "Format": "binary",
     "ConvertToJSON": "false",

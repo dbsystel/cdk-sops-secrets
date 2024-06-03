@@ -3,7 +3,7 @@
 >>>S3MAnagerMockClient.Download.Input
 {
   Bucket: "..",
-  Key: "../test-secrets/binary/sopsfile.enc-age.raw"
+  Key: "../test-secrets/binary/sopsfile.enc-age.binary"
 }
 ---
 
