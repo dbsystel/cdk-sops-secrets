@@ -107,8 +107,8 @@ const sopsComplexSecretYAMLasJSONFlat = new SopsSecret(
   },
 );
 
-new SopsSecret(stack, 'SopsRawAsRaw', {
-  sopsFilePath: 'test-secrets/raw/sopsfile.enc-age.raw',
+new SopsSecret(stack, 'SopsBinaryAsBinary', {
+  sopsFilePath: 'test-secrets/binary/sopsfile.enc-age.binary',
   uploadType: UploadType.ASSET,
   // see test-secrets/README.md for further information regarding the test file
   sopsAgeKey: SecretValue.plainText(
