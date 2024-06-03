@@ -57,6 +57,29 @@ Even if using the main functionality should be done in 3 lines of code, there ar
 
 The most useful settings will be explained in the further chapters:
 
+### RAW - Just the raw file
+
+If you have the need to just upload a sops encrypted raw rile, just name your sops encrypted file *.raw, or specify the option "raw" as format.
+
+
+```typescript
+const secret = new SopsSecret(this, 'SopsComplexSecretJSON', {
+  ...
+  sopsFilePath: 'secrets/sopsfile-encrypted.raw',
+});
+```
+
+or
+
+```typescript
+const secret = new SopsSecret(this, 'SopsComplexSecretJSON', {
+  ...
+  sopsFilePath: 'secrets/sopsfile-encrypted.something',
+  sopsFileFormat: 'raw',
+});
+```
+
+
 ### Getting a specific (older version)
 
 While creating the secret or updating the entries of a secret, the native CDK function ```cdk.FileSystem.fingerprint(...)``` is used to generate the version information of the AWS SecretsManager secret.
