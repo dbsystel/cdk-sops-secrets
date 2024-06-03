@@ -192,10 +192,14 @@ func (a AWS) syncSopsToSecretsmanager(ctx context.Context, event cfn.Event) (phy
 				resourceProperties.Flatten = "false"
 				resourceProperties.StringifyValues = "false"
 			}
+		case "raw":
+			{
+				resourceProperties.Flatten = "false"
+				resourceProperties.StringifyValues = "false"
+			}
 		default:
 			return "", nil, errors.New(fmt.Sprintf("Format %s not supported", resourceProperties.Format))
 		}
-
 		if resourceProperties.Flatten == "" {
 			resourceProperties.Flatten = "true"
 		}
@@ -249,6 +253,7 @@ func (a AWS) syncSopsToSecretsmanager(ctx context.Context, event cfn.Event) (phy
 				return tempArn, nil, err
 			}
 		}
+
 		// Write the secret
 		updateSecretResp, err := a.updateSecret(sopsHash, resourceProperties.SecretARN, decryptedContent)
 		if err != nil {
