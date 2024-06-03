@@ -76,8 +76,9 @@ func decryptSopsFileContent(content []byte, format string) (data []byte, err err
 func (a AWS) updateSecret(sopsHash string, secretArn string, secretContent []byte) (data *secretsmanager.PutSecretValueOutput, err error) {
 	secretContentString := string(secretContent)
 	input := &secretsmanager.PutSecretValueInput{
-		SecretId:           &secretArn,
-		SecretString:       &secretContentString,
+		SecretId:     &secretArn,
+		SecretString: &secretContentString,
+
 		ClientRequestToken: &sopsHash,
 	}
 	secretResp, secretErr := a.secretsmanager.PutSecretValue(input)
@@ -192,7 +193,7 @@ func (a AWS) syncSopsToSecretsmanager(ctx context.Context, event cfn.Event) (phy
 				resourceProperties.Flatten = "false"
 				resourceProperties.StringifyValues = "false"
 			}
-		case "raw":
+		case "binary":
 			{
 				resourceProperties.Flatten = "false"
 				resourceProperties.StringifyValues = "false"
