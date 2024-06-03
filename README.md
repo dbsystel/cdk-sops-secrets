@@ -57,15 +57,15 @@ Even if using the main functionality should be done in 3 lines of code, there ar
 
 The most useful settings will be explained in the further chapters:
 
-### RAW - Just the raw file
+### Binary - Just the raw file
 
-If you have the need to just upload a sops encrypted raw rile, just name your sops encrypted file *.raw, or specify the option "raw" as format.
+If you have the need to just upload a sops encrypted binary file, just name your sops encrypted file *.binary, or specify the option "binary" as format.
 
 
 ```typescript
 const secret = new SopsSecret(this, 'SopsComplexSecretJSON', {
   ...
-  sopsFilePath: 'secrets/sopsfile-encrypted.raw',
+  sopsFilePath: 'secrets/sopsfile-encrypted.binary',
 });
 ```
 
@@ -75,7 +75,7 @@ or
 const secret = new SopsSecret(this, 'SopsComplexSecretJSON', {
   ...
   sopsFilePath: 'secrets/sopsfile-encrypted.something',
-  sopsFileFormat: 'raw',
+  sopsFileFormat: 'binary',
 });
 ```
 
