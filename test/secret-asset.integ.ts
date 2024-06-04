@@ -119,7 +119,7 @@ new SopsSecret(stack, 'SopsBinaryAsBinary', {
 new Function(stack, 'TestFunction', {
   code: Code.fromInline('test'),
   handler: 'test',
-  runtime: Runtime.NODEJS_14_X,
+  runtime: Runtime.NODEJS_20_X,
   environment: {
     ...createMapComplex('SopsComplexSecretJSONFlat', sopsComplexSecretJSONFlat),
     ...createMapComplex(
