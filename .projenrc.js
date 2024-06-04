@@ -2,7 +2,7 @@ const { awscdk } = require('projen');
 const project = new awscdk.AwsCdkConstructLibrary({
   author: 'Markus Siebert',
   authorAddress: 'markus.siebert@deutschebahn.com',
-  cdkVersion: '2.1.0',
+  cdkVersion: '2.144.0',
   stability: 'stable',
   homepage: 'https://constructs.dev/packages/cdk-sops-secrets',
   description:
