@@ -564,10 +564,14 @@ new SopsSyncProvider(scope: Construct, id?: string)
 | <code><a href="#cdk-sops-secrets.SopsSyncProvider.applyRemovalPolicy">applyRemovalPolicy</a></code> | Apply the given removal policy to this resource. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProvider.addEventSource">addEventSource</a></code> | Adds an event source to this function. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProvider.addEventSourceMapping">addEventSourceMapping</a></code> | Adds an event source that maps to this AWS Lambda function. |
+| <code><a href="#cdk-sops-secrets.SopsSyncProvider.addFunctionUrl">addFunctionUrl</a></code> | Adds a url to this lambda function. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProvider.addPermission">addPermission</a></code> | Adds a permission to the Lambda resource policy. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProvider.addToRolePolicy">addToRolePolicy</a></code> | Adds a statement to the IAM role assumed by the instance. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProvider.configureAsyncInvoke">configureAsyncInvoke</a></code> | Configures options for asynchronous invocation. |
+| <code><a href="#cdk-sops-secrets.SopsSyncProvider.considerWarningOnInvokeFunctionPermissions">considerWarningOnInvokeFunctionPermissions</a></code> | A warning will be added to functions under the following conditions: - permissions that include `lambda:InvokeFunction` are added to the unqualified function. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProvider.grantInvoke">grantInvoke</a></code> | Grant the given identity permissions to invoke this Lambda. |
+| <code><a href="#cdk-sops-secrets.SopsSyncProvider.grantInvokeCompositePrincipal">grantInvokeCompositePrincipal</a></code> | Grant multiple principals the ability to invoke this Lambda via CompositePrincipal. |
+| <code><a href="#cdk-sops-secrets.SopsSyncProvider.grantInvokeUrl">grantInvokeUrl</a></code> | Grant the given identity permissions to invoke this Lambda Function URL. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProvider.metric">metric</a></code> | Return the given named metric for this Function. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProvider.metricDuration">metricDuration</a></code> | How long execution of this Lambda takes. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProvider.metricErrors">metricErrors</a></code> | How many invocations of this Lambda fail. |
@@ -619,11 +623,11 @@ public addEventSource(source: IEventSource): void
 
 Adds an event source to this function.
 
-Event sources are implemented in the @aws-cdk/aws-lambda-event-sources module.
+Event sources are implemented in the aws-cdk-lib/aws-lambda-event-sources module.
 
 The following example adds an SQS Queue as an event source:
 ```
-import { SqsEventSource } from '@aws-cdk/aws-lambda-event-sources';
+import { SqsEventSource } from 'aws-cdk-lib/aws-lambda-event-sources';
 myFunction.addEventSource(new SqsEventSource(myQueue));
 ```
 
@@ -650,6 +654,20 @@ Adds an event source that maps to this AWS Lambda function.
 ###### `options`<sup>Required</sup> <a name="options" id="cdk-sops-secrets.SopsSyncProvider.addEventSourceMapping.parameter.options"></a>
 
 - *Type:* aws-cdk-lib.aws_lambda.EventSourceMappingOptions
+
+---
+
+##### `addFunctionUrl` <a name="addFunctionUrl" id="cdk-sops-secrets.SopsSyncProvider.addFunctionUrl"></a>
+
+```typescript
+public addFunctionUrl(options?: FunctionUrlOptions): FunctionUrl
+```
+
+Adds a url to this lambda function.
+
+###### `options`<sup>Optional</sup> <a name="options" id="cdk-sops-secrets.SopsSyncProvider.addFunctionUrl.parameter.options"></a>
+
+- *Type:* aws-cdk-lib.aws_lambda.FunctionUrlOptions
 
 ---
 
@@ -701,6 +719,31 @@ Configures options for asynchronous invocation.
 
 ---
 
+##### `considerWarningOnInvokeFunctionPermissions` <a name="considerWarningOnInvokeFunctionPermissions" id="cdk-sops-secrets.SopsSyncProvider.considerWarningOnInvokeFunctionPermissions"></a>
+
+```typescript
+public considerWarningOnInvokeFunctionPermissions(scope: Construct, action: string): void
+```
+
+A warning will be added to functions under the following conditions: - permissions that include `lambda:InvokeFunction` are added to the unqualified function.
+
+function.currentVersion is invoked before or after the permission is created.
+
+This applies only to permissions on Lambda functions, not versions or aliases.
+This function is overridden as a noOp for QualifiedFunctionBase.
+
+###### `scope`<sup>Required</sup> <a name="scope" id="cdk-sops-secrets.SopsSyncProvider.considerWarningOnInvokeFunctionPermissions.parameter.scope"></a>
+
+- *Type:* constructs.Construct
+
+---
+
+###### `action`<sup>Required</sup> <a name="action" id="cdk-sops-secrets.SopsSyncProvider.considerWarningOnInvokeFunctionPermissions.parameter.action"></a>
+
+- *Type:* string
+
+---
+
 ##### `grantInvoke` <a name="grantInvoke" id="cdk-sops-secrets.SopsSyncProvider.grantInvoke"></a>
 
 ```typescript
@@ -710,6 +753,34 @@ public grantInvoke(grantee: IGrantable): Grant
 Grant the given identity permissions to invoke this Lambda.
 
 ###### `grantee`<sup>Required</sup> <a name="grantee" id="cdk-sops-secrets.SopsSyncProvider.grantInvoke.parameter.grantee"></a>
+
+- *Type:* aws-cdk-lib.aws_iam.IGrantable
+
+---
+
+##### `grantInvokeCompositePrincipal` <a name="grantInvokeCompositePrincipal" id="cdk-sops-secrets.SopsSyncProvider.grantInvokeCompositePrincipal"></a>
+
+```typescript
+public grantInvokeCompositePrincipal(compositePrincipal: CompositePrincipal): Grant[]
+```
+
+Grant multiple principals the ability to invoke this Lambda via CompositePrincipal.
+
+###### `compositePrincipal`<sup>Required</sup> <a name="compositePrincipal" id="cdk-sops-secrets.SopsSyncProvider.grantInvokeCompositePrincipal.parameter.compositePrincipal"></a>
+
+- *Type:* aws-cdk-lib.aws_iam.CompositePrincipal
+
+---
+
+##### `grantInvokeUrl` <a name="grantInvokeUrl" id="cdk-sops-secrets.SopsSyncProvider.grantInvokeUrl"></a>
+
+```typescript
+public grantInvokeUrl(grantee: IGrantable): Grant
+```
+
+Grant the given identity permissions to invoke this Lambda Function URL.
+
+###### `grantee`<sup>Required</sup> <a name="grantee" id="cdk-sops-secrets.SopsSyncProvider.grantInvokeUrl.parameter.grantee"></a>
 
 - *Type:* aws-cdk-lib.aws_iam.IGrantable
 
@@ -894,6 +965,7 @@ public addAgeKey(key: SecretValue): void
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#cdk-sops-secrets.SopsSyncProvider.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+| <code><a href="#cdk-sops-secrets.SopsSyncProvider.isOwnedResource">isOwnedResource</a></code> | Returns true if the construct was created by CDK, and false otherwise. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProvider.isResource">isResource</a></code> | Check whether the given construct is a Resource. |
 
 ---
@@ -913,6 +985,22 @@ Checks if `x` is a construct.
 - *Type:* any
 
 Any object.
+
+---
+
+##### `isOwnedResource` <a name="isOwnedResource" id="cdk-sops-secrets.SopsSyncProvider.isOwnedResource"></a>
+
+```typescript
+import { SopsSyncProvider } from 'cdk-sops-secrets'
+
+SopsSyncProvider.isOwnedResource(construct: IConstruct)
+```
+
+Returns true if the construct was created by CDK, and false otherwise.
+
+###### `construct`<sup>Required</sup> <a name="construct" id="cdk-sops-secrets.SopsSyncProvider.isOwnedResource.parameter.construct"></a>
+
+- *Type:* constructs.IConstruct
 
 ---
 
@@ -939,6 +1027,7 @@ Check whether the given construct is a Resource.
 | <code><a href="#cdk-sops-secrets.SopsSyncProvider.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProvider.property.env">env</a></code> | <code>aws-cdk-lib.ResourceEnvironment</code> | The environment this resource belongs to. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProvider.property.stack">stack</a></code> | <code>aws-cdk-lib.Stack</code> | The stack in which this resource is defined. |
+| <code><a href="#cdk-sops-secrets.SopsSyncProvider.property.architecture">architecture</a></code> | <code>aws-cdk-lib.aws_lambda.Architecture</code> | The architecture of this Lambda Function. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProvider.property.connections">connections</a></code> | <code>aws-cdk-lib.aws_ec2.Connections</code> | Access the Connections object. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProvider.property.functionArn">functionArn</a></code> | <code>string</code> | The ARN fo the function. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProvider.property.functionName">functionName</a></code> | <code>string</code> | The name of the function. |
@@ -946,6 +1035,7 @@ Check whether the given construct is a Resource.
 | <code><a href="#cdk-sops-secrets.SopsSyncProvider.property.isBoundToVpc">isBoundToVpc</a></code> | <code>boolean</code> | Whether or not this Lambda function was bound to a VPC. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProvider.property.latestVersion">latestVersion</a></code> | <code>aws-cdk-lib.aws_lambda.IVersion</code> | The `$LATEST` version of this function. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProvider.property.permissionsNode">permissionsNode</a></code> | <code>constructs.Node</code> | The construct node where permissions are attached. |
+| <code><a href="#cdk-sops-secrets.SopsSyncProvider.property.resourceArnsForGrantInvoke">resourceArnsForGrantInvoke</a></code> | <code>string[]</code> | The ARN(s) to put into the resource field of the generated IAM policy for grantInvoke(). |
 | <code><a href="#cdk-sops-secrets.SopsSyncProvider.property.role">role</a></code> | <code>aws-cdk-lib.aws_iam.IRole</code> | The IAM role associated with this function. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProvider.property.currentVersion">currentVersion</a></code> | <code>aws-cdk-lib.aws_lambda.Version</code> | Returns a `lambda.Version` which represents the current version of this singleton Lambda function. A new version will be created every time the function's configuration changes. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProvider.property.logGroup">logGroup</a></code> | <code>aws-cdk-lib.aws_logs.ILogGroup</code> | The LogGroup where the Lambda function's logs are made available. |
@@ -993,6 +1083,18 @@ public readonly stack: Stack;
 - *Type:* aws-cdk-lib.Stack
 
 The stack in which this resource is defined.
+
+---
+
+##### `architecture`<sup>Required</sup> <a name="architecture" id="cdk-sops-secrets.SopsSyncProvider.property.architecture"></a>
+
+```typescript
+public readonly architecture: Architecture;
+```
+
+- *Type:* aws-cdk-lib.aws_lambda.Architecture
+
+The architecture of this Lambda Function.
 
 ---
 
@@ -1091,6 +1193,18 @@ The construct node where permissions are attached.
 
 ---
 
+##### `resourceArnsForGrantInvoke`<sup>Required</sup> <a name="resourceArnsForGrantInvoke" id="cdk-sops-secrets.SopsSyncProvider.property.resourceArnsForGrantInvoke"></a>
+
+```typescript
+public readonly resourceArnsForGrantInvoke: string[];
+```
+
+- *Type:* string[]
+
+The ARN(s) to put into the resource field of the generated IAM policy for grantInvoke().
+
+---
+
 ##### `role`<sup>Optional</sup> <a name="role" id="cdk-sops-secrets.SopsSyncProvider.property.role"></a>
 
 ```typescript
@@ -1176,6 +1290,9 @@ const sopsSecretProps: SopsSecretProps = { ... }
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.removalPolicy">removalPolicy</a></code> | <code>aws-cdk-lib.RemovalPolicy</code> | Policy to apply when the secret is removed from this stack. |
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.replicaRegions">replicaRegions</a></code> | <code>aws-cdk-lib.aws_secretsmanager.ReplicaRegion[]</code> | A list of regions where to replicate this secret. |
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.secretName">secretName</a></code> | <code>string</code> | A name for the secret. |
+| <code><a href="#cdk-sops-secrets.SopsSecretProps.property.secretObjectValue">secretObjectValue</a></code> | <code>{[ key: string ]: aws-cdk-lib.SecretValue}</code> | Initial value for a JSON secret. |
+| <code><a href="#cdk-sops-secrets.SopsSecretProps.property.secretStringBeta1">secretStringBeta1</a></code> | <code>aws-cdk-lib.aws_secretsmanager.SecretStringValueBeta1</code> | Initial value for the secret. |
+| <code><a href="#cdk-sops-secrets.SopsSecretProps.property.secretStringValue">secretStringValue</a></code> | <code>aws-cdk-lib.SecretValue</code> | Initial value for the secret. |
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.convertToJSON">convertToJSON</a></code> | <code>boolean</code> | Should the encrypted sops value should be converted to JSON? |
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.flatten">flatten</a></code> | <code>boolean</code> | Should the structure be flattened? |
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.sopsAgeKey">sopsAgeKey</a></code> | <code>aws-cdk-lib.SecretValue</code> | The age key that should be used for encryption. |
@@ -1227,6 +1344,8 @@ public readonly generateSecretString: SecretStringGenerator;
 
 Configuration for how to generate a secret value.
 
+Only one of `secretString` and `generateSecretString` can be provided.
+
 ---
 
 ##### `removalPolicy`<sup>Optional</sup> <a name="removalPolicy" id="cdk-sops-secrets.SopsSecretProps.property.removalPolicy"></a>
@@ -1268,6 +1387,96 @@ A name for the secret.
 
 Note that deleting secrets from SecretsManager does not happen immediately, but after a 7 to
 30 days blackout period. During that period, it is not possible to create another secret that shares the same name.
+
+---
+
+##### `secretObjectValue`<sup>Optional</sup> <a name="secretObjectValue" id="cdk-sops-secrets.SopsSecretProps.property.secretObjectValue"></a>
+
+```typescript
+public readonly secretObjectValue: {[ key: string ]: SecretValue};
+```
+
+- *Type:* {[ key: string ]: aws-cdk-lib.SecretValue}
+- *Default:* SecretsManager generates a new secret value.
+
+Initial value for a JSON secret.
+
+**NOTE:** *It is **highly** encouraged to leave this field undefined and allow SecretsManager to create the secret value.
+The secret object -- if provided -- will be included in the output of the cdk as part of synthesis,
+and will appear in the CloudFormation template in the console. This can be secure(-ish) if that value is merely reference to
+another resource (or one of its attributes), but if the value is a plaintext string, it will be visible to anyone with access
+to the CloudFormation template (via the AWS Console, SDKs, or CLI).
+
+Specifies a JSON object that you want to encrypt and store in this new version of the secret.
+To specify a simple string value instead, use `SecretProps.secretStringValue`
+
+Only one of `secretStringBeta1`, `secretStringValue`, 'secretObjectValue', and `generateSecretString` can be provided.
+
+---
+
+*Example*
+
+```typescript
+declare const user: iam.User;
+declare const accessKey: iam.AccessKey;
+declare const stack: Stack;
+new secretsmanager.Secret(stack, 'JSONSecret', {
+  secretObjectValue: {
+    username: SecretValue.unsafePlainText(user.userName), // intrinsic reference, not exposed as plaintext
+    database: SecretValue.unsafePlainText('foo'), // rendered as plain text, but not a secret
+    password: accessKey.secretAccessKey, // SecretValue
+  },
+});
+```
+
+
+##### ~~`secretStringBeta1`~~<sup>Optional</sup> <a name="secretStringBeta1" id="cdk-sops-secrets.SopsSecretProps.property.secretStringBeta1"></a>
+
+- *Deprecated:* Use `secretStringValue` instead.
+
+```typescript
+public readonly secretStringBeta1: SecretStringValueBeta1;
+```
+
+- *Type:* aws-cdk-lib.aws_secretsmanager.SecretStringValueBeta1
+- *Default:* SecretsManager generates a new secret value.
+
+Initial value for the secret.
+
+**NOTE:** *It is **highly** encouraged to leave this field undefined and allow SecretsManager to create the secret value.
+The secret string -- if provided -- will be included in the output of the cdk as part of synthesis,
+and will appear in the CloudFormation template in the console. This can be secure(-ish) if that value is merely reference to
+another resource (or one of its attributes), but if the value is a plaintext string, it will be visible to anyone with access
+to the CloudFormation template (via the AWS Console, SDKs, or CLI).
+
+Specifies text data that you want to encrypt and store in this new version of the secret.
+May be a simple string value, or a string representation of a JSON structure.
+
+Only one of `secretStringBeta1`, `secretStringValue`, and `generateSecretString` can be provided.
+
+---
+
+##### `secretStringValue`<sup>Optional</sup> <a name="secretStringValue" id="cdk-sops-secrets.SopsSecretProps.property.secretStringValue"></a>
+
+```typescript
+public readonly secretStringValue: SecretValue;
+```
+
+- *Type:* aws-cdk-lib.SecretValue
+- *Default:* SecretsManager generates a new secret value.
+
+Initial value for the secret.
+
+**NOTE:** *It is **highly** encouraged to leave this field undefined and allow SecretsManager to create the secret value.
+The secret string -- if provided -- will be included in the output of the cdk as part of synthesis,
+and will appear in the CloudFormation template in the console. This can be secure(-ish) if that value is merely reference to
+another resource (or one of its attributes), but if the value is a plaintext string, it will be visible to anyone with access
+to the CloudFormation template (via the AWS Console, SDKs, or CLI).
+
+Specifies text data that you want to encrypt and store in this new version of the secret.
+May be a simple string value. To provide a string representation of JSON structure, use `SecretProps.secretObjectValue` instead.
+
+Only one of `secretStringBeta1`, `secretStringValue`, 'secretObjectValue', and `generateSecretString` can be provided.
 
 ---
 
