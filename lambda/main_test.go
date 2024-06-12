@@ -40,6 +40,19 @@ func Test_UpdateSecret(t *testing.T) {
 
 	snaps.MatchSnapshot(t, response)
 }
+
+func Test_UpdateSSMParameter(t *testing.T) {
+	mocks := getMocks(t)
+
+	paramterName := "/foo/bar"
+	parameterValue := []byte("some-secret-data")
+
+	response, err := mocks.updateSSMParameter(paramterName, parameterValue, "key")
+	check(err)
+
+	snaps.MatchSnapshot(t, response)
+}
+
 func Test_DecryptSopsFileContent(t *testing.T) {
 
 	os.Setenv("SOPS_AGE_KEY", "AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3")
