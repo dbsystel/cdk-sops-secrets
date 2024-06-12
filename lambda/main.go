@@ -19,6 +19,8 @@ import (
 	"github.com/aws/aws-sdk-go/service/s3/s3manager/s3manageriface"
 	"github.com/aws/aws-sdk-go/service/secretsmanager"
 	"github.com/aws/aws-sdk-go/service/secretsmanager/secretsmanageriface"
+	"github.com/aws/aws-sdk-go/service/ssm"
+	"github.com/aws/aws-sdk-go/service/ssm/ssmiface"
 	"github.com/getsops/sops/v3/decrypt"
 	"gopkg.in/yaml.v3"
 
@@ -35,7 +37,9 @@ type SopsInline struct {
 	Hash    string `json:"Hash,omitempty"`
 }
 type SopsSyncResourcePropertys struct {
-	SecretARN       string     `json:"SecretARN"`
+	SecretARN       string     `json:"SecretARN,omitempty"`
+	ParameterName   string     `json:"ParameterName,omitempty"`
+	EncryptionKey   string     `json:"EncryptionKey,omitempty"`
 	SopsS3File      SopsS3File `json:"SopsS3File,omitempty"`
 	SopsInline      SopsInline `json:"SopsInline,omitempty"`
 	Format          string     `json:"Format"`
@@ -46,6 +50,7 @@ type SopsSyncResourcePropertys struct {
 
 type AWS struct {
 	secretsmanager secretsmanageriface.SecretsManagerAPI
+	ssm            ssmiface.SSMAPI
 	s3downlaoder   s3manageriface.DownloaderAPI
 }
 
@@ -90,8 +95,25 @@ func (a AWS) updateSecret(sopsHash string, secretArn string, secretContent []byt
 	return secretResp, nil
 }
 
+func (a AWS) updateSSMParameter(parameterName string, parameterContent []byte, keyId string) (response *ssm.PutParameterOutput, err error) {
+	parameterContentString := string(parameterContent)
+	input := &ssm.PutParameterInput{
+		Name:      &parameterName,
+		Value:     &parameterContentString,
+		Type:      aws.String("SecureString"),
+		Overwrite: aws.Bool(true),
+		KeyId:     &keyId,
+	}
+	paramResp, paramErr := a.ssm.PutParameter(input)
+	if paramErr != nil {
+		return nil, errors.New(fmt.Sprintf("Failed to store parameter value:\nparameterName: %s\n%v\n", parameterName, paramErr))
+	}
+	log.Printf("Successfully stored parameter:\n%v\n", paramResp)
+	return paramResp, nil
+}
+
 func generatePhysicalResourceId(input string) string {
-	re := regexp.MustCompile(`(^arn:.*:secretsmanager:)(.*)`)
+	re := regexp.MustCompile(`(^arn:.*:secretsmanager:|ssm:)(.*)`)
 	return re.ReplaceAllString(input, `arn:custom:sopssync:$2`)
 }
 
@@ -101,7 +123,6 @@ func (a AWS) syncSopsToSecretsmanager(ctx context.Context, event cfn.Event) (phy
 	// log.Printf("Function invoked with:\n %s", eventJson)
 
 	if event.RequestType == cfn.RequestCreate || event.RequestType == cfn.RequestUpdate {
-
 		// some casting
 
 		jsonResourceProps, err := json.Marshal(event.ResourceProperties)
@@ -114,7 +135,7 @@ func (a AWS) syncSopsToSecretsmanager(ctx context.Context, event cfn.Event) (phy
 			return "", nil, err
 		}
 
-		tempArn := generatePhysicalResourceId(resourceProperties.SecretARN)
+		tempArn := generatePhysicalResourceId(resourceProperties.SecretARN + resourceProperties.ParameterName)
 
 		sopsFile := resourceProperties.SopsS3File
 		sopsInline := resourceProperties.SopsInline
@@ -186,8 +207,6 @@ func (a AWS) syncSopsToSecretsmanager(ctx context.Context, event cfn.Event) (phy
 					}
 				}
 				decryptedInterface = dotEnvMap
-
-				// No need to flatten, because dotenv is already flat
 				resourceProperties.Flatten = "false"
 				resourceProperties.StringifyValues = "false"
 			}
@@ -253,36 +272,45 @@ func (a AWS) syncSopsToSecretsmanager(ctx context.Context, event cfn.Event) (phy
 				return tempArn, nil, err
 			}
 		}
-		// Write the secret
-		updateSecretResp, err := a.updateSecret(sopsHash, resourceProperties.SecretARN, decryptedContent)
-		if err != nil {
-			return tempArn, nil, err
+		if resourceProperties.SecretARN != "" {
+			updateSecretResp, err := a.updateSecret(sopsHash, resourceProperties.SecretARN, decryptedContent)
+			if err != nil {
+				return tempArn, nil, err
+			}
+			returnData := make(map[string]interface{})
+			returnData["ARN"] = *updateSecretResp.ARN
+			returnData["Name"] = *updateSecretResp.Name
+			returnData["VersionStages"] = updateSecretResp.VersionStages
+			returnData["VersionId"] = *updateSecretResp.VersionId
+			return *updateSecretResp.ARN, returnData, nil
+		} else if resourceProperties.ParameterName != "" {
+			response, err := a.updateSSMParameter(resourceProperties.ParameterName, decryptedContent, resourceProperties.EncryptionKey)
+			if err != nil {
+				return tempArn, nil, err
+			}
+			returnData := make(map[string]interface{})
+			returnData["ParameterName"] = resourceProperties.ParameterName
+			returnData["Version"] = response.Version
+			returnData["Tier"] = response.Tier
+			return tempArn, returnData, nil
+		} else {
+			// Should never happen ...
+			return tempArn, nil, errors.New("Neither SecretARN nor ParameterName is provided")
 		}
-
-		returnData := make(map[string]interface{})
-
-		returnData["ARN"] = *updateSecretResp.ARN
-		returnData["Name"] = *updateSecretResp.Name
-		returnData["VersionStages"] = updateSecretResp.VersionStages
-		returnData["VersionId"] = *updateSecretResp.VersionId
-
-		return *updateSecretResp.ARN, returnData, nil
 	} else if event.RequestType == cfn.RequestDelete {
 		return "", nil, nil
 	} else {
-		// Should never happen ...
 		return "", nil, errors.New(fmt.Sprintf("RequestType '%s' not supported", event.RequestType))
 	}
 }
 
 func handleRequest(ctx context.Context, event cfn.Event) (physicalResourceID string, data map[string]interface{}, err error) {
 	awsSession := session.New()
-
 	a := &AWS{
 		secretsmanager: secretsmanager.New(awsSession),
+		ssm:            ssm.New(awsSession),
 		s3downlaoder:   s3manager.NewDownloader(awsSession),
 	}
-
 	return a.syncSopsToSecretsmanager(ctx, event)
 }
 
@@ -366,7 +394,6 @@ func stringifyValues(input any) (interface{}, string, error) {
 }
 
 func flatten(parentkey string, input any, output map[string]interface{}) error {
-
 	switch child := input.(type) {
 	case map[string]interface{}:
 		{
@@ -376,7 +403,6 @@ func flatten(parentkey string, input any, output map[string]interface{}) error {
 				} else {
 					flatten(fmt.Sprintf("%s%s%s", parentkey, ".", k), v, output)
 				}
-
 			}
 		}
 	case []interface{}:
@@ -394,7 +420,6 @@ func flatten(parentkey string, input any, output map[string]interface{}) error {
 			output[parentkey] = input
 		}
 	}
-
 	return nil
 }
 
@@ -403,7 +428,6 @@ func toSopsSyncResourcePropertys(input *map[string]interface{}) (*SopsSyncResour
 	if err != nil {
 		return nil, err
 	}
-
 	resourceProperties := SopsSyncResourcePropertys{}
 	if err := json.Unmarshal(jsonResourceProps, &resourceProperties); err != nil {
 		return nil, err

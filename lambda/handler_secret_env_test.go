@@ -7,7 +7,7 @@ import (
 )
 
 func Test_FullWorkflow_Create_S3_ENV_Simple(t *testing.T) {
-	mocks, ctx, event := prepareHandler(t, "events/event_create_s3_env_simple.json")
+	mocks, ctx, event := prepareHandler(t, "events/event_create_s3_secret_env_simple.json")
 
 	phys, data, err := mocks.syncSopsToSecretsmanager(ctx, event)
 	check(err)
@@ -15,7 +15,7 @@ func Test_FullWorkflow_Create_S3_ENV_Simple(t *testing.T) {
 }
 
 func Test_FullWorkflow_Create_S3_ENV_as_JSON_Simple(t *testing.T) {
-	mocks, ctx, event := prepareHandler(t, "events/event_create_s3_env_as_json_simple.json")
+	mocks, ctx, event := prepareHandler(t, "events/event_create_s3_secret_env_as_json_simple.json")
 	phys, data, err := mocks.syncSopsToSecretsmanager(ctx, event)
 	check(err)
 	snaps.MatchSnapshot(t, ">>>syncSopsToSecretsmanager", phys, data, err)
