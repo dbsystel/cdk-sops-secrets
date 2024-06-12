@@ -3,6 +3,8 @@ package main
 import (
 	"crypto/sha256"
 	"fmt"
+	"github.com/aws/aws-sdk-go/service/ssm"
+	"github.com/aws/aws-sdk-go/service/ssm/ssmiface"
 	"io"
 	"testing"
 
@@ -132,4 +134,24 @@ func (d S3ManagerMockClient) Download(w io.WriterAt, input *s3.GetObjectInput, o
 	_, err = w.WriteAt(dat, int64(0))
 	check(err)
 	return int64(len(dat)), err
+}
+
+type MockSSMClient struct {
+	ssmiface.SSMAPI
+	t *testing.T
+}
+
+type putParameterValueInputNotSecure ssm.PutParameterInput
+
+func (m *MockSSMClient) PutParameter(input *ssm.PutParameterInput) (*ssm.PutParameterOutput, error) {
+	snaps.MatchSnapshot(m.t, ">>>SecretsManagerMockClient.PutParameterValue.Input", putParameterValueInputNotSecure(*input))
+
+	var version int64
+	version = 1
+
+	tier := ssm.ParameterTierStandard
+	return &ssm.PutParameterOutput{
+		Tier:    &tier,
+		Version: &version,
+	}, nil
 }

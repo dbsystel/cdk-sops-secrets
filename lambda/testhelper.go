@@ -67,6 +67,9 @@ func getMocks(t *testing.T) *AWS {
 		s3downlaoder: &S3ManagerMockClient{
 			t: t,
 		},
+		ssm: &MockSSMClient{
+			t: t,
+		},
 	}
 }
 func prepareHandler(t *testing.T, eventFile string) (*AWS, context.Context, cfn.Event) {

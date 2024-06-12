@@ -467,7 +467,7 @@ test('Methods of SopsSync not implemented', () => {
   });
 
   expect(() => secret.addRotationSchedule('something', {})).toThrowError(
-    `Method addTotationSchedule('something', {}) not allowed as this secret is managed by SopsSync`,
+    `Method addRotationSchedule('something', {}) not allowed as this secret is managed by SopsSync`,
   );
   expect(() =>
     secret.grantWrite(

@@ -1,6 +1,5 @@
 import * as fs from 'fs';
 import * as path from 'path';
-//import * as crypto from 'crypto';
 import {
   Annotations,
   CustomResource,
@@ -29,6 +28,11 @@ import {
   Secret,
   SecretProps,
 } from 'aws-cdk-lib/aws-secretsmanager';
+import {
+  IStringParameter,
+  StringParameter,
+  StringParameterProps,
+} from 'aws-cdk-lib/aws-ssm';
 import { Construct } from 'constructs';
 
 export enum UploadType {
@@ -65,6 +69,7 @@ export interface SopsSyncOptions {
    * Both, sopsS3Bucket and sopsS3Key have to be specified
    */
   readonly sopsS3Bucket?: string;
+
   /**
    * If you want to pass the sops file via s3, you can specify the key inside the bucket
    * you can use cfn parameter here
@@ -129,7 +134,17 @@ export interface SopsSyncProps extends SopsSyncOptions {
   /**
    * The secret that will be populated with the encrypted sops file content.
    */
-  readonly secret: ISecret;
+  readonly secret?: ISecret;
+
+  /**
+   * The parameter name. If set this creates an encrypted SSM Parameter instead of a secret.
+   */
+  readonly parameterName?: string;
+
+  /**
+   * The encryption key used for encrypting the ssm parameter if `parameterName` is set.
+   */
+  readonly encryptionKey?: IKey;
 }
 
 /**
@@ -263,7 +278,22 @@ export class SopsSync extends Construct {
             }).grantDecrypt(provider.role!),
           );
         }
-        props.secret.grantWrite(provider);
+        if (props.secret) {
+          props.secret.grantWrite(provider);
+        }
+        if (props.parameterName) {
+          provider.addToRolePolicy(
+            new PolicyStatement({
+              actions: ['ssm:PutParameter'],
+              resources: [
+                `arn:aws:ssm:${Stack.of(this).region}:${
+                  Stack.of(this).account
+                }:parameter${props.parameterName}`,
+              ],
+            }),
+          );
+          props.encryptionKey?.grantEncryptDecrypt(provider);
+        }
         if (sopsAsset !== undefined) {
           sopsAsset.bucket.grantRead(provider);
         }
@@ -273,14 +303,14 @@ export class SopsSync extends Construct {
          * there will be no permissions otherwise
          */
         if (
-          props.secret.encryptionKey !== undefined &&
+          props.secret?.encryptionKey !== undefined &&
           !(props.secret.encryptionKey instanceof Key)
         ) {
           props.secret.encryptionKey.grantEncryptDecrypt(provider);
         }
       } else {
         Annotations.of(this).addWarning(
-          `Please ensure propper permissions for the passed lambda function:\n  - write Access to the secret\n  - encrypt with the sopsKmsKey${
+          `Please ensure proper permissions for the passed lambda function:\n  - write Access to the secret\n  - encrypt with the sopsKmsKey${
             uploadType === UploadType.ASSET
               ? '\n  - download from asset bucket'
               : ''
@@ -316,13 +346,15 @@ export class SopsSync extends Construct {
       serviceToken: provider.functionArn,
       resourceType: 'Custom::SopsSync',
       properties: {
-        SecretARN: props.secret.secretArn,
+        SecretARN: props.secret?.secretArn,
         SopsS3File: sopsS3File,
         SopsInline: sopsInline,
         ConvertToJSON: this.converToJSON,
         Flatten: this.flatten,
         Format: sopsFileFormat,
         StringifiedValues: this.stringifiedValues,
+        ParameterName: props.parameterName,
+        EncryptionKey: props.encryptionKey?.keyId,
       },
     });
     this.versionId = cr.getAttString('VersionId');
@@ -356,6 +388,70 @@ export class SopsSyncProvider extends SingletonFunction implements IGrantable {
 
   public addAgeKey(key: SecretValue) {
     this.sopsAgeKeys.push(key);
+  }
+}
+
+/**
+ * The configuration options of the StringParameter
+ */
+export interface SopsStringParameterProps
+  extends SopsSyncOptions,
+    StringParameterProps {
+  readonly encryptionKey: IKey;
+}
+
+/**
+ * A drop in replacement for the normal String Parameter, that is populated with the encrypted
+ * content of the given sops file.
+ */
+export class SopsStringParameter extends Construct implements IStringParameter {
+  private readonly parameter: StringParameter;
+  readonly sync: SopsSync;
+  readonly encryptionKey: IKey;
+  readonly stack: Stack;
+  readonly env: ResourceEnvironment;
+  readonly parameterArn: string;
+  readonly parameterName: string;
+  readonly parameterType: string;
+  readonly stringValue: string;
+
+  public constructor(
+    scope: Construct,
+    id: string,
+    props: SopsStringParameterProps,
+  ) {
+    super(scope, id);
+
+    this.encryptionKey = props.encryptionKey;
+    this.stack = Stack.of(scope);
+    this.env = {
+      account: this.stack.account,
+      region: this.stack.region,
+    };
+
+    this.parameter = new StringParameter(this, 'Resource', {
+      ...(props as StringParameterProps),
+      stringValue: ' ',
+    });
+    this.parameterArn = this.parameter.parameterArn;
+    this.parameterName = this.parameter.parameterName;
+    this.parameterType = this.parameter.parameterType;
+    this.stringValue = this.parameter.stringValue;
+
+    this.sync = new SopsSync(this, 'SopsSync', {
+      encryptionKey: this.parameter.encryptionKey,
+      parameterName: this.parameter.parameterName,
+      ...(props as SopsSyncOptions),
+    });
+  }
+  grantRead(grantee: IGrantable): Grant {
+    return this.parameter.grantRead(grantee);
+  }
+  grantWrite(grantee: IGrantable): Grant {
+    return this.parameter.grantWrite(grantee);
+  }
+  applyRemovalPolicy(policy: RemovalPolicy): void {
+    this.parameter.applyRemovalPolicy(policy);
   }
 }
 
@@ -398,9 +494,6 @@ export class SopsSecret extends Construct implements ISecret {
     });
   }
 
-  /**
-   * Returns the current versionId that was created via the SopsSync
-   */
   public currentVersionId(): string {
     return this.sync.versionId;
   }
@@ -418,7 +511,7 @@ export class SopsSecret extends Construct implements ISecret {
     options: RotationScheduleOptions,
   ): RotationSchedule {
     throw new Error(
-      `Method addTotationSchedule('${id}', ${JSON.stringify(
+      `Method addRotationSchedule('${id}', ${JSON.stringify(
         options,
       )}) not allowed as this secret is managed by SopsSync`,
     );

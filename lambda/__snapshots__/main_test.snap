@@ -52,3 +52,28 @@ main.putSecretValueInputNotSecure{
   VersionStages: ["ea44991f303ca1fc043cd129e135eb477c9f102e05eff7b06813202bda64638b"]
 }
 ---
+
+[Test_UpdateSSMParameter - 1]
+>>>SecretsManagerMockClient.PutParameterValue.Input
+main.putParameterValueInputNotSecure{
+    _:              struct {}{},
+    AllowedPattern: (*string)(nil),
+    DataType:       (*string)(nil),
+    Description:    (*string)(nil),
+    KeyId:          &"key",
+    Name:           &"/foo/bar",
+    Overwrite:      &bool(true),
+    Policies:       (*string)(nil),
+    Tags:           nil,
+    Tier:           (*string)(nil),
+    Type:           &"SecureString",
+    Value:          &"some-secret-data",
+}
+---
+
+[Test_UpdateSSMParameter - 2]
+{
+  Tier: "Standard",
+  Version: 1
+}
+---
