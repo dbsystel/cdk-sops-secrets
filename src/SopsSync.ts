@@ -365,7 +365,8 @@ export class SopsSync extends Construct {
         Format: sopsFileFormat,
         StringifiedValues: this.stringifiedValues,
         ParameterName: props.parameterName,
-        EncryptionKey: props.encryptionKey?.keyId,
+        EncryptionKey:
+          props.secret !== undefined ? undefined : props.encryptionKey?.keyId,
       },
     });
     this.versionId = cr.getAttString('VersionId');
