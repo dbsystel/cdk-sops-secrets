@@ -28,12 +28,12 @@ func Test_Flatten(t *testing.T) {
 	simpleStruct, err := fromJSON(ReadFile("../test-secrets/json/sopsfile.json"))
 	check(err)
 	flattenedSimpleStruct := make(map[string]interface{})
-	err = flatten("", simpleStruct, flattenedSimpleStruct)
+	err = flatten("", simpleStruct, flattenedSimpleStruct, ".")
 	snaps.MatchSnapshot(t, ">>>Simple", flattenedSimpleStruct)
 	complexStruct, err := fromJSON(ReadFile("../test-secrets/json/sopsfile-complex.json"))
 	check(err)
 	flattenedComplexStruct := make(map[string]interface{})
-	err = flatten("", complexStruct, flattenedComplexStruct)
+	err = flatten("", complexStruct, flattenedComplexStruct, ".")
 	snaps.MatchSnapshot(t, ">>>Complex", flattenedComplexStruct)
 }
 

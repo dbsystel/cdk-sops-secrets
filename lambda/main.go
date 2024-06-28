@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"reflect"
 	"regexp"
 	"strconv"
 	"strings"
@@ -37,15 +38,19 @@ type SopsInline struct {
 	Hash    string `json:"Hash,omitempty"`
 }
 type SopsSyncResourcePropertys struct {
-	SecretARN       string     `json:"SecretARN,omitempty"`
-	ParameterName   string     `json:"ParameterName,omitempty"`
-	EncryptionKey   string     `json:"EncryptionKey,omitempty"`
-	SopsS3File      SopsS3File `json:"SopsS3File,omitempty"`
-	SopsInline      SopsInline `json:"SopsInline,omitempty"`
-	Format          string     `json:"Format"`
-	ConvertToJSON   string     `json:"ConvertToJSON,omitempty"`
-	Flatten         string     `json:"Flatten,omitempty"`
-	StringifyValues string     `json:"StringifyValues,omitempty"`
+	SecretARN          string     `json:"SecretARN,omitempty"`
+	ParameterName      string     `json:"ParameterName,omitempty"`
+	EncryptionKey      string     `json:"EncryptionKey,omitempty"`
+	SopsS3File         SopsS3File `json:"SopsS3File,omitempty"`
+	SopsInline         SopsInline `json:"SopsInline,omitempty"`
+	Format             string     `json:"Format"`
+	ConvertToJSON      string     `json:"ConvertToJSON,omitempty"`
+	Flatten            string     `json:"Flatten,omitempty"`
+	FlattenSeparator   string     `json:"FlattenSeparator,omitempty"`
+	ParameterKeyPrefix string     `json:"ParameterKeyPrefix,omitempty"`
+	StringifyValues    string     `json:"StringifyValues,omitempty"`
+	CreationType       string     `json:"CreationType,omitempty"`
+	ResourceType       string     `json:"ResourceType,omitempty"`
 }
 
 type AWS struct {
@@ -231,7 +236,7 @@ func (a AWS) syncSopsToSecretsmanager(ctx context.Context, event cfn.Event) (phy
 
 		if resourcePropertiesFlatten {
 			flattenedInterface := make(map[string]interface{})
-			err := flatten("", decryptedInterface, flattenedInterface)
+			err := flatten("", decryptedInterface, flattenedInterface, resourceProperties.FlattenSeparator)
 			if err != nil {
 				return tempArn, nil, err
 			}
@@ -272,7 +277,8 @@ func (a AWS) syncSopsToSecretsmanager(ctx context.Context, event cfn.Event) (phy
 				return tempArn, nil, err
 			}
 		}
-		if resourceProperties.SecretARN != "" {
+
+		if resourceProperties.ResourceType == "SECRET" {
 			updateSecretResp, err := a.updateSecret(sopsHash, resourceProperties.SecretARN, decryptedContent)
 			if err != nil {
 				return tempArn, nil, err
@@ -283,16 +289,39 @@ func (a AWS) syncSopsToSecretsmanager(ctx context.Context, event cfn.Event) (phy
 			returnData["VersionStages"] = updateSecretResp.VersionStages
 			returnData["VersionId"] = *updateSecretResp.VersionId
 			return *updateSecretResp.ARN, returnData, nil
-		} else if resourceProperties.ParameterName != "" {
-			response, err := a.updateSSMParameter(resourceProperties.ParameterName, decryptedContent, resourceProperties.EncryptionKey)
-			if err != nil {
-				return tempArn, nil, err
+		} else if resourceProperties.ResourceType == "PARAMETER" {
+			if resourceProperties.CreationType == "MULTI" && resourcePropertiesFlatten {
+				log.Printf("Patching multiple string parameters")
+				v := reflect.ValueOf(finalInterface)
+				returnData := make(map[string]interface{})
+				for i, key := range v.MapKeys() {
+					strKey := resourceProperties.ParameterKeyPrefix + key.String()
+					log.Printf("Parameter: " + strKey)
+					value := v.MapIndex(key).Interface()
+					strValue, ok := value.(string)
+					if !ok {
+						return tempArn, nil, nil
+					}
+
+					_, err := a.updateSSMParameter(strKey, []byte(strValue), resourceProperties.EncryptionKey)
+					if err != nil {
+						return tempArn, nil, err
+					}
+					returnData[fmt.Sprintf("ParameterName[%v]", i)] = strKey
+				}
+				return tempArn, returnData, nil
+			} else {
+				log.Printf("Patching single string parameter")
+				response, err := a.updateSSMParameter(resourceProperties.ParameterName, decryptedContent, resourceProperties.EncryptionKey)
+				if err != nil {
+					return tempArn, nil, err
+				}
+				returnData := make(map[string]interface{})
+				returnData["ParameterName"] = resourceProperties.ParameterName
+				returnData["Version"] = response.Version
+				returnData["Tier"] = response.Tier
+				return tempArn, returnData, nil
 			}
-			returnData := make(map[string]interface{})
-			returnData["ParameterName"] = resourceProperties.ParameterName
-			returnData["Version"] = response.Version
-			returnData["Tier"] = response.Tier
-			return tempArn, returnData, nil
 		} else {
 			// Should never happen ...
 			return tempArn, nil, errors.New("Neither SecretARN nor ParameterName is provided")
@@ -393,15 +422,15 @@ func stringifyValues(input any) (interface{}, string, error) {
 	}
 }
 
-func flatten(parentkey string, input any, output map[string]interface{}) error {
+func flatten(parentkey string, input any, output map[string]interface{}, separator string) error {
 	switch child := input.(type) {
 	case map[string]interface{}:
 		{
 			for k, v := range child {
 				if parentkey == "" {
-					flatten(k, v, output)
+					flatten(k, v, output, separator)
 				} else {
-					flatten(fmt.Sprintf("%s%s%s", parentkey, ".", k), v, output)
+					flatten(fmt.Sprintf("%s%s%s", parentkey, separator, k), v, output, separator)
 				}
 			}
 		}
@@ -409,9 +438,9 @@ func flatten(parentkey string, input any, output map[string]interface{}) error {
 		{
 			for i, v := range child {
 				if parentkey == "" {
-					flatten(fmt.Sprintf("[%d]", i), v, output)
+					flatten(fmt.Sprintf("[%d]", i), v, output, separator)
 				} else {
-					flatten(fmt.Sprintf("%s[%d]", parentkey, i), v, output)
+					flatten(fmt.Sprintf("%s[%d]", parentkey, i), v, output, separator)
 				}
 			}
 		}

@@ -27,6 +27,22 @@ export enum UploadType {
   ASSET = 'ASSET',
 }
 
+export enum CreationType {
+  /**
+   * Create or update a single secret/parameter
+   */
+  SINGLE = 'SINGLE',
+  /**
+   * Create or update a multiple secrets/parameters by flattening the SOPS file
+   */
+  MULTI = 'MULTI',
+}
+
+export enum ResourceType {
+  SECRET = 'SECRET',
+  PARAMETER = 'PARAMETER',
+}
+
 /**
  * Configuration options for the SopsSync
  */
@@ -102,10 +118,25 @@ export interface SopsSyncOptions {
   readonly flatten?: boolean;
 
   /**
+   * If the structure should be flattened use the provided separator between keys.
+   *
+   * @default '.'
+   */
+  readonly flattenSeparator?: string;
+
+  /**
+   * Add this prefix to parameter names.
+   */
+  readonly parameterKeyPrefix?: string;
+
+  /**
    * Shall all values be flattened? This is usefull for dynamic references, as there
    * are lookup errors for certain float types
    */
   readonly stringifyValues?: boolean;
+
+  readonly creationType?: CreationType;
+  readonly resourceType?: ResourceType;
 }
 
 /**
@@ -121,6 +152,11 @@ export interface SopsSyncProps extends SopsSyncOptions {
    * The parameter name. If set this creates an encrypted SSM Parameter instead of a secret.
    */
   readonly parameterName?: string;
+
+  /**
+   * The parameter name. If set this creates an encrypted SSM Parameter instead of a secret.
+   */
+  readonly parameterNames?: string[];
 
   /**
    * The encryption key used for encrypting the ssm parameter if `parameterName` is set.
@@ -299,8 +335,22 @@ export class SopsSync extends Construct {
               resources: [
                 `arn:aws:ssm:${Stack.of(this).region}:${
                   Stack.of(this).account
-                }:parameter${props.parameterName}`,
+                }:parameter/${props.parameterName}`,
               ],
+            }),
+          );
+          props.encryptionKey?.grantEncryptDecrypt(provider);
+        }
+        if (props.parameterNames) {
+          provider.addToRolePolicy(
+            new PolicyStatement({
+              actions: ['ssm:PutParameter'],
+              resources: props.parameterNames.map(
+                (param) =>
+                  `arn:aws:ssm:${Stack.of(this).region}:${
+                    Stack.of(this).account
+                  }:parameter${param.startsWith('/') ? param : `/${param}`}`,
+              ),
             }),
           );
           props.encryptionKey?.grantEncryptDecrypt(provider);
@@ -362,11 +412,19 @@ export class SopsSync extends Construct {
         SopsInline: sopsInline,
         ConvertToJSON: this.converToJSON,
         Flatten: this.flatten,
+        FlattenSeparator: props.flattenSeparator ?? '.',
+        ParameterKeyPrefix: props.parameterKeyPrefix,
         Format: sopsFileFormat,
         StringifiedValues: this.stringifiedValues,
         ParameterName: props.parameterName,
         EncryptionKey:
           props.secret !== undefined ? undefined : props.encryptionKey?.keyId,
+        ResourceType: props.resourceType
+          ? props.resourceType.toString()
+          : ResourceType.SECRET.toString(),
+        CreationType: props.creationType
+          ? props.creationType.toString()
+          : CreationType.SINGLE.toString(),
       },
     });
     this.versionId = cr.getAttString('VersionId');

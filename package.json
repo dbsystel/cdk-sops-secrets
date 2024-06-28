@@ -89,6 +89,12 @@
     "aws-cdk-lib": "^2.144.0",
     "constructs": "^10.0.5"
   },
+  "dependencies": {
+    "yaml": "^2.4.5"
+  },
+  "bundledDependencies": [
+    "yaml"
+  ],
   "resolutions": {
     "@types/babel__traverse": "7.18.2",
     "@types/prettier": "2.6.0"

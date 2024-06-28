@@ -1,0 +1,108 @@
+
+[Test_FullWorkflow_Create_S3_Parameter_YAML_multi_Simple - 1]
+>>>S3MAnagerMockClient.Download.Input
+{
+  Bucket: "..",
+  Key: "../test-secrets/yaml/sopsfile-complex-parameters.enc-age.yaml"
+}
+---
+
+[Test_FullWorkflow_Create_S3_Parameter_YAML_multi_Simple - 2]
+>>>SecretsManagerMockClient.PutParameterValue.Input
+main.putParameterValueInputNotSecure{
+    _:              struct {}{},
+    AllowedPattern: (*string)(nil),
+    DataType:       (*string)(nil),
+    Description:    (*string)(nil),
+    KeyId:          &"",
+    Name:           &"/foo/bar/key1",
+    Overwrite:      &bool(true),
+    Policies:       (*string)(nil),
+    Tags:           nil,
+    Tier:           (*string)(nil),
+    Type:           &"SecureString",
+    Value:          &"foo",
+}
+---
+
+[Test_FullWorkflow_Create_S3_Parameter_YAML_multi_Simple - 3]
+>>>SecretsManagerMockClient.PutParameterValue.Input
+main.putParameterValueInputNotSecure{
+    _:              struct {}{},
+    AllowedPattern: (*string)(nil),
+    DataType:       (*string)(nil),
+    Description:    (*string)(nil),
+    KeyId:          &"",
+    Name:           &"/foo/bar/key2",
+    Overwrite:      &bool(true),
+    Policies:       (*string)(nil),
+    Tags:           nil,
+    Tier:           (*string)(nil),
+    Type:           &"SecureString",
+    Value:          &"bar",
+}
+---
+
+[Test_FullWorkflow_Create_S3_Parameter_YAML_multi_Simple - 4]
+>>>syncSopsToSecretsmanager
+arn:aws:arn:custom:sopssync:eu-central-1:123456789012:parameter/testsecret
+map[string]interface {}{
+    "ParameterName[0]": "/foo/bar/key1",
+    "ParameterName[1]": "/foo/bar/key2",
+}
+nil
+---
+
+[Test_FullWorkflow_Create_S3_Parameter_YAML_multi_Simple_custom_keys - 1]
+>>>S3MAnagerMockClient.Download.Input
+{
+  Bucket: "..",
+  Key: "../test-secrets/yaml/sopsfile-complex-parameters.enc-age.yaml"
+}
+---
+
+[Test_FullWorkflow_Create_S3_Parameter_YAML_multi_Simple_custom_keys - 2]
+>>>SecretsManagerMockClient.PutParameterValue.Input
+main.putParameterValueInputNotSecure{
+    _:              struct {}{},
+    AllowedPattern: (*string)(nil),
+    DataType:       (*string)(nil),
+    Description:    (*string)(nil),
+    KeyId:          &"",
+    Name:           &"_foo.bar.key1",
+    Overwrite:      &bool(true),
+    Policies:       (*string)(nil),
+    Tags:           nil,
+    Tier:           (*string)(nil),
+    Type:           &"SecureString",
+    Value:          &"foo",
+}
+---
+
+[Test_FullWorkflow_Create_S3_Parameter_YAML_multi_Simple_custom_keys - 3]
+>>>SecretsManagerMockClient.PutParameterValue.Input
+main.putParameterValueInputNotSecure{
+    _:              struct {}{},
+    AllowedPattern: (*string)(nil),
+    DataType:       (*string)(nil),
+    Description:    (*string)(nil),
+    KeyId:          &"",
+    Name:           &"_foo.bar.key2",
+    Overwrite:      &bool(true),
+    Policies:       (*string)(nil),
+    Tags:           nil,
+    Tier:           (*string)(nil),
+    Type:           &"SecureString",
+    Value:          &"bar",
+}
+---
+
+[Test_FullWorkflow_Create_S3_Parameter_YAML_multi_Simple_custom_keys - 4]
+>>>syncSopsToSecretsmanager
+arn:aws:arn:custom:sopssync:eu-central-1:123456789012:parameter/testsecret
+map[string]interface {}{
+    "ParameterName[0]": "_foo.bar.key1",
+    "ParameterName[1]": "_foo.bar.key2",
+}
+nil
+---

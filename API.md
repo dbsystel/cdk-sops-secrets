@@ -2,6 +2,149 @@
 
 ## Constructs <a name="Constructs" id="Constructs"></a>
 
+### MultiStringParameter <a name="MultiStringParameter" id="cdk-sops-secrets.MultiStringParameter"></a>
+
+#### Initializers <a name="Initializers" id="cdk-sops-secrets.MultiStringParameter.Initializer"></a>
+
+```typescript
+import { MultiStringParameter } from 'cdk-sops-secrets'
+
+new MultiStringParameter(scope: Construct, id: string, props: SopsStringParameterProps)
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#cdk-sops-secrets.MultiStringParameter.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
+| <code><a href="#cdk-sops-secrets.MultiStringParameter.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#cdk-sops-secrets.MultiStringParameter.Initializer.parameter.props">props</a></code> | <code><a href="#cdk-sops-secrets.SopsStringParameterProps">SopsStringParameterProps</a></code> | *No description.* |
+
+---
+
+##### `scope`<sup>Required</sup> <a name="scope" id="cdk-sops-secrets.MultiStringParameter.Initializer.parameter.scope"></a>
+
+- *Type:* constructs.Construct
+
+---
+
+##### `id`<sup>Required</sup> <a name="id" id="cdk-sops-secrets.MultiStringParameter.Initializer.parameter.id"></a>
+
+- *Type:* string
+
+---
+
+##### `props`<sup>Required</sup> <a name="props" id="cdk-sops-secrets.MultiStringParameter.Initializer.parameter.props"></a>
+
+- *Type:* <a href="#cdk-sops-secrets.SopsStringParameterProps">SopsStringParameterProps</a>
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#cdk-sops-secrets.MultiStringParameter.toString">toString</a></code> | Returns a string representation of this construct. |
+
+---
+
+##### `toString` <a name="toString" id="cdk-sops-secrets.MultiStringParameter.toString"></a>
+
+```typescript
+public toString(): string
+```
+
+Returns a string representation of this construct.
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#cdk-sops-secrets.MultiStringParameter.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+
+---
+
+##### ~~`isConstruct`~~ <a name="isConstruct" id="cdk-sops-secrets.MultiStringParameter.isConstruct"></a>
+
+```typescript
+import { MultiStringParameter } from 'cdk-sops-secrets'
+
+MultiStringParameter.isConstruct(x: any)
+```
+
+Checks if `x` is a construct.
+
+###### `x`<sup>Required</sup> <a name="x" id="cdk-sops-secrets.MultiStringParameter.isConstruct.parameter.x"></a>
+
+- *Type:* any
+
+Any object.
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#cdk-sops-secrets.MultiStringParameter.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#cdk-sops-secrets.MultiStringParameter.property.encryptionKey">encryptionKey</a></code> | <code>aws-cdk-lib.aws_kms.IKey</code> | *No description.* |
+| <code><a href="#cdk-sops-secrets.MultiStringParameter.property.env">env</a></code> | <code>aws-cdk-lib.ResourceEnvironment</code> | *No description.* |
+| <code><a href="#cdk-sops-secrets.MultiStringParameter.property.stack">stack</a></code> | <code>aws-cdk-lib.Stack</code> | *No description.* |
+| <code><a href="#cdk-sops-secrets.MultiStringParameter.property.sync">sync</a></code> | <code><a href="#cdk-sops-secrets.SopsSync">SopsSync</a></code> | *No description.* |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="cdk-sops-secrets.MultiStringParameter.property.node"></a>
+
+```typescript
+public readonly node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+##### `encryptionKey`<sup>Required</sup> <a name="encryptionKey" id="cdk-sops-secrets.MultiStringParameter.property.encryptionKey"></a>
+
+```typescript
+public readonly encryptionKey: IKey;
+```
+
+- *Type:* aws-cdk-lib.aws_kms.IKey
+
+---
+
+##### `env`<sup>Required</sup> <a name="env" id="cdk-sops-secrets.MultiStringParameter.property.env"></a>
+
+```typescript
+public readonly env: ResourceEnvironment;
+```
+
+- *Type:* aws-cdk-lib.ResourceEnvironment
+
+---
+
+##### `stack`<sup>Required</sup> <a name="stack" id="cdk-sops-secrets.MultiStringParameter.property.stack"></a>
+
+```typescript
+public readonly stack: Stack;
+```
+
+- *Type:* aws-cdk-lib.Stack
+
+---
+
+##### `sync`<sup>Required</sup> <a name="sync" id="cdk-sops-secrets.MultiStringParameter.property.sync"></a>
+
+```typescript
+public readonly sync: SopsSync;
+```
+
+- *Type:* <a href="#cdk-sops-secrets.SopsSync">SopsSync</a>
+
+---
+
+
 ### SopsSecret <a name="SopsSecret" id="cdk-sops-secrets.SopsSecret"></a>
 
 - *Implements:* aws-cdk-lib.aws_secretsmanager.ISecret
@@ -1531,6 +1674,234 @@ The runtime environment for the Lambda function.
 
 ## Structs <a name="Structs" id="Structs"></a>
 
+### MultiStringParameterProps <a name="MultiStringParameterProps" id="cdk-sops-secrets.MultiStringParameterProps"></a>
+
+#### Initializer <a name="Initializer" id="cdk-sops-secrets.MultiStringParameterProps.Initializer"></a>
+
+```typescript
+import { MultiStringParameterProps } from 'cdk-sops-secrets'
+
+const multiStringParameterProps: MultiStringParameterProps = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.convertToJSON">convertToJSON</a></code> | <code>boolean</code> | Should the encrypted sops value should be converted to JSON? |
+| <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.creationType">creationType</a></code> | <code><a href="#cdk-sops-secrets.CreationType">CreationType</a></code> | *No description.* |
+| <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.flatten">flatten</a></code> | <code>boolean</code> | Should the structure be flattened? |
+| <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.flattenSeparator">flattenSeparator</a></code> | <code>string</code> | If the structure should be flattened use the provided separator between keys. |
+| <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.resourceType">resourceType</a></code> | <code><a href="#cdk-sops-secrets.ResourceType">ResourceType</a></code> | *No description.* |
+| <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.sopsAgeKey">sopsAgeKey</a></code> | <code>aws-cdk-lib.SecretValue</code> | The age key that should be used for encryption. |
+| <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.sopsFileFormat">sopsFileFormat</a></code> | <code>string</code> | The format of the sops file. |
+| <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.sopsFilePath">sopsFilePath</a></code> | <code>string</code> | The filepath to the sops file. |
+| <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.sopsKmsKey">sopsKmsKey</a></code> | <code>aws-cdk-lib.aws_kms.IKey[]</code> | The kmsKey used to encrypt the sops file. |
+| <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.sopsProvider">sopsProvider</a></code> | <code><a href="#cdk-sops-secrets.SopsSyncProvider">SopsSyncProvider</a></code> | The custom resource provider to use. |
+| <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.sopsS3Bucket">sopsS3Bucket</a></code> | <code>string</code> | If you want to pass the sops file via s3, you can specify the bucket you can use cfn parameter here Both, sopsS3Bucket and sopsS3Key have to be specified. |
+| <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.sopsS3Key">sopsS3Key</a></code> | <code>string</code> | If you want to pass the sops file via s3, you can specify the key inside the bucket you can use cfn parameter here Both, sopsS3Bucket and sopsS3Key have to be specified. |
+| <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.stringifyValues">stringifyValues</a></code> | <code>boolean</code> | Shall all values be flattened? |
+| <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.uploadType">uploadType</a></code> | <code><a href="#cdk-sops-secrets.UploadType">UploadType</a></code> | How should the secret be passed to the CustomResource? |
+| <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.keySeperator">keySeperator</a></code> | <code>string</code> | *No description.* |
+
+---
+
+##### `convertToJSON`<sup>Optional</sup> <a name="convertToJSON" id="cdk-sops-secrets.MultiStringParameterProps.property.convertToJSON"></a>
+
+```typescript
+public readonly convertToJSON: boolean;
+```
+
+- *Type:* boolean
+- *Default:* true
+
+Should the encrypted sops value should be converted to JSON?
+
+Only JSON can be handled by cloud formations dynamic references.
+
+---
+
+##### `creationType`<sup>Optional</sup> <a name="creationType" id="cdk-sops-secrets.MultiStringParameterProps.property.creationType"></a>
+
+```typescript
+public readonly creationType: CreationType;
+```
+
+- *Type:* <a href="#cdk-sops-secrets.CreationType">CreationType</a>
+
+---
+
+##### `flatten`<sup>Optional</sup> <a name="flatten" id="cdk-sops-secrets.MultiStringParameterProps.property.flatten"></a>
+
+```typescript
+public readonly flatten: boolean;
+```
+
+- *Type:* boolean
+- *Default:* true
+
+Should the structure be flattened?
+
+The result will be a flat structure and all
+object keys will be replaced with the full jsonpath as key.
+This is usefull for dynamic references, as those don't support nested objects.
+
+---
+
+##### `flattenSeparator`<sup>Optional</sup> <a name="flattenSeparator" id="cdk-sops-secrets.MultiStringParameterProps.property.flattenSeparator"></a>
+
+```typescript
+public readonly flattenSeparator: string;
+```
+
+- *Type:* string
+- *Default:* '.'
+
+If the structure should be flattened use the provided separator between keys.
+
+---
+
+##### `resourceType`<sup>Optional</sup> <a name="resourceType" id="cdk-sops-secrets.MultiStringParameterProps.property.resourceType"></a>
+
+```typescript
+public readonly resourceType: ResourceType;
+```
+
+- *Type:* <a href="#cdk-sops-secrets.ResourceType">ResourceType</a>
+
+---
+
+##### `sopsAgeKey`<sup>Optional</sup> <a name="sopsAgeKey" id="cdk-sops-secrets.MultiStringParameterProps.property.sopsAgeKey"></a>
+
+```typescript
+public readonly sopsAgeKey: SecretValue;
+```
+
+- *Type:* aws-cdk-lib.SecretValue
+
+The age key that should be used for encryption.
+
+---
+
+##### `sopsFileFormat`<sup>Optional</sup> <a name="sopsFileFormat" id="cdk-sops-secrets.MultiStringParameterProps.property.sopsFileFormat"></a>
+
+```typescript
+public readonly sopsFileFormat: string;
+```
+
+- *Type:* string
+- *Default:* The fileformat will be derived from the file ending
+
+The format of the sops file.
+
+---
+
+##### `sopsFilePath`<sup>Optional</sup> <a name="sopsFilePath" id="cdk-sops-secrets.MultiStringParameterProps.property.sopsFilePath"></a>
+
+```typescript
+public readonly sopsFilePath: string;
+```
+
+- *Type:* string
+
+The filepath to the sops file.
+
+---
+
+##### `sopsKmsKey`<sup>Optional</sup> <a name="sopsKmsKey" id="cdk-sops-secrets.MultiStringParameterProps.property.sopsKmsKey"></a>
+
+```typescript
+public readonly sopsKmsKey: IKey[];
+```
+
+- *Type:* aws-cdk-lib.aws_kms.IKey[]
+- *Default:* The key will be derived from the sops file
+
+The kmsKey used to encrypt the sops file.
+
+Encrypt permissions
+will be granted to the custom resource provider.
+
+---
+
+##### `sopsProvider`<sup>Optional</sup> <a name="sopsProvider" id="cdk-sops-secrets.MultiStringParameterProps.property.sopsProvider"></a>
+
+```typescript
+public readonly sopsProvider: SopsSyncProvider;
+```
+
+- *Type:* <a href="#cdk-sops-secrets.SopsSyncProvider">SopsSyncProvider</a>
+- *Default:* A new singleton provider will be created
+
+The custom resource provider to use.
+
+If you don't specify any, a new
+provider will be created - or if already exists within this stack - reused.
+
+---
+
+##### `sopsS3Bucket`<sup>Optional</sup> <a name="sopsS3Bucket" id="cdk-sops-secrets.MultiStringParameterProps.property.sopsS3Bucket"></a>
+
+```typescript
+public readonly sopsS3Bucket: string;
+```
+
+- *Type:* string
+
+If you want to pass the sops file via s3, you can specify the bucket you can use cfn parameter here Both, sopsS3Bucket and sopsS3Key have to be specified.
+
+---
+
+##### `sopsS3Key`<sup>Optional</sup> <a name="sopsS3Key" id="cdk-sops-secrets.MultiStringParameterProps.property.sopsS3Key"></a>
+
+```typescript
+public readonly sopsS3Key: string;
+```
+
+- *Type:* string
+
+If you want to pass the sops file via s3, you can specify the key inside the bucket you can use cfn parameter here Both, sopsS3Bucket and sopsS3Key have to be specified.
+
+---
+
+##### `stringifyValues`<sup>Optional</sup> <a name="stringifyValues" id="cdk-sops-secrets.MultiStringParameterProps.property.stringifyValues"></a>
+
+```typescript
+public readonly stringifyValues: boolean;
+```
+
+- *Type:* boolean
+
+Shall all values be flattened?
+
+This is usefull for dynamic references, as there
+are lookup errors for certain float types
+
+---
+
+##### `uploadType`<sup>Optional</sup> <a name="uploadType" id="cdk-sops-secrets.MultiStringParameterProps.property.uploadType"></a>
+
+```typescript
+public readonly uploadType: UploadType;
+```
+
+- *Type:* <a href="#cdk-sops-secrets.UploadType">UploadType</a>
+- *Default:* INLINE
+
+How should the secret be passed to the CustomResource?
+
+---
+
+##### `keySeperator`<sup>Optional</sup> <a name="keySeperator" id="cdk-sops-secrets.MultiStringParameterProps.property.keySeperator"></a>
+
+```typescript
+public readonly keySeperator: string;
+```
+
+- *Type:* string
+
+---
+
 ### SopsSecretProps <a name="SopsSecretProps" id="cdk-sops-secrets.SopsSecretProps"></a>
 
 The configuration options of the SopsSecret.
@@ -1557,7 +1928,10 @@ const sopsSecretProps: SopsSecretProps = { ... }
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.secretStringBeta1">secretStringBeta1</a></code> | <code>aws-cdk-lib.aws_secretsmanager.SecretStringValueBeta1</code> | Initial value for the secret. |
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.secretStringValue">secretStringValue</a></code> | <code>aws-cdk-lib.SecretValue</code> | Initial value for the secret. |
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.convertToJSON">convertToJSON</a></code> | <code>boolean</code> | Should the encrypted sops value should be converted to JSON? |
+| <code><a href="#cdk-sops-secrets.SopsSecretProps.property.creationType">creationType</a></code> | <code><a href="#cdk-sops-secrets.CreationType">CreationType</a></code> | *No description.* |
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.flatten">flatten</a></code> | <code>boolean</code> | Should the structure be flattened? |
+| <code><a href="#cdk-sops-secrets.SopsSecretProps.property.flattenSeparator">flattenSeparator</a></code> | <code>string</code> | If the structure should be flattened use the provided separator between keys. |
+| <code><a href="#cdk-sops-secrets.SopsSecretProps.property.resourceType">resourceType</a></code> | <code><a href="#cdk-sops-secrets.ResourceType">ResourceType</a></code> | *No description.* |
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.sopsAgeKey">sopsAgeKey</a></code> | <code>aws-cdk-lib.SecretValue</code> | The age key that should be used for encryption. |
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.sopsFileFormat">sopsFileFormat</a></code> | <code>string</code> | The format of the sops file. |
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.sopsFilePath">sopsFilePath</a></code> | <code>string</code> | The filepath to the sops file. |
@@ -1758,6 +2132,16 @@ Only JSON can be handled by cloud formations dynamic references.
 
 ---
 
+##### `creationType`<sup>Optional</sup> <a name="creationType" id="cdk-sops-secrets.SopsSecretProps.property.creationType"></a>
+
+```typescript
+public readonly creationType: CreationType;
+```
+
+- *Type:* <a href="#cdk-sops-secrets.CreationType">CreationType</a>
+
+---
+
 ##### `flatten`<sup>Optional</sup> <a name="flatten" id="cdk-sops-secrets.SopsSecretProps.property.flatten"></a>
 
 ```typescript
@@ -1772,6 +2156,29 @@ Should the structure be flattened?
 The result will be a flat structure and all
 object keys will be replaced with the full jsonpath as key.
 This is usefull for dynamic references, as those don't support nested objects.
+
+---
+
+##### `flattenSeparator`<sup>Optional</sup> <a name="flattenSeparator" id="cdk-sops-secrets.SopsSecretProps.property.flattenSeparator"></a>
+
+```typescript
+public readonly flattenSeparator: string;
+```
+
+- *Type:* string
+- *Default:* '.'
+
+If the structure should be flattened use the provided separator between keys.
+
+---
+
+##### `resourceType`<sup>Optional</sup> <a name="resourceType" id="cdk-sops-secrets.SopsSecretProps.property.resourceType"></a>
+
+```typescript
+public readonly resourceType: ResourceType;
+```
+
+- *Type:* <a href="#cdk-sops-secrets.ResourceType">ResourceType</a>
 
 ---
 
@@ -1913,7 +2320,10 @@ const sopsStringParameterProps: SopsStringParameterProps = { ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#cdk-sops-secrets.SopsStringParameterProps.property.convertToJSON">convertToJSON</a></code> | <code>boolean</code> | Should the encrypted sops value should be converted to JSON? |
+| <code><a href="#cdk-sops-secrets.SopsStringParameterProps.property.creationType">creationType</a></code> | <code><a href="#cdk-sops-secrets.CreationType">CreationType</a></code> | *No description.* |
 | <code><a href="#cdk-sops-secrets.SopsStringParameterProps.property.flatten">flatten</a></code> | <code>boolean</code> | Should the structure be flattened? |
+| <code><a href="#cdk-sops-secrets.SopsStringParameterProps.property.flattenSeparator">flattenSeparator</a></code> | <code>string</code> | If the structure should be flattened use the provided separator between keys. |
+| <code><a href="#cdk-sops-secrets.SopsStringParameterProps.property.resourceType">resourceType</a></code> | <code><a href="#cdk-sops-secrets.ResourceType">ResourceType</a></code> | *No description.* |
 | <code><a href="#cdk-sops-secrets.SopsStringParameterProps.property.sopsAgeKey">sopsAgeKey</a></code> | <code>aws-cdk-lib.SecretValue</code> | The age key that should be used for encryption. |
 | <code><a href="#cdk-sops-secrets.SopsStringParameterProps.property.sopsFileFormat">sopsFileFormat</a></code> | <code>string</code> | The format of the sops file. |
 | <code><a href="#cdk-sops-secrets.SopsStringParameterProps.property.sopsFilePath">sopsFilePath</a></code> | <code>string</code> | The filepath to the sops file. |
@@ -1950,6 +2360,16 @@ Only JSON can be handled by cloud formations dynamic references.
 
 ---
 
+##### `creationType`<sup>Optional</sup> <a name="creationType" id="cdk-sops-secrets.SopsStringParameterProps.property.creationType"></a>
+
+```typescript
+public readonly creationType: CreationType;
+```
+
+- *Type:* <a href="#cdk-sops-secrets.CreationType">CreationType</a>
+
+---
+
 ##### `flatten`<sup>Optional</sup> <a name="flatten" id="cdk-sops-secrets.SopsStringParameterProps.property.flatten"></a>
 
 ```typescript
@@ -1964,6 +2384,29 @@ Should the structure be flattened?
 The result will be a flat structure and all
 object keys will be replaced with the full jsonpath as key.
 This is usefull for dynamic references, as those don't support nested objects.
+
+---
+
+##### `flattenSeparator`<sup>Optional</sup> <a name="flattenSeparator" id="cdk-sops-secrets.SopsStringParameterProps.property.flattenSeparator"></a>
+
+```typescript
+public readonly flattenSeparator: string;
+```
+
+- *Type:* string
+- *Default:* '.'
+
+If the structure should be flattened use the provided separator between keys.
+
+---
+
+##### `resourceType`<sup>Optional</sup> <a name="resourceType" id="cdk-sops-secrets.SopsStringParameterProps.property.resourceType"></a>
+
+```typescript
+public readonly resourceType: ResourceType;
+```
+
+- *Type:* <a href="#cdk-sops-secrets.ResourceType">ResourceType</a>
 
 ---
 
@@ -2233,7 +2676,10 @@ const sopsSyncOptions: SopsSyncOptions = { ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#cdk-sops-secrets.SopsSyncOptions.property.convertToJSON">convertToJSON</a></code> | <code>boolean</code> | Should the encrypted sops value should be converted to JSON? |
+| <code><a href="#cdk-sops-secrets.SopsSyncOptions.property.creationType">creationType</a></code> | <code><a href="#cdk-sops-secrets.CreationType">CreationType</a></code> | *No description.* |
 | <code><a href="#cdk-sops-secrets.SopsSyncOptions.property.flatten">flatten</a></code> | <code>boolean</code> | Should the structure be flattened? |
+| <code><a href="#cdk-sops-secrets.SopsSyncOptions.property.flattenSeparator">flattenSeparator</a></code> | <code>string</code> | If the structure should be flattened use the provided separator between keys. |
+| <code><a href="#cdk-sops-secrets.SopsSyncOptions.property.resourceType">resourceType</a></code> | <code><a href="#cdk-sops-secrets.ResourceType">ResourceType</a></code> | *No description.* |
 | <code><a href="#cdk-sops-secrets.SopsSyncOptions.property.sopsAgeKey">sopsAgeKey</a></code> | <code>aws-cdk-lib.SecretValue</code> | The age key that should be used for encryption. |
 | <code><a href="#cdk-sops-secrets.SopsSyncOptions.property.sopsFileFormat">sopsFileFormat</a></code> | <code>string</code> | The format of the sops file. |
 | <code><a href="#cdk-sops-secrets.SopsSyncOptions.property.sopsFilePath">sopsFilePath</a></code> | <code>string</code> | The filepath to the sops file. |
@@ -2261,6 +2707,16 @@ Only JSON can be handled by cloud formations dynamic references.
 
 ---
 
+##### `creationType`<sup>Optional</sup> <a name="creationType" id="cdk-sops-secrets.SopsSyncOptions.property.creationType"></a>
+
+```typescript
+public readonly creationType: CreationType;
+```
+
+- *Type:* <a href="#cdk-sops-secrets.CreationType">CreationType</a>
+
+---
+
 ##### `flatten`<sup>Optional</sup> <a name="flatten" id="cdk-sops-secrets.SopsSyncOptions.property.flatten"></a>
 
 ```typescript
@@ -2275,6 +2731,29 @@ Should the structure be flattened?
 The result will be a flat structure and all
 object keys will be replaced with the full jsonpath as key.
 This is usefull for dynamic references, as those don't support nested objects.
+
+---
+
+##### `flattenSeparator`<sup>Optional</sup> <a name="flattenSeparator" id="cdk-sops-secrets.SopsSyncOptions.property.flattenSeparator"></a>
+
+```typescript
+public readonly flattenSeparator: string;
+```
+
+- *Type:* string
+- *Default:* '.'
+
+If the structure should be flattened use the provided separator between keys.
+
+---
+
+##### `resourceType`<sup>Optional</sup> <a name="resourceType" id="cdk-sops-secrets.SopsSyncOptions.property.resourceType"></a>
+
+```typescript
+public readonly resourceType: ResourceType;
+```
+
+- *Type:* <a href="#cdk-sops-secrets.ResourceType">ResourceType</a>
 
 ---
 
@@ -2416,7 +2895,10 @@ const sopsSyncProps: SopsSyncProps = { ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#cdk-sops-secrets.SopsSyncProps.property.convertToJSON">convertToJSON</a></code> | <code>boolean</code> | Should the encrypted sops value should be converted to JSON? |
+| <code><a href="#cdk-sops-secrets.SopsSyncProps.property.creationType">creationType</a></code> | <code><a href="#cdk-sops-secrets.CreationType">CreationType</a></code> | *No description.* |
 | <code><a href="#cdk-sops-secrets.SopsSyncProps.property.flatten">flatten</a></code> | <code>boolean</code> | Should the structure be flattened? |
+| <code><a href="#cdk-sops-secrets.SopsSyncProps.property.flattenSeparator">flattenSeparator</a></code> | <code>string</code> | If the structure should be flattened use the provided separator between keys. |
+| <code><a href="#cdk-sops-secrets.SopsSyncProps.property.resourceType">resourceType</a></code> | <code><a href="#cdk-sops-secrets.ResourceType">ResourceType</a></code> | *No description.* |
 | <code><a href="#cdk-sops-secrets.SopsSyncProps.property.sopsAgeKey">sopsAgeKey</a></code> | <code>aws-cdk-lib.SecretValue</code> | The age key that should be used for encryption. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProps.property.sopsFileFormat">sopsFileFormat</a></code> | <code>string</code> | The format of the sops file. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProps.property.sopsFilePath">sopsFilePath</a></code> | <code>string</code> | The filepath to the sops file. |
@@ -2428,6 +2910,7 @@ const sopsSyncProps: SopsSyncProps = { ... }
 | <code><a href="#cdk-sops-secrets.SopsSyncProps.property.uploadType">uploadType</a></code> | <code><a href="#cdk-sops-secrets.UploadType">UploadType</a></code> | How should the secret be passed to the CustomResource? |
 | <code><a href="#cdk-sops-secrets.SopsSyncProps.property.encryptionKey">encryptionKey</a></code> | <code>aws-cdk-lib.aws_kms.IKey</code> | The encryption key used for encrypting the ssm parameter if `parameterName` is set. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProps.property.parameterName">parameterName</a></code> | <code>string</code> | The parameter name. |
+| <code><a href="#cdk-sops-secrets.SopsSyncProps.property.parameterNames">parameterNames</a></code> | <code>string[]</code> | The parameter name. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProps.property.secret">secret</a></code> | <code>aws-cdk-lib.aws_secretsmanager.ISecret</code> | The secret that will be populated with the encrypted sops file content. |
 
 ---
@@ -2447,6 +2930,16 @@ Only JSON can be handled by cloud formations dynamic references.
 
 ---
 
+##### `creationType`<sup>Optional</sup> <a name="creationType" id="cdk-sops-secrets.SopsSyncProps.property.creationType"></a>
+
+```typescript
+public readonly creationType: CreationType;
+```
+
+- *Type:* <a href="#cdk-sops-secrets.CreationType">CreationType</a>
+
+---
+
 ##### `flatten`<sup>Optional</sup> <a name="flatten" id="cdk-sops-secrets.SopsSyncProps.property.flatten"></a>
 
 ```typescript
@@ -2461,6 +2954,29 @@ Should the structure be flattened?
 The result will be a flat structure and all
 object keys will be replaced with the full jsonpath as key.
 This is usefull for dynamic references, as those don't support nested objects.
+
+---
+
+##### `flattenSeparator`<sup>Optional</sup> <a name="flattenSeparator" id="cdk-sops-secrets.SopsSyncProps.property.flattenSeparator"></a>
+
+```typescript
+public readonly flattenSeparator: string;
+```
+
+- *Type:* string
+- *Default:* '.'
+
+If the structure should be flattened use the provided separator between keys.
+
+---
+
+##### `resourceType`<sup>Optional</sup> <a name="resourceType" id="cdk-sops-secrets.SopsSyncProps.property.resourceType"></a>
+
+```typescript
+public readonly resourceType: ResourceType;
+```
+
+- *Type:* <a href="#cdk-sops-secrets.ResourceType">ResourceType</a>
 
 ---
 
@@ -2611,6 +3127,20 @@ If set this creates an encrypted SSM Parameter instead of a secret.
 
 ---
 
+##### `parameterNames`<sup>Optional</sup> <a name="parameterNames" id="cdk-sops-secrets.SopsSyncProps.property.parameterNames"></a>
+
+```typescript
+public readonly parameterNames: string[];
+```
+
+- *Type:* string[]
+
+The parameter name.
+
+If set this creates an encrypted SSM Parameter instead of a secret.
+
+---
+
 ##### `secret`<sup>Optional</sup> <a name="secret" id="cdk-sops-secrets.SopsSyncProps.property.secret"></a>
 
 ```typescript
@@ -2626,6 +3156,52 @@ The secret that will be populated with the encrypted sops file content.
 
 
 ## Enums <a name="Enums" id="Enums"></a>
+
+### CreationType <a name="CreationType" id="cdk-sops-secrets.CreationType"></a>
+
+#### Members <a name="Members" id="Members"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#cdk-sops-secrets.CreationType.SINGLE">SINGLE</a></code> | Create or update a single secret/parameter. |
+| <code><a href="#cdk-sops-secrets.CreationType.MULTI">MULTI</a></code> | Create or update a multiple secrets/parameters by flattening the SOPS file. |
+
+---
+
+##### `SINGLE` <a name="SINGLE" id="cdk-sops-secrets.CreationType.SINGLE"></a>
+
+Create or update a single secret/parameter.
+
+---
+
+
+##### `MULTI` <a name="MULTI" id="cdk-sops-secrets.CreationType.MULTI"></a>
+
+Create or update a multiple secrets/parameters by flattening the SOPS file.
+
+---
+
+
+### ResourceType <a name="ResourceType" id="cdk-sops-secrets.ResourceType"></a>
+
+#### Members <a name="Members" id="Members"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#cdk-sops-secrets.ResourceType.SECRET">SECRET</a></code> | *No description.* |
+| <code><a href="#cdk-sops-secrets.ResourceType.PARAMETER">PARAMETER</a></code> | *No description.* |
+
+---
+
+##### `SECRET` <a name="SECRET" id="cdk-sops-secrets.ResourceType.SECRET"></a>
+
+---
+
+
+##### `PARAMETER` <a name="PARAMETER" id="cdk-sops-secrets.ResourceType.PARAMETER"></a>
+
+---
+
 
 ### UploadType <a name="UploadType" id="cdk-sops-secrets.UploadType"></a>
 
