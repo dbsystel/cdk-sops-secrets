@@ -606,9 +606,9 @@ test('Multiple parameters from yaml file with custom key structure', () => {
     keyPrefix: '_',
     keySeperator: '.',
     encryptionKey: Key.fromKeyArn(
-        stack,
-        'Key',
-        'arn:aws:kms:eu-central-1:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab',
+      stack,
+      'Key',
+      'arn:aws:kms:eu-central-1:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab',
     ),
     stringValue: ' ',
   });
@@ -664,7 +664,7 @@ test('Multiple parameters from yaml file with custom key structure', () => {
           ],
           Effect: 'Allow',
           Resource:
-              'arn:aws:kms:eu-central-1:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab',
+            'arn:aws:kms:eu-central-1:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab',
         },
       ],
     },

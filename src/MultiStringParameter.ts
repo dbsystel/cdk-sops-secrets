@@ -70,8 +70,8 @@ export class MultiStringParameter extends Construct {
     this.keySeparator = props.keySeperator ?? '/';
 
     const keys = this.parseFile(props.sopsFilePath!, this.keySeparator)
-        .filter(key => !key.startsWith('sops'))
-        .map(value => `${this.keyPrefix}${value}`);
+      .filter((key) => !key.startsWith('sops'))
+      .map((value) => `${this.keyPrefix}${value}`);
 
     keys.forEach((key) => {
       new StringParameter(this, 'Resource' + key, {
@@ -98,7 +98,12 @@ export class MultiStringParameter extends Construct {
     switch (_sopsFileFormat) {
       case 'json': {
         return Object.keys(
-          flattenJSON(JSON.parse(fs.readFileSync(sopsFilePath, 'utf-8')), '', undefined, keySeparator),
+          flattenJSON(
+            JSON.parse(fs.readFileSync(sopsFilePath, 'utf-8')),
+            '',
+            undefined,
+            keySeparator,
+          ),
         );
       }
       case 'yaml': {
