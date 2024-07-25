@@ -530,7 +530,7 @@ test('Multiple parameters from yaml file', () => {
   const stack = new Stack(app, 'ParameterIntegration');
   new MultiStringParameter(stack, 'SopsSecret1', {
     simpleName: false,
-    sopsFilePath: 'test-secrets/yaml/sopsfile-complex-parameters.yaml',
+    sopsFilePath: 'test-secrets/yaml/sopsfile-complex-parameters.enc-age.yaml',
     encryptionKey: Key.fromKeyArn(
       stack,
       'Key',
@@ -602,7 +602,7 @@ test('Multiple parameters from yaml file with custom key structure', () => {
   const stack = new Stack(app, 'ParameterIntegration');
   new MultiStringParameter(stack, 'SopsSecret1', {
     simpleName: false,
-    sopsFilePath: 'test-secrets/yaml/sopsfile-complex-parameters.yaml',
+    sopsFilePath: 'test-secrets/yaml/sopsfile-complex-parameters.enc-age.yaml',
     keyPrefix: '_',
     keySeperator: '.',
     encryptionKey: Key.fromKeyArn(

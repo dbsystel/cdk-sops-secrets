@@ -69,9 +69,9 @@ export class MultiStringParameter extends Construct {
     this.keyPrefix = props.keyPrefix ?? '/';
     this.keySeparator = props.keySeperator ?? '/';
 
-    const keys = this.parseFile(props.sopsFilePath!, this.keySeparator, this.keyPrefix).filter(
-      (key) => !key.startsWith('sops'),
-    );
+    const keys = this.parseFile(props.sopsFilePath!, this.keySeparator)
+        .filter(key => !key.startsWith('sops'))
+        .map(value => `${this.keyPrefix}${value}`);
 
     keys.forEach((key) => {
       new StringParameter(this, 'Resource' + key, {
@@ -93,21 +93,18 @@ export class MultiStringParameter extends Construct {
     });
   }
 
-  private parseFile(sopsFilePath: string, keySeparator: string, keyPrefix: string): string[] {
+  private parseFile(sopsFilePath: string, keySeparator: string): string[] {
     const _sopsFileFormat = sopsFilePath.split('.').pop();
-    var result: string[] = [];
     switch (_sopsFileFormat) {
       case 'json': {
-        result = Object.keys(
+        return Object.keys(
           flattenJSON(JSON.parse(fs.readFileSync(sopsFilePath, 'utf-8')), '', undefined, keySeparator),
         );
-        break;
       }
       case 'yaml': {
         const content = fs.readFileSync(sopsFilePath, 'utf-8');
         const data = YAML.parse(content) as JSONObject;
-        result = Object.keys(flattenJSON(data, '', undefined, keySeparator));
-        break;
+        return Object.keys(flattenJSON(data, '', undefined, keySeparator));
       }
       default: {
         throw new Error(
@@ -115,6 +112,5 @@ export class MultiStringParameter extends Construct {
         );
       }
     }
-    return result.map(value => `${keyPrefix}${value}`);
   }
 }
