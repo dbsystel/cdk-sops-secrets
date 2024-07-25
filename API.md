@@ -9,14 +9,14 @@
 ```typescript
 import { MultiStringParameter } from 'cdk-sops-secrets'
 
-new MultiStringParameter(scope: Construct, id: string, props: SopsStringParameterProps)
+new MultiStringParameter(scope: Construct, id: string, props: MultiStringParameterProps)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#cdk-sops-secrets.MultiStringParameter.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
 | <code><a href="#cdk-sops-secrets.MultiStringParameter.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#cdk-sops-secrets.MultiStringParameter.Initializer.parameter.props">props</a></code> | <code><a href="#cdk-sops-secrets.SopsStringParameterProps">SopsStringParameterProps</a></code> | *No description.* |
+| <code><a href="#cdk-sops-secrets.MultiStringParameter.Initializer.parameter.props">props</a></code> | <code><a href="#cdk-sops-secrets.MultiStringParameterProps">MultiStringParameterProps</a></code> | *No description.* |
 
 ---
 
@@ -34,7 +34,7 @@ new MultiStringParameter(scope: Construct, id: string, props: SopsStringParamete
 
 ##### `props`<sup>Required</sup> <a name="props" id="cdk-sops-secrets.MultiStringParameter.Initializer.parameter.props"></a>
 
-- *Type:* <a href="#cdk-sops-secrets.SopsStringParameterProps">SopsStringParameterProps</a>
+- *Type:* <a href="#cdk-sops-secrets.MultiStringParameterProps">MultiStringParameterProps</a>
 
 ---
 
@@ -87,6 +87,8 @@ Any object.
 | <code><a href="#cdk-sops-secrets.MultiStringParameter.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
 | <code><a href="#cdk-sops-secrets.MultiStringParameter.property.encryptionKey">encryptionKey</a></code> | <code>aws-cdk-lib.aws_kms.IKey</code> | *No description.* |
 | <code><a href="#cdk-sops-secrets.MultiStringParameter.property.env">env</a></code> | <code>aws-cdk-lib.ResourceEnvironment</code> | *No description.* |
+| <code><a href="#cdk-sops-secrets.MultiStringParameter.property.keyPrefix">keyPrefix</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#cdk-sops-secrets.MultiStringParameter.property.keySeparator">keySeparator</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#cdk-sops-secrets.MultiStringParameter.property.stack">stack</a></code> | <code>aws-cdk-lib.Stack</code> | *No description.* |
 | <code><a href="#cdk-sops-secrets.MultiStringParameter.property.sync">sync</a></code> | <code><a href="#cdk-sops-secrets.SopsSync">SopsSync</a></code> | *No description.* |
 
@@ -121,6 +123,26 @@ public readonly env: ResourceEnvironment;
 ```
 
 - *Type:* aws-cdk-lib.ResourceEnvironment
+
+---
+
+##### `keyPrefix`<sup>Required</sup> <a name="keyPrefix" id="cdk-sops-secrets.MultiStringParameter.property.keyPrefix"></a>
+
+```typescript
+public readonly keyPrefix: string;
+```
+
+- *Type:* string
+
+---
+
+##### `keySeparator`<sup>Required</sup> <a name="keySeparator" id="cdk-sops-secrets.MultiStringParameter.property.keySeparator"></a>
+
+```typescript
+public readonly keySeparator: string;
+```
+
+- *Type:* string
 
 ---
 
@@ -1692,6 +1714,7 @@ const multiStringParameterProps: MultiStringParameterProps = { ... }
 | <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.creationType">creationType</a></code> | <code><a href="#cdk-sops-secrets.CreationType">CreationType</a></code> | *No description.* |
 | <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.flatten">flatten</a></code> | <code>boolean</code> | Should the structure be flattened? |
 | <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.flattenSeparator">flattenSeparator</a></code> | <code>string</code> | If the structure should be flattened use the provided separator between keys. |
+| <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.parameterKeyPrefix">parameterKeyPrefix</a></code> | <code>string</code> | Add this prefix to parameter names. |
 | <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.resourceType">resourceType</a></code> | <code><a href="#cdk-sops-secrets.ResourceType">ResourceType</a></code> | *No description.* |
 | <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.sopsAgeKey">sopsAgeKey</a></code> | <code>aws-cdk-lib.SecretValue</code> | The age key that should be used for encryption. |
 | <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.sopsFileFormat">sopsFileFormat</a></code> | <code>string</code> | The format of the sops file. |
@@ -1702,6 +1725,16 @@ const multiStringParameterProps: MultiStringParameterProps = { ... }
 | <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.sopsS3Key">sopsS3Key</a></code> | <code>string</code> | If you want to pass the sops file via s3, you can specify the key inside the bucket you can use cfn parameter here Both, sopsS3Bucket and sopsS3Key have to be specified. |
 | <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.stringifyValues">stringifyValues</a></code> | <code>boolean</code> | Shall all values be flattened? |
 | <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.uploadType">uploadType</a></code> | <code><a href="#cdk-sops-secrets.UploadType">UploadType</a></code> | How should the secret be passed to the CustomResource? |
+| <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.allowedPattern">allowedPattern</a></code> | <code>string</code> | A regular expression used to validate the parameter value. |
+| <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.description">description</a></code> | <code>string</code> | Information about the parameter that you want to add to the system. |
+| <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.parameterName">parameterName</a></code> | <code>string</code> | The name of the parameter. |
+| <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.simpleName">simpleName</a></code> | <code>boolean</code> | Indicates if the parameter name is a simple name (i.e. does not include "/" separators). |
+| <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.tier">tier</a></code> | <code>aws-cdk-lib.aws_ssm.ParameterTier</code> | The tier of the string parameter. |
+| <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.stringValue">stringValue</a></code> | <code>string</code> | The value of the parameter. |
+| <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.dataType">dataType</a></code> | <code>aws-cdk-lib.aws_ssm.ParameterDataType</code> | The data type of the parameter, such as `text` or `aws:ec2:image`. |
+| <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.type">type</a></code> | <code>aws-cdk-lib.aws_ssm.ParameterType</code> | The type of the string parameter. |
+| <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.encryptionKey">encryptionKey</a></code> | <code>aws-cdk-lib.aws_kms.IKey</code> | *No description.* |
+| <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.keyPrefix">keyPrefix</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.keySeperator">keySeperator</a></code> | <code>string</code> | *No description.* |
 
 ---
@@ -1758,6 +1791,18 @@ public readonly flattenSeparator: string;
 - *Default:* '.'
 
 If the structure should be flattened use the provided separator between keys.
+
+---
+
+##### `parameterKeyPrefix`<sup>Optional</sup> <a name="parameterKeyPrefix" id="cdk-sops-secrets.MultiStringParameterProps.property.parameterKeyPrefix"></a>
+
+```typescript
+public readonly parameterKeyPrefix: string;
+```
+
+- *Type:* string
+
+Add this prefix to parameter names.
 
 ---
 
@@ -1892,6 +1937,144 @@ How should the secret be passed to the CustomResource?
 
 ---
 
+##### `allowedPattern`<sup>Optional</sup> <a name="allowedPattern" id="cdk-sops-secrets.MultiStringParameterProps.property.allowedPattern"></a>
+
+```typescript
+public readonly allowedPattern: string;
+```
+
+- *Type:* string
+- *Default:* no validation is performed
+
+A regular expression used to validate the parameter value.
+
+For example, for String types with values restricted to
+numbers, you can specify the following: ``^\d+$``
+
+---
+
+##### `description`<sup>Optional</sup> <a name="description" id="cdk-sops-secrets.MultiStringParameterProps.property.description"></a>
+
+```typescript
+public readonly description: string;
+```
+
+- *Type:* string
+- *Default:* none
+
+Information about the parameter that you want to add to the system.
+
+---
+
+##### `parameterName`<sup>Optional</sup> <a name="parameterName" id="cdk-sops-secrets.MultiStringParameterProps.property.parameterName"></a>
+
+```typescript
+public readonly parameterName: string;
+```
+
+- *Type:* string
+- *Default:* a name will be generated by CloudFormation
+
+The name of the parameter.
+
+---
+
+##### `simpleName`<sup>Optional</sup> <a name="simpleName" id="cdk-sops-secrets.MultiStringParameterProps.property.simpleName"></a>
+
+```typescript
+public readonly simpleName: boolean;
+```
+
+- *Type:* boolean
+- *Default:* auto-detect based on `parameterName`
+
+Indicates if the parameter name is a simple name (i.e. does not include "/" separators).
+
+This is required only if `parameterName` is a token, which means we
+are unable to detect if the name is simple or "path-like" for the purpose
+of rendering SSM parameter ARNs.
+
+If `parameterName` is not specified, `simpleName` must be `true` (or
+undefined) since the name generated by AWS CloudFormation is always a
+simple name.
+
+---
+
+##### `tier`<sup>Optional</sup> <a name="tier" id="cdk-sops-secrets.MultiStringParameterProps.property.tier"></a>
+
+```typescript
+public readonly tier: ParameterTier;
+```
+
+- *Type:* aws-cdk-lib.aws_ssm.ParameterTier
+- *Default:* undefined
+
+The tier of the string parameter.
+
+---
+
+##### `stringValue`<sup>Required</sup> <a name="stringValue" id="cdk-sops-secrets.MultiStringParameterProps.property.stringValue"></a>
+
+```typescript
+public readonly stringValue: string;
+```
+
+- *Type:* string
+
+The value of the parameter.
+
+It may not reference another parameter and ``{{}}`` cannot be used in the value.
+
+---
+
+##### `dataType`<sup>Optional</sup> <a name="dataType" id="cdk-sops-secrets.MultiStringParameterProps.property.dataType"></a>
+
+```typescript
+public readonly dataType: ParameterDataType;
+```
+
+- *Type:* aws-cdk-lib.aws_ssm.ParameterDataType
+- *Default:* ParameterDataType.TEXT
+
+The data type of the parameter, such as `text` or `aws:ec2:image`.
+
+---
+
+##### ~~`type`~~<sup>Optional</sup> <a name="type" id="cdk-sops-secrets.MultiStringParameterProps.property.type"></a>
+
+- *Deprecated:* - type will always be 'String'
+
+```typescript
+public readonly type: ParameterType;
+```
+
+- *Type:* aws-cdk-lib.aws_ssm.ParameterType
+- *Default:* ParameterType.STRING
+
+The type of the string parameter.
+
+---
+
+##### `encryptionKey`<sup>Required</sup> <a name="encryptionKey" id="cdk-sops-secrets.MultiStringParameterProps.property.encryptionKey"></a>
+
+```typescript
+public readonly encryptionKey: IKey;
+```
+
+- *Type:* aws-cdk-lib.aws_kms.IKey
+
+---
+
+##### `keyPrefix`<sup>Optional</sup> <a name="keyPrefix" id="cdk-sops-secrets.MultiStringParameterProps.property.keyPrefix"></a>
+
+```typescript
+public readonly keyPrefix: string;
+```
+
+- *Type:* string
+
+---
+
 ##### `keySeperator`<sup>Optional</sup> <a name="keySeperator" id="cdk-sops-secrets.MultiStringParameterProps.property.keySeperator"></a>
 
 ```typescript
@@ -1931,6 +2114,7 @@ const sopsSecretProps: SopsSecretProps = { ... }
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.creationType">creationType</a></code> | <code><a href="#cdk-sops-secrets.CreationType">CreationType</a></code> | *No description.* |
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.flatten">flatten</a></code> | <code>boolean</code> | Should the structure be flattened? |
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.flattenSeparator">flattenSeparator</a></code> | <code>string</code> | If the structure should be flattened use the provided separator between keys. |
+| <code><a href="#cdk-sops-secrets.SopsSecretProps.property.parameterKeyPrefix">parameterKeyPrefix</a></code> | <code>string</code> | Add this prefix to parameter names. |
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.resourceType">resourceType</a></code> | <code><a href="#cdk-sops-secrets.ResourceType">ResourceType</a></code> | *No description.* |
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.sopsAgeKey">sopsAgeKey</a></code> | <code>aws-cdk-lib.SecretValue</code> | The age key that should be used for encryption. |
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.sopsFileFormat">sopsFileFormat</a></code> | <code>string</code> | The format of the sops file. |
@@ -2172,6 +2356,18 @@ If the structure should be flattened use the provided separator between keys.
 
 ---
 
+##### `parameterKeyPrefix`<sup>Optional</sup> <a name="parameterKeyPrefix" id="cdk-sops-secrets.SopsSecretProps.property.parameterKeyPrefix"></a>
+
+```typescript
+public readonly parameterKeyPrefix: string;
+```
+
+- *Type:* string
+
+Add this prefix to parameter names.
+
+---
+
 ##### `resourceType`<sup>Optional</sup> <a name="resourceType" id="cdk-sops-secrets.SopsSecretProps.property.resourceType"></a>
 
 ```typescript
@@ -2323,6 +2519,7 @@ const sopsStringParameterProps: SopsStringParameterProps = { ... }
 | <code><a href="#cdk-sops-secrets.SopsStringParameterProps.property.creationType">creationType</a></code> | <code><a href="#cdk-sops-secrets.CreationType">CreationType</a></code> | *No description.* |
 | <code><a href="#cdk-sops-secrets.SopsStringParameterProps.property.flatten">flatten</a></code> | <code>boolean</code> | Should the structure be flattened? |
 | <code><a href="#cdk-sops-secrets.SopsStringParameterProps.property.flattenSeparator">flattenSeparator</a></code> | <code>string</code> | If the structure should be flattened use the provided separator between keys. |
+| <code><a href="#cdk-sops-secrets.SopsStringParameterProps.property.parameterKeyPrefix">parameterKeyPrefix</a></code> | <code>string</code> | Add this prefix to parameter names. |
 | <code><a href="#cdk-sops-secrets.SopsStringParameterProps.property.resourceType">resourceType</a></code> | <code><a href="#cdk-sops-secrets.ResourceType">ResourceType</a></code> | *No description.* |
 | <code><a href="#cdk-sops-secrets.SopsStringParameterProps.property.sopsAgeKey">sopsAgeKey</a></code> | <code>aws-cdk-lib.SecretValue</code> | The age key that should be used for encryption. |
 | <code><a href="#cdk-sops-secrets.SopsStringParameterProps.property.sopsFileFormat">sopsFileFormat</a></code> | <code>string</code> | The format of the sops file. |
@@ -2397,6 +2594,18 @@ public readonly flattenSeparator: string;
 - *Default:* '.'
 
 If the structure should be flattened use the provided separator between keys.
+
+---
+
+##### `parameterKeyPrefix`<sup>Optional</sup> <a name="parameterKeyPrefix" id="cdk-sops-secrets.SopsStringParameterProps.property.parameterKeyPrefix"></a>
+
+```typescript
+public readonly parameterKeyPrefix: string;
+```
+
+- *Type:* string
+
+Add this prefix to parameter names.
 
 ---
 
@@ -2679,6 +2888,7 @@ const sopsSyncOptions: SopsSyncOptions = { ... }
 | <code><a href="#cdk-sops-secrets.SopsSyncOptions.property.creationType">creationType</a></code> | <code><a href="#cdk-sops-secrets.CreationType">CreationType</a></code> | *No description.* |
 | <code><a href="#cdk-sops-secrets.SopsSyncOptions.property.flatten">flatten</a></code> | <code>boolean</code> | Should the structure be flattened? |
 | <code><a href="#cdk-sops-secrets.SopsSyncOptions.property.flattenSeparator">flattenSeparator</a></code> | <code>string</code> | If the structure should be flattened use the provided separator between keys. |
+| <code><a href="#cdk-sops-secrets.SopsSyncOptions.property.parameterKeyPrefix">parameterKeyPrefix</a></code> | <code>string</code> | Add this prefix to parameter names. |
 | <code><a href="#cdk-sops-secrets.SopsSyncOptions.property.resourceType">resourceType</a></code> | <code><a href="#cdk-sops-secrets.ResourceType">ResourceType</a></code> | *No description.* |
 | <code><a href="#cdk-sops-secrets.SopsSyncOptions.property.sopsAgeKey">sopsAgeKey</a></code> | <code>aws-cdk-lib.SecretValue</code> | The age key that should be used for encryption. |
 | <code><a href="#cdk-sops-secrets.SopsSyncOptions.property.sopsFileFormat">sopsFileFormat</a></code> | <code>string</code> | The format of the sops file. |
@@ -2744,6 +2954,18 @@ public readonly flattenSeparator: string;
 - *Default:* '.'
 
 If the structure should be flattened use the provided separator between keys.
+
+---
+
+##### `parameterKeyPrefix`<sup>Optional</sup> <a name="parameterKeyPrefix" id="cdk-sops-secrets.SopsSyncOptions.property.parameterKeyPrefix"></a>
+
+```typescript
+public readonly parameterKeyPrefix: string;
+```
+
+- *Type:* string
+
+Add this prefix to parameter names.
 
 ---
 
@@ -2898,6 +3120,7 @@ const sopsSyncProps: SopsSyncProps = { ... }
 | <code><a href="#cdk-sops-secrets.SopsSyncProps.property.creationType">creationType</a></code> | <code><a href="#cdk-sops-secrets.CreationType">CreationType</a></code> | *No description.* |
 | <code><a href="#cdk-sops-secrets.SopsSyncProps.property.flatten">flatten</a></code> | <code>boolean</code> | Should the structure be flattened? |
 | <code><a href="#cdk-sops-secrets.SopsSyncProps.property.flattenSeparator">flattenSeparator</a></code> | <code>string</code> | If the structure should be flattened use the provided separator between keys. |
+| <code><a href="#cdk-sops-secrets.SopsSyncProps.property.parameterKeyPrefix">parameterKeyPrefix</a></code> | <code>string</code> | Add this prefix to parameter names. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProps.property.resourceType">resourceType</a></code> | <code><a href="#cdk-sops-secrets.ResourceType">ResourceType</a></code> | *No description.* |
 | <code><a href="#cdk-sops-secrets.SopsSyncProps.property.sopsAgeKey">sopsAgeKey</a></code> | <code>aws-cdk-lib.SecretValue</code> | The age key that should be used for encryption. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProps.property.sopsFileFormat">sopsFileFormat</a></code> | <code>string</code> | The format of the sops file. |
@@ -2967,6 +3190,18 @@ public readonly flattenSeparator: string;
 - *Default:* '.'
 
 If the structure should be flattened use the provided separator between keys.
+
+---
+
+##### `parameterKeyPrefix`<sup>Optional</sup> <a name="parameterKeyPrefix" id="cdk-sops-secrets.SopsSyncProps.property.parameterKeyPrefix"></a>
+
+```typescript
+public readonly parameterKeyPrefix: string;
+```
+
+- *Type:* string
+
+Add this prefix to parameter names.
 
 ---
 
