@@ -9,6 +9,7 @@ import (
 	"log"
 	"reflect"
 	"regexp"
+	"sort"
 	"strconv"
 	"strings"
 
@@ -294,7 +295,10 @@ func (a AWS) syncSopsToSecretsmanager(ctx context.Context, event cfn.Event) (phy
 				log.Printf("Patching multiple string parameters")
 				v := reflect.ValueOf(finalInterface)
 				returnData := make(map[string]interface{})
-				for i, key := range v.MapKeys() {
+				keys := v.MapKeys()
+				keysOrder := func(i, j int) bool { return keys[i].Interface().(string) < keys[j].Interface().(string) }
+				sort.Slice(keys, keysOrder)
+				for i, key := range keys {
 					strKey := resourceProperties.ParameterKeyPrefix + key.String()
 					log.Printf("Parameter: " + strKey)
 					value := v.MapIndex(key).Interface()
