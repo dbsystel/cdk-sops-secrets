@@ -9,7 +9,12 @@ import {
 } from 'aws-cdk-lib/aws-iam';
 import { Key } from 'aws-cdk-lib/aws-kms';
 import { Function, InlineCode, Runtime } from 'aws-cdk-lib/aws-lambda';
-import { SopsSecret, SopsSyncProvider, UploadType } from '../src';
+import {
+  SopsSecret,
+  SopsSyncProvider,
+  UploadType,
+  MultiStringParameter,
+} from '../src';
 
 const keyStatements = [
   {
@@ -518,4 +523,150 @@ test('Allowed options for SopsSync', () => {
         sopsS3Bucket: 'test',
       }),
   ).toThrowError('You have to specify sopsFileFormat!');
+});
+
+test('Multiple parameters from yaml file', () => {
+  const app = new App();
+  const stack = new Stack(app, 'ParameterIntegration');
+  new MultiStringParameter(stack, 'SopsSecret1', {
+    simpleName: false,
+    sopsFilePath: 'test-secrets/yaml/sopsfile-complex-parameters.enc-age.yaml',
+    encryptionKey: Key.fromKeyArn(
+      stack,
+      'Key',
+      'arn:aws:kms:eu-central-1:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab',
+    ),
+    stringValue: ' ',
+  });
+  const template = Template.fromStack(stack);
+
+  template.hasResourceProperties('AWS::SSM::Parameter', {
+    Name: '/foo/bar/key1',
+  });
+
+  template.hasResourceProperties('AWS::SSM::Parameter', {
+    Name: '/foo/bar/key2',
+  });
+
+  template.hasResourceProperties('AWS::IAM::Policy', {
+    PolicyDocument: {
+      Statement: [
+        {
+          Action: 'ssm:PutParameter',
+          Effect: 'Allow',
+          Resource: [
+            {
+              'Fn::Join': [
+                '',
+                [
+                  'arn:aws:ssm:',
+                  { Ref: 'AWS::Region' },
+                  ':',
+                  { Ref: 'AWS::AccountId' },
+                  ':parameter/foo/bar/key1',
+                ],
+              ],
+            },
+            {
+              'Fn::Join': [
+                '',
+                [
+                  'arn:aws:ssm:',
+                  { Ref: 'AWS::Region' },
+                  ':',
+                  { Ref: 'AWS::AccountId' },
+                  ':parameter/foo/bar/key2',
+                ],
+              ],
+            },
+          ],
+        },
+        {
+          Action: [
+            'kms:Decrypt',
+            'kms:Encrypt',
+            'kms:ReEncrypt*',
+            'kms:GenerateDataKey*',
+          ],
+          Effect: 'Allow',
+          Resource:
+            'arn:aws:kms:eu-central-1:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab',
+        },
+      ],
+    },
+  });
+});
+
+test('Multiple parameters from yaml file with custom key structure', () => {
+  const app = new App();
+  const stack = new Stack(app, 'ParameterIntegration');
+  new MultiStringParameter(stack, 'SopsSecret1', {
+    simpleName: false,
+    sopsFilePath: 'test-secrets/yaml/sopsfile-complex-parameters.enc-age.yaml',
+    keyPrefix: '_',
+    keySeperator: '.',
+    encryptionKey: Key.fromKeyArn(
+      stack,
+      'Key',
+      'arn:aws:kms:eu-central-1:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab',
+    ),
+    stringValue: ' ',
+  });
+  const template = Template.fromStack(stack);
+
+  template.hasResourceProperties('AWS::SSM::Parameter', {
+    Name: '_foo.bar.key1',
+  });
+
+  template.hasResourceProperties('AWS::SSM::Parameter', {
+    Name: '_foo.bar.key2',
+  });
+
+  template.hasResourceProperties('AWS::IAM::Policy', {
+    PolicyDocument: {
+      Statement: [
+        {
+          Action: 'ssm:PutParameter',
+          Effect: 'Allow',
+          Resource: [
+            {
+              'Fn::Join': [
+                '',
+                [
+                  'arn:aws:ssm:',
+                  { Ref: 'AWS::Region' },
+                  ':',
+                  { Ref: 'AWS::AccountId' },
+                  ':parameter/_foo.bar.key1',
+                ],
+              ],
+            },
+            {
+              'Fn::Join': [
+                '',
+                [
+                  'arn:aws:ssm:',
+                  { Ref: 'AWS::Region' },
+                  ':',
+                  { Ref: 'AWS::AccountId' },
+                  ':parameter/_foo.bar.key2',
+                ],
+              ],
+            },
+          ],
+        },
+        {
+          Action: [
+            'kms:Decrypt',
+            'kms:Encrypt',
+            'kms:ReEncrypt*',
+            'kms:GenerateDataKey*',
+          ],
+          Effect: 'Allow',
+          Resource:
+            'arn:aws:kms:eu-central-1:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab',
+        },
+      ],
+    },
+  });
 });
