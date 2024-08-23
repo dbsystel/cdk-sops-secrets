@@ -17,7 +17,7 @@ interface JSONObject {
 }
 
 export interface MultiStringParameterProps extends SopsStringParameterProps {
-  readonly keySeperator?: string;
+  readonly keySeparator?: string;
   readonly keyPrefix?: string;
 }
 
@@ -67,7 +67,7 @@ export class MultiStringParameter extends Construct {
       region: this.stack.region,
     };
     this.keyPrefix = props.keyPrefix ?? '/';
-    this.keySeparator = props.keySeperator ?? '/';
+    this.keySeparator = props.keySeparator ?? '/';
 
     const keys = this.parseFile(props.sopsFilePath!, this.keySeparator)
       .filter((key) => !key.startsWith('sops'))

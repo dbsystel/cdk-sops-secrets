@@ -552,6 +552,24 @@ test('Multiple parameters from yaml file', () => {
     PolicyDocument: {
       Statement: [
         {
+          Action: [
+            'kms:Decrypt',
+            'kms:Encrypt',
+            'kms:ReEncrypt*',
+            'kms:GenerateDataKey*',
+          ],
+          Effect: 'Allow',
+          Resource:
+            'arn:aws:kms:eu-central-1:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab',
+        },
+      ],
+    },
+  });
+
+  template.hasResourceProperties('AWS::IAM::ManagedPolicy', {
+    PolicyDocument: {
+      Statement: [
+        {
           Action: 'ssm:PutParameter',
           Effect: 'Allow',
           Resource: [
@@ -581,17 +599,6 @@ test('Multiple parameters from yaml file', () => {
             },
           ],
         },
-        {
-          Action: [
-            'kms:Decrypt',
-            'kms:Encrypt',
-            'kms:ReEncrypt*',
-            'kms:GenerateDataKey*',
-          ],
-          Effect: 'Allow',
-          Resource:
-            'arn:aws:kms:eu-central-1:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab',
-        },
       ],
     },
   });
@@ -604,7 +611,7 @@ test('Multiple parameters from yaml file with custom key structure', () => {
     simpleName: false,
     sopsFilePath: 'test-secrets/yaml/sopsfile-complex-parameters.enc-age.yaml',
     keyPrefix: '_',
-    keySeperator: '.',
+    keySeparator: '.',
     encryptionKey: Key.fromKeyArn(
       stack,
       'Key',
@@ -623,6 +630,24 @@ test('Multiple parameters from yaml file with custom key structure', () => {
   });
 
   template.hasResourceProperties('AWS::IAM::Policy', {
+    PolicyDocument: {
+      Statement: [
+        {
+          Action: [
+            'kms:Decrypt',
+            'kms:Encrypt',
+            'kms:ReEncrypt*',
+            'kms:GenerateDataKey*',
+          ],
+          Effect: 'Allow',
+          Resource:
+            'arn:aws:kms:eu-central-1:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab',
+        },
+      ],
+    },
+  });
+
+  template.hasResourceProperties('AWS::IAM::ManagedPolicy', {
     PolicyDocument: {
       Statement: [
         {
@@ -655,18 +680,31 @@ test('Multiple parameters from yaml file with custom key structure', () => {
             },
           ],
         },
-        {
-          Action: [
-            'kms:Decrypt',
-            'kms:Encrypt',
-            'kms:ReEncrypt*',
-            'kms:GenerateDataKey*',
-          ],
-          Effect: 'Allow',
-          Resource:
-            'arn:aws:kms:eu-central-1:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab',
-        },
       ],
     },
   });
+});
+
+test('Large set of parameters to split in multiple policies', () => {
+  const app = new App();
+  const stack = new Stack(app, 'ParameterIntegration');
+  new MultiStringParameter(stack, 'SopsSecret1', {
+    simpleName: false,
+    sopsFilePath: 'test-secrets/yaml/sopsfile-parameters-large.yaml',
+    keyPrefix: '_',
+    keySeparator: '.',
+    encryptionKey: Key.fromKeyArn(
+      stack,
+      'Key',
+      'arn:aws:kms:eu-central-1:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab',
+    ),
+    stringValue: ' ',
+  });
+  const template = Template.fromStack(stack);
+
+  template.hasResourceProperties('AWS::SSM::Parameter', {
+    Name: '_DefineSomeExtraExtraLongNameForParameterWhichHaveAExtraExtraLongNameToTestPolicySplitting1',
+  });
+
+  template.resourceCountIs('AWS::IAM::ManagedPolicy', 3);
 });
