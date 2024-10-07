@@ -311,8 +311,10 @@ func (a AWS) syncSopsToSecretsmanager(ctx context.Context, event cfn.Event) (phy
 					if err != nil {
 						return tempArn, nil, err
 					}
-					returnData[fmt.Sprintf("ParameterName[%v]", i)] = strKey
+					// A returnData map for each parameter is not created, because it would limit the number of possible parameters unnecessarily
 				}
+				returnData["Prefix"] = resourceProperties.ParameterKeyPrefix
+				returnData["Count"] = len(keys)
 				return tempArn, returnData, nil
 			} else {
 				log.Printf("Patching single string parameter")
