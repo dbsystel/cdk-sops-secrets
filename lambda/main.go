@@ -298,7 +298,7 @@ func (a AWS) syncSopsToSecretsmanager(ctx context.Context, event cfn.Event) (phy
 				keys := v.MapKeys()
 				keysOrder := func(i, j int) bool { return keys[i].Interface().(string) < keys[j].Interface().(string) }
 				sort.Slice(keys, keysOrder)
-				for i, key := range keys {
+				for _, key := range keys {
 					strKey := resourceProperties.ParameterKeyPrefix + key.String()
 					log.Printf("Parameter: " + strKey)
 					value := v.MapIndex(key).Interface()
@@ -311,8 +311,10 @@ func (a AWS) syncSopsToSecretsmanager(ctx context.Context, event cfn.Event) (phy
 					if err != nil {
 						return tempArn, nil, err
 					}
-					returnData[fmt.Sprintf("ParameterName[%v]", i)] = strKey
+					// A returnData map for each parameter is not created, because it would limit the number of possible parameters unnecessarily
 				}
+				returnData["Prefix"] = resourceProperties.ParameterKeyPrefix
+				returnData["Count"] = len(keys)
 				return tempArn, returnData, nil
 			} else {
 				log.Printf("Patching single string parameter")
