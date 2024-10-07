@@ -1735,7 +1735,7 @@ const multiStringParameterProps: MultiStringParameterProps = { ... }
 | <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.type">type</a></code> | <code>aws-cdk-lib.aws_ssm.ParameterType</code> | The type of the string parameter. |
 | <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.encryptionKey">encryptionKey</a></code> | <code>aws-cdk-lib.aws_kms.IKey</code> | *No description.* |
 | <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.keyPrefix">keyPrefix</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.keySeperator">keySeperator</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.keySeparator">keySeparator</a></code> | <code>string</code> | *No description.* |
 
 ---
 
@@ -2075,10 +2075,10 @@ public readonly keyPrefix: string;
 
 ---
 
-##### `keySeperator`<sup>Optional</sup> <a name="keySeperator" id="cdk-sops-secrets.MultiStringParameterProps.property.keySeperator"></a>
+##### `keySeparator`<sup>Optional</sup> <a name="keySeparator" id="cdk-sops-secrets.MultiStringParameterProps.property.keySeparator"></a>
 
 ```typescript
-public readonly keySeperator: string;
+public readonly keySeparator: string;
 ```
 
 - *Type:* string

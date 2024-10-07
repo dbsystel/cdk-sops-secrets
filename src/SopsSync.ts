@@ -9,7 +9,12 @@ import {
   CustomResource,
   FileSystem,
 } from 'aws-cdk-lib';
-import { IGrantable, PolicyStatement } from 'aws-cdk-lib/aws-iam';
+import {
+  IGrantable,
+  IRole,
+  ManagedPolicy,
+  PolicyStatement,
+} from 'aws-cdk-lib/aws-iam';
 import { IKey, Key } from 'aws-cdk-lib/aws-kms';
 import { SingletonFunction, Code, Runtime } from 'aws-cdk-lib/aws-lambda';
 import { Asset } from 'aws-cdk-lib/aws-s3-assets';
@@ -342,16 +347,9 @@ export class SopsSync extends Construct {
           props.encryptionKey?.grantEncryptDecrypt(provider);
         }
         if (props.parameterNames) {
-          provider.addToRolePolicy(
-            new PolicyStatement({
-              actions: ['ssm:PutParameter'],
-              resources: props.parameterNames.map(
-                (param) =>
-                  `arn:aws:ssm:${Stack.of(this).region}:${
-                    Stack.of(this).account
-                  }:parameter${param.startsWith('/') ? param : `/${param}`}`,
-              ),
-            }),
+          this.createReducedParameterPolicy(
+            props.parameterNames,
+            provider.role,
           );
           props.encryptionKey?.grantEncryptDecrypt(provider);
         }
@@ -428,5 +426,78 @@ export class SopsSync extends Construct {
       },
     });
     this.versionId = cr.getAttString('VersionId');
+  }
+
+  private createReducedParameterPolicy(parameters: string[], role: IRole) {
+    // Avoid too large policies
+    // The maximum size of a managed policy is 6.144 bytes -> 1 character = 1 byte
+    const maxPolicyBytes = 6000; // Keep some bytes as a buffer
+    const arnPrefixBytes = 55; // Content for "arn:aws:ssm:ap-southeast-3:<accountnumer>:parameter/
+    let startAtParameter = 0;
+    let currentPolicyBytes = 300; // Reserve some byte space for basic stuff inside the policy
+    for (let i = 0; i < parameters.length; i += 1) {
+      if (
+        // Check if the current parameter would fit into the policy
+        arnPrefixBytes + parameters[i].length + currentPolicyBytes <
+        maxPolicyBytes
+      ) {
+        // If so increase the byte counter
+        currentPolicyBytes =
+          arnPrefixBytes + parameters[i].length + currentPolicyBytes;
+      } else {
+        const parameterNamesChunk = parameters.slice(
+          startAtParameter,
+          i, //end of slice is not included
+        );
+        startAtParameter = i;
+        currentPolicyBytes = 300;
+        // Create the policy for the selected chunk
+        const putPolicy = new ManagedPolicy(
+          this,
+          `SopsSecretParameterProviderManagedPolicyParameterAccess${i}`,
+          {
+            description:
+              'Policy to grant parameter provider permissions to put parameter',
+          },
+        );
+        putPolicy.addStatements(
+          new PolicyStatement({
+            actions: ['ssm:PutParameter'],
+            resources: parameterNamesChunk.map(
+              (param) =>
+                `arn:aws:ssm:${Stack.of(this).region}:${
+                  Stack.of(this).account
+                }:parameter${param.startsWith('/') ? param : `/${param}`}`,
+            ),
+          }),
+        );
+        role.addManagedPolicy(putPolicy);
+      }
+    }
+    const parameterNamesChunk = parameters.slice(
+      startAtParameter,
+      parameters.length,
+    );
+    // Create the policy for the remaning elements
+    const putPolicy = new ManagedPolicy(
+      this,
+      `SopsSecretParameterProviderManagedPolicyParameterAccess${parameters.length}`,
+      {
+        description:
+          'Policy to grant parameter provider permissions to put parameter',
+      },
+    );
+    putPolicy.addStatements(
+      new PolicyStatement({
+        actions: ['ssm:PutParameter'],
+        resources: parameterNamesChunk.map(
+          (param) =>
+            `arn:aws:ssm:${Stack.of(this).region}:${
+              Stack.of(this).account
+            }:parameter${param.startsWith('/') ? param : `/${param}`}`,
+        ),
+      }),
+    );
+    role.addManagedPolicy(putPolicy);
   }
 }
