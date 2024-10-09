@@ -161,20 +161,10 @@ func (a AWS) syncSopsToSecretsmanager(ctx context.Context, event cfn.Event) (phy
 			if err != nil {
 				return tempArn, nil, err
 			}
-			if attr.Checksum == nil {
-				return tempArn, nil, errors.New("No checksum found in S3 object")
+			if attr.ETag == nil {
+				return tempArn, nil, errors.New("No ETag checksum found in S3 object")
 			}
-			if attr.Checksum.ChecksumCRC32 != nil {
-				sopsHash = *attr.Checksum.ChecksumCRC32
-			} else if attr.Checksum.ChecksumCRC32C != nil {
-				sopsHash = *attr.Checksum.ChecksumCRC32C
-			} else if attr.Checksum.ChecksumSHA1 != nil {
-				sopsHash = *attr.Checksum.ChecksumSHA1
-			} else if attr.Checksum.ChecksumSHA256 != nil {
-				sopsHash = *attr.Checksum.ChecksumSHA256
-			} else {
-				return tempArn, nil, errors.New("No checksum found in S3 object")
-			}
+			sopsHash = *attr.ETag
 			log.Println(sopsHash)
 		}
 

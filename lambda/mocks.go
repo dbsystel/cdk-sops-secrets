@@ -168,11 +168,9 @@ func (m *MocksS3Api) GetObjectAttributes(input *s3.GetObjectAttributesInput) (*s
 	snaps.MatchSnapshot(m.t, ">>>S3ApiMockClient.GetObjectAttributes.Input", *input)
 
 	return &s3.GetObjectAttributesOutput{
-		Checksum: &s3.Checksum{
-			ChecksumCRC32: aws.String("some-32-character-long-string-ab"),
-		},
+		Checksum:       nil,
 		DeleteMarker:   nil,
-		ETag:           nil,
+		ETag:           aws.String("some-32-character-long-string-ab"),
 		LastModified:   nil,
 		ObjectParts:    nil,
 		ObjectSize:     nil,
