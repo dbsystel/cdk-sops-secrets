@@ -3,12 +3,15 @@ package main
 import (
 	"crypto/sha256"
 	"fmt"
-	"github.com/aws/aws-sdk-go/service/ssm"
-	"github.com/aws/aws-sdk-go/service/ssm/ssmiface"
 	"io"
 	"testing"
 
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go/service/ssm"
+	"github.com/aws/aws-sdk-go/service/ssm/ssmiface"
+
 	"github.com/aws/aws-sdk-go/service/s3"
+	"github.com/aws/aws-sdk-go/service/s3/s3iface"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager/s3manageriface"
 	"github.com/aws/aws-sdk-go/service/secretsmanager"
@@ -153,5 +156,28 @@ func (m *MockSSMClient) PutParameter(input *ssm.PutParameterInput) (*ssm.PutPara
 	return &ssm.PutParameterOutput{
 		Tier:    &tier,
 		Version: &version,
+	}, nil
+}
+
+type MocksS3Api struct {
+	s3iface.S3API
+	t *testing.T
+}
+
+func (m *MocksS3Api) GetObjectAttributes(input *s3.GetObjectAttributesInput) (*s3.GetObjectAttributesOutput, error) {
+	snaps.MatchSnapshot(m.t, ">>>S3ApiMockClient.GetObjectAttributes.Input", *input)
+
+	return &s3.GetObjectAttributesOutput{
+		Checksum: &s3.Checksum{
+			ChecksumCRC32: aws.String("some-32-character-long-string-ab"),
+		},
+		DeleteMarker:   nil,
+		ETag:           nil,
+		LastModified:   nil,
+		ObjectParts:    nil,
+		ObjectSize:     nil,
+		RequestCharged: nil,
+		StorageClass:   nil,
+		VersionId:      nil,
 	}, nil
 }

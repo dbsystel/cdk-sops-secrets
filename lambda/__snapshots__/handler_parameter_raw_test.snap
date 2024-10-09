@@ -1,6 +1,6 @@
 
 [Test_FullWorkflow_Create_S3_Parameter_RAW_Simple - 1]
->>>S3MAnagerMockClient.Download.Input
+>>>S3ApiMockClient.GetObjectAttributes.Input
 {
   Bucket: "..",
   Key: "../test-secrets/binary/sopsfile.enc-age.binary"
@@ -8,6 +8,14 @@
 ---
 
 [Test_FullWorkflow_Create_S3_Parameter_RAW_Simple - 2]
+>>>S3MAnagerMockClient.Download.Input
+{
+  Bucket: "..",
+  Key: "../test-secrets/binary/sopsfile.enc-age.binary"
+}
+---
+
+[Test_FullWorkflow_Create_S3_Parameter_RAW_Simple - 3]
 >>>SecretsManagerMockClient.PutParameterValue.Input
 main.putParameterValueInputNotSecure{
     _:              struct {}{},
@@ -25,7 +33,7 @@ main.putParameterValueInputNotSecure{
 }
 ---
 
-[Test_FullWorkflow_Create_S3_Parameter_RAW_Simple - 3]
+[Test_FullWorkflow_Create_S3_Parameter_RAW_Simple - 4]
 >>>syncSopsToSecretsmanager
 arn:aws:arn:custom:sopssync:eu-central-1:123456789012:parameter/testsecret
 map[string]interface {}{
