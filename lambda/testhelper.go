@@ -64,10 +64,13 @@ func getMocks(t *testing.T) *AWS {
 		secretsmanager: &SecretsManagerMockClient{
 			t: t,
 		},
-		s3downlaoder: &S3ManagerMockClient{
+		s3Downloader: &S3ManagerMockClient{
 			t: t,
 		},
 		ssm: &MockSSMClient{
+			t: t,
+		},
+		s3Api: &MocksS3Api{
 			t: t,
 		},
 	}
