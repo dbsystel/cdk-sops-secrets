@@ -47,8 +47,8 @@ main.putParameterValueInputNotSecure{
 >>>syncSopsToSecretsmanager
 arn:aws:arn:custom:sopssync:eu-central-1:123456789012:parameter/testsecret
 map[string]interface {}{
-    "ParameterName[0]": "/foo/bar/key1",
-    "ParameterName[1]": "/foo/bar/key2",
+    "Count":  int(2),
+    "Prefix": "/",
 }
 nil
 ---
@@ -101,8 +101,8 @@ main.putParameterValueInputNotSecure{
 >>>syncSopsToSecretsmanager
 arn:aws:arn:custom:sopssync:eu-central-1:123456789012:parameter/testsecret
 map[string]interface {}{
-    "ParameterName[0]": "_foo.bar.key1",
-    "ParameterName[1]": "_foo.bar.key2",
+    "Count":  int(2),
+    "Prefix": "_",
 }
 nil
 ---
