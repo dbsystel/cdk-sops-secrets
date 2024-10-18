@@ -164,7 +164,7 @@ fixme.forEach((wf) => {
     name: 'gobuild',
     runsOn: 'ubuntu-latest',
     container: {
-      image: 'golang:1.22-bullseye',
+      image: 'golang:1.23-bullseye',
     },
     on: {
       pull_request: null,

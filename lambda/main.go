@@ -17,6 +17,7 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
+	"github.com/aws/aws-sdk-go/service/s3/s3iface"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager/s3manageriface"
 	"github.com/aws/aws-sdk-go/service/secretsmanager"
@@ -57,13 +58,14 @@ type SopsSyncResourcePropertys struct {
 type AWS struct {
 	secretsmanager secretsmanageriface.SecretsManagerAPI
 	ssm            ssmiface.SSMAPI
-	s3downlaoder   s3manageriface.DownloaderAPI
+	s3Downloader   s3manageriface.DownloaderAPI
+	s3Api          s3iface.S3API
 }
 
 func (a AWS) getS3FileContent(file SopsS3File) (data []byte, err error) {
 	log.Printf("Downloading file '%s' from bucket '%s'\n", file.Key, file.Bucket)
 	buf := aws.NewWriteAtBuffer([]byte{})
-	resp, err := a.s3downlaoder.Download(buf, &s3.GetObjectInput{
+	resp, err := a.s3Downloader.Download(buf, &s3.GetObjectInput{
 		Bucket: &file.Bucket,
 		Key:    &file.Key,
 	})
@@ -151,18 +153,21 @@ func (a AWS) syncSopsToSecretsmanager(ctx context.Context, event cfn.Event) (phy
 
 		// If SopsS3File is provided, we have to download this file
 		if sopsFile != (SopsS3File{}) {
+			attr, err := a.s3Api.GetObjectAttributes(&s3.GetObjectAttributesInput{
+				Bucket: &sopsFile.Bucket,
+				Key:    &sopsFile.Key,
+			})
 			encryptedContent, err = a.getS3FileContent(sopsFile)
-			fileNameParts := strings.Split(sopsFile.Key, ".")
-			fileNameParts = fileNameParts[:len(fileNameParts)-1]
-			fileNameWithoutEnding := strings.Join(fileNameParts, ".")
-			sopsHash = fileNameWithoutEnding
-			log.Println(sopsHash)
 			if err != nil {
 				return tempArn, nil, err
 			}
+			if attr.ETag == nil {
+				return tempArn, nil, errors.New("No ETag checksum found in S3 object")
+			}
+			sopsHash = *attr.ETag
 		}
 
-		// If SopsInline is provbided, we have to base64 decode this content
+		// If SopsInline is provided, we have to base64 decode this content
 		if sopsInline != (SopsInline{}) {
 			encryptedContent, err = base64.StdEncoding.DecodeString(sopsInline.Content)
 			sopsHash = sopsInline.Hash
@@ -344,7 +349,7 @@ func handleRequest(ctx context.Context, event cfn.Event) (physicalResourceID str
 	a := &AWS{
 		secretsmanager: secretsmanager.New(awsSession),
 		ssm:            ssm.New(awsSession),
-		s3downlaoder:   s3manager.NewDownloader(awsSession),
+		s3Downloader:   s3manager.NewDownloader(awsSession),
 	}
 	return a.syncSopsToSecretsmanager(ctx, event)
 }
