@@ -165,7 +165,6 @@ func (a AWS) syncSopsToSecretsmanager(ctx context.Context, event cfn.Event) (phy
 				return tempArn, nil, errors.New("No ETag checksum found in S3 object")
 			}
 			sopsHash = *attr.ETag
-			log.Println(sopsHash)
 		}
 
 		// If SopsInline is provided, we have to base64 decode this content
