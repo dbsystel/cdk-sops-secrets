@@ -332,6 +332,7 @@ export class SopsSync extends Construct {
         }
         if (props.secret) {
           props.secret.grantWrite(provider);
+          props.secret.encryptionKey?.grantEncryptDecrypt(provider);
         }
         if (props.parameterName) {
           provider.addToRolePolicy(
