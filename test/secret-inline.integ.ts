@@ -9,7 +9,7 @@ const stack = new Stack(app, 'SecretIntegrationInline');
 new SopsSecret(stack, 'SopsSecretJSON', {
   sopsFilePath: 'test-secrets/json/sopsfile.enc-age.json',
   // see test-secrets/README.md for further information regarding the test file
-  sopsAgeKey: SecretValue.plainText(
+  sopsAgeKey: SecretValue.unsafePlainText(
     'AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3',
   ),
 });
@@ -18,7 +18,7 @@ new SopsSecret(stack, 'SopsSecretYAML', {
   sopsFilePath: 'test-secrets/yaml/sopsfile.enc-age.yaml',
   convertToJSON: false,
   // see test-secrets/README.md for further information regarding the test file
-  sopsAgeKey: SecretValue.plainText(
+  sopsAgeKey: SecretValue.unsafePlainText(
     'AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3',
   ),
 });
@@ -27,7 +27,7 @@ new SopsSecret(stack, 'SopsSecretYAMLasJSON', {
   sopsFilePath: 'test-secrets/yaml/sopsfile.enc-age.yaml',
   convertToJSON: true,
   // see test-secrets/README.md for further information regarding the test file
-  sopsAgeKey: SecretValue.plainText(
+  sopsAgeKey: SecretValue.unsafePlainText(
     'AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3',
   ),
 });
@@ -36,7 +36,7 @@ new SopsSecret(stack, 'SopsSecretDOTENV', {
   sopsFilePath: 'test-secrets/dotenv/encrypted-best-secret.env',
   convertToJSON: false,
   // see test-secrets/README.md for further information regarding the test file
-  sopsAgeKey: SecretValue.plainText(
+  sopsAgeKey: SecretValue.unsafePlainText(
     'AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3',
   ),
 });
@@ -45,7 +45,7 @@ new SopsSecret(stack, 'SopsSecretDOTENVasJSON', {
   sopsFilePath: 'test-secrets/dotenv/encrypted-best-secret.env',
   convertToJSON: true,
   // see test-secrets/README.md for further information regarding the test file
-  sopsAgeKey: SecretValue.plainText(
+  sopsAgeKey: SecretValue.unsafePlainText(
     'AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3',
   ),
 });
@@ -54,7 +54,7 @@ new SopsSecret(stack, 'SopsComplexSecretJSON', {
   sopsFilePath: 'test-secrets/json/sopsfile-complex.enc-age.json',
   flatten: false,
   // see test-secrets/README.md for further information regarding the test file
-  sopsAgeKey: SecretValue.plainText(
+  sopsAgeKey: SecretValue.unsafePlainText(
     'AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3',
   ),
 });
@@ -66,7 +66,7 @@ const sopsComplexSecretJSONFlat = new SopsSecret(
     sopsFilePath: 'test-secrets/json/sopsfile-complex.enc-age.json',
     flatten: true,
     // see test-secrets/README.md for further information regarding the test file
-    sopsAgeKey: SecretValue.plainText(
+    sopsAgeKey: SecretValue.unsafePlainText(
       'AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3',
     ),
   },
@@ -77,7 +77,7 @@ new SopsSecret(stack, 'SopComplexSecretYAML', {
   convertToJSON: false,
   flatten: false,
   // see test-secrets/README.md for further information regarding the test file
-  sopsAgeKey: SecretValue.plainText(
+  sopsAgeKey: SecretValue.unsafePlainText(
     'AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3',
   ),
 });
@@ -87,7 +87,7 @@ new SopsSecret(stack, 'SopComplexSecretYAMLFlat', {
   convertToJSON: false,
   flatten: true,
   // see test-secrets/README.md for further information regarding the test file
-  sopsAgeKey: SecretValue.plainText(
+  sopsAgeKey: SecretValue.unsafePlainText(
     'AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3',
   ),
 });
@@ -97,7 +97,7 @@ new SopsSecret(stack, 'SopsComplexSecretYAMLasJSON', {
   convertToJSON: true,
   flatten: false,
   // see test-secrets/README.md for further information regarding the test file
-  sopsAgeKey: SecretValue.plainText(
+  sopsAgeKey: SecretValue.unsafePlainText(
     'AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3',
   ),
 });
@@ -110,7 +110,7 @@ const sopsComplexSecretYAMLasJSONFlat = new SopsSecret(
     convertToJSON: true,
     flatten: true,
     // see test-secrets/README.md for further information regarding the test file
-    sopsAgeKey: SecretValue.plainText(
+    sopsAgeKey: SecretValue.unsafePlainText(
       'AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3',
     ),
   },

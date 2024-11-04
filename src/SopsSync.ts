@@ -332,6 +332,10 @@ export class SopsSync extends Construct {
         }
         if (props.secret) {
           props.secret.grantWrite(provider);
+          props.secret.encryptionKey?.grantEncryptDecrypt(provider);
+          if (props.secret?.encryptionKey !== undefined) {
+            props.secret.encryptionKey.grantEncryptDecrypt(provider);
+          }
         }
         if (props.parameterName) {
           provider.addToRolePolicy(
@@ -355,17 +359,6 @@ export class SopsSync extends Construct {
         }
         if (sopsAsset !== undefined) {
           sopsAsset.bucket.grantRead(provider);
-        }
-        /**
-         * fixes #234
-         * If the kms key for secrets encryption is an IKey
-         * there will be no permissions otherwise
-         */
-        if (
-          props.secret?.encryptionKey !== undefined &&
-          !(props.secret.encryptionKey instanceof Key)
-        ) {
-          props.secret.encryptionKey.grantEncryptDecrypt(provider);
         }
       } else {
         Annotations.of(this).addWarning(

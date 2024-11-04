@@ -81,7 +81,7 @@ test('Age Key passed', () => {
 
   new SopsSecret(stack, 'SopsSecret', {
     sopsFilePath: 'test-secrets/yaml/sopsfile.enc-kms.yaml',
-    sopsAgeKey: SecretValue.plainText('SOME-KEY'),
+    sopsAgeKey: SecretValue.unsafePlainText('SOME-KEY'),
   });
   Template.fromStack(stack).hasResource('AWS::Lambda::Function', {
     Properties: Match.objectLike({
@@ -99,7 +99,7 @@ test('Age Key add', () => {
   const stack = new Stack(app, 'SecretIntegration');
 
   const provider = new SopsSyncProvider(stack, 'Provider');
-  provider.addAgeKey(SecretValue.plainText('SOME-KEY'));
+  provider.addAgeKey(SecretValue.unsafePlainText('SOME-KEY'));
   new SopsSecret(stack, 'SopsSecret', {
     sopsFilePath: 'test-secrets/yaml/sopsfile.enc-kms.yaml',
   });
