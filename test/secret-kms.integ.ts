@@ -1,7 +1,7 @@
 import { App, SecretValue, Stack } from 'aws-cdk-lib';
+import { Key } from 'aws-cdk-lib/aws-kms';
 import { Code, Function, Runtime } from 'aws-cdk-lib/aws-lambda';
 import { SopsSecret, UploadType } from '../src/index';
-import { Key } from 'aws-cdk-lib/aws-kms';
 
 const app = new App();
 

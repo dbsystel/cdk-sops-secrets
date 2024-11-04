@@ -2,8 +2,8 @@
  * Caution - this test can only be used for snapshots - you can't deploy this
  */
 import { App, SecretValue, Stack } from 'aws-cdk-lib';
-import { SopsSecret, UploadType } from '../src/index';
 import { Key } from 'aws-cdk-lib/aws-kms';
+import { SopsSecret, UploadType } from '../src/index';
 
 const app = new App();
 
