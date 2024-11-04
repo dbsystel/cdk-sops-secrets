@@ -68,14 +68,6 @@ test/secret-inline.integ.snapshot/manifest.json
 test/secret-inline.integ.snapshot/**/manifest.json
 test/secret-inline.integ.snapshot/tree.json
 test/secret-inline.integ.snapshot/**/tree.json
-test/secret-kms.integ.snapshot/asset.*
-test/secret-kms.integ.snapshot/**/asset.*
-test/secret-kms.integ.snapshot/cdk.out
-test/secret-kms.integ.snapshot/**/cdk.out
-test/secret-kms.integ.snapshot/manifest.json
-test/secret-kms.integ.snapshot/**/manifest.json
-test/secret-kms.integ.snapshot/tree.json
-test/secret-kms.integ.snapshot/**/tree.json
 test/secret-manual.integ.snapshot/asset.*
 test/secret-manual.integ.snapshot/**/asset.*
 test/secret-manual.integ.snapshot/cdk.out
