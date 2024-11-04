@@ -276,69 +276,6 @@
         }
       ]
     },
-    "integ:secret-kms:assert": {
-      "name": "integ:secret-kms:assert",
-      "description": "assert the snapshot of integration test 'secret-kms'",
-      "steps": [
-        {
-          "exec": "[ -d \"test/secret-kms.integ.snapshot\" ] || (echo \"No snapshot available for integration test 'secret-kms'. Run 'projen integ:secret-kms:deploy' to capture.\" && exit 1)"
-        },
-        {
-          "exec": "cdk synth --app \"ts-node -P tsconfig.dev.json test/secret-kms.integ.ts\" --no-notices --no-version-reporting --no-asset-metadata --no-path-metadata -o test/.tmp/secret-kms.integ/assert.cdk.out > /dev/null"
-        },
-        {
-          "exec": "diff -r -x asset.* -x cdk.out -x manifest.json -x tree.json test/secret-kms.integ.snapshot/ test/.tmp/secret-kms.integ/assert.cdk.out/"
-        }
-      ]
-    },
-    "integ:secret-kms:deploy": {
-      "name": "integ:secret-kms:deploy",
-      "description": "deploy integration test 'secret-kms' and capture snapshot",
-      "steps": [
-        {
-          "exec": "rm -fr test/.tmp/secret-kms.integ/deploy.cdk.out"
-        },
-        {
-          "exec": "cdk deploy --app \"ts-node -P tsconfig.dev.json test/secret-kms.integ.ts\" --no-notices --no-version-reporting --no-asset-metadata --no-path-metadata '**' --require-approval=never -o test/.tmp/secret-kms.integ/deploy.cdk.out"
-        },
-        {
-          "exec": "rm -fr test/secret-kms.integ.snapshot"
-        },
-        {
-          "exec": "mv test/.tmp/secret-kms.integ/deploy.cdk.out test/secret-kms.integ.snapshot"
-        },
-        {
-          "spawn": "integ:secret-kms:destroy"
-        }
-      ]
-    },
-    "integ:secret-kms:destroy": {
-      "name": "integ:secret-kms:destroy",
-      "description": "destroy integration test 'secret-kms'",
-      "steps": [
-        {
-          "exec": "cdk destroy --app test/secret-kms.integ.snapshot '**' --no-version-reporting"
-        }
-      ]
-    },
-    "integ:secret-kms:snapshot": {
-      "name": "integ:secret-kms:snapshot",
-      "description": "update snapshot for integration test \"secret-kms\"",
-      "steps": [
-        {
-          "exec": "cdk synth --app \"ts-node -P tsconfig.dev.json test/secret-kms.integ.ts\" --no-notices --no-version-reporting --no-asset-metadata --no-path-metadata -o test/secret-kms.integ.snapshot > /dev/null"
-        }
-      ]
-    },
-    "integ:secret-kms:watch": {
-      "name": "integ:secret-kms:watch",
-      "description": "watch integration test 'secret-kms' (without updating snapshots)",
-      "steps": [
-        {
-          "exec": "cdk watch --app \"ts-node -P tsconfig.dev.json test/secret-kms.integ.ts\" --no-notices --no-version-reporting --no-asset-metadata --no-path-metadata '**' -o test/.tmp/secret-kms.integ/deploy.cdk.out"
-        }
-      ]
-    },
     "integ:secret-manual:assert": {
       "name": "integ:secret-manual:assert",
       "description": "assert the snapshot of integration test 'secret-manual'",
@@ -476,9 +413,6 @@
           "spawn": "integ:secret-inline:snapshot"
         },
         {
-          "spawn": "integ:secret-kms:snapshot"
-        },
-        {
           "spawn": "integ:secret-manual:snapshot"
         },
         {
@@ -611,9 +545,6 @@
         },
         {
           "spawn": "integ:secret-inline:assert"
-        },
-        {
-          "spawn": "integ:secret-kms:assert"
         },
         {
           "spawn": "integ:secret-manual:assert"
