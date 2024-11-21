@@ -344,7 +344,7 @@ export class SopsSync extends Construct {
               resources: [
                 `arn:aws:ssm:${Stack.of(this).region}:${
                   Stack.of(this).account
-                }:parameter/${props.parameterName}`,
+                }:parameter${props.parameterName.startsWith('/') ? props.parameterName : `/${props.parameterName}`}`,
               ],
             }),
           );
