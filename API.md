@@ -962,13 +962,14 @@ The current versionId of the secret populated via this resource.
 ```typescript
 import { SopsSyncProvider } from 'cdk-sops-secrets'
 
-new SopsSyncProvider(scope: Construct, id?: string)
+new SopsSyncProvider(scope: Construct, id?: string, props?: SopsSyncProviderProps)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#cdk-sops-secrets.SopsSyncProvider.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
 | <code><a href="#cdk-sops-secrets.SopsSyncProvider.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#cdk-sops-secrets.SopsSyncProvider.Initializer.parameter.props">props</a></code> | <code><a href="#cdk-sops-secrets.SopsSyncProviderProps">SopsSyncProviderProps</a></code> | *No description.* |
 
 ---
 
@@ -981,6 +982,12 @@ new SopsSyncProvider(scope: Construct, id?: string)
 ##### `id`<sup>Optional</sup> <a name="id" id="cdk-sops-secrets.SopsSyncProvider.Initializer.parameter.id"></a>
 
 - *Type:* string
+
+---
+
+##### `props`<sup>Optional</sup> <a name="props" id="cdk-sops-secrets.SopsSyncProvider.Initializer.parameter.props"></a>
+
+- *Type:* <a href="#cdk-sops-secrets.SopsSyncProviderProps">SopsSyncProviderProps</a>
 
 ---
 
@@ -3385,6 +3392,67 @@ public readonly secret: ISecret;
 - *Type:* aws-cdk-lib.aws_secretsmanager.ISecret
 
 The secret that will be populated with the encrypted sops file content.
+
+---
+
+### SopsSyncProviderProps <a name="SopsSyncProviderProps" id="cdk-sops-secrets.SopsSyncProviderProps"></a>
+
+Configuration options for a custom SopsSyncProvider.
+
+#### Initializer <a name="Initializer" id="cdk-sops-secrets.SopsSyncProviderProps.Initializer"></a>
+
+```typescript
+import { SopsSyncProviderProps } from 'cdk-sops-secrets'
+
+const sopsSyncProviderProps: SopsSyncProviderProps = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#cdk-sops-secrets.SopsSyncProviderProps.property.securityGroups">securityGroups</a></code> | <code>aws-cdk-lib.aws_ec2.ISecurityGroup[]</code> | Only if `vpc` is supplied: The list of security groups to associate with the Lambda's network interfaces. |
+| <code><a href="#cdk-sops-secrets.SopsSyncProviderProps.property.vpc">vpc</a></code> | <code>aws-cdk-lib.aws_ec2.IVpc</code> | VPC network to place Lambda network interfaces. |
+| <code><a href="#cdk-sops-secrets.SopsSyncProviderProps.property.vpcSubnets">vpcSubnets</a></code> | <code>aws-cdk-lib.aws_ec2.SubnetSelection</code> | Where to place the network interfaces within the VPC. |
+
+---
+
+##### `securityGroups`<sup>Optional</sup> <a name="securityGroups" id="cdk-sops-secrets.SopsSyncProviderProps.property.securityGroups"></a>
+
+```typescript
+public readonly securityGroups: ISecurityGroup[];
+```
+
+- *Type:* aws-cdk-lib.aws_ec2.ISecurityGroup[]
+- *Default:* A dedicated security group will be created for the lambda function.
+
+Only if `vpc` is supplied: The list of security groups to associate with the Lambda's network interfaces.
+
+---
+
+##### `vpc`<sup>Optional</sup> <a name="vpc" id="cdk-sops-secrets.SopsSyncProviderProps.property.vpc"></a>
+
+```typescript
+public readonly vpc: IVpc;
+```
+
+- *Type:* aws-cdk-lib.aws_ec2.IVpc
+- *Default:* Lambda function is not placed within a VPC.
+
+VPC network to place Lambda network interfaces.
+
+---
+
+##### `vpcSubnets`<sup>Optional</sup> <a name="vpcSubnets" id="cdk-sops-secrets.SopsSyncProviderProps.property.vpcSubnets"></a>
+
+```typescript
+public readonly vpcSubnets: SubnetSelection;
+```
+
+- *Type:* aws-cdk-lib.aws_ec2.SubnetSelection
+- *Default:* Subnets will be chosen automatically.
+
+Where to place the network interfaces within the VPC.
 
 ---
 
