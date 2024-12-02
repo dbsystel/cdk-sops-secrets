@@ -9,6 +9,7 @@ import {
   CustomResource,
   FileSystem,
 } from 'aws-cdk-lib';
+import { ISecurityGroup, IVpc, SubnetSelection } from 'aws-cdk-lib/aws-ec2';
 import {
   IGrantable,
   IRole,
@@ -169,10 +170,16 @@ export interface SopsSyncProps extends SopsSyncOptions {
   readonly encryptionKey?: IKey;
 }
 
+export interface SopsSyncProviderProps {
+  readonly vpc?: IVpc;
+  readonly vpcSubnets?: SubnetSelection;
+  readonly securityGroups?: ISecurityGroup[];
+}
+
 export class SopsSyncProvider extends SingletonFunction implements IGrantable {
   private sopsAgeKeys: SecretValue[];
 
-  constructor(scope: Construct, id?: string) {
+  constructor(scope: Construct, id?: string, props?: SopsSyncProviderProps) {
     super(scope, id ?? 'SopsSyncProvider', {
       code: Code.fromAsset(
         scope.node.tryGetContext('sops_sync_provider_asset_path') ||
@@ -190,6 +197,9 @@ export class SopsSyncProvider extends SingletonFunction implements IGrantable {
             ),
         }),
       },
+      vpc: props?.vpc,
+      vpcSubnets: props?.vpcSubnets,
+      securityGroups: props?.securityGroups,
     });
     this.sopsAgeKeys = [];
   }
