@@ -9,6 +9,7 @@ import {
   CustomResource,
   FileSystem,
 } from 'aws-cdk-lib';
+import { ISecurityGroup, IVpc, SubnetSelection } from 'aws-cdk-lib/aws-ec2';
 import {
   IGrantable,
   IRole,
@@ -169,10 +170,34 @@ export interface SopsSyncProps extends SopsSyncOptions {
   readonly encryptionKey?: IKey;
 }
 
+/**
+ * Configuration options for a custom SopsSyncProvider.
+ */
+export interface SopsSyncProviderProps {
+  /**
+   * VPC network to place Lambda network interfaces.
+   *
+   * @default - Lambda function is not placed within a VPC.
+   */
+  readonly vpc?: IVpc;
+  /**
+   * Where to place the network interfaces within the VPC.
+   *
+   * @default - Subnets will be chosen automatically.
+   */
+  readonly vpcSubnets?: SubnetSelection;
+  /**
+   * Only if `vpc` is supplied: The list of security groups to associate with the Lambda's network interfaces.
+   *
+   * @default - A dedicated security group will be created for the lambda function.
+   */
+  readonly securityGroups?: ISecurityGroup[];
+}
+
 export class SopsSyncProvider extends SingletonFunction implements IGrantable {
   private sopsAgeKeys: SecretValue[];
 
-  constructor(scope: Construct, id?: string) {
+  constructor(scope: Construct, id?: string, props?: SopsSyncProviderProps) {
     super(scope, id ?? 'SopsSyncProvider', {
       code: Code.fromAsset(
         scope.node.tryGetContext('sops_sync_provider_asset_path') ||
@@ -190,6 +215,9 @@ export class SopsSyncProvider extends SingletonFunction implements IGrantable {
             ),
         }),
       },
+      vpc: props?.vpc,
+      vpcSubnets: props?.vpcSubnets,
+      securityGroups: props?.securityGroups,
     });
     this.sopsAgeKeys = [];
   }
