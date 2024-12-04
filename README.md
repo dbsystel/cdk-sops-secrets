@@ -127,6 +127,28 @@ const secret = new SopsSecret(this, 'SopsComplexSecretJSON', {
 });
 ```
 
+
+### Use a VPC for the Lambda Function
+
+Internally, SopsSync uses a lambda function. In some environments it may be necessary to place this lambda function into a VPC and configure subnets and/or security groups for it.
+This can be done by creating a custom `SopsSyncProvider`, setting the required networking configuration and passing it to the secret like this:
+
+```typescript
+// Create the provider
+const provider = new SopsSyncProvider(this, 'CustomSopsSyncProvider', {
+  vpc: myVpc,
+  vpcSubnets: subnetSelection,
+  securityGroups: [mySecurityGroup],
+});
+// create the secret and pass the the provider to it
+const secret = new SopsSecret(this, 'SopsSecret', {
+  sopsProvider: provider,
+  secretName: 'myCoolSecret',
+  sopsFilePath: 'secrets/sopsfile-encrypted.json',
+});
+```
+
+
 ### UploadType: INLINE / ASSET
 
 I decided, that the default behavior should be "INLINE" because of the following consideration:
