@@ -295,44 +295,41 @@ func (a AWS) syncSopsToSecretsmanager(ctx context.Context, event cfn.Event) (phy
 			returnData["VersionStages"] = updateSecretResp.VersionStages
 			returnData["VersionId"] = *updateSecretResp.VersionId
 			return *updateSecretResp.ARN, returnData, nil
-		} else if resourceProperties.ResourceType == "PARAMETER" {
-			if resourceProperties.CreationType == "MULTI" && resourcePropertiesFlatten {
-				log.Printf("Patching multiple string parameters")
-				v := reflect.ValueOf(finalInterface)
-				returnData := make(map[string]interface{})
-				keys := v.MapKeys()
-				keysOrder := func(i, j int) bool { return keys[i].Interface().(string) < keys[j].Interface().(string) }
-				sort.Slice(keys, keysOrder)
-				for _, key := range keys {
-					strKey := resourceProperties.ParameterKeyPrefix + key.String()
-					log.Printf("Parameter: " + strKey)
-					value := v.MapIndex(key).Interface()
-					strValue, ok := value.(string)
-					if !ok {
-						return tempArn, nil, nil
-					}
-
-					_, err := a.updateSSMParameter(strKey, []byte(strValue), resourceProperties.EncryptionKey)
-					if err != nil {
-						return tempArn, nil, err
-					}
-					// A returnData map for each parameter is not created, because it would limit the number of possible parameters unnecessarily
+		} else if resourceProperties.ResourceType == "PARAMETER_MULTI" {
+			log.Printf("Patching multiple string parameters")
+			v := reflect.ValueOf(finalInterface)
+			returnData := make(map[string]interface{})
+			keys := v.MapKeys()
+			keysOrder := func(i, j int) bool { return keys[i].Interface().(string) < keys[j].Interface().(string) }
+			sort.Slice(keys, keysOrder)
+			for _, key := range keys {
+				strKey := resourceProperties.ParameterKeyPrefix + key.String()
+				log.Printf("Parameter: " + strKey)
+				value := v.MapIndex(key).Interface()
+				strValue, ok := value.(string)
+				if !ok {
+					return tempArn, nil, nil
 				}
-				returnData["Prefix"] = resourceProperties.ParameterKeyPrefix
-				returnData["Count"] = len(keys)
-				return tempArn, returnData, nil
-			} else {
-				log.Printf("Patching single string parameter")
-				response, err := a.updateSSMParameter(resourceProperties.ParameterName, decryptedContent, resourceProperties.EncryptionKey)
+				_, err := a.updateSSMParameter(strKey, []byte(strValue), resourceProperties.EncryptionKey)
 				if err != nil {
 					return tempArn, nil, err
 				}
-				returnData := make(map[string]interface{})
-				returnData["ParameterName"] = resourceProperties.ParameterName
-				returnData["Version"] = response.Version
-				returnData["Tier"] = response.Tier
-				return tempArn, returnData, nil
+				// A returnData map for each parameter is not created, because it would limit the number of possible parameters unnecessarily
 			}
+			returnData["Prefix"] = resourceProperties.ParameterKeyPrefix
+			returnData["Count"] = len(keys)
+			return tempArn, returnData, nil
+		} else if resourceProperties.ResourceType == "PARAMETER" {
+			log.Printf("Patching single string parameter")
+			response, err := a.updateSSMParameter(resourceProperties.ParameterName, decryptedContent, resourceProperties.EncryptionKey)
+			if err != nil {
+				return tempArn, nil, err
+			}
+			returnData := make(map[string]interface{})
+			returnData["ParameterName"] = resourceProperties.ParameterName
+			returnData["Version"] = response.Version
+			returnData["Tier"] = response.Tier
+			return tempArn, returnData, nil
 		} else {
 			// Should never happen ...
 			return tempArn, nil, errors.New("Neither SecretARN nor ParameterName is provided")
