@@ -341,7 +341,12 @@ export class SopsSync extends Construct {
         }
       }
 
-      if (provider.role !== undefined && !props.autoGenerateIamPermissions) {
+      if (
+        // Is allways true, but to satisfy TS we check explicitly
+        provider.role !== undefined &&
+        // Check if user has disabled automatic generation
+        props.autoGenerateIamPermissions !== false
+      ) {
         Permissions.sopsKeys(this, {
           userDefinedKeys: props.sopsKmsKey,
           role: provider.role,
