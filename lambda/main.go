@@ -156,6 +156,9 @@ func (a AWS) syncSopsToSecretsmanager(ctx context.Context, event cfn.Event) (phy
 			attr, err := a.s3Api.GetObjectAttributes(&s3.GetObjectAttributesInput{
 				Bucket: &sopsFile.Bucket,
 				Key:    &sopsFile.Key,
+				ObjectAttributes: []*string{
+					aws.String("ETag"),
+				},
 			})
 			encryptedContent, err = a.getS3FileContent(sopsFile)
 			if err != nil {
@@ -347,6 +350,7 @@ func handleRequest(ctx context.Context, event cfn.Event) (physicalResourceID str
 		secretsmanager: secretsmanager.New(awsSession),
 		ssm:            ssm.New(awsSession),
 		s3Downloader:   s3manager.NewDownloader(awsSession),
+		s3Api:          s3.New(awsSession),
 	}
 	return a.syncSopsToSecretsmanager(ctx, event)
 }
