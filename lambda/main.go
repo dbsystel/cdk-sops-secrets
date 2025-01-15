@@ -51,7 +51,6 @@ type SopsSyncResourcePropertys struct {
 	FlattenSeparator   string     `json:"FlattenSeparator,omitempty"`
 	ParameterKeyPrefix string     `json:"ParameterKeyPrefix,omitempty"`
 	StringifyValues    string     `json:"StringifyValues,omitempty"`
-	CreationType       string     `json:"CreationType,omitempty"`
 	ResourceType       string     `json:"ResourceType,omitempty"`
 }
 
