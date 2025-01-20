@@ -127,6 +127,38 @@ const secret = new SopsSecret(this, 'SopsComplexSecretJSON', {
 });
 ```
 
+### User Provided IAM Permissions
+
+If you don't want to use the IAM autogenration, you can provide your own IAM Role with all required permissions:
+
+```typescript
+const sopsProviderRole = new Role(stack, 'SopsProviderRole', {
+  assumedBy: new ServicePrincipal('lambda.amazonaws.com'),
+});
+
+sopsProviderRole.addManagedPolicy({
+  managedPolicyArn:
+    'arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole',
+});
+
+sopsProviderRole.addToPolicy(
+  new PolicyStatement({
+    actions: ['todo:WriteYourRequiredPermissions'],
+    resources: ['*'],
+  }),
+);
+
+new SopsSyncProvider(stack, 'SopsSyncProvider', {
+  role: sopsProviderRole,
+});
+
+new SopsSecret(stack, 'SopsSecretJSON', {
+  sopsFilePath: 'test-secrets/json/sopsfile.enc-age.json',
+  uploadType: UploadType.ASSET,
+  // disable auto IAM generation
+  autoGenerateIamPermissions: false,
+});
+```
 
 ### Use a VPC for the Lambda Function
 
@@ -212,6 +244,7 @@ or in your cdk.json
   } 
 }
 ```
+
 ### I want to upload the sops file myself and only want to reference it
 
 That's possible since version 1.8.0. You can reference the file in S3 like:
