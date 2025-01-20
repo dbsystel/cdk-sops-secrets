@@ -4,7 +4,7 @@ Thanks for your interest in our project. Contributions are welcome. Feel free to
 
 We are committed to fostering a welcoming, respectful, and harassment-free environment. Be kind!
 
-## How to buidl/deploy local
+## How to build/deploy local
 
 Install all necessary tools with `yarn install` and others manually like `go`
 
