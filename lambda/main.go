@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/base64"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"log"
 	"reflect"
@@ -51,7 +50,6 @@ type SopsSyncResourcePropertys struct {
 	FlattenSeparator   string     `json:"FlattenSeparator,omitempty"`
 	ParameterKeyPrefix string     `json:"ParameterKeyPrefix,omitempty"`
 	StringifyValues    string     `json:"StringifyValues,omitempty"`
-	CreationType       string     `json:"CreationType,omitempty"`
 	ResourceType       string     `json:"ResourceType,omitempty"`
 }
 
@@ -70,7 +68,7 @@ func (a AWS) getS3FileContent(file SopsS3File) (data []byte, err error) {
 		Key:    &file.Key,
 	})
 	if err != nil {
-		return nil, errors.New(fmt.Sprintf("S3 download error:\n%v\n", err))
+		return nil, fmt.Errorf("S3 download error:\n%v", err)
 	}
 	log.Printf("Downloaded %d bytes", resp)
 	return buf.Bytes(), nil
@@ -80,7 +78,7 @@ func decryptSopsFileContent(content []byte, format string) (data []byte, err err
 	log.Printf("Decrypting content with format %s\n", format)
 	resp, err := decrypt.Data(content, format)
 	if err != nil {
-		return nil, errors.New(fmt.Sprintf("Decryption error:\n%v\n", err))
+		return nil, fmt.Errorf("decryption error:\n%v", err)
 	}
 	log.Println("Decrypted")
 	return resp, nil
@@ -95,7 +93,7 @@ func (a AWS) updateSecret(sopsHash string, secretArn string, secretContent []byt
 	}
 	secretResp, secretErr := a.secretsmanager.PutSecretValue(input)
 	if secretErr != nil {
-		return nil, errors.New(fmt.Sprintf("Failed to store secret value:\nsecretArn: %s\nClientRequestToken: %s\n%v\n", secretArn, sopsHash, secretErr))
+		return nil, fmt.Errorf("failed to store secret value:\nsecretArn: %s\nClientRequestToken: %s\n%v", secretArn, sopsHash, secretErr)
 	}
 	arn := generatePhysicalResourceId(*secretResp.ARN)
 	secretResp.ARN = &arn
@@ -114,7 +112,7 @@ func (a AWS) updateSSMParameter(parameterName string, parameterContent []byte, k
 	}
 	paramResp, paramErr := a.ssm.PutParameter(input)
 	if paramErr != nil {
-		return nil, errors.New(fmt.Sprintf("Failed to store parameter value:\nparameterName: %s\n%v\n", parameterName, paramErr))
+		return nil, fmt.Errorf("failed to store parameter value:\nparameterName: %s\n%v", parameterName, paramErr)
 	}
 	log.Printf("Successfully stored parameter:\n%v\n", paramResp)
 	return paramResp, nil
@@ -156,13 +154,19 @@ func (a AWS) syncSopsToSecretsmanager(ctx context.Context, event cfn.Event) (phy
 			attr, err := a.s3Api.GetObjectAttributes(&s3.GetObjectAttributesInput{
 				Bucket: &sopsFile.Bucket,
 				Key:    &sopsFile.Key,
+				ObjectAttributes: []*string{
+					aws.String("ETag"),
+				},
 			})
+			if err != nil {
+				return tempArn, nil, fmt.Errorf("error while getting S3 object attributes:\n%v", err)
+			}
 			encryptedContent, err = a.getS3FileContent(sopsFile)
 			if err != nil {
-				return tempArn, nil, err
+				return tempArn, nil, fmt.Errorf("error while getting S3 file content:\n%v", err)
 			}
 			if attr.ETag == nil {
-				return tempArn, nil, errors.New("No ETag checksum found in S3 object")
+				return tempArn, nil, fmt.Errorf("no ETag checksum found in S3 object:\n%v", err)
 			}
 			sopsHash = *attr.ETag
 		}
@@ -177,15 +181,15 @@ func (a AWS) syncSopsToSecretsmanager(ctx context.Context, event cfn.Event) (phy
 		}
 
 		if encryptedContent == nil {
-			return tempArn, nil, errors.New("No encrypted content found! Did you pass SopsS3File or SopsInline?")
+			return tempArn, nil, fmt.Errorf("no encrypted content found! Did you pass SopsS3File or SopsInline:\n%v", err)
 		}
 		if sopsHash == "" {
-			return tempArn, nil, errors.New("No sopsHash found! Did you pass SopsS3File or SopsInline?")
+			return tempArn, nil, fmt.Errorf("no sopsHash found! Did you pass SopsS3File or SopsInline:\n%v", err)
 		}
 
 		decryptedContent, err := decryptSopsFileContent(encryptedContent, resourceProperties.Format)
 		if err != nil {
-			return tempArn, nil, err
+			return tempArn, nil, fmt.Errorf("error while decrypting file content\n%v", err)
 		}
 		var decryptedInterface interface{}
 		switch resourceProperties.Format {
@@ -193,14 +197,14 @@ func (a AWS) syncSopsToSecretsmanager(ctx context.Context, event cfn.Event) (phy
 			{
 				err := json.Unmarshal(decryptedContent, &decryptedInterface)
 				if err != nil {
-					return tempArn, nil, fmt.Errorf("Failed to parse json content: %v", err)
+					return tempArn, nil, fmt.Errorf("failed to parse json content:\n%v", err)
 				}
 			}
 		case "yaml":
 			{
 				err := yaml.Unmarshal(decryptedContent, &decryptedInterface)
 				if err != nil {
-					return tempArn, nil, fmt.Errorf("Failed to parse yaml content: %v", err)
+					return tempArn, nil, fmt.Errorf("failed to parse yaml content:\n%v", err)
 				}
 			}
 		case "dotenv":
@@ -228,14 +232,14 @@ func (a AWS) syncSopsToSecretsmanager(ctx context.Context, event cfn.Event) (phy
 				resourceProperties.ConvertToJSON = "false"
 			}
 		default:
-			return "", nil, errors.New(fmt.Sprintf("Format %s not supported", resourceProperties.Format))
+			return "", nil, fmt.Errorf("format %s not supported", resourceProperties.Format)
 		}
 		if resourceProperties.Flatten == "" {
 			resourceProperties.Flatten = "true"
 		}
 		resourcePropertiesFlatten, err := strconv.ParseBool(resourceProperties.Flatten)
 		if err != nil {
-			return tempArn, nil, err
+			return tempArn, nil, fmt.Errorf("failed to parse bool:\n%v", err)
 		}
 
 		var finalInterface interface{}
@@ -244,7 +248,7 @@ func (a AWS) syncSopsToSecretsmanager(ctx context.Context, event cfn.Event) (phy
 			flattenedInterface := make(map[string]interface{})
 			err := flatten("", decryptedInterface, flattenedInterface, resourceProperties.FlattenSeparator)
 			if err != nil {
-				return tempArn, nil, err
+				return tempArn, nil, fmt.Errorf("failed to flatten:\n%v", err)
 			}
 			finalInterface = flattenedInterface
 		} else {
@@ -256,12 +260,12 @@ func (a AWS) syncSopsToSecretsmanager(ctx context.Context, event cfn.Event) (phy
 		}
 		resourcePropertiesStringifyValues, err := strconv.ParseBool(resourceProperties.StringifyValues)
 		if err != nil {
-			return tempArn, nil, err
+			return tempArn, nil, fmt.Errorf("failed to parse bool:\n%v", err)
 		}
 		if resourcePropertiesStringifyValues {
 			finalInterface, _, err = stringifyValues(finalInterface)
 			if err != nil {
-				return tempArn, nil, err
+				return tempArn, nil, fmt.Errorf("failed to stringify values:\n%v", err)
 			}
 		}
 
@@ -270,24 +274,24 @@ func (a AWS) syncSopsToSecretsmanager(ctx context.Context, event cfn.Event) (phy
 		}
 		resourcePropertieConvertToJSON, err := strconv.ParseBool(resourceProperties.ConvertToJSON)
 		if err != nil {
-			return tempArn, nil, err
+			return tempArn, nil, fmt.Errorf("failed to parse bool:\n%v", err)
 		}
 		if resourcePropertieConvertToJSON || resourceProperties.Format == "json" {
 			decryptedContent, err = toJSON(finalInterface)
 			if err != nil {
-				return tempArn, nil, err
+				return tempArn, nil, fmt.Errorf("failed to convert to JSON:\n%v", err)
 			}
 		} else if resourceProperties.Format == "yaml" {
 			decryptedContent, err = toYAML(finalInterface)
 			if err != nil {
-				return tempArn, nil, err
+				return tempArn, nil, fmt.Errorf("failed to convert to YAML:\n%v", err)
 			}
 		}
 
 		if resourceProperties.ResourceType == "SECRET" {
 			updateSecretResp, err := a.updateSecret(sopsHash, resourceProperties.SecretARN, decryptedContent)
 			if err != nil {
-				return tempArn, nil, err
+				return tempArn, nil, fmt.Errorf("failed to update secret:\n%v", err)
 			}
 			returnData := make(map[string]interface{})
 			returnData["ARN"] = *updateSecretResp.ARN
@@ -295,52 +299,49 @@ func (a AWS) syncSopsToSecretsmanager(ctx context.Context, event cfn.Event) (phy
 			returnData["VersionStages"] = updateSecretResp.VersionStages
 			returnData["VersionId"] = *updateSecretResp.VersionId
 			return *updateSecretResp.ARN, returnData, nil
-		} else if resourceProperties.ResourceType == "PARAMETER" {
-			if resourceProperties.CreationType == "MULTI" && resourcePropertiesFlatten {
-				log.Printf("Patching multiple string parameters")
-				v := reflect.ValueOf(finalInterface)
-				returnData := make(map[string]interface{})
-				keys := v.MapKeys()
-				keysOrder := func(i, j int) bool { return keys[i].Interface().(string) < keys[j].Interface().(string) }
-				sort.Slice(keys, keysOrder)
-				for _, key := range keys {
-					strKey := resourceProperties.ParameterKeyPrefix + key.String()
-					log.Printf("Parameter: " + strKey)
-					value := v.MapIndex(key).Interface()
-					strValue, ok := value.(string)
-					if !ok {
-						return tempArn, nil, nil
-					}
-
-					_, err := a.updateSSMParameter(strKey, []byte(strValue), resourceProperties.EncryptionKey)
-					if err != nil {
-						return tempArn, nil, err
-					}
-					// A returnData map for each parameter is not created, because it would limit the number of possible parameters unnecessarily
+		} else if resourceProperties.ResourceType == "PARAMETER_MULTI" {
+			log.Printf("Patching multiple string parameters")
+			v := reflect.ValueOf(finalInterface)
+			returnData := make(map[string]interface{})
+			keys := v.MapKeys()
+			keysOrder := func(i, j int) bool { return keys[i].Interface().(string) < keys[j].Interface().(string) }
+			sort.Slice(keys, keysOrder)
+			for _, key := range keys {
+				strKey := resourceProperties.ParameterKeyPrefix + key.String()
+				log.Printf("Parameter: " + strKey)
+				value := v.MapIndex(key).Interface()
+				strValue, ok := value.(string)
+				if !ok {
+					return tempArn, nil, nil
 				}
-				returnData["Prefix"] = resourceProperties.ParameterKeyPrefix
-				returnData["Count"] = len(keys)
-				return tempArn, returnData, nil
-			} else {
-				log.Printf("Patching single string parameter")
-				response, err := a.updateSSMParameter(resourceProperties.ParameterName, decryptedContent, resourceProperties.EncryptionKey)
+				_, err := a.updateSSMParameter(strKey, []byte(strValue), resourceProperties.EncryptionKey)
 				if err != nil {
-					return tempArn, nil, err
+					return tempArn, nil, fmt.Errorf("failed to update ssm parameter:\n%v", err)
 				}
-				returnData := make(map[string]interface{})
-				returnData["ParameterName"] = resourceProperties.ParameterName
-				returnData["Version"] = response.Version
-				returnData["Tier"] = response.Tier
-				return tempArn, returnData, nil
+				// A returnData map for each parameter is not created, because it would limit the number of possible parameters unnecessarily
 			}
+			returnData["Prefix"] = resourceProperties.ParameterKeyPrefix
+			returnData["Count"] = len(keys)
+			return tempArn, returnData, nil
+		} else if resourceProperties.ResourceType == "PARAMETER" {
+			log.Printf("Patching single string parameter")
+			response, err := a.updateSSMParameter(resourceProperties.ParameterName, decryptedContent, resourceProperties.EncryptionKey)
+			if err != nil {
+				return tempArn, nil, fmt.Errorf("failed to update ssm parameter:\n%v", err)
+			}
+			returnData := make(map[string]interface{})
+			returnData["ParameterName"] = resourceProperties.ParameterName
+			returnData["Version"] = response.Version
+			returnData["Tier"] = response.Tier
+			return tempArn, returnData, nil
 		} else {
 			// Should never happen ...
-			return tempArn, nil, errors.New("Neither SecretARN nor ParameterName is provided")
+			return tempArn, nil, fmt.Errorf("neither SecretARN nor ParameterName is provided:\n%v", err)
 		}
 	} else if event.RequestType == cfn.RequestDelete {
 		return "", nil, nil
 	} else {
-		return "", nil, errors.New(fmt.Sprintf("RequestType '%s' not supported", event.RequestType))
+		return "", nil, fmt.Errorf("requestType '%s' not supported", event.RequestType)
 	}
 }
 
@@ -350,6 +351,7 @@ func handleRequest(ctx context.Context, event cfn.Event) (physicalResourceID str
 		secretsmanager: secretsmanager.New(awsSession),
 		ssm:            ssm.New(awsSession),
 		s3Downloader:   s3manager.NewDownloader(awsSession),
+		s3Api:          s3.New(awsSession),
 	}
 	return a.syncSopsToSecretsmanager(ctx, event)
 }

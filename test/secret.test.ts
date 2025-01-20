@@ -506,7 +506,7 @@ test('Allowed options for SopsSync', () => {
         sopsS3Key: 'test',
       }),
   ).toThrowError(
-    'You have to specify both sopsS3Bucket and sopsS3Key or neither!',
+    'You can either specify sopsFilePath or sopsS3Bucket and sopsS3Key!',
   );
   expect(
     () =>
@@ -514,7 +514,7 @@ test('Allowed options for SopsSync', () => {
         sopsS3Bucket: 'test',
       }),
   ).toThrowError(
-    'You have to specify both sopsS3Bucket and sopsS3Key or neither!',
+    'You can either specify sopsFilePath or sopsS3Bucket and sopsS3Key!',
   );
   expect(
     () =>

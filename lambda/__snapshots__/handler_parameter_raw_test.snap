@@ -3,7 +3,8 @@
 >>>S3ApiMockClient.GetObjectAttributes.Input
 {
   Bucket: "..",
-  Key: "../test-secrets/binary/sopsfile.enc-age.binary"
+  Key: "../test-secrets/binary/sopsfile.enc-age.binary",
+  ObjectAttributes: ["ETag"]
 }
 ---
 

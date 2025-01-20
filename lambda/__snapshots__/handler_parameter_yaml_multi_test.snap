@@ -3,7 +3,8 @@
 >>>S3ApiMockClient.GetObjectAttributes.Input
 {
   Bucket: "..",
-  Key: "../test-secrets/yaml/sopsfile-complex-parameters.enc-age.yaml"
+  Key: "../test-secrets/yaml/sopsfile-complex-parameters.enc-age.yaml",
+  ObjectAttributes: ["ETag"]
 }
 ---
 
@@ -65,7 +66,8 @@ nil
 >>>S3ApiMockClient.GetObjectAttributes.Input
 {
   Bucket: "..",
-  Key: "../test-secrets/yaml/sopsfile-complex-parameters.enc-age.yaml"
+  Key: "../test-secrets/yaml/sopsfile-complex-parameters.enc-age.yaml",
+  ObjectAttributes: ["ETag"]
 }
 ---
 

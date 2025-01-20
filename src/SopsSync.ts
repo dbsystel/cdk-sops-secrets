@@ -33,20 +33,10 @@ export enum UploadType {
   ASSET = 'ASSET',
 }
 
-export enum CreationType {
-  /**
-   * Create or update a single secret/parameter
-   */
-  SINGLE = 'SINGLE',
-  /**
-   * Create or update a multiple secrets/parameters by flattening the SOPS file
-   */
-  MULTI = 'MULTI',
-}
-
 export enum ResourceType {
   SECRET = 'SECRET',
   PARAMETER = 'PARAMETER',
+  PARAMETER_MULTI = 'PARAMETER_MULTI',
 }
 
 /**
@@ -141,12 +131,16 @@ export interface SopsSyncOptions {
    */
   readonly stringifyValues?: boolean;
 
-  readonly creationType?: CreationType;
-  readonly resourceType?: ResourceType;
+  /**
+   * Should this construct automatically create IAM permissions?
+   *
+   * @default true
+   */
+  readonly autoGenerateIamPermissions?: boolean;
 }
 
 /**
- * The configuration options extended by the target Secret
+ * The configuration options extended by the target Secret / Parameter
  */
 export interface SopsSyncProps extends SopsSyncOptions {
   /**
@@ -155,12 +149,7 @@ export interface SopsSyncProps extends SopsSyncOptions {
   readonly secret?: ISecret;
 
   /**
-   * The parameter name. If set this creates an encrypted SSM Parameter instead of a secret.
-   */
-  readonly parameterName?: string;
-
-  /**
-   * The parameter name. If set this creates an encrypted SSM Parameter instead of a secret.
+   * The parameter names. If set this creates encrypted SSM Parameters instead of a secret.
    */
   readonly parameterNames?: string[];
 
@@ -168,6 +157,11 @@ export interface SopsSyncProps extends SopsSyncOptions {
    * The encryption key used for encrypting the ssm parameter if `parameterName` is set.
    */
   readonly encryptionKey?: IKey;
+
+  /**
+   * Will this Sync deploy a Secret or Parameter(s)
+   */
+  readonly resourceType?: ResourceType;
 }
 
 /**
@@ -192,6 +186,14 @@ export interface SopsSyncProviderProps {
    * @default - A dedicated security group will be created for the lambda function.
    */
   readonly securityGroups?: ISecurityGroup[];
+
+  /**
+   * The role that should be used for the custom resource provider.
+   * If you don't specify any, a new role will be created with all required permissions
+   *
+   * @default - a new role will be created
+   */
+  readonly role?: IRole;
 }
 
 export class SopsSyncProvider extends SingletonFunction implements IGrantable {
@@ -206,6 +208,7 @@ export class SopsSyncProvider extends SingletonFunction implements IGrantable {
       runtime: Runtime.PROVIDED_AL2,
       handler: 'bootstrap',
       uuid: 'SopsSyncProvider',
+      role: props?.role,
       timeout: Duration.seconds(60),
       environment: {
         SOPS_AGE_KEY: Lazy.string({
@@ -268,8 +271,11 @@ export class SopsSync extends Construct {
     let sopsS3File: { Bucket: string; Key: string } | undefined = undefined;
 
     if (
-      props.sopsFilePath !== undefined &&
-      (props.sopsS3Bucket !== undefined || props.sopsS3Key !== undefined)
+      (props.sopsFilePath == undefined &&
+        (props.sopsS3Bucket == undefined || props.sopsS3Key == undefined)) ||
+      (props.sopsFilePath !== undefined &&
+        props.sopsS3Bucket !== undefined &&
+        props.sopsS3Key !== undefined)
     ) {
       throw new Error(
         'You can either specify sopsFilePath or sopsS3Bucket and sopsS3Key!',
@@ -312,11 +318,12 @@ export class SopsSync extends Construct {
       if (!fs.existsSync(props.sopsFilePath)) {
         throw new Error(`File ${props.sopsFilePath} does not exist!`);
       }
+      const sopsFileContent = fs.readFileSync(props.sopsFilePath);
 
       switch (uploadType) {
         case UploadType.INLINE: {
           sopsInline = {
-            Content: fs.readFileSync(props.sopsFilePath).toString('base64'),
+            Content: sopsFileContent.toString('base64'),
             // We calculate the hash the same way as it would be done by new Asset(..) - so we can ensure stable version names even if switching from INLINE to ASSET and viceversa.
             Hash: FileSystem.fingerprint(props.sopsFilePath),
           };
@@ -334,71 +341,29 @@ export class SopsSync extends Construct {
         }
       }
 
-      if (provider.role !== undefined) {
-        if (props.sopsKmsKey !== undefined) {
-          props.sopsKmsKey.forEach((key) => key.grantDecrypt(provider.role!));
-        }
-        const fileContent = fs.readFileSync(props.sopsFilePath);
-        // Handle keys
-        const regexKey = /arn:aws:kms:[a-z0-9-]+:[\d]+:key\/[a-z0-9-]+/g;
-        const resultsKey = fileContent.toString().match(regexKey);
-        if (resultsKey !== undefined) {
-          resultsKey?.forEach((result, index) =>
-            Key.fromKeyArn(this, `SopsKey${index}`, result).grantDecrypt(
-              provider.role!,
-            ),
-          );
-        }
-        const regexAlias = /arn:aws:kms:[a-z0-9-]+:[\d]+:alias\/[a-z0-9-]+/g;
-        const resultsAlias = fileContent.toString().match(regexAlias);
-        if (resultsAlias !== undefined) {
-          resultsAlias?.forEach((result, index) =>
-            Key.fromLookup(this, `SopsAlias${index}`, {
-              aliasName: `alias/${result.split('/').slice(1).join('/')}`,
-            }).grantDecrypt(provider.role!),
-          );
-        }
-        if (props.secret) {
-          props.secret.grantWrite(provider);
-          props.secret.encryptionKey?.grantEncryptDecrypt(provider);
-          if (props.secret?.encryptionKey !== undefined) {
-            props.secret.encryptionKey.grantEncryptDecrypt(provider);
-          }
-        }
-        if (props.parameterName) {
-          provider.addToRolePolicy(
-            new PolicyStatement({
-              actions: ['ssm:PutParameter'],
-              resources: [
-                `arn:aws:ssm:${Stack.of(this).region}:${
-                  Stack.of(this).account
-                }:parameter${
-                  props.parameterName.startsWith('/')
-                    ? props.parameterName
-                    : `/${props.parameterName}`
-                }`,
-              ],
-            }),
-          );
-          props.encryptionKey?.grantEncryptDecrypt(provider);
-        }
-        if (props.parameterNames) {
-          this.createReducedParameterPolicy(
-            props.parameterNames,
-            provider.role,
-          );
-          props.encryptionKey?.grantEncryptDecrypt(provider);
-        }
-        if (sopsAsset !== undefined) {
-          sopsAsset.bucket.grantRead(provider);
-        }
+      if (
+        // Is allways true, but to satisfy TS we check explicitly
+        provider.role !== undefined &&
+        // Check if user has disabled automatic generation
+        props.autoGenerateIamPermissions !== false
+      ) {
+        Permissions.sopsKeys(this, {
+          userDefinedKeys: props.sopsKmsKey,
+          role: provider.role,
+          sopsFileContent: sopsFileContent.toString(),
+        });
+        Permissions.assetBucket(sopsAsset, provider.role);
+        Permissions.encryptionKey(props.encryptionKey, provider.role);
+        Permissions.secret(props.secret, provider.role);
+        Permissions.parameters(this, props.parameterNames, provider.role);
       } else {
         Annotations.of(this).addWarning(
-          `Please ensure proper permissions for the passed lambda function:\n  - write Access to the secret\n  - encrypt with the sopsKmsKey${
-            uploadType === UploadType.ASSET
-              ? '\n  - download from asset bucket'
-              : ''
-          }`,
+          [
+            'Please ensure proper permissions for the passed lambda function:',
+            '  - write Access to the secret/parameters',
+            '  - encrypt with the sopsKmsKey',
+            '  - download from asset bucket',
+          ].join('\n'),
         );
       }
       if (props.sopsAgeKey !== undefined) {
@@ -415,10 +380,6 @@ export class SopsSync extends Construct {
       uploadType = UploadType.ASSET;
       Annotations.of(this).addWarning(
         'You have to manually add permissions to the sops provider to (permission to download file, to decrypt sops file)!',
-      );
-    } else {
-      throw new Error(
-        'You have to specify both sopsS3Bucket and sopsS3Key or neither!',
       );
     }
 
@@ -439,90 +400,169 @@ export class SopsSync extends Construct {
         ParameterKeyPrefix: props.parameterKeyPrefix,
         Format: sopsFileFormat,
         StringifiedValues: this.stringifiedValues,
-        ParameterName: props.parameterName,
+        ParameterName:
+          // Dirty Workaround, refactor ...
+          props.parameterNames && props.parameterNames.length == 1
+            ? props.parameterNames[0]
+            : undefined,
         EncryptionKey:
           props.secret !== undefined ? undefined : props.encryptionKey?.keyId,
         ResourceType: props.resourceType
           ? props.resourceType.toString()
           : ResourceType.SECRET.toString(),
-        CreationType: props.creationType
-          ? props.creationType.toString()
-          : CreationType.SINGLE.toString(),
       },
     });
     this.versionId = cr.getAttString('VersionId');
   }
+}
 
-  private createReducedParameterPolicy(parameters: string[], role: IRole) {
-    // Avoid too large policies
-    // The maximum size of a managed policy is 6.144 bytes -> 1 character = 1 byte
-    const maxPolicyBytes = 6000; // Keep some bytes as a buffer
-    const arnPrefixBytes = 55; // Content for "arn:aws:ssm:ap-southeast-3:<accountnumer>:parameter/
-    let startAtParameter = 0;
-    let currentPolicyBytes = 300; // Reserve some byte space for basic stuff inside the policy
-    for (let i = 0; i < parameters.length; i += 1) {
-      if (
-        // Check if the current parameter would fit into the policy
-        arnPrefixBytes + parameters[i].length + currentPolicyBytes <
-        maxPolicyBytes
-      ) {
-        // If so increase the byte counter
-        currentPolicyBytes =
-          arnPrefixBytes + parameters[i].length + currentPolicyBytes;
-      } else {
-        const parameterNamesChunk = parameters.slice(
-          startAtParameter,
-          i, //end of slice is not included
-        );
-        startAtParameter = i;
-        currentPolicyBytes = 300;
-        // Create the policy for the selected chunk
-        const putPolicy = new ManagedPolicy(
-          this,
-          `SopsSecretParameterProviderManagedPolicyParameterAccess${i}`,
-          {
-            description:
-              'Policy to grant parameter provider permissions to put parameter',
-          },
-        );
-        putPolicy.addStatements(
-          new PolicyStatement({
-            actions: ['ssm:PutParameter'],
-            resources: parameterNamesChunk.map(
-              (param) =>
-                `arn:aws:ssm:${Stack.of(this).region}:${
-                  Stack.of(this).account
-                }:parameter${param.startsWith('/') ? param : `/${param}`}`,
-            ),
-          }),
-        );
-        role.addManagedPolicy(putPolicy);
-      }
+export namespace Permissions {
+  /**
+   * Grants the necessary permissions for encrypt/decrypt on the customer managed encryption key
+   * for the secrets / parameters.
+   */
+  export function encryptionKey(key: IKey | undefined, target: IGrantable) {
+    if (key === undefined) {
+      return;
     }
-    const parameterNamesChunk = parameters.slice(
-      startAtParameter,
-      parameters.length,
-    );
-    // Create the policy for the remaning elements
-    const putPolicy = new ManagedPolicy(
-      this,
-      `SopsSecretParameterProviderManagedPolicyParameterAccess${parameters.length}`,
-      {
-        description:
-          'Policy to grant parameter provider permissions to put parameter',
-      },
-    );
-    putPolicy.addStatements(
-      new PolicyStatement({
-        actions: ['ssm:PutParameter'],
-        resources: parameterNamesChunk.map(
-          (param) =>
-            `arn:aws:ssm:${Stack.of(this).region}:${
-              Stack.of(this).account
-            }:parameter${param.startsWith('/') ? param : `/${param}`}`,
-        ),
-      }),
-    );
-    role.addManagedPolicy(putPolicy);
+    key.grantEncryptDecrypt(target);
+  }
+
+  export function keysFromSopsContent(ctx: Construct, c: string): IKey[] {
+    const regexKey = /arn:aws:kms:[a-z0-9-]+:[\d]+:key\/[a-z0-9-]+/g;
+    const resultsKey = c.match(regexKey);
+    if (resultsKey !== null) {
+      return resultsKey.map((result, index) =>
+        Key.fromKeyArn(ctx, `SopsKey${index}`, result),
+      );
+    }
+    return [];
+  }
+
+  export function keysFromSopsContentAlias(ctx: Construct, c: string): IKey[] {
+    const regexAlias = /arn:aws:kms:[a-z0-9-]+:[\d]+:alias\/[a-z0-9-]+/g;
+    const resultsAlias = c.match(regexAlias);
+    if (resultsAlias !== null) {
+      return resultsAlias.map((result, index) =>
+        Key.fromLookup(ctx, `SopsAlias${index}`, {
+          aliasName: `alias/${result.split('/').slice(1).join('/')}`,
+        }),
+      );
+    }
+    return [];
+  }
+
+  /**
+   * Grants the necessary permissions to decrypt the given sops file content.
+   * Takes user defined keys, and searches the sops file for keys and aliases.
+   */
+  export function sopsKeys(
+    ctx: Construct,
+    props: {
+      userDefinedKeys?: IKey[];
+      sopsFileContent: string;
+      role: IRole;
+    },
+  ) {
+    (props.userDefinedKeys ?? [])
+      .concat(
+        keysFromSopsContent(ctx, props.sopsFileContent),
+        keysFromSopsContentAlias(ctx, props.sopsFileContent),
+      )
+      .forEach((key) => key.grantDecrypt(props.role));
+  }
+
+  /**
+   * Grants the necessary permissions to write the given secrets.
+   */
+  export function secret(
+    targetSecret: ISecret | undefined,
+    target: IGrantable,
+  ) {
+    if (targetSecret === undefined) {
+      return;
+    }
+    targetSecret.grantWrite(target);
+  }
+
+  function sliceParameters(params: string[]): string[][] {
+    const result: string[][] = [];
+    /**
+     * The maximum size of a managed policy is 6.144 bytes -> 1 character = 1 byte
+     * bout 300 characters are reserved for the policy apart from resource arns
+     * with some buffer, we end with an upper limit of 5750 bytes
+     */
+    const limit = 5750;
+
+    /**
+     * Content for "arn:aws:ssm:ap-southeast-3:<accountnumer>:parameter/
+     */
+    const prefix = 55;
+
+    let currentSize = 0;
+    let currentChunk: string[] = [];
+    for (const param of params) {
+      const paramLength = param.length + prefix;
+      if (currentSize + paramLength > limit) {
+        result.push(currentChunk);
+        currentChunk = [];
+        currentSize = 0;
+      }
+      currentChunk.push(param);
+      currentSize += paramLength;
+    }
+
+    if (currentChunk.length > 0) {
+      result.push(currentChunk);
+    }
+    return result;
+  }
+
+  /**
+   * Grants the necessary permissions to write the given parameters.
+   */
+  export function parameters(
+    ctx: Construct,
+    targetParameters: string[] | undefined,
+    role: IRole,
+  ) {
+    if (targetParameters === undefined) {
+      return;
+    }
+
+    const paramSlices = sliceParameters(targetParameters);
+
+    for (let i = 0; i < paramSlices.length; i++) {
+      const putPolicy = new ManagedPolicy(
+        ctx,
+        `SopsSecretParameterProviderManagedPolicyParameterAccess${i}`,
+        {
+          description:
+            'Policy to grant parameter provider permissions to put parameter',
+        },
+      );
+      putPolicy.addStatements(
+        new PolicyStatement({
+          actions: ['ssm:PutParameter'],
+          resources: paramSlices[i].map(
+            (param) =>
+              `arn:aws:ssm:${Stack.of(ctx).region}:${
+                Stack.of(ctx).account
+              }:parameter${param.startsWith('/') ? param : `/${param}`}`,
+          ),
+        }),
+      );
+      role.addManagedPolicy(putPolicy);
+    }
+  }
+
+  /**
+   * Grants the necessary permissions to read the given asset from S3.
+   */
+  export function assetBucket(asset: Asset | undefined, target: IGrantable) {
+    if (asset === undefined) {
+      return;
+    }
+    asset.bucket.grantRead(target);
   }
 }
