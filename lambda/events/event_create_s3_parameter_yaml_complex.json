@@ -2,8 +2,7 @@
   "RequestType": "Create",
   "LogicalResourceId": "LogicalResourceId",
   "ResourceProperties": {
-    "ResourceType": "PARAMETER",
-    "CreationType": "MULTI",
+    "ResourceType": "PARAMETER_MULTI",
     "ParameterName": "arn:aws:ssm:eu-central-1:123456789012:parameter/testsecret",
     "SopsS3File": {
       "Bucket": "..",

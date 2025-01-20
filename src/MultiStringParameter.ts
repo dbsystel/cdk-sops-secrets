@@ -5,12 +5,7 @@ import { ResourceEnvironment, Stack } from 'aws-cdk-lib/core';
 import { Construct } from 'constructs';
 import * as YAML from 'yaml';
 import { SopsStringParameterProps } from './SopsStringParameter';
-import {
-  CreationType,
-  ResourceType,
-  SopsSync,
-  SopsSyncOptions,
-} from './SopsSync';
+import { ResourceType, SopsSync, SopsSyncOptions } from './SopsSync';
 
 interface JSONObject {
   [key: string]: any;
@@ -83,8 +78,7 @@ export class MultiStringParameter extends Construct {
 
     this.sync = new SopsSync(this, 'SopsSync', {
       encryptionKey: this.encryptionKey,
-      resourceType: ResourceType.PARAMETER,
-      creationType: CreationType.MULTI,
+      resourceType: ResourceType.PARAMETER_MULTI,
       flatten: true,
       flattenSeparator: this.keySeparator,
       parameterKeyPrefix: this.keyPrefix,

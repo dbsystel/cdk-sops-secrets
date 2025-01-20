@@ -7,7 +7,7 @@ import {
 } from 'aws-cdk-lib/aws-ssm';
 import { RemovalPolicy, ResourceEnvironment, Stack } from 'aws-cdk-lib/core';
 import { Construct } from 'constructs';
-import { SopsSync, SopsSyncOptions } from './SopsSync';
+import { ResourceType, SopsSync, SopsSyncOptions } from './SopsSync';
 
 /**
  * The configuration options of the StringParameter
@@ -58,7 +58,8 @@ export class SopsStringParameter extends Construct implements IStringParameter {
 
     this.sync = new SopsSync(this, 'SopsSync', {
       encryptionKey: this.parameter.encryptionKey,
-      parameterName: this.parameter.parameterName,
+      parameterNames: [this.parameter.parameterName],
+      resourceType: ResourceType.PARAMETER,
       ...(props as SopsSyncOptions),
     });
   }

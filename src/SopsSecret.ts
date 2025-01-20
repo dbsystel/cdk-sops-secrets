@@ -20,12 +20,7 @@ import {
   Stack,
 } from 'aws-cdk-lib/core';
 import { Construct } from 'constructs';
-import {
-  CreationType,
-  ResourceType,
-  SopsSync,
-  SopsSyncOptions,
-} from './SopsSync';
+import { ResourceType, SopsSync, SopsSyncOptions } from './SopsSync';
 
 /**
  * The configuration options of the SopsSecret
@@ -63,7 +58,6 @@ export class SopsSecret extends Construct implements ISecret {
     this.sync = new SopsSync(this, 'SopsSync', {
       secret: this.secret,
       resourceType: ResourceType.SECRET,
-      creationType: CreationType.SINGLE,
       flattenSeparator: '.',
       ...(props as SopsSyncOptions),
     });

@@ -8,8 +8,8 @@ export GOPROXY=https://proxy.golang.org,direct
 export CGO_ENABLED=0
 go build -trimpath -buildvcs=false -tags lambda.norpc -o bootstrap -ldflags="-s -w -buildid="
 ls -la bootstrap
-shasum bootstrap
+sha1sum bootstrap
 touch -t 202002020000 bootstrap
 chmod 755 bootstrap
 ls -la bootstrap
-shasum bootstrap
+sha1sum bootstrap

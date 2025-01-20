@@ -1,0 +1,40 @@
+[extend]
+useDefault = true
+
+[[rules]]
+id = "generic-api-key"
+# all the other attributes from the default rule are inherited
+
+    [[rules.allowlists]]
+    regexTarget = "line"
+    regexes = [ 
+      '''objectKey''',
+      '''S3Key''',
+      '''SopsAgeKey''',
+      '''s3Key''',
+    ]
+
+[[rules]]
+id = "private-key"
+
+    [[rules.allowlists]]
+    regexTarget = "line"
+    regexes = [
+      '''(.*)OAdqlMznWINBDoyR\+PESgQJlUptwnh(.*)''',
+    ]
+
+[allowlist]
+description = "global allow list"
+paths = [
+  '''\.gitleaks\.toml''',
+  '''lambda/events/(.*?)json''',
+  '''lambda/__snapshots__/(.*?)snap''',
+  '''test-secrets/(.*?)(json|yaml|yml|env|binary)''',
+  '''test/(.*)\.integ\.snapshot/(.*?)json'''
+]
+
+regexTarget = "match"
+regexes = [
+  '''AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3''',
+]
+
