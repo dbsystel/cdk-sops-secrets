@@ -1,10 +1,18 @@
-import { App, SecretValue, Stack } from 'aws-cdk-lib';
+import { App, DefaultStackSynthesizer, SecretValue, Stack } from 'aws-cdk-lib';
 import { Code, Function, Runtime } from 'aws-cdk-lib/aws-lambda';
 import { SopsSecret, UploadType } from '../src/index';
 
 const app = new App();
 
-const stack = new Stack(app, 'SecretIntegrationAsset');
+const stack = new Stack(app, 'SecretIntegrationAsset', {
+  synthesizer: new DefaultStackSynthesizer({
+    qualifier: 'integ',
+  }),
+  env: {
+    account: '123456789',
+    region: 'us-east-1',
+  }
+});
 
 new SopsSecret(stack, 'SopsSecretJSON', {
   sopsFilePath: 'test-secrets/json/sopsfile.enc-age.json',

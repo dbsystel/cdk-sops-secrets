@@ -352,7 +352,7 @@ export class SopsSync extends Construct {
           role: provider.role,
           sopsFileContent: sopsFileContent.toString(),
         });
-        Permissions.assetBucket(sopsAsset, provider.role);
+        Permissions.assetBucket(this, sopsAsset, provider.role);
         Permissions.encryptionKey(props.encryptionKey, provider.role);
         Permissions.secret(props.secret, provider.role);
         Permissions.parameters(this, props.parameterNames, provider.role);
@@ -559,10 +559,15 @@ export namespace Permissions {
   /**
    * Grants the necessary permissions to read the given asset from S3.
    */
-  export function assetBucket(asset: Asset | undefined, target: IGrantable) {
+  export function assetBucket(context: Construct, asset: Asset | undefined, target: IGrantable) {
     if (asset === undefined) {
       return;
     }
+    const qualifier = context.node.tryGetContext('aws:cdk:qualifier') ?? 'hnb659fds';
+    Key.fromLookup(context, 'AssetBucketKey', {
+      aliasName: `alias/cdk-bootstrap/${qualifier}`,
+    }).grantEncrypt(target);
+
     asset.bucket.grantRead(target);
   }
 }
