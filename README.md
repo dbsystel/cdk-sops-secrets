@@ -43,7 +43,7 @@ Nevertheless, I would recommend pinning the exact version of this library in you
 2. Create a secret with the SopsSecret construct inside your app
    ```ts
    const secret = new SopsSecret(stack, 'SopsComplexSecretJSON', {
-     sopsFilePath: 'secets/sopsfile-encrypted.json',
+     sopsFilePath: 'secrets/sopsfile-encrypted.json',
    });
    ```
 3. Optional: Access the secret via dynamic references
