@@ -132,6 +132,14 @@ export interface SopsSyncOptions {
   readonly stringifyValues?: boolean;
 
   /**
+   * Remove any JSON/Yaml object structure and store this secret as a plaintext secret.
+   * SOPS files must contain a JSON/Yaml object on the toplevel, they cannot store only a single string.
+   * As a workaround, you can enable this flag and use the following format in the SOPS file:
+   * `data: "secret value"`. Only the secret value will be synced to AWS Secrets Manager.
+   */
+  readonly plaintext?: boolean;
+
+  /**
    * Should this construct automatically create IAM permissions?
    *
    * @default true
@@ -397,6 +405,7 @@ export class SopsSync extends Construct {
         ConvertToJSON: this.converToJSON,
         Flatten: this.flatten,
         FlattenSeparator: props.flattenSeparator ?? '.',
+        Plaintext: props.plaintext ?? false,
         ParameterKeyPrefix: props.parameterKeyPrefix,
         Format: sopsFileFormat,
         StringifiedValues: this.stringifiedValues,

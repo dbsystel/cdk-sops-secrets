@@ -48,6 +48,7 @@ type SopsSyncResourcePropertys struct {
 	ConvertToJSON      string     `json:"ConvertToJSON,omitempty"`
 	Flatten            string     `json:"Flatten,omitempty"`
 	FlattenSeparator   string     `json:"FlattenSeparator,omitempty"`
+	Plaintext          string     `json:"Plaintext,omitempty"`
 	ParameterKeyPrefix string     `json:"ParameterKeyPrefix,omitempty"`
 	StringifyValues    string     `json:"StringifyValues,omitempty"`
 	ResourceType       string     `json:"ResourceType,omitempty"`
@@ -269,22 +270,36 @@ func (a AWS) syncSopsToSecretsmanager(ctx context.Context, event cfn.Event) (phy
 			}
 		}
 
-		if resourceProperties.ConvertToJSON == "" {
-			resourceProperties.ConvertToJSON = "true"
+		if resourceProperties.Plaintext == "" {
+			resourceProperties.Plaintext = "false"
 		}
-		resourcePropertieConvertToJSON, err := strconv.ParseBool(resourceProperties.ConvertToJSON)
+		resourcePropertiesPlaintext, err := strconv.ParseBool(resourceProperties.Plaintext)
 		if err != nil {
 			return tempArn, nil, fmt.Errorf("failed to parse bool:\n%v", err)
 		}
-		if resourcePropertieConvertToJSON || resourceProperties.Format == "json" {
-			decryptedContent, err = toJSON(finalInterface)
+		if resourcePropertiesPlaintext {
+			decryptedContent, err = convertToPlainText(finalInterface)
 			if err != nil {
-				return tempArn, nil, fmt.Errorf("failed to convert to JSON:\n%v", err)
+				return tempArn, nil, fmt.Errorf("failed to convert to plaintext: \n%v", err)
 			}
-		} else if resourceProperties.Format == "yaml" {
-			decryptedContent, err = toYAML(finalInterface)
+		} else {
+			if resourceProperties.ConvertToJSON == "" {
+				resourceProperties.ConvertToJSON = "true"
+			}
+			resourcePropertieConvertToJSON, err := strconv.ParseBool(resourceProperties.ConvertToJSON)
 			if err != nil {
-				return tempArn, nil, fmt.Errorf("failed to convert to YAML:\n%v", err)
+				return tempArn, nil, fmt.Errorf("failed to parse bool:\n%v", err)
+			}
+			if resourcePropertieConvertToJSON || resourceProperties.Format == "json" {
+				decryptedContent, err = toJSON(finalInterface)
+				if err != nil {
+					return tempArn, nil, fmt.Errorf("failed to convert to JSON:\n%v", err)
+				}
+			} else if resourceProperties.Format == "yaml" {
+				decryptedContent, err = toYAML(finalInterface)
+				if err != nil {
+					return tempArn, nil, fmt.Errorf("failed to convert to YAML:\n%v", err)
+				}
 			}
 		}
 
@@ -463,6 +478,25 @@ func flatten(parentkey string, input any, output map[string]interface{}, separat
 		}
 	}
 	return nil
+}
+
+func convertToPlainText(input interface{}) ([]byte, error) {
+	v := reflect.ValueOf(input)
+	key := reflect.ValueOf("data")
+	value := v.MapIndex(key)
+
+	if !value.IsValid() {
+		return nil, fmt.Errorf("if plaintext is set to true, secret must contain exactly one key '%s'", key.Interface())
+	}
+
+	switch v := value.Interface().(type) {
+	case string:
+		return []byte(v), nil
+	case int:
+		return []byte(strconv.Itoa(v)), nil
+	default:
+		return nil, fmt.Errorf("failed to convert value to bytes: %v", v)
+	}
 }
 
 func toSopsSyncResourcePropertys(input *map[string]interface{}) (*SopsSyncResourcePropertys, error) {

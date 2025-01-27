@@ -1722,6 +1722,7 @@ const multiStringParameterProps: MultiStringParameterProps = { ... }
 | <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.flatten">flatten</a></code> | <code>boolean</code> | Should the structure be flattened? |
 | <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.flattenSeparator">flattenSeparator</a></code> | <code>string</code> | If the structure should be flattened use the provided separator between keys. |
 | <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.parameterKeyPrefix">parameterKeyPrefix</a></code> | <code>string</code> | Add this prefix to parameter names. |
+| <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.plaintext">plaintext</a></code> | <code>boolean</code> | Remove any JSON/Yaml object structure and store this secret as a plaintext secret. |
 | <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.sopsAgeKey">sopsAgeKey</a></code> | <code>aws-cdk-lib.SecretValue</code> | The age key that should be used for encryption. |
 | <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.sopsFileFormat">sopsFileFormat</a></code> | <code>string</code> | The format of the sops file. |
 | <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.sopsFilePath">sopsFilePath</a></code> | <code>string</code> | The filepath to the sops file. |
@@ -1812,6 +1813,22 @@ public readonly parameterKeyPrefix: string;
 - *Type:* string
 
 Add this prefix to parameter names.
+
+---
+
+##### `plaintext`<sup>Optional</sup> <a name="plaintext" id="cdk-sops-secrets.MultiStringParameterProps.property.plaintext"></a>
+
+```typescript
+public readonly plaintext: boolean;
+```
+
+- *Type:* boolean
+
+Remove any JSON/Yaml object structure and store this secret as a plaintext secret.
+
+SOPS files must contain a JSON/Yaml object on the toplevel, they cannot store only a single string.
+As a workaround, you can enable this flag and use the following format in the SOPS file:
+`data: "secret value"`. Only the secret value will be synced to AWS Secrets Manager.
 
 ---
 
@@ -2114,6 +2131,7 @@ const sopsSecretProps: SopsSecretProps = { ... }
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.flatten">flatten</a></code> | <code>boolean</code> | Should the structure be flattened? |
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.flattenSeparator">flattenSeparator</a></code> | <code>string</code> | If the structure should be flattened use the provided separator between keys. |
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.parameterKeyPrefix">parameterKeyPrefix</a></code> | <code>string</code> | Add this prefix to parameter names. |
+| <code><a href="#cdk-sops-secrets.SopsSecretProps.property.plaintext">plaintext</a></code> | <code>boolean</code> | Remove any JSON/Yaml object structure and store this secret as a plaintext secret. |
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.sopsAgeKey">sopsAgeKey</a></code> | <code>aws-cdk-lib.SecretValue</code> | The age key that should be used for encryption. |
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.sopsFileFormat">sopsFileFormat</a></code> | <code>string</code> | The format of the sops file. |
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.sopsFilePath">sopsFilePath</a></code> | <code>string</code> | The filepath to the sops file. |
@@ -2369,6 +2387,22 @@ Add this prefix to parameter names.
 
 ---
 
+##### `plaintext`<sup>Optional</sup> <a name="plaintext" id="cdk-sops-secrets.SopsSecretProps.property.plaintext"></a>
+
+```typescript
+public readonly plaintext: boolean;
+```
+
+- *Type:* boolean
+
+Remove any JSON/Yaml object structure and store this secret as a plaintext secret.
+
+SOPS files must contain a JSON/Yaml object on the toplevel, they cannot store only a single string.
+As a workaround, you can enable this flag and use the following format in the SOPS file:
+`data: "secret value"`. Only the secret value will be synced to AWS Secrets Manager.
+
+---
+
 ##### `sopsAgeKey`<sup>Optional</sup> <a name="sopsAgeKey" id="cdk-sops-secrets.SopsSecretProps.property.sopsAgeKey"></a>
 
 ```typescript
@@ -2511,6 +2545,7 @@ const sopsStringParameterProps: SopsStringParameterProps = { ... }
 | <code><a href="#cdk-sops-secrets.SopsStringParameterProps.property.flatten">flatten</a></code> | <code>boolean</code> | Should the structure be flattened? |
 | <code><a href="#cdk-sops-secrets.SopsStringParameterProps.property.flattenSeparator">flattenSeparator</a></code> | <code>string</code> | If the structure should be flattened use the provided separator between keys. |
 | <code><a href="#cdk-sops-secrets.SopsStringParameterProps.property.parameterKeyPrefix">parameterKeyPrefix</a></code> | <code>string</code> | Add this prefix to parameter names. |
+| <code><a href="#cdk-sops-secrets.SopsStringParameterProps.property.plaintext">plaintext</a></code> | <code>boolean</code> | Remove any JSON/Yaml object structure and store this secret as a plaintext secret. |
 | <code><a href="#cdk-sops-secrets.SopsStringParameterProps.property.sopsAgeKey">sopsAgeKey</a></code> | <code>aws-cdk-lib.SecretValue</code> | The age key that should be used for encryption. |
 | <code><a href="#cdk-sops-secrets.SopsStringParameterProps.property.sopsFileFormat">sopsFileFormat</a></code> | <code>string</code> | The format of the sops file. |
 | <code><a href="#cdk-sops-secrets.SopsStringParameterProps.property.sopsFilePath">sopsFilePath</a></code> | <code>string</code> | The filepath to the sops file. |
@@ -2599,6 +2634,22 @@ public readonly parameterKeyPrefix: string;
 - *Type:* string
 
 Add this prefix to parameter names.
+
+---
+
+##### `plaintext`<sup>Optional</sup> <a name="plaintext" id="cdk-sops-secrets.SopsStringParameterProps.property.plaintext"></a>
+
+```typescript
+public readonly plaintext: boolean;
+```
+
+- *Type:* boolean
+
+Remove any JSON/Yaml object structure and store this secret as a plaintext secret.
+
+SOPS files must contain a JSON/Yaml object on the toplevel, they cannot store only a single string.
+As a workaround, you can enable this flag and use the following format in the SOPS file:
+`data: "secret value"`. Only the secret value will be synced to AWS Secrets Manager.
 
 ---
 
@@ -2872,6 +2923,7 @@ const sopsSyncOptions: SopsSyncOptions = { ... }
 | <code><a href="#cdk-sops-secrets.SopsSyncOptions.property.flatten">flatten</a></code> | <code>boolean</code> | Should the structure be flattened? |
 | <code><a href="#cdk-sops-secrets.SopsSyncOptions.property.flattenSeparator">flattenSeparator</a></code> | <code>string</code> | If the structure should be flattened use the provided separator between keys. |
 | <code><a href="#cdk-sops-secrets.SopsSyncOptions.property.parameterKeyPrefix">parameterKeyPrefix</a></code> | <code>string</code> | Add this prefix to parameter names. |
+| <code><a href="#cdk-sops-secrets.SopsSyncOptions.property.plaintext">plaintext</a></code> | <code>boolean</code> | Remove any JSON/Yaml object structure and store this secret as a plaintext secret. |
 | <code><a href="#cdk-sops-secrets.SopsSyncOptions.property.sopsAgeKey">sopsAgeKey</a></code> | <code>aws-cdk-lib.SecretValue</code> | The age key that should be used for encryption. |
 | <code><a href="#cdk-sops-secrets.SopsSyncOptions.property.sopsFileFormat">sopsFileFormat</a></code> | <code>string</code> | The format of the sops file. |
 | <code><a href="#cdk-sops-secrets.SopsSyncOptions.property.sopsFilePath">sopsFilePath</a></code> | <code>string</code> | The filepath to the sops file. |
@@ -2951,6 +3003,22 @@ public readonly parameterKeyPrefix: string;
 - *Type:* string
 
 Add this prefix to parameter names.
+
+---
+
+##### `plaintext`<sup>Optional</sup> <a name="plaintext" id="cdk-sops-secrets.SopsSyncOptions.property.plaintext"></a>
+
+```typescript
+public readonly plaintext: boolean;
+```
+
+- *Type:* boolean
+
+Remove any JSON/Yaml object structure and store this secret as a plaintext secret.
+
+SOPS files must contain a JSON/Yaml object on the toplevel, they cannot store only a single string.
+As a workaround, you can enable this flag and use the following format in the SOPS file:
+`data: "secret value"`. Only the secret value will be synced to AWS Secrets Manager.
 
 ---
 
@@ -3096,6 +3164,7 @@ const sopsSyncProps: SopsSyncProps = { ... }
 | <code><a href="#cdk-sops-secrets.SopsSyncProps.property.flatten">flatten</a></code> | <code>boolean</code> | Should the structure be flattened? |
 | <code><a href="#cdk-sops-secrets.SopsSyncProps.property.flattenSeparator">flattenSeparator</a></code> | <code>string</code> | If the structure should be flattened use the provided separator between keys. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProps.property.parameterKeyPrefix">parameterKeyPrefix</a></code> | <code>string</code> | Add this prefix to parameter names. |
+| <code><a href="#cdk-sops-secrets.SopsSyncProps.property.plaintext">plaintext</a></code> | <code>boolean</code> | Remove any JSON/Yaml object structure and store this secret as a plaintext secret. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProps.property.sopsAgeKey">sopsAgeKey</a></code> | <code>aws-cdk-lib.SecretValue</code> | The age key that should be used for encryption. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProps.property.sopsFileFormat">sopsFileFormat</a></code> | <code>string</code> | The format of the sops file. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProps.property.sopsFilePath">sopsFilePath</a></code> | <code>string</code> | The filepath to the sops file. |
@@ -3179,6 +3248,22 @@ public readonly parameterKeyPrefix: string;
 - *Type:* string
 
 Add this prefix to parameter names.
+
+---
+
+##### `plaintext`<sup>Optional</sup> <a name="plaintext" id="cdk-sops-secrets.SopsSyncProps.property.plaintext"></a>
+
+```typescript
+public readonly plaintext: boolean;
+```
+
+- *Type:* boolean
+
+Remove any JSON/Yaml object structure and store this secret as a plaintext secret.
+
+SOPS files must contain a JSON/Yaml object on the toplevel, they cannot store only a single string.
+As a workaround, you can enable this flag and use the following format in the SOPS file:
+`data: "secret value"`. Only the secret value will be synced to AWS Secrets Manager.
 
 ---
 
