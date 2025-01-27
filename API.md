@@ -3105,6 +3105,7 @@ const sopsSyncProps: SopsSyncProps = { ... }
 | <code><a href="#cdk-sops-secrets.SopsSyncProps.property.sopsS3Key">sopsS3Key</a></code> | <code>string</code> | If you want to pass the sops file via s3, you can specify the key inside the bucket you can use cfn parameter here Both, sopsS3Bucket and sopsS3Key have to be specified. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProps.property.stringifyValues">stringifyValues</a></code> | <code>boolean</code> | Shall all values be flattened? |
 | <code><a href="#cdk-sops-secrets.SopsSyncProps.property.uploadType">uploadType</a></code> | <code><a href="#cdk-sops-secrets.UploadType">UploadType</a></code> | How should the secret be passed to the CustomResource? |
+| <code><a href="#cdk-sops-secrets.SopsSyncProps.property.assetEncryptionKey">assetEncryptionKey</a></code> | <code>aws-cdk-lib.aws_kms.IKey</code> | The encryption key used by the CDK default Asset S3 Bucket. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProps.property.encryptionKey">encryptionKey</a></code> | <code>aws-cdk-lib.aws_kms.IKey</code> | The encryption key used for encrypting the ssm parameter if `parameterName` is set. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProps.property.parameterNames">parameterNames</a></code> | <code>string[]</code> | The parameter names. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProps.property.resourceType">resourceType</a></code> | <code><a href="#cdk-sops-secrets.ResourceType">ResourceType</a></code> | Will this Sync deploy a Secret or Parameter(s). |
@@ -3300,6 +3301,19 @@ public readonly uploadType: UploadType;
 - *Default:* INLINE
 
 How should the secret be passed to the CustomResource?
+
+---
+
+##### `assetEncryptionKey`<sup>Optional</sup> <a name="assetEncryptionKey" id="cdk-sops-secrets.SopsSyncProps.property.assetEncryptionKey"></a>
+
+```typescript
+public readonly assetEncryptionKey: IKey;
+```
+
+- *Type:* aws-cdk-lib.aws_kms.IKey
+- *Default:* Trying to get the key using the CDK Bootstrap context.
+
+The encryption key used by the CDK default Asset S3 Bucket.
 
 ---
 
