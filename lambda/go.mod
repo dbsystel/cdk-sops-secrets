@@ -7,7 +7,7 @@ require (
 	github.com/aws/aws-sdk-go v1.55.6
 	github.com/aws/aws-sdk-go-v2 v1.34.0
 	github.com/getsops/sops/v3 v3.9.2
-	github.com/gkampitakis/go-snaps v0.5.8
+	github.com/gkampitakis/go-snaps v0.5.9
 	github.com/go-test/deep v1.1.1
 	gopkg.in/yaml.v3 v3.0.1
 )
