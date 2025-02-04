@@ -1,0 +1,10 @@
+{
+  "bool": true,
+  "nested": {
+    "bool": true,
+    "number": 1.1,
+    "string": "examplestring"
+  },
+  "number": 1.1,
+  "string": "examplestring"
+}

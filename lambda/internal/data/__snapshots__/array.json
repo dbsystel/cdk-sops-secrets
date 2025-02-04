@@ -1,0 +1,12 @@
+[
+  {
+    "bool": true,
+    "number": 1.1,
+    "string": "examplestring"
+  },
+  {
+    "bool": true,
+    "number": 1.1,
+    "string": "examplestring"
+  }
+]
