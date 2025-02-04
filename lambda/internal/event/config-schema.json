@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "SopsSyncResourcePropertys",
+  "$defs": {
+    "SopsInline": {
+      "properties": {
+        "Content": {
+          "type": "string"
+        },
+        "Hash": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "Content",
+        "Hash"
+      ]
+    },
+    "SopsS3File": {
+      "properties": {
+        "Bucket": {
+          "type": "string"
+        },
+        "Key": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "Bucket",
+        "Key"
+      ]
+    }
+  },
+  "properties": {
+    "ResourceType": {
+      "type": "string",
+      "enum": [
+        "SECRET",
+        "SECRET_BINARY",
+        "PARAMETER_MULTI",
+        "PARAMETER"
+      ]
+    },
+    "Format": {
+      "type": "string",
+      "enum": [
+        "json",
+        "yaml",
+        "dotenv",
+        "binary"
+      ]
+    },
+    "Target": {
+      "type": "string"
+    },
+    "EncryptionKey": {
+      "type": "string"
+    },
+    "SopsS3File": {
+      "$ref": "#/$defs/SopsS3File"
+    },
+    "SopsInline": {
+      "$ref": "#/$defs/SopsInline"
+    },
+    "FlattenSeparator": {
+      "type": "string"
+    },
+    "ServiceToken": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "type": "object",
+  "required": [
+    "ResourceType",
+    "Format",
+    "Target"
+  ]
+}

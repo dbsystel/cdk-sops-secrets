@@ -1,0 +1,8 @@
+{
+   "OutputFormat": "json",
+   "Flatten": false,
+   "FlattenSeparator": "",
+   "Format": "yaml",
+   "ResourceType": "SECRET",
+   "StringifyValues": false
+}

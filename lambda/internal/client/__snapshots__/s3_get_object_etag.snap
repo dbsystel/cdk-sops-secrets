@@ -1,0 +1,17 @@
+
+[TestS3GetObjectETAG - 1]
+&s3.GetObjectAttributesInput{
+    Bucket:                &"test-bucket",
+    Key:                   &"test-key",
+    ObjectAttributes:      {"ETag"},
+    ExpectedBucketOwner:   (*string)(nil),
+    MaxParts:              (*int32)(nil),
+    PartNumberMarker:      (*string)(nil),
+    RequestPayer:          "",
+    SSECustomerAlgorithm:  (*string)(nil),
+    SSECustomerKey:        (*string)(nil),
+    SSECustomerKeyMD5:     (*string)(nil),
+    VersionId:             (*string)(nil),
+    noSmithyDocumentSerde: document.NoSerde{},
+}
+---

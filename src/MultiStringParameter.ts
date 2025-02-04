@@ -4,15 +4,25 @@ import { ParameterTier, StringParameter } from 'aws-cdk-lib/aws-ssm';
 import { ResourceEnvironment, Stack } from 'aws-cdk-lib/core';
 import { Construct } from 'constructs';
 import * as YAML from 'yaml';
-import { SopsStringParameterProps } from './SopsStringParameter';
+import { SopsCommonParameterProps } from './SopsStringParameter';
 import { ResourceType, SopsSync, SopsSyncOptions } from './SopsSync';
 
 interface JSONObject {
   [key: string]: any;
 }
 
-export interface MultiStringParameterProps extends SopsStringParameterProps {
+export interface MultiStringParameterProps extends SopsCommonParameterProps {
+  /**
+   * The seperator used to seperate keys
+   * 
+   * @default - '/'
+   */
   readonly keySeparator?: string;
+  /**
+   * The prefix used for all parameters
+   * 
+   * @default - '/'
+   */
   readonly keyPrefix?: string;
 }
 
@@ -79,10 +89,9 @@ export class MultiStringParameter extends Construct {
     this.sync = new SopsSync(this, 'SopsSync', {
       encryptionKey: this.encryptionKey,
       resourceType: ResourceType.PARAMETER_MULTI,
-      flatten: true,
       flattenSeparator: this.keySeparator,
-      parameterKeyPrefix: this.keyPrefix,
       parameterNames: keys,
+      target: this.keyPrefix,
       ...(props as SopsSyncOptions),
     });
   }

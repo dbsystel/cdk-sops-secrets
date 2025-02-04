@@ -1,0 +1,7 @@
+
+[TestDecrypt/yaml/sopsfile.enc-age.yaml - 1]
+key1: value1
+key2: 12345
+key3: false
+
+---

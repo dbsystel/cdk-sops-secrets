@@ -25,7 +25,13 @@ import { ResourceType, SopsSync, SopsSyncOptions } from './SopsSync';
 /**
  * The configuration options of the SopsSecret
  */
-export interface SopsSecretProps extends SecretProps, SopsSyncOptions {}
+export interface SopsSecretProps extends SecretProps, SopsSyncOptions {
+  /**
+   * Should the secret parsed and transformed to json?
+   * @default - true
+   */
+  readonly rawOutput?: boolean;
+}
 
 /**
  * A drop in replacement for the normal Secret, that is populated with the encrypted
@@ -56,9 +62,10 @@ export class SopsSecret extends Construct implements ISecret {
     };
 
     this.sync = new SopsSync(this, 'SopsSync', {
-      secret: this.secret,
-      resourceType: ResourceType.SECRET,
+      target: this.secret.secretArn,
+      resourceType: props.rawOutput === true? ResourceType.SECRET_BINARY : ResourceType.SECRET,
       flattenSeparator: '.',
+      secret: this.secret,
       ...(props as SopsSyncOptions),
     });
   }

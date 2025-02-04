@@ -1,0 +1,10 @@
+{
+  "EncryptionKey": "arn:aws:kms:eu-central-1:505755377845:key/58b75958-883a-440c-842c-85af5d33a5bb",
+  "Format": "json",
+  "Target": "/11-parametermulti-json-na-true-na/",
+  "ResourceType": "PARAMETER_MULTI",
+  "SopsS3File": {
+    "Bucket": "cdk-hnb659fds-assets-505755377845-eu-central-1",
+    "Key": "test-secrets/json/sopsfile-complex.enc-age.json"
+  }
+}

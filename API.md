@@ -885,9 +885,6 @@ Any object.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#cdk-sops-secrets.SopsSync.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#cdk-sops-secrets.SopsSync.property.converToJSON">converToJSON</a></code> | <code>boolean</code> | Was the format converted to json? |
-| <code><a href="#cdk-sops-secrets.SopsSync.property.flatten">flatten</a></code> | <code>boolean</code> | Was the structure flattened? |
-| <code><a href="#cdk-sops-secrets.SopsSync.property.stringifiedValues">stringifiedValues</a></code> | <code>boolean</code> | Were the values stringified? |
 | <code><a href="#cdk-sops-secrets.SopsSync.property.versionId">versionId</a></code> | <code>string</code> | The current versionId of the secret populated via this resource. |
 
 ---
@@ -901,42 +898,6 @@ public readonly node: Node;
 - *Type:* constructs.Node
 
 The tree node.
-
----
-
-##### `converToJSON`<sup>Required</sup> <a name="converToJSON" id="cdk-sops-secrets.SopsSync.property.converToJSON"></a>
-
-```typescript
-public readonly converToJSON: boolean;
-```
-
-- *Type:* boolean
-
-Was the format converted to json?
-
----
-
-##### `flatten`<sup>Required</sup> <a name="flatten" id="cdk-sops-secrets.SopsSync.property.flatten"></a>
-
-```typescript
-public readonly flatten: boolean;
-```
-
-- *Type:* boolean
-
-Was the structure flattened?
-
----
-
-##### `stringifiedValues`<sup>Required</sup> <a name="stringifiedValues" id="cdk-sops-secrets.SopsSync.property.stringifiedValues"></a>
-
-```typescript
-public readonly stringifiedValues: boolean;
-```
-
-- *Type:* boolean
-
-Were the values stringified?
 
 ---
 
@@ -1006,7 +967,9 @@ new SopsSyncProvider(scope: Construct, id?: string, props?: SopsSyncProviderProp
 | <code><a href="#cdk-sops-secrets.SopsSyncProvider.considerWarningOnInvokeFunctionPermissions">considerWarningOnInvokeFunctionPermissions</a></code> | A warning will be added to functions under the following conditions: - permissions that include `lambda:InvokeFunction` are added to the unqualified function. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProvider.grantInvoke">grantInvoke</a></code> | Grant the given identity permissions to invoke this Lambda. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProvider.grantInvokeCompositePrincipal">grantInvokeCompositePrincipal</a></code> | Grant multiple principals the ability to invoke this Lambda via CompositePrincipal. |
+| <code><a href="#cdk-sops-secrets.SopsSyncProvider.grantInvokeLatestVersion">grantInvokeLatestVersion</a></code> | Grant the given identity permissions to invoke the $LATEST version or unqualified version of this Lambda. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProvider.grantInvokeUrl">grantInvokeUrl</a></code> | Grant the given identity permissions to invoke this Lambda Function URL. |
+| <code><a href="#cdk-sops-secrets.SopsSyncProvider.grantInvokeVersion">grantInvokeVersion</a></code> | Grant the given identity permissions to invoke the given version of this Lambda. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProvider.metric">metric</a></code> | Return the given named metric for this Function. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProvider.metricDuration">metricDuration</a></code> | How long execution of this Lambda takes. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProvider.metricErrors">metricErrors</a></code> | How many invocations of this Lambda fail. |
@@ -1015,6 +978,7 @@ new SopsSyncProvider(scope: Construct, id?: string, props?: SopsSyncProviderProp
 | <code><a href="#cdk-sops-secrets.SopsSyncProvider.addDependency">addDependency</a></code> | Using node.addDependency() does not work on this method as the underlying lambda function is modeled as a singleton across the stack. Use this method instead to declare dependencies. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProvider.addEnvironment">addEnvironment</a></code> | Adds an environment variable to this Lambda function. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProvider.addLayers">addLayers</a></code> | Adds one or more Lambda Layers to this Lambda function. |
+| <code><a href="#cdk-sops-secrets.SopsSyncProvider.addMetadata">addMetadata</a></code> | Use this method to write to the construct tree. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProvider.dependOn">dependOn</a></code> | The SingletonFunction construct cannot be added as a dependency of another construct using node.addDependency(). Use this method instead to declare this as a dependency of another construct. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProvider.addAgeKey">addAgeKey</a></code> | *No description.* |
 
@@ -1207,6 +1171,20 @@ Grant multiple principals the ability to invoke this Lambda via CompositePrincip
 
 ---
 
+##### `grantInvokeLatestVersion` <a name="grantInvokeLatestVersion" id="cdk-sops-secrets.SopsSyncProvider.grantInvokeLatestVersion"></a>
+
+```typescript
+public grantInvokeLatestVersion(grantee: IGrantable): Grant
+```
+
+Grant the given identity permissions to invoke the $LATEST version or unqualified version of this Lambda.
+
+###### `grantee`<sup>Required</sup> <a name="grantee" id="cdk-sops-secrets.SopsSyncProvider.grantInvokeLatestVersion.parameter.grantee"></a>
+
+- *Type:* aws-cdk-lib.aws_iam.IGrantable
+
+---
+
 ##### `grantInvokeUrl` <a name="grantInvokeUrl" id="cdk-sops-secrets.SopsSyncProvider.grantInvokeUrl"></a>
 
 ```typescript
@@ -1218,6 +1196,26 @@ Grant the given identity permissions to invoke this Lambda Function URL.
 ###### `grantee`<sup>Required</sup> <a name="grantee" id="cdk-sops-secrets.SopsSyncProvider.grantInvokeUrl.parameter.grantee"></a>
 
 - *Type:* aws-cdk-lib.aws_iam.IGrantable
+
+---
+
+##### `grantInvokeVersion` <a name="grantInvokeVersion" id="cdk-sops-secrets.SopsSyncProvider.grantInvokeVersion"></a>
+
+```typescript
+public grantInvokeVersion(grantee: IGrantable, version: IVersion): Grant
+```
+
+Grant the given identity permissions to invoke the given version of this Lambda.
+
+###### `grantee`<sup>Required</sup> <a name="grantee" id="cdk-sops-secrets.SopsSyncProvider.grantInvokeVersion.parameter.grantee"></a>
+
+- *Type:* aws-cdk-lib.aws_iam.IGrantable
+
+---
+
+###### `version`<sup>Required</sup> <a name="version" id="cdk-sops-secrets.SopsSyncProvider.grantInvokeVersion.parameter.version"></a>
+
+- *Type:* aws-cdk-lib.aws_lambda.IVersion
 
 ---
 
@@ -1369,6 +1367,34 @@ the layers to be added.
 
 ---
 
+##### `addMetadata` <a name="addMetadata" id="cdk-sops-secrets.SopsSyncProvider.addMetadata"></a>
+
+```typescript
+public addMetadata(type: string, data: any, options?: MetadataOptions): void
+```
+
+Use this method to write to the construct tree.
+
+The metadata entries are written to the Cloud Assembly Manifest if the `treeMetadata` property is specified in the props of the App that contains this Construct.
+
+###### `type`<sup>Required</sup> <a name="type" id="cdk-sops-secrets.SopsSyncProvider.addMetadata.parameter.type"></a>
+
+- *Type:* string
+
+---
+
+###### `data`<sup>Required</sup> <a name="data" id="cdk-sops-secrets.SopsSyncProvider.addMetadata.parameter.data"></a>
+
+- *Type:* any
+
+---
+
+###### `options`<sup>Optional</sup> <a name="options" id="cdk-sops-secrets.SopsSyncProvider.addMetadata.parameter.options"></a>
+
+- *Type:* constructs.MetadataOptions
+
+---
+
 ##### `dependOn` <a name="dependOn" id="cdk-sops-secrets.SopsSyncProvider.dependOn"></a>
 
 ```typescript
@@ -1472,6 +1498,7 @@ Check whether the given construct is a Resource.
 | <code><a href="#cdk-sops-secrets.SopsSyncProvider.property.permissionsNode">permissionsNode</a></code> | <code>constructs.Node</code> | The construct node where permissions are attached. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProvider.property.resourceArnsForGrantInvoke">resourceArnsForGrantInvoke</a></code> | <code>string[]</code> | The ARN(s) to put into the resource field of the generated IAM policy for grantInvoke(). |
 | <code><a href="#cdk-sops-secrets.SopsSyncProvider.property.role">role</a></code> | <code>aws-cdk-lib.aws_iam.IRole</code> | The IAM role associated with this function. |
+| <code><a href="#cdk-sops-secrets.SopsSyncProvider.property.constructName">constructName</a></code> | <code>string</code> | The name of the singleton function. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProvider.property.currentVersion">currentVersion</a></code> | <code>aws-cdk-lib.aws_lambda.Version</code> | Returns a `lambda.Version` which represents the current version of this singleton Lambda function. A new version will be created every time the function's configuration changes. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProvider.property.logGroup">logGroup</a></code> | <code>aws-cdk-lib.aws_logs.ILogGroup</code> | The LogGroup where the Lambda function's logs are made available. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProvider.property.runtime">runtime</a></code> | <code>aws-cdk-lib.aws_lambda.Runtime</code> | The runtime environment for the Lambda function. |
@@ -1654,6 +1681,20 @@ Undefined if the function was imported without a role.
 
 ---
 
+##### `constructName`<sup>Required</sup> <a name="constructName" id="cdk-sops-secrets.SopsSyncProvider.property.constructName"></a>
+
+```typescript
+public readonly constructName: string;
+```
+
+- *Type:* string
+
+The name of the singleton function.
+
+It acts as a unique ID within its CDK stack.
+
+---
+
 ##### `currentVersion`<sup>Required</sup> <a name="currentVersion" id="cdk-sops-secrets.SopsSyncProvider.property.currentVersion"></a>
 
 ```typescript
@@ -1718,10 +1759,7 @@ const multiStringParameterProps: MultiStringParameterProps = { ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.autoGenerateIamPermissions">autoGenerateIamPermissions</a></code> | <code>boolean</code> | Should this construct automatically create IAM permissions? |
-| <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.convertToJSON">convertToJSON</a></code> | <code>boolean</code> | Should the encrypted sops value should be converted to JSON? |
-| <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.flatten">flatten</a></code> | <code>boolean</code> | Should the structure be flattened? |
 | <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.flattenSeparator">flattenSeparator</a></code> | <code>string</code> | If the structure should be flattened use the provided separator between keys. |
-| <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.parameterKeyPrefix">parameterKeyPrefix</a></code> | <code>string</code> | Add this prefix to parameter names. |
 | <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.sopsAgeKey">sopsAgeKey</a></code> | <code>aws-cdk-lib.SecretValue</code> | The age key that should be used for encryption. |
 | <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.sopsFileFormat">sopsFileFormat</a></code> | <code>string</code> | The format of the sops file. |
 | <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.sopsFilePath">sopsFilePath</a></code> | <code>string</code> | The filepath to the sops file. |
@@ -1729,19 +1767,12 @@ const multiStringParameterProps: MultiStringParameterProps = { ... }
 | <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.sopsProvider">sopsProvider</a></code> | <code><a href="#cdk-sops-secrets.SopsSyncProvider">SopsSyncProvider</a></code> | The custom resource provider to use. |
 | <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.sopsS3Bucket">sopsS3Bucket</a></code> | <code>string</code> | If you want to pass the sops file via s3, you can specify the bucket you can use cfn parameter here Both, sopsS3Bucket and sopsS3Key have to be specified. |
 | <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.sopsS3Key">sopsS3Key</a></code> | <code>string</code> | If you want to pass the sops file via s3, you can specify the key inside the bucket you can use cfn parameter here Both, sopsS3Bucket and sopsS3Key have to be specified. |
-| <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.stringifyValues">stringifyValues</a></code> | <code>boolean</code> | Shall all values be flattened? |
 | <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.uploadType">uploadType</a></code> | <code><a href="#cdk-sops-secrets.UploadType">UploadType</a></code> | How should the secret be passed to the CustomResource? |
-| <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.allowedPattern">allowedPattern</a></code> | <code>string</code> | A regular expression used to validate the parameter value. |
-| <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.description">description</a></code> | <code>string</code> | Information about the parameter that you want to add to the system. |
-| <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.parameterName">parameterName</a></code> | <code>string</code> | The name of the parameter. |
-| <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.simpleName">simpleName</a></code> | <code>boolean</code> | Indicates if the parameter name is a simple name (i.e. does not include "/" separators). |
-| <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.tier">tier</a></code> | <code>aws-cdk-lib.aws_ssm.ParameterTier</code> | The tier of the string parameter. |
-| <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.stringValue">stringValue</a></code> | <code>string</code> | The value of the parameter. |
-| <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.dataType">dataType</a></code> | <code>aws-cdk-lib.aws_ssm.ParameterDataType</code> | The data type of the parameter, such as `text` or `aws:ec2:image`. |
-| <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.type">type</a></code> | <code>aws-cdk-lib.aws_ssm.ParameterType</code> | The type of the string parameter. |
 | <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.encryptionKey">encryptionKey</a></code> | <code>aws-cdk-lib.aws_kms.IKey</code> | *No description.* |
-| <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.keyPrefix">keyPrefix</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.keySeparator">keySeparator</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.description">description</a></code> | <code>string</code> | Information about the parameter that you want to add to the system. |
+| <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.tier">tier</a></code> | <code>aws-cdk-lib.aws_ssm.ParameterTier</code> | The tier of the string parameter. |
+| <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.keyPrefix">keyPrefix</a></code> | <code>string</code> | The prefix used for all parameters. |
+| <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.keySeparator">keySeparator</a></code> | <code>string</code> | The seperator used to seperate keys. |
 
 ---
 
@@ -1758,38 +1789,6 @@ Should this construct automatically create IAM permissions?
 
 ---
 
-##### `convertToJSON`<sup>Optional</sup> <a name="convertToJSON" id="cdk-sops-secrets.MultiStringParameterProps.property.convertToJSON"></a>
-
-```typescript
-public readonly convertToJSON: boolean;
-```
-
-- *Type:* boolean
-- *Default:* true
-
-Should the encrypted sops value should be converted to JSON?
-
-Only JSON can be handled by cloud formations dynamic references.
-
----
-
-##### `flatten`<sup>Optional</sup> <a name="flatten" id="cdk-sops-secrets.MultiStringParameterProps.property.flatten"></a>
-
-```typescript
-public readonly flatten: boolean;
-```
-
-- *Type:* boolean
-- *Default:* true
-
-Should the structure be flattened?
-
-The result will be a flat structure and all
-object keys will be replaced with the full jsonpath as key.
-This is usefull for dynamic references, as those don't support nested objects.
-
----
-
 ##### `flattenSeparator`<sup>Optional</sup> <a name="flattenSeparator" id="cdk-sops-secrets.MultiStringParameterProps.property.flattenSeparator"></a>
 
 ```typescript
@@ -1797,21 +1796,9 @@ public readonly flattenSeparator: string;
 ```
 
 - *Type:* string
-- *Default:* '.'
+- *Default:* undefined
 
 If the structure should be flattened use the provided separator between keys.
-
----
-
-##### `parameterKeyPrefix`<sup>Optional</sup> <a name="parameterKeyPrefix" id="cdk-sops-secrets.MultiStringParameterProps.property.parameterKeyPrefix"></a>
-
-```typescript
-public readonly parameterKeyPrefix: string;
-```
-
-- *Type:* string
-
-Add this prefix to parameter names.
 
 ---
 
@@ -1908,21 +1895,6 @@ If you want to pass the sops file via s3, you can specify the key inside the buc
 
 ---
 
-##### `stringifyValues`<sup>Optional</sup> <a name="stringifyValues" id="cdk-sops-secrets.MultiStringParameterProps.property.stringifyValues"></a>
-
-```typescript
-public readonly stringifyValues: boolean;
-```
-
-- *Type:* boolean
-
-Shall all values be flattened?
-
-This is usefull for dynamic references, as there
-are lookup errors for certain float types
-
----
-
 ##### `uploadType`<sup>Optional</sup> <a name="uploadType" id="cdk-sops-secrets.MultiStringParameterProps.property.uploadType"></a>
 
 ```typescript
@@ -1936,19 +1908,13 @@ How should the secret be passed to the CustomResource?
 
 ---
 
-##### `allowedPattern`<sup>Optional</sup> <a name="allowedPattern" id="cdk-sops-secrets.MultiStringParameterProps.property.allowedPattern"></a>
+##### `encryptionKey`<sup>Required</sup> <a name="encryptionKey" id="cdk-sops-secrets.MultiStringParameterProps.property.encryptionKey"></a>
 
 ```typescript
-public readonly allowedPattern: string;
+public readonly encryptionKey: IKey;
 ```
 
-- *Type:* string
-- *Default:* no validation is performed
-
-A regular expression used to validate the parameter value.
-
-For example, for String types with values restricted to
-numbers, you can specify the following: ``^\d+$``
+- *Type:* aws-cdk-lib.aws_kms.IKey
 
 ---
 
@@ -1965,40 +1931,6 @@ Information about the parameter that you want to add to the system.
 
 ---
 
-##### `parameterName`<sup>Optional</sup> <a name="parameterName" id="cdk-sops-secrets.MultiStringParameterProps.property.parameterName"></a>
-
-```typescript
-public readonly parameterName: string;
-```
-
-- *Type:* string
-- *Default:* a name will be generated by CloudFormation
-
-The name of the parameter.
-
----
-
-##### `simpleName`<sup>Optional</sup> <a name="simpleName" id="cdk-sops-secrets.MultiStringParameterProps.property.simpleName"></a>
-
-```typescript
-public readonly simpleName: boolean;
-```
-
-- *Type:* boolean
-- *Default:* auto-detect based on `parameterName`
-
-Indicates if the parameter name is a simple name (i.e. does not include "/" separators).
-
-This is required only if `parameterName` is a token, which means we
-are unable to detect if the name is simple or "path-like" for the purpose
-of rendering SSM parameter ARNs.
-
-If `parameterName` is not specified, `simpleName` must be `true` (or
-undefined) since the name generated by AWS CloudFormation is always a
-simple name.
-
----
-
 ##### `tier`<sup>Optional</sup> <a name="tier" id="cdk-sops-secrets.MultiStringParameterProps.property.tier"></a>
 
 ```typescript
@@ -2012,58 +1944,6 @@ The tier of the string parameter.
 
 ---
 
-##### `stringValue`<sup>Required</sup> <a name="stringValue" id="cdk-sops-secrets.MultiStringParameterProps.property.stringValue"></a>
-
-```typescript
-public readonly stringValue: string;
-```
-
-- *Type:* string
-
-The value of the parameter.
-
-It may not reference another parameter and ``{{}}`` cannot be used in the value.
-
----
-
-##### `dataType`<sup>Optional</sup> <a name="dataType" id="cdk-sops-secrets.MultiStringParameterProps.property.dataType"></a>
-
-```typescript
-public readonly dataType: ParameterDataType;
-```
-
-- *Type:* aws-cdk-lib.aws_ssm.ParameterDataType
-- *Default:* ParameterDataType.TEXT
-
-The data type of the parameter, such as `text` or `aws:ec2:image`.
-
----
-
-##### ~~`type`~~<sup>Optional</sup> <a name="type" id="cdk-sops-secrets.MultiStringParameterProps.property.type"></a>
-
-- *Deprecated:* - type will always be 'String'
-
-```typescript
-public readonly type: ParameterType;
-```
-
-- *Type:* aws-cdk-lib.aws_ssm.ParameterType
-- *Default:* ParameterType.STRING
-
-The type of the string parameter.
-
----
-
-##### `encryptionKey`<sup>Required</sup> <a name="encryptionKey" id="cdk-sops-secrets.MultiStringParameterProps.property.encryptionKey"></a>
-
-```typescript
-public readonly encryptionKey: IKey;
-```
-
-- *Type:* aws-cdk-lib.aws_kms.IKey
-
----
-
 ##### `keyPrefix`<sup>Optional</sup> <a name="keyPrefix" id="cdk-sops-secrets.MultiStringParameterProps.property.keyPrefix"></a>
 
 ```typescript
@@ -2071,6 +1951,9 @@ public readonly keyPrefix: string;
 ```
 
 - *Type:* string
+- *Default:* '/'
+
+The prefix used for all parameters.
 
 ---
 
@@ -2081,6 +1964,209 @@ public readonly keySeparator: string;
 ```
 
 - *Type:* string
+- *Default:* '/'
+
+The seperator used to seperate keys.
+
+---
+
+### SopsCommonParameterProps <a name="SopsCommonParameterProps" id="cdk-sops-secrets.SopsCommonParameterProps"></a>
+
+The configuration options of the StringParameter.
+
+#### Initializer <a name="Initializer" id="cdk-sops-secrets.SopsCommonParameterProps.Initializer"></a>
+
+```typescript
+import { SopsCommonParameterProps } from 'cdk-sops-secrets'
+
+const sopsCommonParameterProps: SopsCommonParameterProps = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#cdk-sops-secrets.SopsCommonParameterProps.property.autoGenerateIamPermissions">autoGenerateIamPermissions</a></code> | <code>boolean</code> | Should this construct automatically create IAM permissions? |
+| <code><a href="#cdk-sops-secrets.SopsCommonParameterProps.property.flattenSeparator">flattenSeparator</a></code> | <code>string</code> | If the structure should be flattened use the provided separator between keys. |
+| <code><a href="#cdk-sops-secrets.SopsCommonParameterProps.property.sopsAgeKey">sopsAgeKey</a></code> | <code>aws-cdk-lib.SecretValue</code> | The age key that should be used for encryption. |
+| <code><a href="#cdk-sops-secrets.SopsCommonParameterProps.property.sopsFileFormat">sopsFileFormat</a></code> | <code>string</code> | The format of the sops file. |
+| <code><a href="#cdk-sops-secrets.SopsCommonParameterProps.property.sopsFilePath">sopsFilePath</a></code> | <code>string</code> | The filepath to the sops file. |
+| <code><a href="#cdk-sops-secrets.SopsCommonParameterProps.property.sopsKmsKey">sopsKmsKey</a></code> | <code>aws-cdk-lib.aws_kms.IKey[]</code> | The kmsKey used to encrypt the sops file. |
+| <code><a href="#cdk-sops-secrets.SopsCommonParameterProps.property.sopsProvider">sopsProvider</a></code> | <code><a href="#cdk-sops-secrets.SopsSyncProvider">SopsSyncProvider</a></code> | The custom resource provider to use. |
+| <code><a href="#cdk-sops-secrets.SopsCommonParameterProps.property.sopsS3Bucket">sopsS3Bucket</a></code> | <code>string</code> | If you want to pass the sops file via s3, you can specify the bucket you can use cfn parameter here Both, sopsS3Bucket and sopsS3Key have to be specified. |
+| <code><a href="#cdk-sops-secrets.SopsCommonParameterProps.property.sopsS3Key">sopsS3Key</a></code> | <code>string</code> | If you want to pass the sops file via s3, you can specify the key inside the bucket you can use cfn parameter here Both, sopsS3Bucket and sopsS3Key have to be specified. |
+| <code><a href="#cdk-sops-secrets.SopsCommonParameterProps.property.uploadType">uploadType</a></code> | <code><a href="#cdk-sops-secrets.UploadType">UploadType</a></code> | How should the secret be passed to the CustomResource? |
+| <code><a href="#cdk-sops-secrets.SopsCommonParameterProps.property.encryptionKey">encryptionKey</a></code> | <code>aws-cdk-lib.aws_kms.IKey</code> | *No description.* |
+| <code><a href="#cdk-sops-secrets.SopsCommonParameterProps.property.description">description</a></code> | <code>string</code> | Information about the parameter that you want to add to the system. |
+| <code><a href="#cdk-sops-secrets.SopsCommonParameterProps.property.tier">tier</a></code> | <code>aws-cdk-lib.aws_ssm.ParameterTier</code> | The tier of the string parameter. |
+
+---
+
+##### `autoGenerateIamPermissions`<sup>Optional</sup> <a name="autoGenerateIamPermissions" id="cdk-sops-secrets.SopsCommonParameterProps.property.autoGenerateIamPermissions"></a>
+
+```typescript
+public readonly autoGenerateIamPermissions: boolean;
+```
+
+- *Type:* boolean
+- *Default:* true
+
+Should this construct automatically create IAM permissions?
+
+---
+
+##### `flattenSeparator`<sup>Optional</sup> <a name="flattenSeparator" id="cdk-sops-secrets.SopsCommonParameterProps.property.flattenSeparator"></a>
+
+```typescript
+public readonly flattenSeparator: string;
+```
+
+- *Type:* string
+- *Default:* undefined
+
+If the structure should be flattened use the provided separator between keys.
+
+---
+
+##### `sopsAgeKey`<sup>Optional</sup> <a name="sopsAgeKey" id="cdk-sops-secrets.SopsCommonParameterProps.property.sopsAgeKey"></a>
+
+```typescript
+public readonly sopsAgeKey: SecretValue;
+```
+
+- *Type:* aws-cdk-lib.SecretValue
+
+The age key that should be used for encryption.
+
+---
+
+##### `sopsFileFormat`<sup>Optional</sup> <a name="sopsFileFormat" id="cdk-sops-secrets.SopsCommonParameterProps.property.sopsFileFormat"></a>
+
+```typescript
+public readonly sopsFileFormat: string;
+```
+
+- *Type:* string
+- *Default:* The fileformat will be derived from the file ending
+
+The format of the sops file.
+
+---
+
+##### `sopsFilePath`<sup>Optional</sup> <a name="sopsFilePath" id="cdk-sops-secrets.SopsCommonParameterProps.property.sopsFilePath"></a>
+
+```typescript
+public readonly sopsFilePath: string;
+```
+
+- *Type:* string
+
+The filepath to the sops file.
+
+---
+
+##### `sopsKmsKey`<sup>Optional</sup> <a name="sopsKmsKey" id="cdk-sops-secrets.SopsCommonParameterProps.property.sopsKmsKey"></a>
+
+```typescript
+public readonly sopsKmsKey: IKey[];
+```
+
+- *Type:* aws-cdk-lib.aws_kms.IKey[]
+- *Default:* The key will be derived from the sops file
+
+The kmsKey used to encrypt the sops file.
+
+Encrypt permissions
+will be granted to the custom resource provider.
+
+---
+
+##### `sopsProvider`<sup>Optional</sup> <a name="sopsProvider" id="cdk-sops-secrets.SopsCommonParameterProps.property.sopsProvider"></a>
+
+```typescript
+public readonly sopsProvider: SopsSyncProvider;
+```
+
+- *Type:* <a href="#cdk-sops-secrets.SopsSyncProvider">SopsSyncProvider</a>
+- *Default:* A new singleton provider will be created
+
+The custom resource provider to use.
+
+If you don't specify any, a new
+provider will be created - or if already exists within this stack - reused.
+
+---
+
+##### `sopsS3Bucket`<sup>Optional</sup> <a name="sopsS3Bucket" id="cdk-sops-secrets.SopsCommonParameterProps.property.sopsS3Bucket"></a>
+
+```typescript
+public readonly sopsS3Bucket: string;
+```
+
+- *Type:* string
+
+If you want to pass the sops file via s3, you can specify the bucket you can use cfn parameter here Both, sopsS3Bucket and sopsS3Key have to be specified.
+
+---
+
+##### `sopsS3Key`<sup>Optional</sup> <a name="sopsS3Key" id="cdk-sops-secrets.SopsCommonParameterProps.property.sopsS3Key"></a>
+
+```typescript
+public readonly sopsS3Key: string;
+```
+
+- *Type:* string
+
+If you want to pass the sops file via s3, you can specify the key inside the bucket you can use cfn parameter here Both, sopsS3Bucket and sopsS3Key have to be specified.
+
+---
+
+##### `uploadType`<sup>Optional</sup> <a name="uploadType" id="cdk-sops-secrets.SopsCommonParameterProps.property.uploadType"></a>
+
+```typescript
+public readonly uploadType: UploadType;
+```
+
+- *Type:* <a href="#cdk-sops-secrets.UploadType">UploadType</a>
+- *Default:* INLINE
+
+How should the secret be passed to the CustomResource?
+
+---
+
+##### `encryptionKey`<sup>Required</sup> <a name="encryptionKey" id="cdk-sops-secrets.SopsCommonParameterProps.property.encryptionKey"></a>
+
+```typescript
+public readonly encryptionKey: IKey;
+```
+
+- *Type:* aws-cdk-lib.aws_kms.IKey
+
+---
+
+##### `description`<sup>Optional</sup> <a name="description" id="cdk-sops-secrets.SopsCommonParameterProps.property.description"></a>
+
+```typescript
+public readonly description: string;
+```
+
+- *Type:* string
+- *Default:* none
+
+Information about the parameter that you want to add to the system.
+
+---
+
+##### `tier`<sup>Optional</sup> <a name="tier" id="cdk-sops-secrets.SopsCommonParameterProps.property.tier"></a>
+
+```typescript
+public readonly tier: ParameterTier;
+```
+
+- *Type:* aws-cdk-lib.aws_ssm.ParameterTier
+- *Default:* undefined
+
+The tier of the string parameter.
 
 ---
 
@@ -2110,10 +2196,7 @@ const sopsSecretProps: SopsSecretProps = { ... }
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.secretStringBeta1">secretStringBeta1</a></code> | <code>aws-cdk-lib.aws_secretsmanager.SecretStringValueBeta1</code> | Initial value for the secret. |
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.secretStringValue">secretStringValue</a></code> | <code>aws-cdk-lib.SecretValue</code> | Initial value for the secret. |
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.autoGenerateIamPermissions">autoGenerateIamPermissions</a></code> | <code>boolean</code> | Should this construct automatically create IAM permissions? |
-| <code><a href="#cdk-sops-secrets.SopsSecretProps.property.convertToJSON">convertToJSON</a></code> | <code>boolean</code> | Should the encrypted sops value should be converted to JSON? |
-| <code><a href="#cdk-sops-secrets.SopsSecretProps.property.flatten">flatten</a></code> | <code>boolean</code> | Should the structure be flattened? |
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.flattenSeparator">flattenSeparator</a></code> | <code>string</code> | If the structure should be flattened use the provided separator between keys. |
-| <code><a href="#cdk-sops-secrets.SopsSecretProps.property.parameterKeyPrefix">parameterKeyPrefix</a></code> | <code>string</code> | Add this prefix to parameter names. |
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.sopsAgeKey">sopsAgeKey</a></code> | <code>aws-cdk-lib.SecretValue</code> | The age key that should be used for encryption. |
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.sopsFileFormat">sopsFileFormat</a></code> | <code>string</code> | The format of the sops file. |
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.sopsFilePath">sopsFilePath</a></code> | <code>string</code> | The filepath to the sops file. |
@@ -2121,8 +2204,8 @@ const sopsSecretProps: SopsSecretProps = { ... }
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.sopsProvider">sopsProvider</a></code> | <code><a href="#cdk-sops-secrets.SopsSyncProvider">SopsSyncProvider</a></code> | The custom resource provider to use. |
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.sopsS3Bucket">sopsS3Bucket</a></code> | <code>string</code> | If you want to pass the sops file via s3, you can specify the bucket you can use cfn parameter here Both, sopsS3Bucket and sopsS3Key have to be specified. |
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.sopsS3Key">sopsS3Key</a></code> | <code>string</code> | If you want to pass the sops file via s3, you can specify the key inside the bucket you can use cfn parameter here Both, sopsS3Bucket and sopsS3Key have to be specified. |
-| <code><a href="#cdk-sops-secrets.SopsSecretProps.property.stringifyValues">stringifyValues</a></code> | <code>boolean</code> | Shall all values be flattened? |
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.uploadType">uploadType</a></code> | <code><a href="#cdk-sops-secrets.UploadType">UploadType</a></code> | How should the secret be passed to the CustomResource? |
+| <code><a href="#cdk-sops-secrets.SopsSecretProps.property.rawOutput">rawOutput</a></code> | <code>boolean</code> | Should the secret parsed and transformed to json? |
 
 ---
 
@@ -2312,38 +2395,6 @@ Should this construct automatically create IAM permissions?
 
 ---
 
-##### `convertToJSON`<sup>Optional</sup> <a name="convertToJSON" id="cdk-sops-secrets.SopsSecretProps.property.convertToJSON"></a>
-
-```typescript
-public readonly convertToJSON: boolean;
-```
-
-- *Type:* boolean
-- *Default:* true
-
-Should the encrypted sops value should be converted to JSON?
-
-Only JSON can be handled by cloud formations dynamic references.
-
----
-
-##### `flatten`<sup>Optional</sup> <a name="flatten" id="cdk-sops-secrets.SopsSecretProps.property.flatten"></a>
-
-```typescript
-public readonly flatten: boolean;
-```
-
-- *Type:* boolean
-- *Default:* true
-
-Should the structure be flattened?
-
-The result will be a flat structure and all
-object keys will be replaced with the full jsonpath as key.
-This is usefull for dynamic references, as those don't support nested objects.
-
----
-
 ##### `flattenSeparator`<sup>Optional</sup> <a name="flattenSeparator" id="cdk-sops-secrets.SopsSecretProps.property.flattenSeparator"></a>
 
 ```typescript
@@ -2351,21 +2402,9 @@ public readonly flattenSeparator: string;
 ```
 
 - *Type:* string
-- *Default:* '.'
+- *Default:* undefined
 
 If the structure should be flattened use the provided separator between keys.
-
----
-
-##### `parameterKeyPrefix`<sup>Optional</sup> <a name="parameterKeyPrefix" id="cdk-sops-secrets.SopsSecretProps.property.parameterKeyPrefix"></a>
-
-```typescript
-public readonly parameterKeyPrefix: string;
-```
-
-- *Type:* string
-
-Add this prefix to parameter names.
 
 ---
 
@@ -2462,21 +2501,6 @@ If you want to pass the sops file via s3, you can specify the key inside the buc
 
 ---
 
-##### `stringifyValues`<sup>Optional</sup> <a name="stringifyValues" id="cdk-sops-secrets.SopsSecretProps.property.stringifyValues"></a>
-
-```typescript
-public readonly stringifyValues: boolean;
-```
-
-- *Type:* boolean
-
-Shall all values be flattened?
-
-This is usefull for dynamic references, as there
-are lookup errors for certain float types
-
----
-
 ##### `uploadType`<sup>Optional</sup> <a name="uploadType" id="cdk-sops-secrets.SopsSecretProps.property.uploadType"></a>
 
 ```typescript
@@ -2490,9 +2514,20 @@ How should the secret be passed to the CustomResource?
 
 ---
 
-### SopsStringParameterProps <a name="SopsStringParameterProps" id="cdk-sops-secrets.SopsStringParameterProps"></a>
+##### `rawOutput`<sup>Optional</sup> <a name="rawOutput" id="cdk-sops-secrets.SopsSecretProps.property.rawOutput"></a>
 
-The configuration options of the StringParameter.
+```typescript
+public readonly rawOutput: boolean;
+```
+
+- *Type:* boolean
+- *Default:* true
+
+Should the secret parsed and transformed to json?
+
+---
+
+### SopsStringParameterProps <a name="SopsStringParameterProps" id="cdk-sops-secrets.SopsStringParameterProps"></a>
 
 #### Initializer <a name="Initializer" id="cdk-sops-secrets.SopsStringParameterProps.Initializer"></a>
 
@@ -2507,10 +2542,7 @@ const sopsStringParameterProps: SopsStringParameterProps = { ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#cdk-sops-secrets.SopsStringParameterProps.property.autoGenerateIamPermissions">autoGenerateIamPermissions</a></code> | <code>boolean</code> | Should this construct automatically create IAM permissions? |
-| <code><a href="#cdk-sops-secrets.SopsStringParameterProps.property.convertToJSON">convertToJSON</a></code> | <code>boolean</code> | Should the encrypted sops value should be converted to JSON? |
-| <code><a href="#cdk-sops-secrets.SopsStringParameterProps.property.flatten">flatten</a></code> | <code>boolean</code> | Should the structure be flattened? |
 | <code><a href="#cdk-sops-secrets.SopsStringParameterProps.property.flattenSeparator">flattenSeparator</a></code> | <code>string</code> | If the structure should be flattened use the provided separator between keys. |
-| <code><a href="#cdk-sops-secrets.SopsStringParameterProps.property.parameterKeyPrefix">parameterKeyPrefix</a></code> | <code>string</code> | Add this prefix to parameter names. |
 | <code><a href="#cdk-sops-secrets.SopsStringParameterProps.property.sopsAgeKey">sopsAgeKey</a></code> | <code>aws-cdk-lib.SecretValue</code> | The age key that should be used for encryption. |
 | <code><a href="#cdk-sops-secrets.SopsStringParameterProps.property.sopsFileFormat">sopsFileFormat</a></code> | <code>string</code> | The format of the sops file. |
 | <code><a href="#cdk-sops-secrets.SopsStringParameterProps.property.sopsFilePath">sopsFilePath</a></code> | <code>string</code> | The filepath to the sops file. |
@@ -2518,17 +2550,11 @@ const sopsStringParameterProps: SopsStringParameterProps = { ... }
 | <code><a href="#cdk-sops-secrets.SopsStringParameterProps.property.sopsProvider">sopsProvider</a></code> | <code><a href="#cdk-sops-secrets.SopsSyncProvider">SopsSyncProvider</a></code> | The custom resource provider to use. |
 | <code><a href="#cdk-sops-secrets.SopsStringParameterProps.property.sopsS3Bucket">sopsS3Bucket</a></code> | <code>string</code> | If you want to pass the sops file via s3, you can specify the bucket you can use cfn parameter here Both, sopsS3Bucket and sopsS3Key have to be specified. |
 | <code><a href="#cdk-sops-secrets.SopsStringParameterProps.property.sopsS3Key">sopsS3Key</a></code> | <code>string</code> | If you want to pass the sops file via s3, you can specify the key inside the bucket you can use cfn parameter here Both, sopsS3Bucket and sopsS3Key have to be specified. |
-| <code><a href="#cdk-sops-secrets.SopsStringParameterProps.property.stringifyValues">stringifyValues</a></code> | <code>boolean</code> | Shall all values be flattened? |
 | <code><a href="#cdk-sops-secrets.SopsStringParameterProps.property.uploadType">uploadType</a></code> | <code><a href="#cdk-sops-secrets.UploadType">UploadType</a></code> | How should the secret be passed to the CustomResource? |
-| <code><a href="#cdk-sops-secrets.SopsStringParameterProps.property.allowedPattern">allowedPattern</a></code> | <code>string</code> | A regular expression used to validate the parameter value. |
-| <code><a href="#cdk-sops-secrets.SopsStringParameterProps.property.description">description</a></code> | <code>string</code> | Information about the parameter that you want to add to the system. |
-| <code><a href="#cdk-sops-secrets.SopsStringParameterProps.property.parameterName">parameterName</a></code> | <code>string</code> | The name of the parameter. |
-| <code><a href="#cdk-sops-secrets.SopsStringParameterProps.property.simpleName">simpleName</a></code> | <code>boolean</code> | Indicates if the parameter name is a simple name (i.e. does not include "/" separators). |
-| <code><a href="#cdk-sops-secrets.SopsStringParameterProps.property.tier">tier</a></code> | <code>aws-cdk-lib.aws_ssm.ParameterTier</code> | The tier of the string parameter. |
-| <code><a href="#cdk-sops-secrets.SopsStringParameterProps.property.stringValue">stringValue</a></code> | <code>string</code> | The value of the parameter. |
-| <code><a href="#cdk-sops-secrets.SopsStringParameterProps.property.dataType">dataType</a></code> | <code>aws-cdk-lib.aws_ssm.ParameterDataType</code> | The data type of the parameter, such as `text` or `aws:ec2:image`. |
-| <code><a href="#cdk-sops-secrets.SopsStringParameterProps.property.type">type</a></code> | <code>aws-cdk-lib.aws_ssm.ParameterType</code> | The type of the string parameter. |
 | <code><a href="#cdk-sops-secrets.SopsStringParameterProps.property.encryptionKey">encryptionKey</a></code> | <code>aws-cdk-lib.aws_kms.IKey</code> | *No description.* |
+| <code><a href="#cdk-sops-secrets.SopsStringParameterProps.property.description">description</a></code> | <code>string</code> | Information about the parameter that you want to add to the system. |
+| <code><a href="#cdk-sops-secrets.SopsStringParameterProps.property.tier">tier</a></code> | <code>aws-cdk-lib.aws_ssm.ParameterTier</code> | The tier of the string parameter. |
+| <code><a href="#cdk-sops-secrets.SopsStringParameterProps.property.parameterName">parameterName</a></code> | <code>string</code> | The name of the parameter. |
 
 ---
 
@@ -2545,38 +2571,6 @@ Should this construct automatically create IAM permissions?
 
 ---
 
-##### `convertToJSON`<sup>Optional</sup> <a name="convertToJSON" id="cdk-sops-secrets.SopsStringParameterProps.property.convertToJSON"></a>
-
-```typescript
-public readonly convertToJSON: boolean;
-```
-
-- *Type:* boolean
-- *Default:* true
-
-Should the encrypted sops value should be converted to JSON?
-
-Only JSON can be handled by cloud formations dynamic references.
-
----
-
-##### `flatten`<sup>Optional</sup> <a name="flatten" id="cdk-sops-secrets.SopsStringParameterProps.property.flatten"></a>
-
-```typescript
-public readonly flatten: boolean;
-```
-
-- *Type:* boolean
-- *Default:* true
-
-Should the structure be flattened?
-
-The result will be a flat structure and all
-object keys will be replaced with the full jsonpath as key.
-This is usefull for dynamic references, as those don't support nested objects.
-
----
-
 ##### `flattenSeparator`<sup>Optional</sup> <a name="flattenSeparator" id="cdk-sops-secrets.SopsStringParameterProps.property.flattenSeparator"></a>
 
 ```typescript
@@ -2584,21 +2578,9 @@ public readonly flattenSeparator: string;
 ```
 
 - *Type:* string
-- *Default:* '.'
+- *Default:* undefined
 
 If the structure should be flattened use the provided separator between keys.
-
----
-
-##### `parameterKeyPrefix`<sup>Optional</sup> <a name="parameterKeyPrefix" id="cdk-sops-secrets.SopsStringParameterProps.property.parameterKeyPrefix"></a>
-
-```typescript
-public readonly parameterKeyPrefix: string;
-```
-
-- *Type:* string
-
-Add this prefix to parameter names.
 
 ---
 
@@ -2695,21 +2677,6 @@ If you want to pass the sops file via s3, you can specify the key inside the buc
 
 ---
 
-##### `stringifyValues`<sup>Optional</sup> <a name="stringifyValues" id="cdk-sops-secrets.SopsStringParameterProps.property.stringifyValues"></a>
-
-```typescript
-public readonly stringifyValues: boolean;
-```
-
-- *Type:* boolean
-
-Shall all values be flattened?
-
-This is usefull for dynamic references, as there
-are lookup errors for certain float types
-
----
-
 ##### `uploadType`<sup>Optional</sup> <a name="uploadType" id="cdk-sops-secrets.SopsStringParameterProps.property.uploadType"></a>
 
 ```typescript
@@ -2723,19 +2690,13 @@ How should the secret be passed to the CustomResource?
 
 ---
 
-##### `allowedPattern`<sup>Optional</sup> <a name="allowedPattern" id="cdk-sops-secrets.SopsStringParameterProps.property.allowedPattern"></a>
+##### `encryptionKey`<sup>Required</sup> <a name="encryptionKey" id="cdk-sops-secrets.SopsStringParameterProps.property.encryptionKey"></a>
 
 ```typescript
-public readonly allowedPattern: string;
+public readonly encryptionKey: IKey;
 ```
 
-- *Type:* string
-- *Default:* no validation is performed
-
-A regular expression used to validate the parameter value.
-
-For example, for String types with values restricted to
-numbers, you can specify the following: ``^\d+$``
+- *Type:* aws-cdk-lib.aws_kms.IKey
 
 ---
 
@@ -2752,40 +2713,6 @@ Information about the parameter that you want to add to the system.
 
 ---
 
-##### `parameterName`<sup>Optional</sup> <a name="parameterName" id="cdk-sops-secrets.SopsStringParameterProps.property.parameterName"></a>
-
-```typescript
-public readonly parameterName: string;
-```
-
-- *Type:* string
-- *Default:* a name will be generated by CloudFormation
-
-The name of the parameter.
-
----
-
-##### `simpleName`<sup>Optional</sup> <a name="simpleName" id="cdk-sops-secrets.SopsStringParameterProps.property.simpleName"></a>
-
-```typescript
-public readonly simpleName: boolean;
-```
-
-- *Type:* boolean
-- *Default:* auto-detect based on `parameterName`
-
-Indicates if the parameter name is a simple name (i.e. does not include "/" separators).
-
-This is required only if `parameterName` is a token, which means we
-are unable to detect if the name is simple or "path-like" for the purpose
-of rendering SSM parameter ARNs.
-
-If `parameterName` is not specified, `simpleName` must be `true` (or
-undefined) since the name generated by AWS CloudFormation is always a
-simple name.
-
----
-
 ##### `tier`<sup>Optional</sup> <a name="tier" id="cdk-sops-secrets.SopsStringParameterProps.property.tier"></a>
 
 ```typescript
@@ -2799,55 +2726,16 @@ The tier of the string parameter.
 
 ---
 
-##### `stringValue`<sup>Required</sup> <a name="stringValue" id="cdk-sops-secrets.SopsStringParameterProps.property.stringValue"></a>
+##### `parameterName`<sup>Optional</sup> <a name="parameterName" id="cdk-sops-secrets.SopsStringParameterProps.property.parameterName"></a>
 
 ```typescript
-public readonly stringValue: string;
+public readonly parameterName: string;
 ```
 
 - *Type:* string
+- *Default:* a name will be generated by CloudFormation
 
-The value of the parameter.
-
-It may not reference another parameter and ``{{}}`` cannot be used in the value.
-
----
-
-##### `dataType`<sup>Optional</sup> <a name="dataType" id="cdk-sops-secrets.SopsStringParameterProps.property.dataType"></a>
-
-```typescript
-public readonly dataType: ParameterDataType;
-```
-
-- *Type:* aws-cdk-lib.aws_ssm.ParameterDataType
-- *Default:* ParameterDataType.TEXT
-
-The data type of the parameter, such as `text` or `aws:ec2:image`.
-
----
-
-##### ~~`type`~~<sup>Optional</sup> <a name="type" id="cdk-sops-secrets.SopsStringParameterProps.property.type"></a>
-
-- *Deprecated:* - type will always be 'String'
-
-```typescript
-public readonly type: ParameterType;
-```
-
-- *Type:* aws-cdk-lib.aws_ssm.ParameterType
-- *Default:* ParameterType.STRING
-
-The type of the string parameter.
-
----
-
-##### `encryptionKey`<sup>Required</sup> <a name="encryptionKey" id="cdk-sops-secrets.SopsStringParameterProps.property.encryptionKey"></a>
-
-```typescript
-public readonly encryptionKey: IKey;
-```
-
-- *Type:* aws-cdk-lib.aws_kms.IKey
+The name of the parameter.
 
 ---
 
@@ -2868,10 +2756,7 @@ const sopsSyncOptions: SopsSyncOptions = { ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#cdk-sops-secrets.SopsSyncOptions.property.autoGenerateIamPermissions">autoGenerateIamPermissions</a></code> | <code>boolean</code> | Should this construct automatically create IAM permissions? |
-| <code><a href="#cdk-sops-secrets.SopsSyncOptions.property.convertToJSON">convertToJSON</a></code> | <code>boolean</code> | Should the encrypted sops value should be converted to JSON? |
-| <code><a href="#cdk-sops-secrets.SopsSyncOptions.property.flatten">flatten</a></code> | <code>boolean</code> | Should the structure be flattened? |
 | <code><a href="#cdk-sops-secrets.SopsSyncOptions.property.flattenSeparator">flattenSeparator</a></code> | <code>string</code> | If the structure should be flattened use the provided separator between keys. |
-| <code><a href="#cdk-sops-secrets.SopsSyncOptions.property.parameterKeyPrefix">parameterKeyPrefix</a></code> | <code>string</code> | Add this prefix to parameter names. |
 | <code><a href="#cdk-sops-secrets.SopsSyncOptions.property.sopsAgeKey">sopsAgeKey</a></code> | <code>aws-cdk-lib.SecretValue</code> | The age key that should be used for encryption. |
 | <code><a href="#cdk-sops-secrets.SopsSyncOptions.property.sopsFileFormat">sopsFileFormat</a></code> | <code>string</code> | The format of the sops file. |
 | <code><a href="#cdk-sops-secrets.SopsSyncOptions.property.sopsFilePath">sopsFilePath</a></code> | <code>string</code> | The filepath to the sops file. |
@@ -2879,7 +2764,6 @@ const sopsSyncOptions: SopsSyncOptions = { ... }
 | <code><a href="#cdk-sops-secrets.SopsSyncOptions.property.sopsProvider">sopsProvider</a></code> | <code><a href="#cdk-sops-secrets.SopsSyncProvider">SopsSyncProvider</a></code> | The custom resource provider to use. |
 | <code><a href="#cdk-sops-secrets.SopsSyncOptions.property.sopsS3Bucket">sopsS3Bucket</a></code> | <code>string</code> | If you want to pass the sops file via s3, you can specify the bucket you can use cfn parameter here Both, sopsS3Bucket and sopsS3Key have to be specified. |
 | <code><a href="#cdk-sops-secrets.SopsSyncOptions.property.sopsS3Key">sopsS3Key</a></code> | <code>string</code> | If you want to pass the sops file via s3, you can specify the key inside the bucket you can use cfn parameter here Both, sopsS3Bucket and sopsS3Key have to be specified. |
-| <code><a href="#cdk-sops-secrets.SopsSyncOptions.property.stringifyValues">stringifyValues</a></code> | <code>boolean</code> | Shall all values be flattened? |
 | <code><a href="#cdk-sops-secrets.SopsSyncOptions.property.uploadType">uploadType</a></code> | <code><a href="#cdk-sops-secrets.UploadType">UploadType</a></code> | How should the secret be passed to the CustomResource? |
 
 ---
@@ -2897,38 +2781,6 @@ Should this construct automatically create IAM permissions?
 
 ---
 
-##### `convertToJSON`<sup>Optional</sup> <a name="convertToJSON" id="cdk-sops-secrets.SopsSyncOptions.property.convertToJSON"></a>
-
-```typescript
-public readonly convertToJSON: boolean;
-```
-
-- *Type:* boolean
-- *Default:* true
-
-Should the encrypted sops value should be converted to JSON?
-
-Only JSON can be handled by cloud formations dynamic references.
-
----
-
-##### `flatten`<sup>Optional</sup> <a name="flatten" id="cdk-sops-secrets.SopsSyncOptions.property.flatten"></a>
-
-```typescript
-public readonly flatten: boolean;
-```
-
-- *Type:* boolean
-- *Default:* true
-
-Should the structure be flattened?
-
-The result will be a flat structure and all
-object keys will be replaced with the full jsonpath as key.
-This is usefull for dynamic references, as those don't support nested objects.
-
----
-
 ##### `flattenSeparator`<sup>Optional</sup> <a name="flattenSeparator" id="cdk-sops-secrets.SopsSyncOptions.property.flattenSeparator"></a>
 
 ```typescript
@@ -2936,21 +2788,9 @@ public readonly flattenSeparator: string;
 ```
 
 - *Type:* string
-- *Default:* '.'
+- *Default:* undefined
 
 If the structure should be flattened use the provided separator between keys.
-
----
-
-##### `parameterKeyPrefix`<sup>Optional</sup> <a name="parameterKeyPrefix" id="cdk-sops-secrets.SopsSyncOptions.property.parameterKeyPrefix"></a>
-
-```typescript
-public readonly parameterKeyPrefix: string;
-```
-
-- *Type:* string
-
-Add this prefix to parameter names.
 
 ---
 
@@ -3047,21 +2887,6 @@ If you want to pass the sops file via s3, you can specify the key inside the buc
 
 ---
 
-##### `stringifyValues`<sup>Optional</sup> <a name="stringifyValues" id="cdk-sops-secrets.SopsSyncOptions.property.stringifyValues"></a>
-
-```typescript
-public readonly stringifyValues: boolean;
-```
-
-- *Type:* boolean
-
-Shall all values be flattened?
-
-This is usefull for dynamic references, as there
-are lookup errors for certain float types
-
----
-
 ##### `uploadType`<sup>Optional</sup> <a name="uploadType" id="cdk-sops-secrets.SopsSyncOptions.property.uploadType"></a>
 
 ```typescript
@@ -3092,10 +2917,7 @@ const sopsSyncProps: SopsSyncProps = { ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#cdk-sops-secrets.SopsSyncProps.property.autoGenerateIamPermissions">autoGenerateIamPermissions</a></code> | <code>boolean</code> | Should this construct automatically create IAM permissions? |
-| <code><a href="#cdk-sops-secrets.SopsSyncProps.property.convertToJSON">convertToJSON</a></code> | <code>boolean</code> | Should the encrypted sops value should be converted to JSON? |
-| <code><a href="#cdk-sops-secrets.SopsSyncProps.property.flatten">flatten</a></code> | <code>boolean</code> | Should the structure be flattened? |
 | <code><a href="#cdk-sops-secrets.SopsSyncProps.property.flattenSeparator">flattenSeparator</a></code> | <code>string</code> | If the structure should be flattened use the provided separator between keys. |
-| <code><a href="#cdk-sops-secrets.SopsSyncProps.property.parameterKeyPrefix">parameterKeyPrefix</a></code> | <code>string</code> | Add this prefix to parameter names. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProps.property.sopsAgeKey">sopsAgeKey</a></code> | <code>aws-cdk-lib.SecretValue</code> | The age key that should be used for encryption. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProps.property.sopsFileFormat">sopsFileFormat</a></code> | <code>string</code> | The format of the sops file. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProps.property.sopsFilePath">sopsFilePath</a></code> | <code>string</code> | The filepath to the sops file. |
@@ -3103,12 +2925,12 @@ const sopsSyncProps: SopsSyncProps = { ... }
 | <code><a href="#cdk-sops-secrets.SopsSyncProps.property.sopsProvider">sopsProvider</a></code> | <code><a href="#cdk-sops-secrets.SopsSyncProvider">SopsSyncProvider</a></code> | The custom resource provider to use. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProps.property.sopsS3Bucket">sopsS3Bucket</a></code> | <code>string</code> | If you want to pass the sops file via s3, you can specify the bucket you can use cfn parameter here Both, sopsS3Bucket and sopsS3Key have to be specified. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProps.property.sopsS3Key">sopsS3Key</a></code> | <code>string</code> | If you want to pass the sops file via s3, you can specify the key inside the bucket you can use cfn parameter here Both, sopsS3Bucket and sopsS3Key have to be specified. |
-| <code><a href="#cdk-sops-secrets.SopsSyncProps.property.stringifyValues">stringifyValues</a></code> | <code>boolean</code> | Shall all values be flattened? |
 | <code><a href="#cdk-sops-secrets.SopsSyncProps.property.uploadType">uploadType</a></code> | <code><a href="#cdk-sops-secrets.UploadType">UploadType</a></code> | How should the secret be passed to the CustomResource? |
-| <code><a href="#cdk-sops-secrets.SopsSyncProps.property.encryptionKey">encryptionKey</a></code> | <code>aws-cdk-lib.aws_kms.IKey</code> | The encryption key used for encrypting the ssm parameter if `parameterName` is set. |
-| <code><a href="#cdk-sops-secrets.SopsSyncProps.property.parameterNames">parameterNames</a></code> | <code>string[]</code> | The parameter names. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProps.property.resourceType">resourceType</a></code> | <code><a href="#cdk-sops-secrets.ResourceType">ResourceType</a></code> | Will this Sync deploy a Secret or Parameter(s). |
-| <code><a href="#cdk-sops-secrets.SopsSyncProps.property.secret">secret</a></code> | <code>aws-cdk-lib.aws_secretsmanager.ISecret</code> | The secret that will be populated with the encrypted sops file content. |
+| <code><a href="#cdk-sops-secrets.SopsSyncProps.property.target">target</a></code> | <code>string</code> | The target to populate with the sops file content. |
+| <code><a href="#cdk-sops-secrets.SopsSyncProps.property.encryptionKey">encryptionKey</a></code> | <code>aws-cdk-lib.aws_kms.IKey</code> | The encryption key used for encrypting the ssm parameter if `parameterName` is set. |
+| <code><a href="#cdk-sops-secrets.SopsSyncProps.property.parameterNames">parameterNames</a></code> | <code>string[]</code> | *No description.* |
+| <code><a href="#cdk-sops-secrets.SopsSyncProps.property.secret">secret</a></code> | <code>aws-cdk-lib.aws_secretsmanager.ISecret</code> | *No description.* |
 
 ---
 
@@ -3125,38 +2947,6 @@ Should this construct automatically create IAM permissions?
 
 ---
 
-##### `convertToJSON`<sup>Optional</sup> <a name="convertToJSON" id="cdk-sops-secrets.SopsSyncProps.property.convertToJSON"></a>
-
-```typescript
-public readonly convertToJSON: boolean;
-```
-
-- *Type:* boolean
-- *Default:* true
-
-Should the encrypted sops value should be converted to JSON?
-
-Only JSON can be handled by cloud formations dynamic references.
-
----
-
-##### `flatten`<sup>Optional</sup> <a name="flatten" id="cdk-sops-secrets.SopsSyncProps.property.flatten"></a>
-
-```typescript
-public readonly flatten: boolean;
-```
-
-- *Type:* boolean
-- *Default:* true
-
-Should the structure be flattened?
-
-The result will be a flat structure and all
-object keys will be replaced with the full jsonpath as key.
-This is usefull for dynamic references, as those don't support nested objects.
-
----
-
 ##### `flattenSeparator`<sup>Optional</sup> <a name="flattenSeparator" id="cdk-sops-secrets.SopsSyncProps.property.flattenSeparator"></a>
 
 ```typescript
@@ -3164,21 +2954,9 @@ public readonly flattenSeparator: string;
 ```
 
 - *Type:* string
-- *Default:* '.'
+- *Default:* undefined
 
 If the structure should be flattened use the provided separator between keys.
-
----
-
-##### `parameterKeyPrefix`<sup>Optional</sup> <a name="parameterKeyPrefix" id="cdk-sops-secrets.SopsSyncProps.property.parameterKeyPrefix"></a>
-
-```typescript
-public readonly parameterKeyPrefix: string;
-```
-
-- *Type:* string
-
-Add this prefix to parameter names.
 
 ---
 
@@ -3275,21 +3053,6 @@ If you want to pass the sops file via s3, you can specify the key inside the buc
 
 ---
 
-##### `stringifyValues`<sup>Optional</sup> <a name="stringifyValues" id="cdk-sops-secrets.SopsSyncProps.property.stringifyValues"></a>
-
-```typescript
-public readonly stringifyValues: boolean;
-```
-
-- *Type:* boolean
-
-Shall all values be flattened?
-
-This is usefull for dynamic references, as there
-are lookup errors for certain float types
-
----
-
 ##### `uploadType`<sup>Optional</sup> <a name="uploadType" id="cdk-sops-secrets.SopsSyncProps.property.uploadType"></a>
 
 ```typescript
@@ -3300,6 +3063,34 @@ public readonly uploadType: UploadType;
 - *Default:* INLINE
 
 How should the secret be passed to the CustomResource?
+
+---
+
+##### `resourceType`<sup>Required</sup> <a name="resourceType" id="cdk-sops-secrets.SopsSyncProps.property.resourceType"></a>
+
+```typescript
+public readonly resourceType: ResourceType;
+```
+
+- *Type:* <a href="#cdk-sops-secrets.ResourceType">ResourceType</a>
+
+Will this Sync deploy a Secret or Parameter(s).
+
+---
+
+##### `target`<sup>Required</sup> <a name="target" id="cdk-sops-secrets.SopsSyncProps.property.target"></a>
+
+```typescript
+public readonly target: string;
+```
+
+- *Type:* string
+
+The target to populate with the sops file content.
+
+for secret, it's the name or arn of the secret
+- for parameter, it's the name of the parameter
+- for parameter multi, it's the prefix of the parameters
 
 ---
 
@@ -3323,22 +3114,6 @@ public readonly parameterNames: string[];
 
 - *Type:* string[]
 
-The parameter names.
-
-If set this creates encrypted SSM Parameters instead of a secret.
-
----
-
-##### `resourceType`<sup>Optional</sup> <a name="resourceType" id="cdk-sops-secrets.SopsSyncProps.property.resourceType"></a>
-
-```typescript
-public readonly resourceType: ResourceType;
-```
-
-- *Type:* <a href="#cdk-sops-secrets.ResourceType">ResourceType</a>
-
-Will this Sync deploy a Secret or Parameter(s).
-
 ---
 
 ##### `secret`<sup>Optional</sup> <a name="secret" id="cdk-sops-secrets.SopsSyncProps.property.secret"></a>
@@ -3348,8 +3123,6 @@ public readonly secret: ISecret;
 ```
 
 - *Type:* aws-cdk-lib.aws_secretsmanager.ISecret
-
-The secret that will be populated with the encrypted sops file content.
 
 ---
 
@@ -3441,12 +3214,18 @@ Where to place the network interfaces within the VPC.
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#cdk-sops-secrets.ResourceType.SECRET">SECRET</a></code> | *No description.* |
+| <code><a href="#cdk-sops-secrets.ResourceType.SECRET_BINARY">SECRET_BINARY</a></code> | *No description.* |
 | <code><a href="#cdk-sops-secrets.ResourceType.PARAMETER">PARAMETER</a></code> | *No description.* |
 | <code><a href="#cdk-sops-secrets.ResourceType.PARAMETER_MULTI">PARAMETER_MULTI</a></code> | *No description.* |
 
 ---
 
 ##### `SECRET` <a name="SECRET" id="cdk-sops-secrets.ResourceType.SECRET"></a>
+
+---
+
+
+##### `SECRET_BINARY` <a name="SECRET_BINARY" id="cdk-sops-secrets.ResourceType.SECRET_BINARY"></a>
 
 ---
 

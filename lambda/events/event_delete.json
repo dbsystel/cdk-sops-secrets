@@ -1,8 +1,0 @@
-{
-  "RequestType": "Delete",
-  "LogicalResourceId": "LogicalResourceId",
-  "ResourceProperties": {},
-  "ResourceType": "Custom::SOPS::Secret",
-  "RequestId": "RequestId",
-  "StackId": "StackId"
-}

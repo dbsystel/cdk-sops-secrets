@@ -21,6 +21,7 @@ import { SingletonFunction, Code, Runtime } from 'aws-cdk-lib/aws-lambda';
 import { Asset } from 'aws-cdk-lib/aws-s3-assets';
 import { ISecret } from 'aws-cdk-lib/aws-secretsmanager';
 import { Construct } from 'constructs';
+import { SopsSyncResourcePropertys } from './LambdaInterface';
 
 export enum UploadType {
   /**
@@ -35,6 +36,7 @@ export enum UploadType {
 
 export enum ResourceType {
   SECRET = 'SECRET',
+  SECRET_BINARY = 'SECRET_BINARY',
   PARAMETER = 'PARAMETER',
   PARAMETER_MULTI = 'PARAMETER_MULTI',
 }
@@ -97,39 +99,11 @@ export interface SopsSyncOptions {
   readonly sopsAgeKey?: SecretValue;
 
   /**
-   * Should the encrypted sops value should be converted to JSON?
-   * Only JSON can be handled by cloud formations dynamic references.
-   *
-   * @default true
-   */
-  readonly convertToJSON?: boolean;
-
-  /**
-   * Should the structure be flattened? The result will be a flat structure and all
-   * object keys will be replaced with the full jsonpath as key.
-   * This is usefull for dynamic references, as those don't support nested objects.
-   *
-   * @default true
-   */
-  readonly flatten?: boolean;
-
-  /**
    * If the structure should be flattened use the provided separator between keys.
    *
-   * @default '.'
+   * @default - undefined
    */
   readonly flattenSeparator?: string;
-
-  /**
-   * Add this prefix to parameter names.
-   */
-  readonly parameterKeyPrefix?: string;
-
-  /**
-   * Shall all values be flattened? This is usefull for dynamic references, as there
-   * are lookup errors for certain float types
-   */
-  readonly stringifyValues?: boolean;
 
   /**
    * Should this construct automatically create IAM permissions?
@@ -143,15 +117,13 @@ export interface SopsSyncOptions {
  * The configuration options extended by the target Secret / Parameter
  */
 export interface SopsSyncProps extends SopsSyncOptions {
-  /**
-   * The secret that will be populated with the encrypted sops file content.
+    /**
+   * The target to populate with the sops file content.
+   * - for secret, it's the name or arn of the secret
+   * - for parameter, it's the name of the parameter
+   * - for parameter multi, it's the prefix of the parameters
    */
-  readonly secret?: ISecret;
-
-  /**
-   * The parameter names. If set this creates encrypted SSM Parameters instead of a secret.
-   */
-  readonly parameterNames?: string[];
+  readonly target: string
 
   /**
    * The encryption key used for encrypting the ssm parameter if `parameterName` is set.
@@ -161,7 +133,10 @@ export interface SopsSyncProps extends SopsSyncOptions {
   /**
    * Will this Sync deploy a Secret or Parameter(s)
    */
-  readonly resourceType?: ResourceType;
+  readonly resourceType: ResourceType;
+
+  readonly secret?: ISecret,
+  readonly parameterNames?: string[];
 }
 
 /**
@@ -239,27 +214,8 @@ export class SopsSync extends Construct {
    */
   readonly versionId: string;
 
-  /**
-   * Was the format converted to json?
-   */
-  readonly converToJSON: boolean;
-
-  /**
-   * Was the structure flattened?
-   */
-  readonly flatten: boolean;
-
-  /**
-   * Were the values stringified?
-   */
-  readonly stringifiedValues: boolean;
-
   constructor(scope: Construct, id: string, props: SopsSyncProps) {
     super(scope, id);
-
-    this.converToJSON = props.convertToJSON ?? true;
-    this.flatten = props.flatten ?? true;
-    this.stringifiedValues = props.stringifyValues ?? true;
 
     const provider = props.sopsProvider ?? new SopsSyncProvider(scope);
 
@@ -283,35 +239,36 @@ export class SopsSync extends Construct {
     }
 
     if (props.sopsFilePath !== undefined) {
-      const _sopsFileFormat =
-        props.sopsFileFormat ?? props.sopsFilePath.split('.').pop();
-      switch (_sopsFileFormat) {
-        case 'json': {
-          sopsFileFormat = 'json';
-          break;
-        }
-        case 'yaml': {
-          sopsFileFormat = 'yaml';
-          break;
-        }
-        case 'yml': {
-          sopsFileFormat = 'yaml';
-          break;
-        }
-        case 'dotenv': {
-          sopsFileFormat = 'dotenv';
-          break;
-        }
-        case 'env': {
-          sopsFileFormat = 'dotenv';
-          break;
-        }
-        case 'binary': {
-          sopsFileFormat = 'binary';
-          break;
-        }
-        default: {
-          throw new Error(`Unsupported sopsFileFormat ${_sopsFileFormat}`);
+      if (sopsFileFormat === undefined) {
+        const _sopsFileFormat = props.sopsFilePath.split('.').pop();
+        switch (_sopsFileFormat) {
+          case 'json': {
+            sopsFileFormat = 'json';
+            break;
+          }
+          case 'yaml': {
+            sopsFileFormat = 'yaml';
+            break;
+          }
+          case 'yml': {
+            sopsFileFormat = 'yaml';
+            break;
+          }
+          case 'dotenv': {
+            sopsFileFormat = 'dotenv';
+            break;
+          }
+          case 'env': {
+            sopsFileFormat = 'dotenv';
+            break;
+          }
+          case 'binary': {
+            sopsFileFormat = 'binary';
+            break;
+          }
+          default: {
+            Annotations.of(this).addError("Failed to determine sops file format. Please specify 'sopsFileFormat'!");
+          }
         }
       }
 
@@ -391,26 +348,14 @@ export class SopsSync extends Construct {
       serviceToken: provider.functionArn,
       resourceType: 'Custom::SopsSync',
       properties: {
-        SecretARN: props.secret?.secretArn,
         SopsS3File: sopsS3File,
         SopsInline: sopsInline,
-        ConvertToJSON: this.converToJSON,
-        Flatten: this.flatten,
-        FlattenSeparator: props.flattenSeparator ?? '.',
-        ParameterKeyPrefix: props.parameterKeyPrefix,
+        FlattenSeparator: props.flattenSeparator,
         Format: sopsFileFormat,
-        StringifiedValues: this.stringifiedValues,
-        ParameterName:
-          // Dirty Workaround, refactor ...
-          props.parameterNames && props.parameterNames.length == 1
-            ? props.parameterNames[0]
-            : undefined,
-        EncryptionKey:
-          props.secret !== undefined ? undefined : props.encryptionKey?.keyId,
-        ResourceType: props.resourceType
-          ? props.resourceType.toString()
-          : ResourceType.SECRET.toString(),
-      },
+        EncryptionKey: props.encryptionKey?.keyId,
+        ResourceType: props.resourceType,
+        Target: props.target,
+      } satisfies SopsSyncResourcePropertys,
     });
     this.versionId = cr.getAttString('VersionId');
   }

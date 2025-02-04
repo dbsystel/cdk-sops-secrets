@@ -1,0 +1,5 @@
+
+[TestFromCfnEvent - 1]
+invalid resource properties (more details in log):
+map[Flatten:false FlattenSeparator: Format:yaml OutputFormat:json ResourceType:SECRET StringifyValues:false]
+---

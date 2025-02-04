@@ -1,0 +1,49 @@
+
+[TestHandleRequestWithClients/11-parametermulti-json-na-true-na.json - 1]
+main.getObjectCalls{
+    "test-secrets/json/sopsfile-complex.enc-age.json": {Bucket:"cdk-hnb659fds-assets-505755377845-eu-central-1", Key:"test-secrets/json/sopsfile-complex.enc-age.json"},
+}
+main.getObjectEtagCalls{
+    "test-secrets/json/sopsfile-complex.enc-age.json": {Bucket:"cdk-hnb659fds-assets-505755377845-eu-central-1", Key:"test-secrets/json/sopsfile-complex.enc-age.json"},
+}
+main.putParameterCalls{
+    "/11-parametermulti-json-na-true-na/and_now/some/0/basic": map[string]interface {}{
+        "keyId":            "arn:aws:kms:eu-central-1:505755377845:key/58b75958-883a-440c-842c-85af5d33a5bb",
+        "parameterContent": "false",
+    },
+    "/11-parametermulti-json-na-true-na/and_now/some/1/nested": map[string]interface {}{
+        "keyId":            "arn:aws:kms:eu-central-1:505755377845:key/58b75958-883a-440c-842c-85af5d33a5bb",
+        "parameterContent": "12345",
+    },
+    "/11-parametermulti-json-na-true-na/and_now/some/2/type": map[string]interface {}{
+        "keyId":            "arn:aws:kms:eu-central-1:505755377845:key/58b75958-883a-440c-842c-85af5d33a5bb",
+        "parameterContent": "1.2345",
+    },
+    "/11-parametermulti-json-na-true-na/and_now/some/3/tests": map[string]interface {}{
+        "keyId":            "arn:aws:kms:eu-central-1:505755377845:key/58b75958-883a-440c-842c-85af5d33a5bb",
+        "parameterContent": "Finish!",
+    },
+    "/11-parametermulti-json-na-true-na/some/deep/nested/arrays/0": map[string]interface {}{
+        "keyId":            "arn:aws:kms:eu-central-1:505755377845:key/58b75958-883a-440c-842c-85af5d33a5bb",
+        "parameterContent": "with",
+    },
+    "/11-parametermulti-json-na-true-na/some/deep/nested/arrays/1": map[string]interface {}{
+        "keyId":            "arn:aws:kms:eu-central-1:505755377845:key/58b75958-883a-440c-842c-85af5d33a5bb",
+        "parameterContent": "several",
+    },
+    "/11-parametermulti-json-na-true-na/some/deep/nested/arrays/2/values/and": map[string]interface {}{
+        "keyId":            "arn:aws:kms:eu-central-1:505755377845:key/58b75958-883a-440c-842c-85af5d33a5bb",
+        "parameterContent": "objects",
+    },
+    "/11-parametermulti-json-na-true-na/some/deep/nested/object": map[string]interface {}{
+        "keyId":            "arn:aws:kms:eu-central-1:505755377845:key/58b75958-883a-440c-842c-85af5d33a5bb",
+        "parameterContent": "structure",
+    },
+    "/11-parametermulti-json-na-true-na/some/notsodeep": map[string]interface {}{
+        "keyId":            "arn:aws:kms:eu-central-1:505755377845:key/58b75958-883a-440c-842c-85af5d33a5bb",
+        "parameterContent": "struct",
+    },
+}
+main.putSecretValueCalls{
+}
+---
