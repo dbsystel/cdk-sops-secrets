@@ -1,0 +1,10 @@
+{
+    "json.schemas": [
+        {
+            "fileMatch": [
+                "lambda/internal/event/testdata/*.json"
+            ],
+            "url": "./lambda/internal/event/config-schema.json"
+        }
+    ]
+}

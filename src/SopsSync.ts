@@ -8,6 +8,7 @@ import {
   Annotations,
   CustomResource,
   FileSystem,
+  Errors,
 } from 'aws-cdk-lib';
 import { ISecurityGroup, IVpc, SubnetSelection } from 'aws-cdk-lib/aws-ec2';
 import {
@@ -21,6 +22,7 @@ import { SingletonFunction, Code, Runtime } from 'aws-cdk-lib/aws-lambda';
 import { Asset } from 'aws-cdk-lib/aws-s3-assets';
 import { ISecret } from 'aws-cdk-lib/aws-secretsmanager';
 import { Construct } from 'constructs';
+import { SopsSyncResourcePropertys } from './LambdaInterface';
 
 export enum UploadType {
   /**
@@ -97,14 +99,6 @@ export interface SopsSyncOptions {
   readonly sopsAgeKey?: SecretValue;
 
   /**
-   * Should the encrypted sops value should be converted to JSON?
-   * Only JSON can be handled by cloud formations dynamic references.
-   *
-   * @default true
-   */
-  readonly convertToJSON?: boolean;
-
-  /**
    * Should the structure be flattened? The result will be a flat structure and all
    * object keys will be replaced with the full jsonpath as key.
    * This is usefull for dynamic references, as those don't support nested objects.
@@ -137,6 +131,13 @@ export interface SopsSyncOptions {
    * @default true
    */
   readonly autoGenerateIamPermissions?: boolean;
+
+  /**
+   * Format of the output
+   * 
+   * @default json
+   */
+  readonly outputFileFormat?: 'json' | 'yaml' | 'dotenv' | 'binary';
 }
 
 /**
@@ -239,27 +240,8 @@ export class SopsSync extends Construct {
    */
   readonly versionId: string;
 
-  /**
-   * Was the format converted to json?
-   */
-  readonly converToJSON: boolean;
-
-  /**
-   * Was the structure flattened?
-   */
-  readonly flatten: boolean;
-
-  /**
-   * Were the values stringified?
-   */
-  readonly stringifiedValues: boolean;
-
   constructor(scope: Construct, id: string, props: SopsSyncProps) {
     super(scope, id);
-
-    this.converToJSON = props.convertToJSON ?? true;
-    this.flatten = props.flatten ?? true;
-    this.stringifiedValues = props.stringifyValues ?? true;
 
     const provider = props.sopsProvider ?? new SopsSyncProvider(scope);
 
@@ -283,35 +265,36 @@ export class SopsSync extends Construct {
     }
 
     if (props.sopsFilePath !== undefined) {
-      const _sopsFileFormat =
-        props.sopsFileFormat ?? props.sopsFilePath.split('.').pop();
-      switch (_sopsFileFormat) {
-        case 'json': {
-          sopsFileFormat = 'json';
-          break;
-        }
-        case 'yaml': {
-          sopsFileFormat = 'yaml';
-          break;
-        }
-        case 'yml': {
-          sopsFileFormat = 'yaml';
-          break;
-        }
-        case 'dotenv': {
-          sopsFileFormat = 'dotenv';
-          break;
-        }
-        case 'env': {
-          sopsFileFormat = 'dotenv';
-          break;
-        }
-        case 'binary': {
-          sopsFileFormat = 'binary';
-          break;
-        }
-        default: {
-          throw new Error(`Unsupported sopsFileFormat ${_sopsFileFormat}`);
+      if (sopsFileFormat === undefined) {
+        const _sopsFileFormat = props.sopsFilePath.split('.').pop();
+        switch (_sopsFileFormat) {
+          case 'json': {
+            sopsFileFormat = 'json';
+            break;
+          }
+          case 'yaml': {
+            sopsFileFormat = 'yaml';
+            break;
+          }
+          case 'yml': {
+            sopsFileFormat = 'yaml';
+            break;
+          }
+          case 'dotenv': {
+            sopsFileFormat = 'dotenv';
+            break;
+          }
+          case 'env': {
+            sopsFileFormat = 'dotenv';
+            break;
+          }
+          case 'binary': {
+            sopsFileFormat = 'binary';
+            break;
+          }
+          default: {
+            Annotations.of(this).addError("Failed to determine sops file format. Please specify 'sopsFileFormat'!");
+          }
         }
       }
 
@@ -394,12 +377,12 @@ export class SopsSync extends Construct {
         SecretARN: props.secret?.secretArn,
         SopsS3File: sopsS3File,
         SopsInline: sopsInline,
-        ConvertToJSON: this.converToJSON,
-        Flatten: this.flatten,
+        OutputFormat: props.outputFileFormat ?? 'json',
+        Flatten: props.flatten ?? true,
         FlattenSeparator: props.flattenSeparator ?? '.',
         ParameterKeyPrefix: props.parameterKeyPrefix,
         Format: sopsFileFormat,
-        StringifiedValues: this.stringifiedValues,
+        StringifyValues: props.stringifyValues ?? false,
         ParameterName:
           // Dirty Workaround, refactor ...
           props.parameterNames && props.parameterNames.length == 1
@@ -408,9 +391,9 @@ export class SopsSync extends Construct {
         EncryptionKey:
           props.secret !== undefined ? undefined : props.encryptionKey?.keyId,
         ResourceType: props.resourceType
-          ? props.resourceType.toString()
-          : ResourceType.SECRET.toString(),
-      },
+          ? props.resourceType
+          : ResourceType.SECRET,
+      } satisfies SopsSyncResourcePropertys,
     });
     this.versionId = cr.getAttString('VersionId');
   }

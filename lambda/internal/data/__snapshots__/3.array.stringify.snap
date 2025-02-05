@@ -1,0 +1,19 @@
+
+[Test_Stringify/3.array - 1]
+&data.Data{
+    parsed: &[]interface {}{
+        map[string]interface {}{
+            "bool":   "true",
+            "number": "1.1",
+            "string": "examplestring",
+        },
+        map[string]interface {}{
+            "bool":   "true",
+            "number": "1.1",
+            "string": "examplestring",
+        },
+    },
+    raw:  (*[]uint8)(nil),
+    hash: (*string)(nil),
+}
+---

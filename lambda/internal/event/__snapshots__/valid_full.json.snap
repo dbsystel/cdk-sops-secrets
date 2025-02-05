@@ -1,0 +1,17 @@
+
+[TestFromCfnEvent - 1]
+&event.SopsSyncResourcePropertys{
+    ResourceType:       "SECRET",
+    Format:             "json",
+    SecretARN:          &"string",
+    ParameterName:      &"string",
+    ParameterKeyPrefix: &"string",
+    EncryptionKey:      &"string",
+    SopsS3File:         &event.SopsS3File{Bucket:"string", Key:"string"},
+    SopsInline:         &event.SopsInline{Content:"string", Hash:"string"},
+    ConvertToJSON:      false,
+    Flatten:            false,
+    StringifyValues:    false,
+    FlattenSeparator:   "string",
+}
+---

@@ -1,3 +1,5 @@
+
+[Test_ToJSON/3.array - 1]
 [
   {
     "bool": true,
@@ -10,3 +12,4 @@
     "string": "examplestring"
   }
 ]
+---

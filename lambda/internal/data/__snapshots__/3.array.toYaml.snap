@@ -1,6 +1,10 @@
+
+[Test_ToYAML/3.array - 1]
 - bool: true
   number: 1.1
   string: examplestring
 - bool: true
   number: 1.1
   string: examplestring
+
+---

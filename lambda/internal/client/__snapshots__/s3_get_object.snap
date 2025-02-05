@@ -1,0 +1,27 @@
+
+[TestS3GetObject - 1]
+&s3.GetObjectInput{
+    Bucket:                     &"test-bucket",
+    Key:                        &"test-key",
+    ChecksumMode:               "",
+    ExpectedBucketOwner:        (*string)(nil),
+    IfMatch:                    (*string)(nil),
+    IfModifiedSince:            (*time.Time)(nil),
+    IfNoneMatch:                (*string)(nil),
+    IfUnmodifiedSince:          (*time.Time)(nil),
+    PartNumber:                 (*int32)(nil),
+    Range:                      (*string)(nil),
+    RequestPayer:               "",
+    ResponseCacheControl:       (*string)(nil),
+    ResponseContentDisposition: (*string)(nil),
+    ResponseContentEncoding:    (*string)(nil),
+    ResponseContentLanguage:    (*string)(nil),
+    ResponseContentType:        (*string)(nil),
+    ResponseExpires:            (*time.Time)(nil),
+    SSECustomerAlgorithm:       (*string)(nil),
+    SSECustomerKey:             (*string)(nil),
+    SSECustomerKeyMD5:          (*string)(nil),
+    VersionId:                  (*string)(nil),
+    noSmithyDocumentSerde:      document.NoSerde{},
+}
+---

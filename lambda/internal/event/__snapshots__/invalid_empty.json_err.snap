@@ -1,0 +1,338 @@
+
+[TestFromCfnEvent - 1]
+Invalid resource properties:
+[
+  {
+    "valid": false,
+    "evaluationPath": "/properties/ConvertToJSON",
+    "schemaLocation": "https://github.com/markussiebert/cdk-sops-secrets/internal/event/sops-sync-resource-propertys#/properties/ConvertToJSON",
+    "instanceLocation": "/ConvertToJSON",
+    "errors": {
+      "type": {
+        "keyword": "type",
+        "code": "type_mismatch",
+        "message": "Value is {received} but should be {expected}",
+        "params": {
+          "expected": "boolean",
+          "received": "null"
+        }
+      }
+    }
+  },
+  {
+    "valid": true,
+    "evaluationPath": "/properties/EncryptionKey",
+    "schemaLocation": "https://github.com/markussiebert/cdk-sops-secrets/internal/event/sops-sync-resource-propertys#/properties/EncryptionKey",
+    "instanceLocation": "/EncryptionKey",
+    "details": [
+      {
+        "valid": false,
+        "evaluationPath": "/oneOf/0",
+        "schemaLocation": "https://github.com/markussiebert/cdk-sops-secrets/internal/event/sops-sync-resource-propertys#/oneOf/0",
+        "instanceLocation": "",
+        "errors": {
+          "type": {
+            "keyword": "type",
+            "code": "type_mismatch",
+            "message": "Value is {received} but should be {expected}",
+            "params": {
+              "expected": "string",
+              "received": "null"
+            }
+          }
+        }
+      },
+      {
+        "valid": true,
+        "evaluationPath": "/oneOf/1",
+        "schemaLocation": "https://github.com/markussiebert/cdk-sops-secrets/internal/event/sops-sync-resource-propertys#/oneOf/1",
+        "instanceLocation": ""
+      }
+    ]
+  },
+  {
+    "valid": false,
+    "evaluationPath": "/properties/Flatten",
+    "schemaLocation": "https://github.com/markussiebert/cdk-sops-secrets/internal/event/sops-sync-resource-propertys#/properties/Flatten",
+    "instanceLocation": "/Flatten",
+    "errors": {
+      "type": {
+        "keyword": "type",
+        "code": "type_mismatch",
+        "message": "Value is {received} but should be {expected}",
+        "params": {
+          "expected": "boolean",
+          "received": "null"
+        }
+      }
+    }
+  },
+  {
+    "valid": false,
+    "evaluationPath": "/properties/FlattenSeparator",
+    "schemaLocation": "https://github.com/markussiebert/cdk-sops-secrets/internal/event/sops-sync-resource-propertys#/properties/FlattenSeparator",
+    "instanceLocation": "/FlattenSeparator",
+    "errors": {
+      "type": {
+        "keyword": "type",
+        "code": "type_mismatch",
+        "message": "Value is {received} but should be {expected}",
+        "params": {
+          "expected": "string",
+          "received": "null"
+        }
+      }
+    }
+  },
+  {
+    "valid": false,
+    "evaluationPath": "/properties/Format",
+    "schemaLocation": "https://github.com/markussiebert/cdk-sops-secrets/internal/event/sops-sync-resource-propertys#/properties/Format",
+    "instanceLocation": "/Format",
+    "errors": {
+      "enum": {
+        "keyword": "enum",
+        "code": "value_not_in_enum",
+        "message": "Value should match one of the values specified by the enum",
+        "params": null
+      },
+      "type": {
+        "keyword": "type",
+        "code": "type_mismatch",
+        "message": "Value is {received} but should be {expected}",
+        "params": {
+          "expected": "string",
+          "received": "null"
+        }
+      }
+    }
+  },
+  {
+    "valid": true,
+    "evaluationPath": "/properties/ParameterKeyPrefix",
+    "schemaLocation": "https://github.com/markussiebert/cdk-sops-secrets/internal/event/sops-sync-resource-propertys#/properties/ParameterKeyPrefix",
+    "instanceLocation": "/ParameterKeyPrefix",
+    "details": [
+      {
+        "valid": false,
+        "evaluationPath": "/oneOf/0",
+        "schemaLocation": "https://github.com/markussiebert/cdk-sops-secrets/internal/event/sops-sync-resource-propertys#/oneOf/0",
+        "instanceLocation": "",
+        "errors": {
+          "type": {
+            "keyword": "type",
+            "code": "type_mismatch",
+            "message": "Value is {received} but should be {expected}",
+            "params": {
+              "expected": "string",
+              "received": "null"
+            }
+          }
+        }
+      },
+      {
+        "valid": true,
+        "evaluationPath": "/oneOf/1",
+        "schemaLocation": "https://github.com/markussiebert/cdk-sops-secrets/internal/event/sops-sync-resource-propertys#/oneOf/1",
+        "instanceLocation": ""
+      }
+    ]
+  },
+  {
+    "valid": true,
+    "evaluationPath": "/properties/ParameterName",
+    "schemaLocation": "https://github.com/markussiebert/cdk-sops-secrets/internal/event/sops-sync-resource-propertys#/properties/ParameterName",
+    "instanceLocation": "/ParameterName",
+    "details": [
+      {
+        "valid": false,
+        "evaluationPath": "/oneOf/0",
+        "schemaLocation": "https://github.com/markussiebert/cdk-sops-secrets/internal/event/sops-sync-resource-propertys#/oneOf/0",
+        "instanceLocation": "",
+        "errors": {
+          "type": {
+            "keyword": "type",
+            "code": "type_mismatch",
+            "message": "Value is {received} but should be {expected}",
+            "params": {
+              "expected": "string",
+              "received": "null"
+            }
+          }
+        }
+      },
+      {
+        "valid": true,
+        "evaluationPath": "/oneOf/1",
+        "schemaLocation": "https://github.com/markussiebert/cdk-sops-secrets/internal/event/sops-sync-resource-propertys#/oneOf/1",
+        "instanceLocation": ""
+      }
+    ]
+  },
+  {
+    "valid": false,
+    "evaluationPath": "/properties/ResourceType",
+    "schemaLocation": "https://github.com/markussiebert/cdk-sops-secrets/internal/event/sops-sync-resource-propertys#/properties/ResourceType",
+    "instanceLocation": "/ResourceType",
+    "errors": {
+      "enum": {
+        "keyword": "enum",
+        "code": "value_not_in_enum",
+        "message": "Value should match one of the values specified by the enum",
+        "params": null
+      },
+      "type": {
+        "keyword": "type",
+        "code": "type_mismatch",
+        "message": "Value is {received} but should be {expected}",
+        "params": {
+          "expected": "string",
+          "received": "null"
+        }
+      }
+    }
+  },
+  {
+    "valid": true,
+    "evaluationPath": "/properties/SecretARN",
+    "schemaLocation": "https://github.com/markussiebert/cdk-sops-secrets/internal/event/sops-sync-resource-propertys#/properties/SecretARN",
+    "instanceLocation": "/SecretARN",
+    "details": [
+      {
+        "valid": false,
+        "evaluationPath": "/oneOf/0",
+        "schemaLocation": "https://github.com/markussiebert/cdk-sops-secrets/internal/event/sops-sync-resource-propertys#/oneOf/0",
+        "instanceLocation": "",
+        "errors": {
+          "type": {
+            "keyword": "type",
+            "code": "type_mismatch",
+            "message": "Value is {received} but should be {expected}",
+            "params": {
+              "expected": "string",
+              "received": "null"
+            }
+          }
+        }
+      },
+      {
+        "valid": true,
+        "evaluationPath": "/oneOf/1",
+        "schemaLocation": "https://github.com/markussiebert/cdk-sops-secrets/internal/event/sops-sync-resource-propertys#/oneOf/1",
+        "instanceLocation": ""
+      }
+    ]
+  },
+  {
+    "valid": true,
+    "evaluationPath": "/properties/SopsInline",
+    "schemaLocation": "https://github.com/markussiebert/cdk-sops-secrets/internal/event/sops-sync-resource-propertys#/properties/SopsInline",
+    "instanceLocation": "/SopsInline",
+    "details": [
+      {
+        "valid": false,
+        "evaluationPath": "/oneOf/0",
+        "schemaLocation": "https://github.com/markussiebert/cdk-sops-secrets/internal/event/sops-sync-resource-propertys#/oneOf/0",
+        "instanceLocation": "",
+        "errors": {
+          "$ref": {
+            "keyword": "$ref",
+            "code": "ref_mismatch",
+            "message": "Value does not match the reference schema",
+            "params": null
+          }
+        },
+        "details": [
+          {
+            "valid": false,
+            "evaluationPath": "",
+            "schemaLocation": "",
+            "instanceLocation": "",
+            "errors": {
+              "type": {
+                "keyword": "type",
+                "code": "type_mismatch",
+                "message": "Value is {received} but should be {expected}",
+                "params": {
+                  "expected": "object",
+                  "received": "null"
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "valid": true,
+        "evaluationPath": "/oneOf/1",
+        "schemaLocation": "https://github.com/markussiebert/cdk-sops-secrets/internal/event/sops-sync-resource-propertys#/oneOf/1",
+        "instanceLocation": ""
+      }
+    ]
+  },
+  {
+    "valid": true,
+    "evaluationPath": "/properties/SopsS3File",
+    "schemaLocation": "https://github.com/markussiebert/cdk-sops-secrets/internal/event/sops-sync-resource-propertys#/properties/SopsS3File",
+    "instanceLocation": "/SopsS3File",
+    "details": [
+      {
+        "valid": false,
+        "evaluationPath": "/oneOf/0",
+        "schemaLocation": "https://github.com/markussiebert/cdk-sops-secrets/internal/event/sops-sync-resource-propertys#/oneOf/0",
+        "instanceLocation": "",
+        "errors": {
+          "$ref": {
+            "keyword": "$ref",
+            "code": "ref_mismatch",
+            "message": "Value does not match the reference schema",
+            "params": null
+          }
+        },
+        "details": [
+          {
+            "valid": false,
+            "evaluationPath": "",
+            "schemaLocation": "",
+            "instanceLocation": "",
+            "errors": {
+              "type": {
+                "keyword": "type",
+                "code": "type_mismatch",
+                "message": "Value is {received} but should be {expected}",
+                "params": {
+                  "expected": "object",
+                  "received": "null"
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "valid": true,
+        "evaluationPath": "/oneOf/1",
+        "schemaLocation": "https://github.com/markussiebert/cdk-sops-secrets/internal/event/sops-sync-resource-propertys#/oneOf/1",
+        "instanceLocation": ""
+      }
+    ]
+  },
+  {
+    "valid": false,
+    "evaluationPath": "/properties/StringifyValues",
+    "schemaLocation": "https://github.com/markussiebert/cdk-sops-secrets/internal/event/sops-sync-resource-propertys#/properties/StringifyValues",
+    "instanceLocation": "/StringifyValues",
+    "errors": {
+      "type": {
+        "keyword": "type",
+        "code": "type_mismatch",
+        "message": "Value is {received} but should be {expected}",
+        "params": {
+          "expected": "boolean",
+          "received": "null"
+        }
+      }
+    }
+  }
+]
+---

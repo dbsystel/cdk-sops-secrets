@@ -1,0 +1,17 @@
+
+[Test_Stringify/2.nested - 1]
+&data.Data{
+    parsed: &map[string]interface {}{
+        "bool":   "true",
+        "nested": map[string]interface {}{
+            "bool":   "true",
+            "number": "1.1",
+            "string": "examplestring",
+        },
+        "number": "1.1",
+        "string": "examplestring",
+    },
+    raw:  (*[]uint8)(nil),
+    hash: (*string)(nil),
+}
+---
