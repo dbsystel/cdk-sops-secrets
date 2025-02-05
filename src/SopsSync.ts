@@ -137,6 +137,12 @@ export interface SopsSyncOptions {
    * @default true
    */
   readonly autoGenerateIamPermissions?: boolean;
+
+  /**
+   * The encryption key used by the CDK default Asset S3 Bucket.
+   * @default - Trying to get the key using the CDK Bootstrap context.
+   */
+  readonly assetEncryptionKey?: IKey;
 }
 
 /**
@@ -158,11 +164,6 @@ export interface SopsSyncProps extends SopsSyncOptions {
    */
   readonly encryptionKey?: IKey;
 
-  /**
-   * The encryption key used by the CDK default Asset S3 Bucket.
-   * @default - Trying to get the key using the CDK Bootstrap context.
-   */
-  readonly assetEncryptionKey?: IKey;
   /**
    * Will this Sync deploy a Secret or Parameter(s)
    */
