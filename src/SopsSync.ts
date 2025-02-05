@@ -1,13 +1,13 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import {
-  SecretValue,
-  Duration,
-  Lazy,
-  Stack,
   Annotations,
   CustomResource,
+  Duration,
   FileSystem,
+  Lazy,
+  SecretValue,
+  Stack,
 } from 'aws-cdk-lib';
 import { ISecurityGroup, IVpc, SubnetSelection } from 'aws-cdk-lib/aws-ec2';
 import {
@@ -17,7 +17,7 @@ import {
   PolicyStatement,
 } from 'aws-cdk-lib/aws-iam';
 import { IKey, Key } from 'aws-cdk-lib/aws-kms';
-import { SingletonFunction, Code, Runtime } from 'aws-cdk-lib/aws-lambda';
+import { Code, Runtime, SingletonFunction } from 'aws-cdk-lib/aws-lambda';
 import { Asset } from 'aws-cdk-lib/aws-s3-assets';
 import { ISecret } from 'aws-cdk-lib/aws-secretsmanager';
 import { Construct } from 'constructs';
@@ -137,6 +137,12 @@ export interface SopsSyncOptions {
    * @default true
    */
   readonly autoGenerateIamPermissions?: boolean;
+
+  /**
+   * The encryption key used by the CDK default Asset S3 Bucket.
+   * @default - Trying to get the key using the CDK Bootstrap context.
+   */
+  readonly assetEncryptionKey?: IKey;
 }
 
 /**
@@ -352,7 +358,12 @@ export class SopsSync extends Construct {
           role: provider.role,
           sopsFileContent: sopsFileContent.toString(),
         });
-        Permissions.assetBucket(this, sopsAsset, provider.role);
+        Permissions.assetBucket(
+          this,
+          sopsAsset,
+          provider.role,
+          props.assetEncryptionKey,
+        );
         Permissions.encryptionKey(props.encryptionKey, provider.role);
         Permissions.secret(props.secret, provider.role);
         Permissions.parameters(this, props.parameterNames, provider.role);
@@ -559,15 +570,32 @@ export namespace Permissions {
   /**
    * Grants the necessary permissions to read the given asset from S3.
    */
-  export function assetBucket(context: Construct, asset: Asset | undefined, target: IGrantable) {
+  export function assetBucket(
+    context: Construct,
+    asset: Asset | undefined,
+    target: IGrantable,
+    assetKey: IKey | undefined,
+  ) {
     if (asset === undefined) {
       return;
     }
-    const qualifier = context.node.tryGetContext('aws:cdk:qualifier') ?? 'hnb659fds';
-    Key.fromLookup(context, 'AssetBucketKey', {
-      aliasName: `alias/cdk-bootstrap/${qualifier}`,
-    }).grantEncrypt(target);
-
     asset.bucket.grantRead(target);
+
+    if (assetKey) {
+      assetKey.grantDecrypt(target);
+    } else {
+      try {
+        const qualifier =
+          Stack.of(context).synthesizer.bootstrapQualifier ?? 'hnb659fds'; // hnb659fds is the AWS global default qualifier
+        Key.fromLookup(context, 'AssetBucketKey', {
+          aliasName: `alias/cdk-bootstrap/${qualifier}`,
+        }).grantEncrypt(target);
+      } catch (error) {
+        Annotations.of(context).addWarningV2(
+          'no-asset-kms-key',
+          `An error occured while retreving the KMS-Key for the Asset S3-Bucket from CDK Bootstrap. Set encryption key manually by using props.assetEncryptionKey. ${error}`,
+        );
+      }
+    }
   }
 }
