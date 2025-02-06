@@ -1,10 +1,25 @@
-import { App, SecretValue, Stack } from 'aws-cdk-lib';
+import { App, DefaultStackSynthesizer, SecretValue, Stack } from 'aws-cdk-lib';
+import { Key } from 'aws-cdk-lib/aws-kms';
 import { Code, Function, Runtime } from 'aws-cdk-lib/aws-lambda';
 import { SopsSecret, UploadType } from '../src/index';
 
 const app = new App();
 
-const stack = new Stack(app, 'SecretIntegrationAsset');
+const stack = new Stack(app, 'SecretIntegrationAsset', {
+  synthesizer: new DefaultStackSynthesizer({
+    qualifier: 'integ',
+  }),
+  env: {
+    account: '123456789',
+    region: 'us-east-1',
+  },
+});
+
+const assetKey = Key.fromKeyArn(
+  stack,
+  'KmsKey',
+  'arn:aws:kms:us-east-1:123456789:key/my-key-id',
+);
 
 new SopsSecret(stack, 'SopsSecretJSON', {
   sopsFilePath: 'test-secrets/json/sopsfile.enc-age.json',
@@ -13,6 +28,7 @@ new SopsSecret(stack, 'SopsSecretJSON', {
   sopsAgeKey: SecretValue.unsafePlainText(
     'AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3',
   ),
+  assetEncryptionKey: assetKey,
 });
 
 new SopsSecret(stack, 'SopsSecretYAML', {
@@ -23,6 +39,7 @@ new SopsSecret(stack, 'SopsSecretYAML', {
   sopsAgeKey: SecretValue.unsafePlainText(
     'AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3',
   ),
+  assetEncryptionKey: assetKey,
 });
 
 new SopsSecret(stack, 'SopsSecretYAMLasJSON', {
@@ -33,6 +50,7 @@ new SopsSecret(stack, 'SopsSecretYAMLasJSON', {
   sopsAgeKey: SecretValue.unsafePlainText(
     'AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3',
   ),
+  assetEncryptionKey: assetKey,
 });
 
 new SopsSecret(stack, 'SopsComplexSecretJSON', {
@@ -43,6 +61,7 @@ new SopsSecret(stack, 'SopsComplexSecretJSON', {
   sopsAgeKey: SecretValue.unsafePlainText(
     'AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3',
   ),
+  assetEncryptionKey: assetKey,
 });
 
 const sopsComplexSecretJSONFlat = new SopsSecret(
@@ -56,6 +75,7 @@ const sopsComplexSecretJSONFlat = new SopsSecret(
     sopsAgeKey: SecretValue.unsafePlainText(
       'AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3',
     ),
+    assetEncryptionKey: assetKey,
   },
 );
 
@@ -68,6 +88,7 @@ new SopsSecret(stack, 'SopComplexSecretYAML', {
   sopsAgeKey: SecretValue.unsafePlainText(
     'AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3',
   ),
+  assetEncryptionKey: assetKey,
 });
 
 new SopsSecret(stack, 'SopComplexSecretYAMLFlat', {
@@ -79,6 +100,7 @@ new SopsSecret(stack, 'SopComplexSecretYAMLFlat', {
   sopsAgeKey: SecretValue.unsafePlainText(
     'AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3',
   ),
+  assetEncryptionKey: assetKey,
 });
 
 new SopsSecret(stack, 'SopsComplexSecretYAMLasJSON', {
@@ -90,6 +112,7 @@ new SopsSecret(stack, 'SopsComplexSecretYAMLasJSON', {
   sopsAgeKey: SecretValue.unsafePlainText(
     'AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3',
   ),
+  assetEncryptionKey: assetKey,
 });
 
 const sopsComplexSecretYAMLasJSONFlat = new SopsSecret(
@@ -104,6 +127,7 @@ const sopsComplexSecretYAMLasJSONFlat = new SopsSecret(
     sopsAgeKey: SecretValue.unsafePlainText(
       'AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3',
     ),
+    assetEncryptionKey: assetKey,
   },
 );
 
@@ -114,6 +138,7 @@ new SopsSecret(stack, 'SopsBinaryAsBinary', {
   sopsAgeKey: SecretValue.unsafePlainText(
     'AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3',
   ),
+  assetEncryptionKey: assetKey,
 });
 
 new Function(stack, 'TestFunction', {
