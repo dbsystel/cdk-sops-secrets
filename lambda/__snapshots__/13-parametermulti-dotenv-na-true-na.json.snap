@@ -1,0 +1,24 @@
+
+[TestHandleRequestWithClients/13-parametermulti-dotenv-na-true-na.json - 1]
+client.SopsS3File{Bucket:"cdk-hnb659fds-assets-505755377845-eu-central-1", Key:"test-secrets/dotenv/encrypted-best-secret.env"}
+---
+
+[TestHandleRequestWithClients/13-parametermulti-dotenv-na-true-na.json - 2]
+client.SopsS3File{Bucket:"cdk-hnb659fds-assets-505755377845-eu-central-1", Key:"test-secrets/dotenv/encrypted-best-secret.env"}
+---
+
+[TestHandleRequestWithClients/13-parametermulti-dotenv-na-true-na.json - 3]
+map[string]interface {}{
+    "keyId":            "arn:aws:kms:eu-central-1:505755377845:key/58b75958-883a-440c-842c-85af5d33a5bb",
+    "parameterContent": "yellow",
+    "parameterName":    "/13-parametermulti-dotenv-na-true-na/banane",
+}
+---
+
+[TestHandleRequestWithClients/13-parametermulti-dotenv-na-true-na.json - 4]
+map[string]interface {}{
+    "keyId":            "arn:aws:kms:eu-central-1:505755377845:key/58b75958-883a-440c-842c-85af5d33a5bb",
+    "parameterContent": "\"ajkscbuiuXA34%%&&=",
+    "parameterName":    "/13-parametermulti-dotenv-na-true-na/crypt",
+}
+---

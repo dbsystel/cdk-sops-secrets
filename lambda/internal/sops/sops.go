@@ -63,13 +63,13 @@ func (e EncryptedSopsSecret) Decrypt() (*DecryptedSopsSecret, error) {
 func (d DecryptedSopsSecret) ToData() (*data.Data, error) {
 	switch d.format {
 	case JSON:
-		return data.FromJSON(d.content)
+		return data.FromJSON(d.content, &d.hash)
 	case YAML:
-		return data.FromYAML(d.content)
+		return data.FromYAML(d.content, &d.hash)
 	case DOTENV:
-		return data.FromDotEnv(d.content)
+		return data.FromDotEnv(d.content, &d.hash)
 	case BINARY:
-		return data.FromBinary(d.content)
+		return data.FromBinary(d.content, &d.hash)
 	default:
 		return nil, fmt.Errorf("unsupported format %s", d.format)
 	}

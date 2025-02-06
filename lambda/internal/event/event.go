@@ -29,7 +29,7 @@ type SopsS3File struct {
 }
 
 func (s *SopsS3File) IsEmpty() bool {
-	return s.Bucket == "" && s.Key == ""
+	return s == nil || (s.Bucket == "" && s.Key == "")
 }
 
 type SopsInline struct {
@@ -38,7 +38,7 @@ type SopsInline struct {
 }
 
 func (s *SopsInline) IsEmpty() bool {
-	return s.Content == "" && s.Hash == ""
+	return s == nil || (s.Content == "" && s.Hash == "")
 }
 
 type ResourceType string

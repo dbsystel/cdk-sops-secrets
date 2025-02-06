@@ -145,7 +145,7 @@ func Test_FromJSON(t *testing.T) {
 				t.Errorf("Read() error = %v", err)
 				return
 			}
-			data, err := FromJSON(jsonData)
+			data, err := FromJSON(jsonData, nil)
 			if err != nil {
 				t.Errorf("FromJSON() error = %v", err)
 				return
@@ -165,7 +165,7 @@ func Test_FromYAML(t *testing.T) {
 				t.Errorf("Read() error = %v", err)
 				return
 			}
-			data, err := FromYAML(jsonData)
+			data, err := FromYAML(jsonData, nil)
 			if err != nil {
 				t.Errorf("FromYAML() error = %v", err)
 				return
@@ -197,7 +197,7 @@ func Test_FromDotEnv(t *testing.T) {
 		"NESTED_BOOL":   "true",
 	}
 
-	data, err := FromDotEnv(dotEnvData)
+	data, err := FromDotEnv(dotEnvData, nil)
 	if err != nil {
 		t.Errorf("FromDotEnv() error = %v", err)
 		return

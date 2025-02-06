@@ -43,7 +43,7 @@ type Client struct {
 }
 
 func CreateAwsClients(context context.Context) AwsClient {
-	cfg, err := config.LoadDefaultConfig(context, config.WithRegion("us-west-2"))
+	cfg, err := config.LoadDefaultConfig(context)
 	if err != nil {
 		log.Fatalf("unable to load SDK config, %v", err)
 	}

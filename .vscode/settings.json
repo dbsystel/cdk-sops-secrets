@@ -2,7 +2,8 @@
     "json.schemas": [
         {
             "fileMatch": [
-                "lambda/internal/event/testdata/*.json"
+                "lambda/internal/event/testdata/*.json",
+                "lambda/events/*.json"
             ],
             "url": "./lambda/internal/event/config-schema.json"
         }

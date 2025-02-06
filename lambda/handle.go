@@ -3,13 +3,16 @@ package main
 import (
 	"fmt"
 	"log"
+	"strings"
 
 	"github.com/markussiebert/cdk-sops-secrets/internal/client"
 	"github.com/markussiebert/cdk-sops-secrets/internal/data"
+	"github.com/markussiebert/cdk-sops-secrets/internal/event"
 	"github.com/markussiebert/cdk-sops-secrets/internal/sops"
 )
 
 type BaseProps struct {
+	properties          *event.SopsSyncResourcePropertys
 	clients             client.AwsClient
 	tempArn             string
 	secretDecryptedData *data.Data
@@ -59,7 +62,15 @@ func handleParameterMulti(props HandleParameterMultiProps) (physicalResourceID s
 		return props.tempArn, nil, e
 	}
 	for key, value := range v {
-		_, err := props.clients.SsmPutParameter(fmt.Sprintf("%s%s", *props.parameterKeyPrefix, key), &value, *props.encryptionKey)
+		// Ass we flatten array to [number] path notations, we have to fix this for parameter store
+		fixedKey := strings.ReplaceAll(key, "[", props.properties.FlattenSeparator)
+		fixedKey = strings.ReplaceAll(fixedKey, "]", props.properties.FlattenSeparator)
+		fixedKey = fmt.Sprintf("%s%s", *props.parameterKeyPrefix, fixedKey)
+		fixedKey = strings.ReplaceAll(fixedKey, fmt.Sprintf("%s%s", props.properties.FlattenSeparator, props.properties.FlattenSeparator), props.properties.FlattenSeparator)
+		fixedKey = strings.TrimSuffix(fixedKey, props.properties.FlattenSeparator)
+		// Whitespaces are also not allowed, maybe more characters
+		fixedKey = strings.ReplaceAll(fixedKey, " ", "_")
+		_, err := props.clients.SsmPutParameter(fixedKey, &value, *props.encryptionKey)
 		if err != nil {
 			return props.tempArn, nil, fmt.Errorf("failed to update ssm parameter:\n%v", err)
 		}

@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"fmt"
-	"regexp"
 
 	"github.com/aws/aws-lambda-go/cfn"
 	runtime "github.com/aws/aws-lambda-go/lambda"
@@ -59,7 +58,9 @@ func HandleRequestWithClients(clients client.AwsClient, e cfn.Event) (physicalRe
 			return "", nil, err
 		}
 	}
+
 	baseProps := BaseProps{
+		properties:          props,
 		clients:             clients,
 		tempArn:             tempArn,
 		secretDecryptedData: secretDecryptedData,
@@ -101,9 +102,4 @@ func HandleRequest(ctx context.Context, event cfn.Event) (physicalResourceID str
 
 func main() {
 	runtime.Start(cfn.LambdaWrap(HandleRequest))
-}
-
-func generatePhysicalResourceId(input string) string {
-	re := regexp.MustCompile(`(^arn:.*:secretsmanager:|ssm:)(.*)`)
-	return re.ReplaceAllString(input, `arn:custom:sopssync:$2`)
 }
