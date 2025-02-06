@@ -589,7 +589,7 @@ export namespace Permissions {
           Stack.of(context).synthesizer.bootstrapQualifier ?? 'hnb659fds'; // hnb659fds is the AWS global default qualifier
         Key.fromLookup(context, 'AssetBucketKey', {
           aliasName: `alias/cdk-bootstrap/${qualifier}`,
-        }).grantEncrypt(target);
+        }).grantDecrypt(target);
       } catch (error) {
         Annotations.of(context).addWarningV2(
           'no-asset-kms-key',
