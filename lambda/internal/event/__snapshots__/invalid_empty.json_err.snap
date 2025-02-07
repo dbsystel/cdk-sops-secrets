@@ -1,5 +1,5 @@
 
 [TestFromCfnEvent - 1]
-Invalid resource properties:
-null
+invalid resource properties (more details in log):
+map[]
 ---

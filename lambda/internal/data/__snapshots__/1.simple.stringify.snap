@@ -7,6 +7,6 @@
         "string": "examplestring",
     },
     raw:  (*[]uint8)(nil),
-    hash: (*string)(nil),
+    Hash: (*string)(nil),
 }
 ---

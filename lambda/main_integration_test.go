@@ -1,11 +1,8 @@
-//go:build integration
-
 package main
 
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"os"
 	"strings"
 	"testing"
@@ -59,8 +56,10 @@ func prepareSecret(t *testing.T, resourceProps map[string]interface{}) {
 
 	secretsManagerClient := secretsmanager.NewFromConfig(cfg)
 
-	secretName, ok := resourceProps["SecretARN"].(string)
-	if !ok {
+	secretName := resourceProps["Target"].(string)
+	ResourceType := resourceProps["ResourceType"].(string)
+
+	if ResourceType != "SECRET" && ResourceType != "SECRET_BINARY" {
 		return
 	}
 
@@ -85,8 +84,10 @@ func cleanupSecret(t *testing.T, resourceProps map[string]interface{}) {
 
 	secretsManagerClient := secretsmanager.NewFromConfig(cfg)
 
-	secretName, ok := resourceProps["SecretARN"].(string)
-	if !ok {
+	secretName := resourceProps["Target"].(string)
+	ResourceType := resourceProps["ResourceType"].(string)
+
+	if ResourceType != "SECRET" && ResourceType != "SECRET_BINARY" {
 		return
 	}
 
@@ -110,10 +111,10 @@ func cleanupParameter(t *testing.T, resourceProps map[string]interface{}) {
 
 	ssmClient := ssm.NewFromConfig(cfg)
 	parameterNames := []string{}
-	parameterName, parameterNameOk := resourceProps["ParameterName"].(string)
-	parameterKeyPrefix, parameterKeyPrefixOk := resourceProps["ParameterKeyPrefix"].(string)
+	parameterName := resourceProps["Target"].(string)
+	ResourceType := resourceProps["ResourceType"].(string)
 
-	if parameterKeyPrefixOk && !parameterNameOk {
+	if ResourceType == "PARAMETER_MULTI" {
 		input := &ssm.DescribeParametersInput{}
 		for {
 			output, err := ssmClient.DescribeParameters(context.Background(), input)
@@ -122,7 +123,7 @@ func cleanupParameter(t *testing.T, resourceProps map[string]interface{}) {
 				return
 			}
 			for _, param := range output.Parameters {
-				if strings.HasPrefix(*param.Name, parameterKeyPrefix) {
+				if strings.HasPrefix(*param.Name, parameterName) {
 					parameterNames = append(parameterNames, *param.Name)
 				}
 			}
@@ -131,10 +132,11 @@ func cleanupParameter(t *testing.T, resourceProps map[string]interface{}) {
 			}
 			input.NextToken = output.NextToken
 		}
-	} else if parameterNameOk {
+	} else if ResourceType == "PARAMETER" {
 		parameterNames = append(parameterNames, parameterName)
-	} else if parameterNameOk && parameterKeyPrefixOk {
-		parameterNames = append(parameterNames, fmt.Sprintf("%s%s", parameterKeyPrefix, parameterName))
+	} else {
+		t.Logf("unknown resource type: %s", ResourceType)
+		return
 	}
 
 	for _, p := range parameterNames {

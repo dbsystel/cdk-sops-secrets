@@ -40,6 +40,7 @@
       "type": "string",
       "enum": [
         "SECRET",
+        "SECRET_BINARY",
         "PARAMETER_MULTI",
         "PARAMETER"
       ]
@@ -53,22 +54,7 @@
         "binary"
       ]
     },
-    "OutputFormat": {
-      "type": "string",
-      "enum": [
-        "json",
-        "yaml",
-        "dotenv",
-        "binary"
-      ]
-    },
-    "SecretARN": {
-      "type": "string"
-    },
-    "ParameterName": {
-      "type": "string"
-    },
-    "ParameterKeyPrefix": {
+    "Target": {
       "type": "string"
     },
     "EncryptionKey": {
@@ -80,13 +66,10 @@
     "SopsInline": {
       "$ref": "#/$defs/SopsInline"
     },
-    "Flatten": {
-      "type": "boolean"
-    },
-    "StringifyValues": {
-      "type": "boolean"
-    },
     "FlattenSeparator": {
+      "type": "string"
+    },
+    "ServiceToken": {
       "type": "string"
     }
   },
@@ -95,9 +78,6 @@
   "required": [
     "ResourceType",
     "Format",
-    "OutputFormat",
-    "Flatten",
-    "StringifyValues",
-    "FlattenSeparator"
+    "Target"
   ]
 }

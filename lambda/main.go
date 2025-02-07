@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"log/slog"
 
 	"github.com/aws/aws-lambda-go/cfn"
 	runtime "github.com/aws/aws-lambda-go/lambda"
@@ -11,6 +12,9 @@ import (
 )
 
 func HandleRequestWithClients(clients client.AwsClient, e cfn.Event) (physicalResourceID string, data map[string]interface{}, err error) {
+	logger := slog.With("Package", "main", "Function", "HandleRequestWithClients")
+	logger.Debug("Incoming Event", "Event", e)
+
 	// If it's a delete request, we don't have to do anything
 	if e.RequestType == cfn.RequestDelete {
 		return "", nil, nil
@@ -24,8 +28,6 @@ func HandleRequestWithClients(clients client.AwsClient, e cfn.Event) (physicalRe
 	if err != nil {
 		return "", nil, err
 	}
-
-	tempArn := props.GeneratePhysicalResourceId()
 
 	secretEncrypted, secretEncryptedErr := props.GetEncryptedSopsSecret(clients)
 
@@ -45,48 +47,19 @@ func HandleRequestWithClients(clients client.AwsClient, e cfn.Event) (physicalRe
 		return "", nil, secretDecryptedDataErr
 	}
 
-	if props.Flatten {
-		err := secretDecryptedData.Flatten(props.FlattenSeparator)
-		if err != nil {
-			return "", nil, err
-		}
-	}
-
-	if props.StringifyValues {
-		err := secretDecryptedData.StringifyValues()
-		if err != nil {
-			return "", nil, err
-		}
-	}
-
 	baseProps := BaseProps{
 		properties:          props,
 		clients:             clients,
-		tempArn:             tempArn,
 		secretDecryptedData: secretDecryptedData,
 	}
 
 	switch props.ResourceType {
-	case "SECRET":
-		return handleSecret(HandleSecretProps{
-			BaseProps:    baseProps,
-			hash:         secretEncrypted.Hash,
-			secretArn:    props.SecretARN,
-			outputFormat: props.OutputFormat,
-		})
-	case "PARAMETER_MULTI":
-		return handleParameterMulti(HandleParameterMultiProps{
-			BaseProps:          baseProps,
-			parameterKeyPrefix: props.ParameterKeyPrefix,
-			encryptionKey:      props.EncryptionKey,
-		})
-	case "PARAMETER":
-		return handleParameter(HandleParameterProps{
-			BaseProps:     baseProps,
-			parameterName: props.ParameterName,
-			encryptionKey: props.EncryptionKey,
-			outputFormat:  props.OutputFormat,
-		})
+	case event.SECRET, event.SECRET_BINARY:
+		return handleSecret(baseProps)
+	case event.PARAMETER_MULTI:
+		return handleParameterMulti(baseProps)
+	case event.PARAMETER:
+		return handleParameter(baseProps)
 	default:
 		return "", nil, fmt.Errorf("unsupported resource type %s", props.ResourceType)
 	}

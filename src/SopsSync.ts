@@ -8,7 +8,6 @@ import {
   Annotations,
   CustomResource,
   FileSystem,
-  Errors,
 } from 'aws-cdk-lib';
 import { ISecurityGroup, IVpc, SubnetSelection } from 'aws-cdk-lib/aws-ec2';
 import {
@@ -37,6 +36,7 @@ export enum UploadType {
 
 export enum ResourceType {
   SECRET = 'SECRET',
+  SECRET_BINARY = 'SECRET_BINARY',
   PARAMETER = 'PARAMETER',
   PARAMETER_MULTI = 'PARAMETER_MULTI',
 }
@@ -99,31 +99,11 @@ export interface SopsSyncOptions {
   readonly sopsAgeKey?: SecretValue;
 
   /**
-   * Should the structure be flattened? The result will be a flat structure and all
-   * object keys will be replaced with the full jsonpath as key.
-   * This is usefull for dynamic references, as those don't support nested objects.
-   *
-   * @default true
-   */
-  readonly flatten?: boolean;
-
-  /**
    * If the structure should be flattened use the provided separator between keys.
    *
-   * @default '.'
+   * @default - undefined
    */
   readonly flattenSeparator?: string;
-
-  /**
-   * Add this prefix to parameter names.
-   */
-  readonly parameterKeyPrefix?: string;
-
-  /**
-   * Shall all values be flattened? This is usefull for dynamic references, as there
-   * are lookup errors for certain float types
-   */
-  readonly stringifyValues?: boolean;
 
   /**
    * Should this construct automatically create IAM permissions?
@@ -131,28 +111,19 @@ export interface SopsSyncOptions {
    * @default true
    */
   readonly autoGenerateIamPermissions?: boolean;
-
-  /**
-   * Format of the output
-   * 
-   * @default json
-   */
-  readonly outputFileFormat?: 'json' | 'yaml' | 'dotenv' | 'binary';
 }
 
 /**
  * The configuration options extended by the target Secret / Parameter
  */
 export interface SopsSyncProps extends SopsSyncOptions {
-  /**
-   * The secret that will be populated with the encrypted sops file content.
+    /**
+   * The target to populate with the sops file content.
+   * - for secret, it's the name or arn of the secret
+   * - for parameter, it's the name of the parameter
+   * - for parameter multi, it's the prefix of the parameters
    */
-  readonly secret?: ISecret;
-
-  /**
-   * The parameter names. If set this creates encrypted SSM Parameters instead of a secret.
-   */
-  readonly parameterNames?: string[];
+  readonly target: string
 
   /**
    * The encryption key used for encrypting the ssm parameter if `parameterName` is set.
@@ -162,7 +133,10 @@ export interface SopsSyncProps extends SopsSyncOptions {
   /**
    * Will this Sync deploy a Secret or Parameter(s)
    */
-  readonly resourceType?: ResourceType;
+  readonly resourceType: ResourceType;
+
+  readonly secret?: ISecret,
+  readonly parameterNames?: string[];
 }
 
 /**
@@ -337,6 +311,7 @@ export class SopsSync extends Construct {
         });
         Permissions.assetBucket(sopsAsset, provider.role);
         Permissions.encryptionKey(props.encryptionKey, provider.role);
+        if (typeof props.target === 'object' && 'secretArn' in props.target)
         Permissions.secret(props.secret, provider.role);
         Permissions.parameters(this, props.parameterNames, provider.role);
       } else {
@@ -374,25 +349,13 @@ export class SopsSync extends Construct {
       serviceToken: provider.functionArn,
       resourceType: 'Custom::SopsSync',
       properties: {
-        SecretARN: props.secret?.secretArn,
         SopsS3File: sopsS3File,
         SopsInline: sopsInline,
-        OutputFormat: props.outputFileFormat ?? 'json',
-        Flatten: props.flatten ?? true,
-        FlattenSeparator: props.flattenSeparator ?? '.',
-        ParameterKeyPrefix: props.parameterKeyPrefix,
+        FlattenSeparator: props.flattenSeparator,
         Format: sopsFileFormat,
-        StringifyValues: props.stringifyValues ?? false,
-        ParameterName:
-          // Dirty Workaround, refactor ...
-          props.parameterNames && props.parameterNames.length == 1
-            ? props.parameterNames[0]
-            : undefined,
-        EncryptionKey:
-          props.secret !== undefined ? undefined : props.encryptionKey?.keyId,
-        ResourceType: props.resourceType
-          ? props.resourceType
-          : ResourceType.SECRET,
+        EncryptionKey: props.encryptionKey?.keyId,
+        ResourceType: props.resourceType,
+        Target: props.target,
       } satisfies SopsSyncResourcePropertys,
     });
     this.versionId = cr.getAttString('VersionId');

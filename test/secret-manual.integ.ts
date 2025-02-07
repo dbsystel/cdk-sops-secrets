@@ -20,7 +20,7 @@ new SopsSecret(stack, 'SopsSecretYAML', {
   sopsS3Bucket: 'testbucket',
   sopsS3Key: 'secret.json',
   sopsFileFormat: 'json',
-  convertToJSON: false,
+  rawOutput: true,
   // see test-secrets/README.md for further information regarding the test file
   sopsAgeKey: SecretValue.unsafePlainText(
     'AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3',
@@ -31,7 +31,7 @@ new SopsSecret(stack, 'SopsSecretYAMLasJSON', {
   sopsS3Bucket: 'testbucket',
   sopsS3Key: 'secret.json',
   sopsFileFormat: 'yaml',
-  convertToJSON: true,
+  rawOutput: true,
   // see test-secrets/README.md for further information regarding the test file
   sopsAgeKey: SecretValue.unsafePlainText(
     'AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3',
@@ -42,7 +42,7 @@ new SopsSecret(stack, 'SopsComplexSecretJSON', {
   sopsS3Bucket: 'testbucket',
   sopsS3Key: 'secret.json',
   sopsFileFormat: 'json',
-  flatten: false,
+  rawOutput: true,
   // see test-secrets/README.md for further information regarding the test file
   sopsAgeKey: SecretValue.unsafePlainText(
     'AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3',
@@ -56,7 +56,7 @@ const sopsComplexSecretJSONFlat = new SopsSecret(
     sopsS3Bucket: 'testbucket',
     sopsS3Key: 'secret.json',
     sopsFileFormat: 'json',
-    flatten: true,
+    rawOutput: true,
     // see test-secrets/README.md for further information regarding the test file
     sopsAgeKey: SecretValue.unsafePlainText(
       'AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3',
@@ -68,8 +68,7 @@ new SopsSecret(stack, 'SopComplexSecretYAML', {
   sopsS3Bucket: 'testbucket',
   sopsS3Key: 'secret.yaml',
   sopsFileFormat: 'yaml',
-  convertToJSON: false,
-  flatten: false,
+  rawOutput: true,
   // see test-secrets/README.md for further information regarding the test file
   sopsAgeKey: SecretValue.unsafePlainText(
     'AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3',
@@ -80,8 +79,7 @@ new SopsSecret(stack, 'SopComplexSecretYAMLFlat', {
   sopsS3Bucket: 'testbucket',
   sopsS3Key: 'secret.yaml',
   sopsFileFormat: 'yaml',
-  convertToJSON: false,
-  flatten: true,
+  rawOutput: true,
   // see test-secrets/README.md for further information regarding the test file
   sopsAgeKey: SecretValue.unsafePlainText(
     'AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3',
@@ -92,8 +90,7 @@ new SopsSecret(stack, 'SopsComplexSecretYAMLasJSON', {
   sopsS3Bucket: 'testbucket',
   sopsS3Key: 'secret.yaml',
   sopsFileFormat: 'yaml',
-  convertToJSON: true,
-  flatten: false,
+  rawOutput: true,
   // see test-secrets/README.md for further information regarding the test file
   sopsAgeKey: SecretValue.unsafePlainText(
     'AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3',
@@ -107,8 +104,6 @@ const sopsComplexSecretYAMLasJSONFlat = new SopsSecret(
     sopsS3Bucket: 'testbucket',
     sopsS3Key: 'secret.yaml',
     sopsFileFormat: 'yaml',
-    convertToJSON: true,
-    flatten: true,
     // see test-secrets/README.md for further information regarding the test file
     sopsAgeKey: SecretValue.unsafePlainText(
       'AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3',

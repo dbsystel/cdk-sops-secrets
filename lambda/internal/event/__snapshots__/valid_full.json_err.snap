@@ -1,4 +1,5 @@
 
 [TestFromCfnEvent - 1]
-<nil>
+invalid resource properties (more details in log):
+map[EncryptionKey:string Flatten:false FlattenSeparator:string Format:json OutputFormat:json ParameterKeyPrefix:string ParameterName:string ResourceType:SECRET SecretARN:string SopsInline:map[Content:string Hash:string] SopsS3File:map[Bucket:string Key:string] StringifyValues:false]
 ---

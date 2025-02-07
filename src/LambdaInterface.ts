@@ -6,18 +6,13 @@
  */
 
 export interface SopsSyncResourcePropertys {
-  ResourceType: "SECRET" | "PARAMETER_MULTI" | "PARAMETER";
+  ResourceType: "SECRET" | "SECRET_BINARY" | "PARAMETER_MULTI" | "PARAMETER";
   Format: "json" | "yaml" | "dotenv" | "binary";
-  OutputFormat: "json" | "yaml" | "dotenv" | "binary";
-  SecretARN?: string;
-  ParameterName?: string;
-  ParameterKeyPrefix?: string;
+  Target: string;
   EncryptionKey?: string;
   SopsS3File?: SopsS3File;
   SopsInline?: SopsInline;
-  Flatten: boolean;
-  StringifyValues: boolean;
-  FlattenSeparator: string;
+  FlattenSeparator?: string;
 }
 export interface SopsS3File {
   Bucket: string;

@@ -6,9 +6,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"log/slog"
 	"os"
-	"regexp"
-	"sort"
 	"strings"
 
 	_ "embed"
@@ -44,49 +43,44 @@ func (s *SopsInline) IsEmpty() bool {
 type ResourceType string
 
 const (
-	SECRET          ResourceType = "SECRET"
+	// Secret, flattened and stringified
+	SECRET ResourceType = "SECRET"
+	// Secret, just the raw value
+	SECRET_BINARY ResourceType = "SECRET_BINARY"
+	// The JSON object is flattened into multiple parameters
 	PARAMETER_MULTI ResourceType = "PARAMETER_MULTI"
-	PARAMETER       ResourceType = "PARAMETER"
+	// The raw value is stored as Parameter
+	PARAMETER ResourceType = "PARAMETER"
 )
 
 type SopsSyncResourcePropertys struct {
-	ResourceType       ResourceType `json:"ResourceType" jsonschema:"enum=SECRET,enum=PARAMETER_MULTI,enum=PARAMETER"`
-	Format             sops.Format  `json:"Format" jsonschema:"enum=json,enum=yaml,enum=dotenv,enum=binary"`
-	OutputFormat       sops.Format  `json:"OutputFormat" jsonschema:"enum=json,enum=yaml,enum=dotenv,enum=binary"`
-	SecretARN          *string      `json:"SecretARN,omitempty"`
-	ParameterName      *string      `json:"ParameterName,omitempty"`
-	ParameterKeyPrefix *string      `json:"ParameterKeyPrefix,omitempty"`
-	EncryptionKey      *string      `json:"EncryptionKey,omitempty"`
-	SopsS3File         *SopsS3File  `json:"SopsS3File,omitempty"`
-	SopsInline         *SopsInline  `json:"SopsInline,omitempty"`
-	Flatten            bool         `json:"Flatten"`
-	StringifyValues    bool         `json:"StringifyValues"`
-	FlattenSeparator   string       `json:"FlattenSeparator"`
+	ResourceType     ResourceType `json:"ResourceType" jsonschema:"enum=SECRET,enum=SECRET_BINARY,enum=PARAMETER_MULTI,enum=PARAMETER"`
+	Format           sops.Format  `json:"Format" jsonschema:"enum=json,enum=yaml,enum=dotenv,enum=binary"`
+	Target           string       `json:"Target"`
+	EncryptionKey    *string      `json:"EncryptionKey,omitempty"`
+	SopsS3File       *SopsS3File  `json:"SopsS3File,omitempty"`
+	SopsInline       *SopsInline  `json:"SopsInline,omitempty"`
+	FlattenSeparator *string      `json:"FlattenSeparator,omitempty"`
+	// ServiceToken is the ARN of the service token that was passed to the custom resource
+	// Populated by the CloudFormation
+	ServiceToken *string `json:"ServiceToken,omitempty"`
 }
 
 func FromCfnEvent(event cfn.Event) (*SopsSyncResourcePropertys, error) {
-
+	logger := slog.With("Package", "event", "Function", "FromCfnEvent")
 	compiler := jsonSchemaValidate.NewCompiler()
 	schema, err := compiler.Compile(configSchema)
 	if err != nil {
-		log.Fatalf("Failed to compile schema: %v", err)
+		logger.Error("Failed to compile schema", "Error", err)
 	}
+
+	slog.Debug("FromCfnEvent", "Event", event)
 
 	result := schema.Validate(event.ResourceProperties)
 	if !result.IsValid() {
 		// Sort the details by evaluationPath
-		var sortedDetails []*jsonSchemaValidate.EvaluationResult
-		for _, detail := range result.Details[0].Details {
-			sortedDetails = append(sortedDetails, detail)
-		}
-		sort.Slice(sortedDetails, func(i, j int) bool {
-			return sortedDetails[i].EvaluationPath < sortedDetails[j].EvaluationPath
-		})
-		details, err := json.MarshalIndent(sortedDetails, "", "  ")
-		if err != nil {
-			return nil, fmt.Errorf("failed to marshal validation details: %v", err)
-		}
-		return nil, fmt.Errorf("Invalid resource properties:\n%s", string(details))
+		logger.Info("Invalid ResourceProperties", "EvaluationResult", result)
+		return nil, fmt.Errorf("invalid resource properties (more details in log):\n%v", event.ResourceProperties)
 	}
 
 	var props SopsSyncResourcePropertys
@@ -104,8 +98,7 @@ func FromCfnEvent(event cfn.Event) (*SopsSyncResourcePropertys, error) {
 }
 
 func (p *SopsSyncResourcePropertys) GeneratePhysicalResourceId() string {
-	re := regexp.MustCompile(`(^arn:.*:secretsmanager:|ssm:)(.*)`)
-	return re.ReplaceAllString(fmt.Sprintf("%v%v", p.SecretARN, p.ParameterName), `arn:custom:sopssync:$2`)
+	return fmt.Sprintf("%s:%s:%s", "arn:custom:sopssync:", p.ResourceType, p.Target)
 }
 
 func (p *SopsSyncResourcePropertys) sopsInlineToSopsEncryptedSecret() (*sops.EncryptedSopsSecret, error) {

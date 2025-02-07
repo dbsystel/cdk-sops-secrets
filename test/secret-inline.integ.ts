@@ -16,7 +16,7 @@ new SopsSecret(stack, 'SopsSecretJSON', {
 
 new SopsSecret(stack, 'SopsSecretYAML', {
   sopsFilePath: 'test-secrets/yaml/sopsfile.enc-age.yaml',
-  outputFileFormat: 'yaml',
+  rawOutput: true,
   // see test-secrets/README.md for further information regarding the test file
   sopsAgeKey: SecretValue.unsafePlainText(
     'AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3',
@@ -25,7 +25,7 @@ new SopsSecret(stack, 'SopsSecretYAML', {
 
 new SopsSecret(stack, 'SopsSecretYAMLasJSON', {
   sopsFilePath: 'test-secrets/yaml/sopsfile.enc-age.yaml',
-  outputFileFormat: 'json',
+  rawOutput: true,
   // see test-secrets/README.md for further information regarding the test file
   sopsAgeKey: SecretValue.unsafePlainText(
     'AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3',
@@ -34,7 +34,7 @@ new SopsSecret(stack, 'SopsSecretYAMLasJSON', {
 
 new SopsSecret(stack, 'SopsSecretDOTENV', {
   sopsFilePath: 'test-secrets/dotenv/encrypted-best-secret.env',
-  outputFileFormat: 'dotenv',
+  rawOutput: true,
   // see test-secrets/README.md for further information regarding the test file
   sopsAgeKey: SecretValue.unsafePlainText(
     'AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3',
@@ -43,7 +43,6 @@ new SopsSecret(stack, 'SopsSecretDOTENV', {
 
 new SopsSecret(stack, 'SopsSecretDOTENVasJSON', {
   sopsFilePath: 'test-secrets/dotenv/encrypted-best-secret.env',
-  outputFileFormat: 'json',
   // see test-secrets/README.md for further information regarding the test file
   sopsAgeKey: SecretValue.unsafePlainText(
     'AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3',
@@ -52,7 +51,6 @@ new SopsSecret(stack, 'SopsSecretDOTENVasJSON', {
 
 new SopsSecret(stack, 'SopsComplexSecretJSON', {
   sopsFilePath: 'test-secrets/json/sopsfile-complex.enc-age.json',
-  flatten: false,
   // see test-secrets/README.md for further information regarding the test file
   sopsAgeKey: SecretValue.unsafePlainText(
     'AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3',
@@ -64,7 +62,6 @@ const sopsComplexSecretJSONFlat = new SopsSecret(
   'SopsComplexSecretJSONFlat',
   {
     sopsFilePath: 'test-secrets/json/sopsfile-complex.enc-age.json',
-    flatten: true,
     // see test-secrets/README.md for further information regarding the test file
     sopsAgeKey: SecretValue.unsafePlainText(
       'AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3',
@@ -74,8 +71,6 @@ const sopsComplexSecretJSONFlat = new SopsSecret(
 
 new SopsSecret(stack, 'SopComplexSecretYAML', {
   sopsFilePath: 'test-secrets/yaml/sopsfile-complex.enc-age.yaml',
-  outputFileFormat: 'yaml',
-  flatten: false,
   // see test-secrets/README.md for further information regarding the test file
   sopsAgeKey: SecretValue.unsafePlainText(
     'AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3',
@@ -84,8 +79,6 @@ new SopsSecret(stack, 'SopComplexSecretYAML', {
 
 new SopsSecret(stack, 'SopComplexSecretYAMLFlat', {
   sopsFilePath: 'test-secrets/yaml/sopsfile-complex.enc-age.yaml',
-  outputFileFormat: 'yaml',
-  flatten: true,
   // see test-secrets/README.md for further information regarding the test file
   sopsAgeKey: SecretValue.unsafePlainText(
     'AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3',
@@ -94,8 +87,6 @@ new SopsSecret(stack, 'SopComplexSecretYAMLFlat', {
 
 new SopsSecret(stack, 'SopsComplexSecretYAMLasJSON', {
   sopsFilePath: 'test-secrets/yaml/sopsfile-complex.enc-age.yaml',
-  outputFileFormat: 'json',
-  flatten: false,
   // see test-secrets/README.md for further information regarding the test file
   sopsAgeKey: SecretValue.unsafePlainText(
     'AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3',
@@ -107,8 +98,6 @@ const sopsComplexSecretYAMLasJSONFlat = new SopsSecret(
   'SopsComplexSecretYAMLasJSONFlat',
   {
     sopsFilePath: 'test-secrets/yaml/sopsfile-complex.enc-age.yaml',
-    outputFileFormat: 'json',
-    flatten: true,
     // see test-secrets/README.md for further information regarding the test file
     sopsAgeKey: SecretValue.unsafePlainText(
       'AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3',

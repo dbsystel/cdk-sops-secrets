@@ -2,41 +2,45 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"strings"
 
 	"github.com/markussiebert/cdk-sops-secrets/internal/client"
 	"github.com/markussiebert/cdk-sops-secrets/internal/data"
 	"github.com/markussiebert/cdk-sops-secrets/internal/event"
-	"github.com/markussiebert/cdk-sops-secrets/internal/sops"
 )
 
 type BaseProps struct {
 	properties          *event.SopsSyncResourcePropertys
 	clients             client.AwsClient
-	tempArn             string
 	secretDecryptedData *data.Data
 }
 
-type HandleSecretProps struct {
-	BaseProps
-	outputFormat sops.Format
-	hash         string
-	secretArn    *string
-}
+func handleSecret(props BaseProps) (physicalResourceID string, data map[string]interface{}, err error) {
+	var outData *[]byte
+	var outDataErr error
+	if props.properties.ResourceType == event.SECRET {
+		seperator := "."
+		if props.properties.FlattenSeparator != nil {
+			seperator = *props.properties.FlattenSeparator
+		}
+		if err := props.secretDecryptedData.Flatten(seperator); err != nil {
+			return props.properties.GeneratePhysicalResourceId(), nil, err
+		}
+		if err := props.secretDecryptedData.StringifyValues(); err != nil {
+			return props.properties.GeneratePhysicalResourceId(), nil, err
+		}
+		outData, outDataErr = props.secretDecryptedData.ToJSON()
+	} else {
+		outData, outDataErr = props.secretDecryptedData.GetRaw()
+	}
 
-func handleSecret(props HandleSecretProps) (physicalResourceID string, data map[string]interface{}, err error) {
-	outData, outDataErr := produceOutput(props.outputFormat, props.secretDecryptedData)
 	if outDataErr != nil {
-		return props.tempArn, nil, outDataErr
-	}
-	if props.secretArn == nil {
-		return props.tempArn, nil, fmt.Errorf("SecretARN must be set for SECRET")
+		return props.properties.GeneratePhysicalResourceId(), nil, outDataErr
 	}
 
-	putSecretValueResp, putSecretValueRespErr := props.clients.SecretsManagerPutSecretValue(props.hash, *props.secretArn, outData)
+	putSecretValueResp, putSecretValueRespErr := props.clients.SecretsManagerPutSecretValue(*props.secretDecryptedData.Hash, props.properties.Target, outData)
 	if putSecretValueRespErr != nil {
-		return props.tempArn, nil, putSecretValueRespErr
+		return props.properties.GeneratePhysicalResourceId(), nil, putSecretValueRespErr
 	}
 	return *putSecretValueResp.ARN, map[string]interface{}{
 		"ARN":           *putSecretValueResp.ARN,
@@ -46,79 +50,58 @@ func handleSecret(props HandleSecretProps) (physicalResourceID string, data map[
 	}, nil
 }
 
-type HandleParameterMultiProps struct {
-	BaseProps
-	parameterKeyPrefix *string
-	encryptionKey      *string
-}
-
-func handleParameterMulti(props HandleParameterMultiProps) (physicalResourceID string, data map[string]interface{}, err error) {
-	if props.parameterKeyPrefix == nil || props.encryptionKey == nil {
-		return "", nil, fmt.Errorf("ParameterKeyPrefix and EncryptionKey must be set for PARAMETER_MULTI")
+func handleParameterMulti(props BaseProps) (physicalResourceID string, data map[string]interface{}, err error) {
+	seperator := "/"
+	if props.properties.FlattenSeparator != nil {
+		seperator = *props.properties.FlattenSeparator
 	}
-	log.Printf("Patching multiple string parameters")
-	v, e := props.secretDecryptedData.ToStringMap()
-	if e != nil {
-		return props.tempArn, nil, e
+	if err := props.secretDecryptedData.Flatten(seperator); err != nil {
+		return props.properties.GeneratePhysicalResourceId(), nil, err
 	}
-	for key, value := range v {
+	outData, outDataErr := props.secretDecryptedData.ToStringMap()
+	if outDataErr != nil {
+		return props.properties.GeneratePhysicalResourceId(), nil, outDataErr
+	}
+	if props.properties.EncryptionKey == nil {
+		return props.properties.GeneratePhysicalResourceId(), nil, fmt.Errorf("EncryptionKey must be set for PARAMETER_MULTI")
+	}
+	for key, value := range outData {
 		// Ass we flatten array to [number] path notations, we have to fix this for parameter store
-		fixedKey := strings.ReplaceAll(key, "[", props.properties.FlattenSeparator)
-		fixedKey = strings.ReplaceAll(fixedKey, "]", props.properties.FlattenSeparator)
-		fixedKey = fmt.Sprintf("%s%s", *props.parameterKeyPrefix, fixedKey)
-		fixedKey = strings.ReplaceAll(fixedKey, fmt.Sprintf("%s%s", props.properties.FlattenSeparator, props.properties.FlattenSeparator), props.properties.FlattenSeparator)
-		fixedKey = strings.TrimSuffix(fixedKey, props.properties.FlattenSeparator)
+		fixedKey := strings.ReplaceAll(key, "[", seperator)
+		fixedKey = strings.ReplaceAll(fixedKey, "]", seperator)
+		fixedKey = strings.TrimSuffix(fixedKey, seperator)
+		fixedKey = strings.ReplaceAll(fixedKey, seperator+seperator, seperator)
 		// Whitespaces are also not allowed, maybe more characters
 		fixedKey = strings.ReplaceAll(fixedKey, " ", "_")
-		_, err := props.clients.SsmPutParameter(fixedKey, &value, *props.encryptionKey)
+		// Prefix with Target
+		fixedKey = props.properties.Target + fixedKey
+		_, err := props.clients.SsmPutParameter(fixedKey, &value, *props.properties.EncryptionKey)
 		if err != nil {
-			return props.tempArn, nil, fmt.Errorf("failed to update ssm parameter:\n%v", err)
+			return props.properties.GeneratePhysicalResourceId(), nil, fmt.Errorf("failed to update ssm parameter:\n%v", err)
 		}
 	}
 
-	return props.tempArn, map[string]interface{}{
-		"Prefix": props.parameterKeyPrefix,
-		"Count":  len(v),
+	return props.properties.GeneratePhysicalResourceId(), map[string]interface{}{
+		"Prefix": props.properties.Target,
+		"Count":  len(outData),
 	}, nil
 }
 
-type HandleParameterProps struct {
-	BaseProps
-	outputFormat  sops.Format
-	parameterName *string
-	encryptionKey *string
-}
-
-func handleParameter(props HandleParameterProps) (physicalResourceID string, data map[string]interface{}, err error) {
-	outData, outDataErr := produceOutput(props.outputFormat, props.secretDecryptedData)
+func handleParameter(props BaseProps) (physicalResourceID string, data map[string]interface{}, err error) {
+	outData, outDataErr := props.secretDecryptedData.GetRaw()
 	if outDataErr != nil {
-		return props.tempArn, nil, outDataErr
+		return props.properties.GeneratePhysicalResourceId(), nil, outDataErr
 	}
-	if props.parameterName == nil || props.encryptionKey == nil {
-		return "", nil, fmt.Errorf("ParameterName and EncryptionKey must be set for PARAMETER")
+	if props.properties.EncryptionKey == nil {
+		return "", nil, fmt.Errorf("EncryptionKey must be set for PARAMETER")
 	}
-	putParameterResponse, putParameterResponseErr := props.clients.SsmPutParameter(*props.parameterName, outData, *props.encryptionKey)
+	putParameterResponse, putParameterResponseErr := props.clients.SsmPutParameter(*&props.properties.Target, outData, *props.properties.EncryptionKey)
 	if putParameterResponseErr != nil {
-		return props.tempArn, nil, fmt.Errorf("failed to update ssm parameter:\n%v", err)
+		return props.properties.GeneratePhysicalResourceId(), nil, fmt.Errorf("failed to update ssm parameter:\n%v", err)
 	}
-	return props.tempArn, map[string]interface{}{
-		"ParameterName": props.parameterName,
+	return props.properties.GeneratePhysicalResourceId(), map[string]interface{}{
+		"ParameterName": props.properties.Target,
 		"Version":       putParameterResponse.Version,
 		"Tier":          putParameterResponse.Tier,
 	}, nil
-}
-
-func produceOutput(outputFormat sops.Format, secretDecryptedData *data.Data) (*[]byte, error) {
-	switch outputFormat {
-	case sops.JSON:
-		return secretDecryptedData.ToJSON()
-	case sops.YAML:
-		return secretDecryptedData.ToYAML()
-	case sops.DOTENV:
-		return secretDecryptedData.ToDotEnv()
-	case sops.BINARY:
-		return secretDecryptedData.GetRaw()
-	default:
-		return nil, fmt.Errorf("unsupported output format %s", outputFormat)
-	}
 }

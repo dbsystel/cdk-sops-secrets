@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"reflect"
+	"slices"
 	"strings"
 
 	"gopkg.in/yaml.v3"
@@ -12,7 +13,7 @@ import (
 type Data struct {
 	parsed *any
 	raw    *[]byte
-	hash   *string
+	Hash   *string
 }
 
 var (
@@ -22,7 +23,7 @@ var (
 func FromBinary(in []byte, hash *string) (*Data, error) {
 	return &Data{
 		raw:  &in,
-		hash: hash,
+		Hash: hash,
 	}, nil
 }
 
@@ -35,7 +36,7 @@ func FromYAML(in []byte, hash *string) (*Data, error) {
 	return &Data{
 		parsed: &content,
 		raw:    &in,
-		hash:   hash,
+		Hash:   hash,
 	}, nil
 }
 
@@ -48,7 +49,7 @@ func FromJSON(in []byte, hash *string) (*Data, error) {
 	return &Data{
 		parsed: &content,
 		raw:    &in,
-		hash:   hash,
+		Hash:   hash,
 	}, nil
 }
 
@@ -68,7 +69,7 @@ func FromDotEnv(in []byte, hash *string) (*Data, error) {
 	return &Data{
 		parsed: &dotEnvMap,
 		raw:    &in,
-		hash:   hash,
+		Hash:   hash,
 	}, nil
 }
 
@@ -117,10 +118,15 @@ func (d *Data) ToStringMap() (map[string][]byte, error) {
 	}
 	if result, ok := (*d.parsed).(map[string]interface{}); ok {
 		stringMap := make(map[string][]byte)
-		for k, v := range result {
-			switch v.(type) {
+		keys := make([]string, 0, len(result))
+		for k := range result {
+			keys = append(keys, k)
+		}
+		slices.Sort(keys)
+		for _, k := range keys {
+			switch result[k].(type) {
 			case string, float32, float64, int, int32, int64, uint, uint32, uint64, bool, []byte:
-				stringMap[k] = []byte(fmt.Sprintf("%v", v))
+				stringMap[k] = []byte(fmt.Sprintf("%v", result[k]))
 			default:
 				return nil, fmt.Errorf(`value for key %s is a complex type (map or slice), maybe run "Flatten" first`, k)
 			}

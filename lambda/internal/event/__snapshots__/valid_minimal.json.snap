@@ -1,17 +1,4 @@
 
 [TestFromCfnEvent - 1]
-&event.SopsSyncResourcePropertys{
-    ResourceType:       "SECRET",
-    Format:             "yaml",
-    OutputFormat:       "json",
-    SecretARN:          (*string)(nil),
-    ParameterName:      (*string)(nil),
-    ParameterKeyPrefix: (*string)(nil),
-    EncryptionKey:      (*string)(nil),
-    SopsS3File:         (*event.SopsS3File)(nil),
-    SopsInline:         (*event.SopsInline)(nil),
-    Flatten:            false,
-    StringifyValues:    false,
-    FlattenSeparator:   "",
-}
+(*event.SopsSyncResourcePropertys)(nil)
 ---

@@ -14,13 +14,21 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+type putParameterCalls map[string]interface{}
+type putSecretValueCalls map[string]interface{}
+type getObjectEtagCalls map[string]client.SopsS3File
+type getObjectCalls map[string]client.SopsS3File
 type MockAwsClient struct {
-	snapsFileName string
-	t             *testing.T
+	snapsFileName  string
+	t              *testing.T
+	putParameter   putParameterCalls
+	putSecretValue putSecretValueCalls
+	getObjectEtag  getObjectEtagCalls
+	getObject      getObjectCalls
 }
 
 func (m *MockAwsClient) S3GetObject(file client.SopsS3File) ([]byte, error) {
-	snaps.WithConfig(snaps.Filename(m.snapsFileName)).MatchSnapshot(m.t, file)
+	m.getObject[file.Key] = file
 	localFile := "../" + file.Key
 	content, err := os.ReadFile(localFile)
 	if err != nil {
@@ -31,16 +39,12 @@ func (m *MockAwsClient) S3GetObject(file client.SopsS3File) ([]byte, error) {
 
 func (m *MockAwsClient) S3GetObjectETAG(file client.SopsS3File) (*string, error) {
 	etag := "mock-etag"
-	snaps.WithConfig(snaps.Filename(m.snapsFileName)).MatchSnapshot(m.t, file)
+	m.getObjectEtag[file.Key] = file
 	return &etag, nil
 }
 
 func (m *MockAwsClient) SecretsManagerPutSecretValue(sopsHash string, secretArn string, secretContent *[]byte) (*secretsmanager.PutSecretValueOutput, error) {
-	snaps.WithConfig(snaps.Filename(m.snapsFileName)).MatchSnapshot(m.t, map[string]interface{}{
-		"sopsHash":      sopsHash,
-		"secretArn":     secretArn,
-		"secretContent": string(*secretContent),
-	})
+	m.putSecretValue[secretArn] = map[string]interface{}{"sopsHash": sopsHash, "secretContent": string(*secretContent)}
 	arn := "mock-arn"
 	return &secretsmanager.PutSecretValueOutput{
 		ARN:           &arn,
@@ -51,11 +55,7 @@ func (m *MockAwsClient) SecretsManagerPutSecretValue(sopsHash string, secretArn 
 }
 
 func (m *MockAwsClient) SsmPutParameter(parameterName string, parameterContent *[]byte, keyId string) (*ssm.PutParameterOutput, error) {
-	snaps.WithConfig(snaps.Filename(m.snapsFileName)).MatchSnapshot(m.t, map[string]interface{}{
-		"parameterName":    parameterName,
-		"parameterContent": string(*parameterContent),
-		"keyId":            keyId,
-	})
+	m.putParameter[parameterName] = map[string]interface{}{"parameterContent": string(*parameterContent), "keyId": keyId}
 	return &ssm.PutParameterOutput{Version: 1}, nil
 }
 
@@ -103,11 +103,16 @@ func TestHandleRequestWithClients(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			clients := &MockAwsClient{
-				snapsFileName: tt.name,
-				t:             t,
+				snapsFileName:  tt.name,
+				t:              t,
+				putParameter:   putParameterCalls{},
+				putSecretValue: putSecretValueCalls{},
+				getObjectEtag:  getObjectEtagCalls{},
+				getObject:      getObjectCalls{},
 			}
 
 			physicalResourceID, data, err := HandleRequestWithClients(clients, tt.event)
+			snaps.WithConfig(snaps.Filename(tt.name)).MatchSnapshot(t, clients.getObject, clients.getObjectEtag, clients.putParameter, clients.putSecretValue)
 
 			assert.NoError(t, err)
 			assert.NotEmpty(t, physicalResourceID)
