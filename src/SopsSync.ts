@@ -311,7 +311,6 @@ export class SopsSync extends Construct {
         });
         Permissions.assetBucket(sopsAsset, provider.role);
         Permissions.encryptionKey(props.encryptionKey, provider.role);
-        if (typeof props.target === 'object' && 'secretArn' in props.target)
         Permissions.secret(props.secret, provider.role);
         Permissions.parameters(this, props.parameterNames, provider.role);
       } else {

@@ -5,6 +5,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"log/slog"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/config"
@@ -61,7 +62,9 @@ type SopsS3File struct {
 }
 
 func (c *Client) S3GetObject(file SopsS3File) (data []byte, err error) {
-	log.Printf("Downloading file '%s' from bucket '%s'\n", file.Key, file.Bucket)
+	logger := slog.With("Package", "client", "Function", "S3GetObject")
+	logger.Info("Downloading file", "Bucket", file.Bucket, "Key", file.Key)
+
 	resp, err := c.s3.GetObject(c.ctx, &s3.GetObjectInput{
 		Bucket: &file.Bucket,
 		Key:    &file.Key,
@@ -76,7 +79,7 @@ func (c *Client) S3GetObject(file SopsS3File) (data []byte, err error) {
 	if err != nil {
 		return nil, fmt.Errorf("read buffer error:\n%v", err)
 	}
-	log.Printf("Downloaded %d bytes", buf.Len())
+	logger.Info("Downloaded file", "Size", buf.Len())
 	return buf.Bytes(), nil
 }
 

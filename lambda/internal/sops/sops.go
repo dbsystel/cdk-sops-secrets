@@ -2,7 +2,7 @@ package sops
 
 import (
 	"fmt"
-	"log"
+	"log/slog"
 
 	"github.com/getsops/sops/v3/decrypt"
 	"github.com/markussiebert/cdk-sops-secrets/internal/data"
@@ -47,12 +47,13 @@ type DecryptedSopsSecret struct {
 }
 
 func (e EncryptedSopsSecret) Decrypt() (*DecryptedSopsSecret, error) {
-	log.Printf("Decrypting content with format %s\n", e.Format)
+	logger := slog.With("Package", "sops", "Function", "Decrypt")
+	logger.Info("Decrypting content", "Format", e.Format)
 	cleartext, err := decrypt.Data(e.Content, string(e.Format))
 	if err != nil {
 		return nil, fmt.Errorf("decryption error:\n%v", err)
 	}
-	log.Println("Decrypted")
+	logger.Info("Decryption successful")
 	return &DecryptedSopsSecret{
 		content: cleartext,
 		format:  e.Format,
