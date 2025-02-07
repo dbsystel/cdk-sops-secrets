@@ -1,6 +1,8 @@
 package sops
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
 	"log"
 
@@ -53,6 +55,24 @@ func (e EncryptedSopsSecret) Decrypt() (*DecryptedSopsSecret, error) {
 		return nil, fmt.Errorf("decryption error:\n%v", err)
 	}
 	log.Println("Decrypted")
+
+	if e.Format == JSON {
+		var jsonObj interface{}
+		var buf bytes.Buffer
+		err := json.Unmarshal(cleartext, &jsonObj)
+		if err != nil {
+			return nil, fmt.Errorf("decoding error:\n%v", err)
+		}
+		encoder := json.NewEncoder(&buf)
+		encoder.SetEscapeHTML(false)
+		encoder.SetIndent("", "	") // tab inside
+		err = encoder.Encode(jsonObj)
+		if err != nil {
+			return nil, fmt.Errorf("encoding error:\n%v", err)
+		}
+		cleartext = bytes.TrimSpace(buf.Bytes())
+	}
+
 	return &DecryptedSopsSecret{
 		content: cleartext,
 		format:  e.Format,

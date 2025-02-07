@@ -1,23 +1,6 @@
 
 [TestDecrypt/sopsfile-complex.enc-age.json - 1]
 {
-    "some": {
-        "deep": {
-            "nested": {
-                "object": "structure",
-                "arrays": [
-                    "with",
-                    "several",
-                    {
-                        "values": {
-                            "and": "objects"
-                        }
-                    }
-                ]
-            }
-        },
-        "notsodeep": "struct"
-    },
     "and now": {
         "some": [
             {
@@ -33,6 +16,28 @@
                 "tests": "Finish!"
             }
         ]
+    },
+    "some": {
+        "deep": {
+            "nested": {
+                "arrays": [
+                    "with",
+                    "several",
+                    {
+                        "values": {
+                            "and": "objects"
+                        }
+                    }
+                ],
+                "object": "structure"
+            }
+        },
+        "notsodeep": "struct"
+    },
+    "with": {
+        "TestValue": "test <test@test.test>",
+        "TestValue2": "&",
+        "TestValue3": "@"
     }
 }
 ---
