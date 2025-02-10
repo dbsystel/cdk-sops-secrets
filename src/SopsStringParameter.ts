@@ -25,10 +25,15 @@ export interface SopsCommonParameterProps extends SopsSyncOptions {
    * @default none
    */
   readonly description?: string;
+  /**
+   * The customer-managed encryption key to use for encrypting the secret value.
+   *
+   * @default - A default KMS key for the account and region is used.
+   */
   readonly encryptionKey: IKey;
 }
 
-export interface SopsStringParameterProps extends SopsCommonParameterProps{
+export interface SopsStringParameterProps extends SopsCommonParameterProps {
   /**
    * The name of the parameter.
    *
@@ -72,7 +77,7 @@ export class SopsStringParameter extends Construct implements IStringParameter {
       tier: props.tier,
       stringValue: ' ',
     });
-    
+
     this.parameterArn = this.parameter.parameterArn;
     this.parameterName = this.parameter.parameterName;
     this.parameterType = this.parameter.parameterType;
@@ -82,7 +87,7 @@ export class SopsStringParameter extends Construct implements IStringParameter {
       encryptionKey: this.parameter.encryptionKey,
       target: this.parameter.parameterName,
       resourceType: ResourceType.PARAMETER,
-      parameterNames: [this.parameter.parameterName],
+      parameterNames: [props.parameterName ?? this.parameter.parameterName],
       ...(props as SopsSyncOptions),
     });
   }

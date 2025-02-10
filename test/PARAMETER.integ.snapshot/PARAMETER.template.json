@@ -1,0 +1,388 @@
+{
+ "Resources": {
+  "Json7D959341": {
+   "Type": "AWS::SSM::Parameter",
+   "Properties": {
+    "Name": "/Json",
+    "Type": "String",
+    "Value": " "
+   }
+  },
+  "JsonSopsSyncSopsSecretParameterProviderManagedPolicyParameterAccess0B4B19A62": {
+   "Type": "AWS::IAM::ManagedPolicy",
+   "Properties": {
+    "Description": "Policy to grant parameter provider permissions to put parameter",
+    "Path": "/",
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": "ssm:PutParameter",
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::Join": [
+         "",
+         [
+          "arn:aws:ssm:",
+          {
+           "Ref": "AWS::Region"
+          },
+          ":",
+          {
+           "Ref": "AWS::AccountId"
+          },
+          ":parameter/Json"
+         ]
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   }
+  },
+  "JsonSopsSync13335C85": {
+   "Type": "Custom::SopsSync",
+   "Properties": {
+    "ServiceToken": {
+     "Fn::GetAtt": [
+      "SingletonLambdaSopsSyncProviderAA18D140",
+      "Arn"
+     ]
+    },
+    "SopsInline": {
+     "Content": "ewoJImFwaUtleSI6ICJFTkNbQUVTMjU2X0dDTSxkYXRhOmxMYlhWRWhCUktYaUdHa0JoNUtsdGdVQm9BPT0saXY6bHVheUpuaWlYSHdBM1owclp5eGVGMDB4bEhmTXdyWU1pWWgrYWhQNkF5bz0sdGFnOmwzazNwU256UlRBS2VBSE94dytmR3c9PSx0eXBlOnN0cl0iLAoJImRhdGFiYXNlIjogewoJCSJ1c2VyIjogIkVOQ1tBRVMyNTZfR0NNLGRhdGE6a1F0a1Fhcz0saXY6K3F5SjlGVVhvTXRjcGNmZFQ3WlRPTkhmM1NzR2JBZkp6bkpGdDVlL3BWRT0sdGFnOjJDaW5telZlcW42NTRNZllkaGtxeGc9PSx0eXBlOnN0cl0iLAoJCSJwYXNzd29yZCI6ICJFTkNbQUVTMjU2X0dDTSxkYXRhOmpId0NFSmgwMkE4cyxpdjppbXdIVzRVN0RWMDltNU5Dek81azBBdVJaZFkvVEsyK0YyOFZiV0ZINnlnPSx0YWc6cGNRM2g0MEQ5QXZCRlFFbmlSeE1vdz09LHR5cGU6c3RyXSIsCgkJImhvc3QiOiAiRU5DW0FFUzI1Nl9HQ00sZGF0YTpVM0p4L0drQnlLTFBuZWJzcDVVPSxpdjpjQ3VXOTlrdHlBSTRkVlF6RHQxL2pzZ0xQNXBNZFlZQ3NpNkFocXNnVlhzPSx0YWc6djE2enlZdTVBMVRWQlA0YmFPeEIxZz09LHR5cGU6c3RyXSIKCX0sCgkidG9rZW5zIjogWwoJCXsKCQkJInNlcnZpY2UiOiAiRU5DW0FFUzI1Nl9HQ00sZGF0YTpNTFFXOHRvY2dDYz0saXY6Ky9mb1F5UjdxMGh2Yk9rR2l2YXVVQVdkaWhmb0hLendnU1lkdjFHcTI5Yz0sdGFnOk8yZWJtVDJ1OU5mVnFvbzBxNEo5N3c9PSx0eXBlOnN0cl0iLAoJCQkidG9rZW4iOiAiRU5DW0FFUzI1Nl9HQ00sZGF0YTpwY3JGUVFEayxpdjorcS8zaTduaVR3bi9qeU9xZUhKOGhVVkE0ak44Q3FQWHVmV3NJUmtrcEpBPSx0YWc6YnVJczhHNE9maXVKUGYxMDgvc0RoUT09LHR5cGU6c3RyXSIKCQl9LAoJCXsKCQkJInNlcnZpY2UiOiAiRU5DW0FFUzI1Nl9HQ00sZGF0YTpneVJuSWlnUFhoOD0saXY6b1ROclhUWktYNzd5eW52Y1F3aHpYaW8yckVKWHNJQk1VRDZET0NScjRmQT0sdGFnOjJPY2habWJxZGNIZGxqQzZDS2t1bEE9PSx0eXBlOnN0cl0iLAoJCQkidG9rZW4iOiAiRU5DW0FFUzI1Nl9HQ00sZGF0YTpFd0dDWVQzayxpdjoxSE16VURxbVhySTNiaEdheGtuTWZ0d0VaOENjMXN6eGFNVjZBMTY0bWZjPSx0YWc6MGI1ZVJ3eFpENGo5dWppeFRqZkZaZz09LHR5cGU6c3RyXSIKCQl9CgldLAoJInNvbWVPdGhlcktleSI6ICJFTkNbQUVTMjU2X0dDTSxkYXRhOnZWbHAzRUUxbWdUUVA5SlNER2RQZi8raDJGU3Fhalk9LGl2OnhZR0lvVFlQRW4rNGF4MkxUS2l4bFFiNU5hb3RWdyswUVZmRlNtOVFOV289LHRhZzorVTRKUWJtLzhtRldBbWxNcnlnN0xBPT0sdHlwZTpzdHJdIiwKCSJzcGVjaWZpYyI6IHsKCQkiU3BlY2lhbENoYXJhY3RlcnMiOiAiRU5DW0FFUzI1Nl9HQ00sZGF0YTp1UHFGT1NqVU1nVmRyb1VCSU02cWVybk9zQT09LGl2OnJTU2NOZ2wzZzY2K0lUQVlZamp5VTJIekJXWUR5OGxCY0NHR1hGdkhJZ289LHRhZzpKRXczeVlkaUxLK0YrTUN5V2N0aDZ3PT0sdHlwZTpzdHJdIiwKCQkiSFRNTEVuY29kaW5nVGVzdDEiOiAiRU5DW0FFUzI1Nl9HQ00sZGF0YTprc0N1M0cwckcyTmY1K2MvOXZTczBhb2wreG52LGl2OjcrUEp0M1E5MUNIbXZSSHFESWJBcFNNYVlMb1pxM0QxL0JuYUEzQ2ZzTXc9LHRhZzpTL0F0MmNsU3NHQXZIU2tqTHdldHFRPT0sdHlwZTpzdHJdIiwKCQkiSFRNTEVuY29kaW5nVGVzdDIiOiAiRU5DW0FFUzI1Nl9HQ00sZGF0YTpadz09LGl2OmpIM1JrUkpzTURMK2dQUHpwTHYxZ1BYL1RMeTlVMXpTUHFJcEY5N3dUYjQ9LHRhZzozWGFmN0pXWVl4SVFRUjg4ZWIrRkRnPT0sdHlwZTpzdHJdIiwKCQkiSFRMTUVuY29kaW5nVGVzdDMiOiAiRU5DW0FFUzI1Nl9HQ00sZGF0YTpVQT09LGl2OlpZcUNoTUxCZlFvS0hjbHU5NHNiY0k5OHNWR3Z5bU0zN0Vzc2h2ejBJdXc9LHRhZzpVVjF6RmltY2dFVEQwbmNUanBnRHZnPT0sdHlwZTpzdHJdIiwKCQkibnVsbCI6IG51bGwsCgkJImJvb2xlYW4iOiAiRU5DW0FFUzI1Nl9HQ00sZGF0YTp3MnNZL0E9PSxpdjpLKzJBTDhEYTcwKzFtQlZ6dXEyZU9nemtFRndlbWJFY3lYOEhYS0lBcVI4PSx0YWc6S1lDdzNtNlBUOHJjdTFpL21HWko1Zz09LHR5cGU6Ym9vbF0iLAoJCSJudW1iZXIxIjogIkVOQ1tBRVMyNTZfR0NNLGRhdGE6M1kxZixpdjpNQ0NUK0V3Tm5wVkxldS9La2lRTmxJR0dva2ltaDZVN1BORUZFeXIxdTRBPSx0YWc6alpWYU1ObjRyZ2grNWtXZ056aUlpZz09LHR5cGU6ZmxvYXRdIiwKCQkibnVtYmVyMiI6ICJFTkNbQUVTMjU2X0dDTSxkYXRhOkVQZ1REN1p4VlE9PSxpdjorWkpnZkQyVi9zM1hCalF1enEweXNTNWZZdFMyUDJoWDcyZGo5cW11SENFPSx0YWc6Zk05Zyt3dHViakFmalhQSEN2c1hWQT09LHR5cGU6ZmxvYXRdIgoJfSwKCSJzb3BzIjogewoJCSJrbXMiOiBudWxsLAoJCSJnY3Bfa21zIjogbnVsbCwKCQkiYXp1cmVfa3YiOiBudWxsLAoJCSJoY192YXVsdCI6IG51bGwsCgkJImFnZSI6IFsKCQkJewoJCQkJInJlY2lwaWVudCI6ICJhZ2UxZGpsbHcycHp1cHJycWMwZW41bTh2YzhrNWdlM3RtMGY2ZzdjajBjMGdsZnpwNDR2ZGM0cWw4bmd2dSIsCgkJCQkiZW5jIjogIi0tLS0tQkVHSU4gQUdFIEVOQ1JZUFRFRCBGSUxFLS0tLS1cbllXZGxMV1Z1WTNKNWNIUnBiMjR1YjNKbkwzWXhDaTArSUZneU5UVXhPU0JqU0N0dE1GbFlaRTlGWmpkSFMyZ3dcblFqZGplRk5tUm1sUVZuVllNSEl2VXpsTFRFSkZaVkZ4WjFFMENtRnhXblJ3ZWpOTVpYcEJObnBsYVVWRGR6WnRcblFXWkdWRUo1UXpNelVVaHVkMGhrU1c1dmRHRmlVMDBLTFMwdElEVnBSVEpITWxocVRHSlpTeXRyYW5aYVNXMWFcbmNsQTBZV0ZVTlhJclkyeDJlbWg1ZEdGVGQxVmpZekFLQTlSOUMrNDJiWjJiS0RVbjhLNlNEZlE1S2tySUNZM3JcbjBOMjdWNThaUEFvNDh0cWtoZWEvbzBEQnRrZGxsckJIT3hHZU9JSm0vd0ZPZm5FVHJaNjhWdz09XG4tLS0tLUVORCBBR0UgRU5DUllQVEVEIEZJTEUtLS0tLVxuIgoJCQl9CgkJXSwKCQkibGFzdG1vZGlmaWVkIjogIjIwMjUtMDItMDdUMTQ6NDc6MTRaIiwKCQkibWFjIjogIkVOQ1tBRVMyNTZfR0NNLGRhdGE6N0N1Q2o3c0plS0ZaRnBGcDZqaTNCZkd6RFkrWDZaNWVmY2NwVHNiRGo0Y2svUVl1K3gzaUxraXJoaHJHSDBoRXVONnhIS0Fqcnkvam1DUkpwR2grN0VHbTNmZlFvU1l1OW9DK3VqU1gzKzdhV2ZoT3Y4Uk90N1IzOFo5anpFbjFxcGhLRVg5bEszTytJcnVYSGZVRSs2dC96cXdsSVZqTUdhSTFBUmJMQktBPSxpdjpuOGNlSGI0V3dYeTRWSXgvbUpOV05Nd0diRjZJdk11T3cvWVFhN0p4UmlZPSx0YWc6aGZVM1NiWkU3Y0FKOVFUWFJHWmo3dz09LHR5cGU6c3RyXSIsCgkJInBncCI6IG51bGwsCgkJInVuZW5jcnlwdGVkX3N1ZmZpeCI6ICJfdW5lbmNyeXB0ZWQiLAoJCSJ2ZXJzaW9uIjogIjMuOS40IgoJfQp9",
+     "Hash": "e79149a81c3a4f62383c195070a39111284086e5c754f516b315c09943583dfb"
+    },
+    "Format": "json",
+    "EncryptionKey": "58b75958-883a-440c-842c-85af5d33a5bb",
+    "ResourceType": "PARAMETER",
+    "Target": {
+     "Ref": "Json7D959341"
+    }
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete"
+  },
+  "SingletonLambdaSopsSyncProviderServiceRoleC45BBD25": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     },
+     {
+      "Ref": "JsonSopsSyncSopsSecretParameterProviderManagedPolicyParameterAccess0B4B19A62"
+     },
+     {
+      "Ref": "YamlSopsSyncSopsSecretParameterProviderManagedPolicyParameterAccess0A22A1629"
+     },
+     {
+      "Ref": "DotEnvSopsSyncSopsSecretParameterProviderManagedPolicyParameterAccess096D6CB67"
+     },
+     {
+      "Ref": "BinarySopsSyncSopsSecretParameterProviderManagedPolicyParameterAccess0957B5711"
+     }
+    ]
+   }
+  },
+  "SingletonLambdaSopsSyncProviderServiceRoleDefaultPolicy45D64FF6": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "kms:Decrypt",
+        "kms:Encrypt",
+        "kms:ReEncrypt*",
+        "kms:GenerateDataKey*"
+       ],
+       "Effect": "Allow",
+       "Resource": "arn:aws:kms:eu-central-1:505755377845:key/58b75958-883a-440c-842c-85af5d33a5bb"
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "SingletonLambdaSopsSyncProviderServiceRoleDefaultPolicy45D64FF6",
+    "Roles": [
+     {
+      "Ref": "SingletonLambdaSopsSyncProviderServiceRoleC45BBD25"
+     }
+    ]
+   }
+  },
+  "SingletonLambdaSopsSyncProviderAA18D140": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+     },
+     "S3Key": "d4fa67588efc8e80877fce3ed8397e0350420ed5859c6d2a36fefc0f1604fae4.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "SOPS_AGE_KEY": "AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3"
+     }
+    },
+    "Handler": "bootstrap",
+    "Role": {
+     "Fn::GetAtt": [
+      "SingletonLambdaSopsSyncProviderServiceRoleC45BBD25",
+      "Arn"
+     ]
+    },
+    "Runtime": "provided.al2",
+    "Timeout": 60
+   },
+   "DependsOn": [
+    "SingletonLambdaSopsSyncProviderServiceRoleDefaultPolicy45D64FF6",
+    "SingletonLambdaSopsSyncProviderServiceRoleC45BBD25"
+   ]
+  },
+  "Yaml8A8E441C": {
+   "Type": "AWS::SSM::Parameter",
+   "Properties": {
+    "Name": "/Yaml",
+    "Type": "String",
+    "Value": " "
+   }
+  },
+  "YamlSopsSyncSopsSecretParameterProviderManagedPolicyParameterAccess0A22A1629": {
+   "Type": "AWS::IAM::ManagedPolicy",
+   "Properties": {
+    "Description": "Policy to grant parameter provider permissions to put parameter",
+    "Path": "/",
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": "ssm:PutParameter",
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::Join": [
+         "",
+         [
+          "arn:aws:ssm:",
+          {
+           "Ref": "AWS::Region"
+          },
+          ":",
+          {
+           "Ref": "AWS::AccountId"
+          },
+          ":parameter/Yaml"
+         ]
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   }
+  },
+  "YamlSopsSync65050259": {
+   "Type": "Custom::SopsSync",
+   "Properties": {
+    "ServiceToken": {
+     "Fn::GetAtt": [
+      "SingletonLambdaSopsSyncProviderAA18D140",
+      "Arn"
+     ]
+    },
+    "SopsInline": {
+     "Content": "YXBpS2V5OiBFTkNbQUVTMjU2X0dDTSxkYXRhOnI2WWZyd0drVkZ4QkY4bUhFY3NQYXhNdFVRPT0saXY6LzhycjRLNW1CeExpM2pSMmxIZmVleVZPL3dRWTAwcGMvL093NXZxWTE3UT0sdGFnOitkZ0xhS2VTeE5OQnVPRUZJZnRPWnc9PSx0eXBlOnN0cl0KZGF0YWJhc2U6CiAgICB1c2VyOiBFTkNbQUVTMjU2X0dDTSxkYXRhOnNkc1V5dm89LGl2OklWaW9KQ1Z5Uk9laEF0RzZ4Ym1BWnpkNTJIUXZrMGVaSXRNQmpCQXZxeDg9LHRhZzowcHVtemR5SDV3aUVBck1tbXJhM1VRPT0sdHlwZTpzdHJdCiAgICBwYXNzd29yZDogRU5DW0FFUzI1Nl9HQ00sZGF0YTpDU1E4akZyeG5MUVksaXY6aFhMRU5tRzhxTEdzR2RXdjN3YnJqNUxmMnpiRjFUb05Jd1M0eTF1V0VYZz0sdGFnOjhRRENNeUE2OWRZbDU4eEl1UDFEY0E9PSx0eXBlOnN0cl0KICAgIGhvc3Q6IEVOQ1tBRVMyNTZfR0NNLGRhdGE6eGZVMmVDKy8rdXZDa0hZOFFIWT0saXY6VUxXZHZvYTZyOEYxZzIrWkYzeFB3YWsxRWRoRFdtbmRzTzVSVXhBVlBFOD0sdGFnOktHbEpHMUlNU1duNG5FdE1hT1NzZGc9PSx0eXBlOnN0cl0KdG9rZW5zOgogICAgLSBzZXJ2aWNlOiBFTkNbQUVTMjU2X0dDTSxkYXRhOnRSU1VwR0tJRW1jPSxpdjpoaS8zOGlDL0dsYzRueFVrUllCVjJjeTk0NmsrYXpYRnRFZEpPTlAxZy93PSx0YWc6R1EwL1dFaHRleXFDcHNFdi9TRnJiQT09LHR5cGU6c3RyXQogICAgICB0b2tlbjogRU5DW0FFUzI1Nl9HQ00sZGF0YTpDR25TTzRIRSxpdjpMSDB4VldOVGJCbUhQUTFPaVA1K3VSRmZHL0U3SzdPR1lxS0hYT0tqZThRPSx0YWc6c09ZaGdLS1Yxb2dPczdQSnJCcnNqdz09LHR5cGU6c3RyXQogICAgLSBzZXJ2aWNlOiBFTkNbQUVTMjU2X0dDTSxkYXRhOm9ocVh2Wi83SFd3PSxpdjpDcGpVZFRiR0w0VEdSSVd0RUp4Wjg5MjN0dy9Rb213K2tDdGlIdUZpR1FjPSx0YWc6OTVUUVVhM05TVzFxR1Q4TE5zRWdiUT09LHR5cGU6c3RyXQogICAgICB0b2tlbjogRU5DW0FFUzI1Nl9HQ00sZGF0YTpJMEkvWGdXbCxpdjo4N0UvYzdEaUdLVDIydGRkQ0ZxQnVQT0M3MzZ5djVZRDlNLytnM1BpWlg0PSx0YWc6WjFwcklIZkgzOW0yVTZpMktlVjIyUT09LHR5cGU6c3RyXQpzb21lT3RoZXJLZXk6IEVOQ1tBRVMyNTZfR0NNLGRhdGE6SFNNRndNWEhuaTE4dFRPUHcyREFFMGc1WFFSOW9Vdz0saXY6NHhUUk84VFloYmxhMDFnemF0aGY3VUJIaDhHdGhkOTdHSXhYLzBrQ1h3Zz0sdGFnOjRwc0VGVzNPMlJxcVlONjhVMjNQeHc9PSx0eXBlOnN0cl0Kc3BlY2lmaWM6CiAgICBTcGVjaWFsQ2hhcmFjdGVyczogRU5DW0FFUzI1Nl9HQ00sZGF0YTpFL2pxa1B2VVNiaFpQYm0wdnJDalgxc29MQT09LGl2OlJ0bzBFeVFUMm96Rm1rMXR2azN4UkR3Vm5OcHJBNXhqcENOR1RaaWViMEE9LHRhZzpwUnZoc1huVnJiMnFHRzFvY3U1bUt3PT0sdHlwZTpzdHJdCiAgICBIVE1MRW5jb2RpbmdUZXN0MTogRU5DW0FFUzI1Nl9HQ00sZGF0YTpaZGM1dlpPQklRUjhtY2xyUHl0dm15ZzRIUWVELGl2OldHelMwK0xTUDlYYUZlcWgxYVptbWdPNTRaRG44VGYyWUlPaXdtSkhwMEk9LHRhZzpaZEEveFg3Mkp6Qll4R1ZjVjJhMlJBPT0sdHlwZTpzdHJdCiAgICBIVE1MRW5jb2RpbmdUZXN0MjogRU5DW0FFUzI1Nl9HQ00sZGF0YTpYdz09LGl2OmJsWUpYd1Qrd0VyZ1Zzd2FDVzhvV1lubnk4OG9MMXl2Rng4ZTNKY0UwOVE9LHRhZzorWVV5MDJ4YUpocXFhdEJ0a2o5NzJBPT0sdHlwZTpzdHJdCiAgICBIVExNRW5jb2RpbmdUZXN0MzogRU5DW0FFUzI1Nl9HQ00sZGF0YTovdz09LGl2Oi80ZVNWdEZRN2NHb05JN1VPTXc4bHkwK2FpWDdXaXZVNGloTWxWS1VENWs9LHRhZzpjTFNPOENSMElNK1k1TFpmZE00M0JRPT0sdHlwZTpzdHJdCiAgICAibnVsbCI6IG51bGwKICAgIGJvb2xlYW46IEVOQ1tBRVMyNTZfR0NNLGRhdGE6RDFpYVVBPT0saXY6U3VyVUFCaHFNK1VZaUNaYUVtanlHS1phaTJqREpMM25uWko0MXRNTkhCUT0sdGFnOmdld0ZsY2NVZGIzSXlYN2tQK1NQM3c9PSx0eXBlOmJvb2xdCiAgICBudW1iZXIxOiBFTkNbQUVTMjU2X0dDTSxkYXRhOk1jQk0saXY6VmpZRXBkVmdMc2pYR20yVlJEOUx1MEJYeU9NRmprVU1RSWp2dVZvZDVjcz0sdGFnOjdFZm5LMHFjSVRSZzFPYnJpdTdFZ2c9PSx0eXBlOmludF0KICAgIG51bWJlcjI6IEVOQ1tBRVMyNTZfR0NNLGRhdGE6d0xjdTBYanlKZz09LGl2OnRaVC9BTVlNVG9aaTVudW82alV4d0IwMUhQWDRIaEhwZHQ2djd1elo5U0U9LHRhZzpmZ0s0R2ZpNVlCQTFMdXBKQlgyc0JBPT0sdHlwZTpmbG9hdF0Kc29wczoKICAgIGttczogW10KICAgIGdjcF9rbXM6IFtdCiAgICBhenVyZV9rdjogW10KICAgIGhjX3ZhdWx0OiBbXQogICAgYWdlOgogICAgICAgIC0gcmVjaXBpZW50OiBhZ2UxZGpsbHcycHp1cHJycWMwZW41bTh2YzhrNWdlM3RtMGY2ZzdjajBjMGdsZnpwNDR2ZGM0cWw4bmd2dQogICAgICAgICAgZW5jOiB8CiAgICAgICAgICAgIC0tLS0tQkVHSU4gQUdFIEVOQ1JZUFRFRCBGSUxFLS0tLS0KICAgICAgICAgICAgWVdkbExXVnVZM0o1Y0hScGIyNHViM0puTDNZeENpMCtJRmd5TlRVeE9TQlljM0Y2WkZZNFJGbGxiU3RwTXpFegogICAgICAgICAgICBXbXh1TnpkdU15dGpSa2gxWTI0eE1VTm9WbmRDWVVOaGFHdEpDakp3WjFBelpsQlZjVmQ2WTJORmJHUjRNbVZGCiAgICAgICAgICAgIGJXOU9XV2gyYm1SamFGUnJPRm95ZVdWV2JuSlRlV01LTFMwdElFeHlWRE5GUlhwRlRFcFJNell2V0cxUGFXTnoKICAgICAgICAgICAgVFc5NmQwdHFhakJMYzAxcGFWbEVaSEZYUjFGMmJYY0tMSUpnN3lUbTB1Q2lpUGlLc25zQXlSTS9hRFovZk52dwogICAgICAgICAgICBpaWxLVEI1d1AxcWRzN1N0Y1ZMSjE4UkdVbzl2dUFBOWlQME5aQ1A2a0tMVmdaYmNKL2FTZHc9PQogICAgICAgICAgICAtLS0tLUVORCBBR0UgRU5DUllQVEVEIEZJTEUtLS0tLQogICAgbGFzdG1vZGlmaWVkOiAiMjAyNS0wMi0wN1QxNDo0NzowOVoiCiAgICBtYWM6IEVOQ1tBRVMyNTZfR0NNLGRhdGE6U3gyRDZTRitwUUhRK291eDdsTmV4c2hQb2RjZ2UzdzJnNml4TFRqSy9Oa0VneUJNbWdzVnlCR1dNbCtrU2s2UFk1OEhUNEFRcHlCdHVpVUtqM2pTSjRwWm1lcGdXSUFkeEtwQjNzbHF5MzhnZ2hZUDIvQUhTYkhZUnpoTFFJT3h4RE8waW5Vd3JvSGExM0h0dEpDekRmWEtOaUtyYk1SQVFLaytGV0Y2eDN3PSxpdjo3c0JqU2hWV3JXMTc3d1pCdityeFc2ZXFLMFZRY2pqR1dWdEh3OWRiR1RZPSx0YWc6Qm8zb1lGZ2JBVGJOVndEdFAyUkFhdz09LHR5cGU6c3RyXQogICAgcGdwOiBbXQogICAgdW5lbmNyeXB0ZWRfc3VmZml4OiBfdW5lbmNyeXB0ZWQKICAgIHZlcnNpb246IDMuOS40Cg==",
+     "Hash": "9912a0ccf8001b767579817f902a5d7e030019cc7b6db34c028f4a0f9079fddf"
+    },
+    "Format": "yaml",
+    "EncryptionKey": "58b75958-883a-440c-842c-85af5d33a5bb",
+    "ResourceType": "PARAMETER",
+    "Target": {
+     "Ref": "Yaml8A8E441C"
+    }
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete"
+  },
+  "DotEnv36F67242": {
+   "Type": "AWS::SSM::Parameter",
+   "Properties": {
+    "Name": "/DotEnv",
+    "Type": "String",
+    "Value": " "
+   }
+  },
+  "DotEnvSopsSyncSopsSecretParameterProviderManagedPolicyParameterAccess096D6CB67": {
+   "Type": "AWS::IAM::ManagedPolicy",
+   "Properties": {
+    "Description": "Policy to grant parameter provider permissions to put parameter",
+    "Path": "/",
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": "ssm:PutParameter",
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::Join": [
+         "",
+         [
+          "arn:aws:ssm:",
+          {
+           "Ref": "AWS::Region"
+          },
+          ":",
+          {
+           "Ref": "AWS::AccountId"
+          },
+          ":parameter/DotEnv"
+         ]
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   }
+  },
+  "DotEnvSopsSyncBB91B728": {
+   "Type": "Custom::SopsSync",
+   "Properties": {
+    "ServiceToken": {
+     "Fn::GetAtt": [
+      "SingletonLambdaSopsSyncProviderAA18D140",
+      "Arn"
+     ]
+    },
+    "SopsInline": {
+     "Content": "YXBpS2V5PUVOQ1tBRVMyNTZfR0NNLGRhdGE6eU1qVm12ZzhuZ3Bsc3c2QTJFZC9MOXhyRmc9PSxpdjpDcUlSRW12ZDR2dE1tWFIwc0tGVzRCelpWYTlnMHJUajU1OFJmd0JBeXA4PSx0YWc6dURka0EvSFRFTkZJYUZ6cWxIVVRkdz09LHR5cGU6c3RyXQpkYXRhYmFzZTpob3N0PUVOQ1tBRVMyNTZfR0NNLGRhdGE6TlFHQkpjRW1iM01rOTZYTFBLcz0saXY6bGhrcThrY0gvYXhWK3dSOGQvcWNYRDBpc1NuK0JBRlQrajRnRDFrQ3FWYz0sdGFnOldLOUNkOXhRbzIwQzcyNlRZTkJ3Ync9PSx0eXBlOnN0cl0KZGF0YWJhc2U6cGFzc3dvcmQ9RU5DW0FFUzI1Nl9HQ00sZGF0YTpvNkN3NmxSQ0t3VzMsaXY6YWIxeExjcmY5WFdyalhBZGRXL3ZGaHpPUUhxYk95UmlNVDFXRFoyRTk0VT0sdGFnOnhheTRxcXBYVkZHNVNBWHN3dEt1V2c9PSx0eXBlOnN0cl0KZGF0YWJhc2U6dXNlcj1FTkNbQUVTMjU2X0dDTSxkYXRhOllha1p2RlU9LGl2Oi9Va002RUUydjltaU1uZ2c1aHJGVytUTkM2TzlTSGdKdnBFcGJCUzRpWms9LHRhZzpjUTdCZ04vcmxmcHBCYUkyZVhOQjRBPT0sdHlwZTpzdHJdCnNvbWVPdGhlcktleT1FTkNbQUVTMjU2X0dDTSxkYXRhOmpiclVRMlpOM0crMm1zMWt0VWJCNG40R0tNaHpzMVE9LGl2Om54QnI3aFlhS1dJUSt3MlI5eWRxUmdFOFdZM3dXSllIUkxFTUw0b1h2Q0U9LHRhZzpoOHhYMEVOdzMwSnZQVUJWYm4zUmNBPT0sdHlwZTpzdHJdCnNwZWNpZmljOmJvb2xlYW49RU5DW0FFUzI1Nl9HQ00sZGF0YTo2aEpacEE9PSxpdjpKbjd2Y0doRy9LSHVJdm5XdExtNEt1dEJjWE9NR0dhMDNWZXhERWZvRUx3PSx0YWc6eVZZYnJkRGM4bFpRY3I1TTkwaExwQT09LHR5cGU6c3RyXQpzcGVjaWZpYzpTcGVjaWFsQ2hhcmFjdGVycz1FTkNbQUVTMjU2X0dDTSxkYXRhOmlWblY4UjR3VW80SG1qK2hOQmdWaHFzSy9RPT0saXY6MnFuSkZQMDdxK2JpZFY2UUh2YTh4Zy82S3V0MDF2eVNxb1VickppVmRkND0sdGFnOk9EUEhHTHMzeVU5QktBWGp2SDhhYVE9PSx0eXBlOnN0cl0Kc3BlY2lmaWM6SFRMTUVuY29kaW5nVGVzdDM9RU5DW0FFUzI1Nl9HQ00sZGF0YTpPZz09LGl2Ok9zaWpSYmFVdFgyZk5OenNJMDJCbTgxQng5WnBNQ0xsOW9FWWZFZ295Z009LHRhZzpXNXlyVFRDdDh4cEV5RFdwbUNyU2JnPT0sdHlwZTpzdHJdCnNwZWNpZmljOkhUTUxFbmNvZGluZ1Rlc3QxPUVOQ1tBRVMyNTZfR0NNLGRhdGE6R3RjNXlPU1pycFJRWlJXcGJGUDlRQ2s1MkRwcSxpdjp6cy9GTU81Uzkydy9ET21UL1JoRXVXUTRXWER0SFlXbWdseXA4Ym1XNlNRPSx0YWc6NG5RQ2RrTUpMblJLNVJBV1RtYk5WQT09LHR5cGU6c3RyXQpzcGVjaWZpYzpIVE1MRW5jb2RpbmdUZXN0Mj1FTkNbQUVTMjU2X0dDTSxkYXRhOktnPT0saXY6UlFSeThMV0Z2b0tkNFVhV1NJS0wvNWpzNkk4V3ZpK3IrVDd1Ri9veCtyQT0sdGFnOlRLTWRVbS84M01rQm5QOVZ0UEFIV2c9PSx0eXBlOnN0cl0Kc3BlY2lmaWM6bnVsbD0Kc3BlY2lmaWM6bnVtYmVyMT1FTkNbQUVTMjU2X0dDTSxkYXRhOjIzNk8saXY6L1gxakR5TU92Y3FmdmU2NzNCakNQNXIxempqMGgxS3RWak1EKzRyYklaST0sdGFnOnJXQlQwUnM1aGhsS0JUeXZOd0JxaXc9PSx0eXBlOnN0cl0Kc3BlY2lmaWM6bnVtYmVyMj1FTkNbQUVTMjU2X0dDTSxkYXRhOmlJcUtsbXdSQ0E9PSxpdjp1c0YrWDBmbFdJZzlLaTdPMThLMDF4OG0vV1Qva1FkL2FWV0JTZFhhYnd3PSx0YWc6QlBIRlhUZXE3cXJ1Nk9XRzNEZlVzUT09LHR5cGU6c3RyXQp0b2tlbnM6MDpzZXJ2aWNlPUVOQ1tBRVMyNTZfR0NNLGRhdGE6TWxnYnVUcjFkNHM9LGl2OmUvWWpFdkV0RWhNUWR1NG9iVFczQnprU3RTazg0M2tyZWZFVElTbXh4Vnc9LHRhZzpjZzRFMmNsRko1R1dVYytpRm03OFR3PT0sdHlwZTpzdHJdCnRva2VuczowOnRva2VuPUVOQ1tBRVMyNTZfR0NNLGRhdGE6S2RlOXFITjgsaXY6SFdHZWkrUmh4V2ZFWStZZ0tUNzVRZndXaDFwaUUxVUo4cTRsVmM0R3U3TT0sdGFnOkRMWVB3bVlsaFJsSks2Q094ZDl3YXc9PSx0eXBlOnN0cl0KdG9rZW5zOjE6c2VydmljZT1FTkNbQUVTMjU2X0dDTSxkYXRhOmQwQVdsSnorbnQ0PSxpdjpCUXpLSGJCRFRsUis4ejFMVGtoQkxMby83dkFjT2pMVGZCLzlxUjdNZEdnPSx0YWc6czJOZU9QbFIxSXdaaVVuQ3M0RTFlZz09LHR5cGU6c3RyXQp0b2tlbnM6MTp0b2tlbj1FTkNbQUVTMjU2X0dDTSxkYXRhOkc0dklEVnRsLGl2OmloVi90alBTd1NhenNjL0RmK2RYcG5lcHdTa1A2bjFLY2NERzhHS1dSTWc9LHRhZzpSRGw5YzNQOWtvazF6V1dVYmlmRWNBPT0sdHlwZTpzdHJdCnNvcHNfYWdlX19saXN0XzBfX21hcF9lbmM9LS0tLS1CRUdJTiBBR0UgRU5DUllQVEVEIEZJTEUtLS0tLVxuWVdkbExXVnVZM0o1Y0hScGIyNHViM0puTDNZeENpMCtJRmd5TlRVeE9TQlJjVFVyUld0d1NIZFBPVE5HVlhWcFxuZW1KUVdsWTRhWGcwWkVWU1NHeHNVemw0TVc5eWRsVllSMmxCQ2tGRGRrbDRialZWWVdwamEzRk9iQzluVkZWS1xuTWtzNWNrNW1TWEk0UVVrNVIxUjBjMkpDVkM5WkswRUtMUzB0SUVSTk9EZExhV0ptWjFSM05GWkVUM0YxWVZNeVxuUml0QmNFVmhOR3Q2VVVObGMyc3paVUpqZDFSVFQxa0tBWWsrRDdncUYrcHJkTkFGN09kT0hpbWEvQTkyTmpwd1xucWg1N1JrNUM3Tlh2VmVlSmsweEtkUzJ6Rm04NklJU1QvS2dTdzdRSzgwSVV4OGlHQ0hmNmtnPT1cbi0tLS0tRU5EIEFHRSBFTkNSWVBURUQgRklMRS0tLS0tXG4Kc29wc19hZ2VfX2xpc3RfMF9fbWFwX3JlY2lwaWVudD1hZ2UxZGpsbHcycHp1cHJycWMwZW41bTh2YzhrNWdlM3RtMGY2ZzdjajBjMGdsZnpwNDR2ZGM0cWw4bmd2dQpzb3BzX2xhc3Rtb2RpZmllZD0yMDI1LTAyLTA3VDE0OjQ2OjA0Wgpzb3BzX21hYz1FTkNbQUVTMjU2X0dDTSxkYXRhOnZtSk9UR0k1NlVOZVRTVTVmM09GUTJLcWdsNk41MVRLSHBDWjJlR0Q5VzBzQnp2cmk0dXNEOWNPaWlPc3IxY09JVms5dGpmZHBqY3M4L1NNVkxQWTJENG5NZkJkVU82ZTMydE5vM1YwRHBSMUJVUFljVXlrUG9nREY0cHNySjNoMVdHOCtuMVkxS2dWRG8wK1Jhd0hwNFd4ZUJpOC9teXhGdkUrbTA2N3Jzbz0saXY6TWVpUFBUd2VwekhVMHJydGlWcE9JbmdWTXJHTy9MR1h1LzVGREtlK2s2QT0sdGFnOnZZU0trMS9nN1RQYU5ybmluRngxR2c9PSx0eXBlOnN0cl0Kc29wc191bmVuY3J5cHRlZF9zdWZmaXg9X3VuZW5jcnlwdGVkCnNvcHNfdmVyc2lvbj0zLjkuNAo=",
+     "Hash": "8503036ebdb63922730f2d820336b67f3a28a6713b1d92133fc311b2a04ff62c"
+    },
+    "Format": "dotenv",
+    "EncryptionKey": "58b75958-883a-440c-842c-85af5d33a5bb",
+    "ResourceType": "PARAMETER",
+    "Target": {
+     "Ref": "DotEnv36F67242"
+    }
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete"
+  },
+  "Binary266F49CD": {
+   "Type": "AWS::SSM::Parameter",
+   "Properties": {
+    "Name": "/Binary",
+    "Type": "String",
+    "Value": " "
+   }
+  },
+  "BinarySopsSyncSopsSecretParameterProviderManagedPolicyParameterAccess0957B5711": {
+   "Type": "AWS::IAM::ManagedPolicy",
+   "Properties": {
+    "Description": "Policy to grant parameter provider permissions to put parameter",
+    "Path": "/",
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": "ssm:PutParameter",
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::Join": [
+         "",
+         [
+          "arn:aws:ssm:",
+          {
+           "Ref": "AWS::Region"
+          },
+          ":",
+          {
+           "Ref": "AWS::AccountId"
+          },
+          ":parameter/Binary"
+         ]
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   }
+  },
+  "BinarySopsSyncC6FD2267": {
+   "Type": "Custom::SopsSync",
+   "Properties": {
+    "ServiceToken": {
+     "Fn::GetAtt": [
+      "SingletonLambdaSopsSyncProviderAA18D140",
+      "Arn"
+     ]
+    },
+    "SopsInline": {
+     "Content": "ewoJImRhdGEiOiAiRU5DW0FFUzI1Nl9HQ00sZGF0YTpNOWd6RHNSZDlvQ3J1TTFEaFlpVUE0WUNBR3ZTdUFXT1JicFhlcHJlVDNOeElmRDhZNjNwejAwTEhoL3Q5WStXclRCQXBKdU9PRDNVWWhVMUpydnU2MzhIZWRyQjFBNXNxMXRPdUFWc1l6OStLVWFPamFveWV5TWh2d3JOenZsemFINkowNlMycWIycS9HMXBVSFdWUGtvRU9VaGlHTnlYVGJRY2g0bkhVQmJVWnBVU2ttcXd0dnprSVlPeDBGYnhSaGYwRndaWGF5NFMrWE9NY0R1S2JmUXg4aEExZ1hYZGdaYWwybmxldWpFNGtYV2FoN2dCL3EwQWNmaklqaHl0UGFlaWVFbFBYck5jSmR5SVJLbGxPV3RwbW93RHhhUm1xVTRpcVVZZzVrL095YnRLd1B2YmcybWpZeEx3SlpyNTd4anpFWDJ0RkppOWt1b3hsNEhQMDRxVkVSUGJhUHV5M3E2MVpiOStGd3RXODVlYm5WaU9BSVRwLy9SNzhLa21yUVZ6R3g2VktZKzJKeGJQR3NRNkhmZVNtN1dXV0dDWHRldVREWUFncG9FS2xaSE1kLzZoWTA3RDkydGxuYTh2YWRCUE9jTEFsNytjeFZmQ0phWjdPYjYzakZnelBvNi9MT1R6WWpxREt2TElFS2RGR2owOFB3aUVEM3ZVaVg0aE80b2kyTVVrZk51STFqeWpQOUFxd2ovSDJRd3ZxcGJ0R0RqRDIrQ2R5T2R3NXBCRVFRPT0saXY6bnR3YTdUU0ZWRERBaGQ3OVg1R0xEMkI2MUZNMTlRYWpPMkJLUk9qRjdzaz0sdGFnOjROZndvVFJOektLMVVQMkd4YVFSWHc9PSx0eXBlOnN0cl0iLAoJInNvcHMiOiB7CgkJImttcyI6IG51bGwsCgkJImdjcF9rbXMiOiBudWxsLAoJCSJhenVyZV9rdiI6IG51bGwsCgkJImhjX3ZhdWx0IjogbnVsbCwKCQkiYWdlIjogWwoJCQl7CgkJCQkicmVjaXBpZW50IjogImFnZTFkamxsdzJwenVwcnJxYzBlbjVtOHZjOGs1Z2UzdG0wZjZnN2NqMGMwZ2xmenA0NHZkYzRxbDhuZ3Z1IiwKCQkJCSJlbmMiOiAiLS0tLS1CRUdJTiBBR0UgRU5DUllQVEVEIEZJTEUtLS0tLVxuWVdkbExXVnVZM0o1Y0hScGIyNHViM0puTDNZeENpMCtJRmd5TlRVeE9TQlhOVUV5VDA5UFIzcFpZbU4xWlU5U1xuZVVSQ1dVZFpZbmhtTXpCaVNtMUZjRU5ZTkdsaU5HdE5aekZSQ2s1MlRWWkNTRFJCT1drNVRUQjJkR1JHVEZnelxuTWtsc1pVVjBaRm9yVWt4YU0wWmlTVFJJY1c1aWQzTUtMUzB0SUhkRk1IRk1NVWRFWWxsVWFHUlJTRWw2VUdad1xuZEZGMk9EQlBaR1JyVG5CR2JXSnZkVlp2ZFdWR1VXOEttNVBZWFJ1VEJ2am1NRFltZzZORUtoSWJVVS9TSFBTWlxuVHRnd29zOGlkK01ZVHB1ZEcrYUtWVEtTeDkxR254OWVrTGNUa2FmRXcvWVVMVTljcnliWXRnPT1cbi0tLS0tRU5EIEFHRSBFTkNSWVBURUQgRklMRS0tLS0tXG4iCgkJCX0KCQldLAoJCSJsYXN0bW9kaWZpZWQiOiAiMjAyNS0wMi0wN1QxNDo1MDoyNVoiLAoJCSJtYWMiOiAiRU5DW0FFUzI1Nl9HQ00sZGF0YTpOakxQWkw1YmRrYytlYk5ycFQ5c2pzT1pqVUUvWjF0L09xMXE0Q0VzNzMxamdiVzBsb2xMWjNEcjdFRlZOTG9DNWV1bmhReHZuN0U2WkExYnBtcXBpanRNTlNrcXFWUWRHMUpzekY3WUdoRjlZaitUeXo5Ukhodk5GdUg4QUZjbDRmMWtzRDdHbW5WN2RZc2oxcjFZUDN3d0ZZK1VoRXFscTQrS2Q4N1ZuYTA9LGl2OjhJTUIzN1Y0a3hMSHJOaUlWMGNWWnRCMlZDZnVxOFNZQU5zeUR5bDNtMW89LHRhZzpFR0JYVk9JYXl6bjJsaDVaaTUrR3hnPT0sdHlwZTpzdHJdIiwKCQkicGdwIjogbnVsbCwKCQkidW5lbmNyeXB0ZWRfc3VmZml4IjogIl91bmVuY3J5cHRlZCIsCgkJInZlcnNpb24iOiAiMy45LjQiCgl9Cn0=",
+     "Hash": "a62d06dea56fc1e8018c1ec402c92887c6477cff4923a1d8acb7ccd082ba8552"
+    },
+    "Format": "binary",
+    "EncryptionKey": "58b75958-883a-440c-842c-85af5d33a5bb",
+    "ResourceType": "PARAMETER",
+    "Target": {
+     "Ref": "Binary266F49CD"
+    }
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete"
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}

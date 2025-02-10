@@ -1759,7 +1759,6 @@ const multiStringParameterProps: MultiStringParameterProps = { ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.autoGenerateIamPermissions">autoGenerateIamPermissions</a></code> | <code>boolean</code> | Should this construct automatically create IAM permissions? |
-| <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.flattenSeparator">flattenSeparator</a></code> | <code>string</code> | If the structure should be flattened use the provided separator between keys. |
 | <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.sopsAgeKey">sopsAgeKey</a></code> | <code>aws-cdk-lib.SecretValue</code> | The age key that should be used for encryption. |
 | <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.sopsFileFormat">sopsFileFormat</a></code> | <code>string</code> | The format of the sops file. |
 | <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.sopsFilePath">sopsFilePath</a></code> | <code>string</code> | The filepath to the sops file. |
@@ -1768,7 +1767,7 @@ const multiStringParameterProps: MultiStringParameterProps = { ... }
 | <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.sopsS3Bucket">sopsS3Bucket</a></code> | <code>string</code> | If you want to pass the sops file via s3, you can specify the bucket you can use cfn parameter here Both, sopsS3Bucket and sopsS3Key have to be specified. |
 | <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.sopsS3Key">sopsS3Key</a></code> | <code>string</code> | If you want to pass the sops file via s3, you can specify the key inside the bucket you can use cfn parameter here Both, sopsS3Bucket and sopsS3Key have to be specified. |
 | <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.uploadType">uploadType</a></code> | <code><a href="#cdk-sops-secrets.UploadType">UploadType</a></code> | How should the secret be passed to the CustomResource? |
-| <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.encryptionKey">encryptionKey</a></code> | <code>aws-cdk-lib.aws_kms.IKey</code> | *No description.* |
+| <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.encryptionKey">encryptionKey</a></code> | <code>aws-cdk-lib.aws_kms.IKey</code> | The customer-managed encryption key to use for encrypting the secret value. |
 | <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.description">description</a></code> | <code>string</code> | Information about the parameter that you want to add to the system. |
 | <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.tier">tier</a></code> | <code>aws-cdk-lib.aws_ssm.ParameterTier</code> | The tier of the string parameter. |
 | <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.keyPrefix">keyPrefix</a></code> | <code>string</code> | The prefix used for all parameters. |
@@ -1786,19 +1785,6 @@ public readonly autoGenerateIamPermissions: boolean;
 - *Default:* true
 
 Should this construct automatically create IAM permissions?
-
----
-
-##### `flattenSeparator`<sup>Optional</sup> <a name="flattenSeparator" id="cdk-sops-secrets.MultiStringParameterProps.property.flattenSeparator"></a>
-
-```typescript
-public readonly flattenSeparator: string;
-```
-
-- *Type:* string
-- *Default:* undefined
-
-If the structure should be flattened use the provided separator between keys.
 
 ---
 
@@ -1915,6 +1901,9 @@ public readonly encryptionKey: IKey;
 ```
 
 - *Type:* aws-cdk-lib.aws_kms.IKey
+- *Default:* A default KMS key for the account and region is used.
+
+The customer-managed encryption key to use for encrypting the secret value.
 
 ---
 
@@ -1987,7 +1976,6 @@ const sopsCommonParameterProps: SopsCommonParameterProps = { ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#cdk-sops-secrets.SopsCommonParameterProps.property.autoGenerateIamPermissions">autoGenerateIamPermissions</a></code> | <code>boolean</code> | Should this construct automatically create IAM permissions? |
-| <code><a href="#cdk-sops-secrets.SopsCommonParameterProps.property.flattenSeparator">flattenSeparator</a></code> | <code>string</code> | If the structure should be flattened use the provided separator between keys. |
 | <code><a href="#cdk-sops-secrets.SopsCommonParameterProps.property.sopsAgeKey">sopsAgeKey</a></code> | <code>aws-cdk-lib.SecretValue</code> | The age key that should be used for encryption. |
 | <code><a href="#cdk-sops-secrets.SopsCommonParameterProps.property.sopsFileFormat">sopsFileFormat</a></code> | <code>string</code> | The format of the sops file. |
 | <code><a href="#cdk-sops-secrets.SopsCommonParameterProps.property.sopsFilePath">sopsFilePath</a></code> | <code>string</code> | The filepath to the sops file. |
@@ -1996,7 +1984,7 @@ const sopsCommonParameterProps: SopsCommonParameterProps = { ... }
 | <code><a href="#cdk-sops-secrets.SopsCommonParameterProps.property.sopsS3Bucket">sopsS3Bucket</a></code> | <code>string</code> | If you want to pass the sops file via s3, you can specify the bucket you can use cfn parameter here Both, sopsS3Bucket and sopsS3Key have to be specified. |
 | <code><a href="#cdk-sops-secrets.SopsCommonParameterProps.property.sopsS3Key">sopsS3Key</a></code> | <code>string</code> | If you want to pass the sops file via s3, you can specify the key inside the bucket you can use cfn parameter here Both, sopsS3Bucket and sopsS3Key have to be specified. |
 | <code><a href="#cdk-sops-secrets.SopsCommonParameterProps.property.uploadType">uploadType</a></code> | <code><a href="#cdk-sops-secrets.UploadType">UploadType</a></code> | How should the secret be passed to the CustomResource? |
-| <code><a href="#cdk-sops-secrets.SopsCommonParameterProps.property.encryptionKey">encryptionKey</a></code> | <code>aws-cdk-lib.aws_kms.IKey</code> | *No description.* |
+| <code><a href="#cdk-sops-secrets.SopsCommonParameterProps.property.encryptionKey">encryptionKey</a></code> | <code>aws-cdk-lib.aws_kms.IKey</code> | The customer-managed encryption key to use for encrypting the secret value. |
 | <code><a href="#cdk-sops-secrets.SopsCommonParameterProps.property.description">description</a></code> | <code>string</code> | Information about the parameter that you want to add to the system. |
 | <code><a href="#cdk-sops-secrets.SopsCommonParameterProps.property.tier">tier</a></code> | <code>aws-cdk-lib.aws_ssm.ParameterTier</code> | The tier of the string parameter. |
 
@@ -2012,19 +2000,6 @@ public readonly autoGenerateIamPermissions: boolean;
 - *Default:* true
 
 Should this construct automatically create IAM permissions?
-
----
-
-##### `flattenSeparator`<sup>Optional</sup> <a name="flattenSeparator" id="cdk-sops-secrets.SopsCommonParameterProps.property.flattenSeparator"></a>
-
-```typescript
-public readonly flattenSeparator: string;
-```
-
-- *Type:* string
-- *Default:* undefined
-
-If the structure should be flattened use the provided separator between keys.
 
 ---
 
@@ -2141,6 +2116,9 @@ public readonly encryptionKey: IKey;
 ```
 
 - *Type:* aws-cdk-lib.aws_kms.IKey
+- *Default:* A default KMS key for the account and region is used.
+
+The customer-managed encryption key to use for encrypting the secret value.
 
 ---
 
@@ -2186,17 +2164,7 @@ const sopsSecretProps: SopsSecretProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-sops-secrets.SopsSecretProps.property.description">description</a></code> | <code>string</code> | An optional, human-friendly description of the secret. |
-| <code><a href="#cdk-sops-secrets.SopsSecretProps.property.encryptionKey">encryptionKey</a></code> | <code>aws-cdk-lib.aws_kms.IKey</code> | The customer-managed encryption key to use for encrypting the secret value. |
-| <code><a href="#cdk-sops-secrets.SopsSecretProps.property.generateSecretString">generateSecretString</a></code> | <code>aws-cdk-lib.aws_secretsmanager.SecretStringGenerator</code> | Configuration for how to generate a secret value. |
-| <code><a href="#cdk-sops-secrets.SopsSecretProps.property.removalPolicy">removalPolicy</a></code> | <code>aws-cdk-lib.RemovalPolicy</code> | Policy to apply when the secret is removed from this stack. |
-| <code><a href="#cdk-sops-secrets.SopsSecretProps.property.replicaRegions">replicaRegions</a></code> | <code>aws-cdk-lib.aws_secretsmanager.ReplicaRegion[]</code> | A list of regions where to replicate this secret. |
-| <code><a href="#cdk-sops-secrets.SopsSecretProps.property.secretName">secretName</a></code> | <code>string</code> | A name for the secret. |
-| <code><a href="#cdk-sops-secrets.SopsSecretProps.property.secretObjectValue">secretObjectValue</a></code> | <code>{[ key: string ]: aws-cdk-lib.SecretValue}</code> | Initial value for a JSON secret. |
-| <code><a href="#cdk-sops-secrets.SopsSecretProps.property.secretStringBeta1">secretStringBeta1</a></code> | <code>aws-cdk-lib.aws_secretsmanager.SecretStringValueBeta1</code> | Initial value for the secret. |
-| <code><a href="#cdk-sops-secrets.SopsSecretProps.property.secretStringValue">secretStringValue</a></code> | <code>aws-cdk-lib.SecretValue</code> | Initial value for the secret. |
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.autoGenerateIamPermissions">autoGenerateIamPermissions</a></code> | <code>boolean</code> | Should this construct automatically create IAM permissions? |
-| <code><a href="#cdk-sops-secrets.SopsSecretProps.property.flattenSeparator">flattenSeparator</a></code> | <code>string</code> | If the structure should be flattened use the provided separator between keys. |
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.sopsAgeKey">sopsAgeKey</a></code> | <code>aws-cdk-lib.SecretValue</code> | The age key that should be used for encryption. |
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.sopsFileFormat">sopsFileFormat</a></code> | <code>string</code> | The format of the sops file. |
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.sopsFilePath">sopsFilePath</a></code> | <code>string</code> | The filepath to the sops file. |
@@ -2205,180 +2173,12 @@ const sopsSecretProps: SopsSecretProps = { ... }
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.sopsS3Bucket">sopsS3Bucket</a></code> | <code>string</code> | If you want to pass the sops file via s3, you can specify the bucket you can use cfn parameter here Both, sopsS3Bucket and sopsS3Key have to be specified. |
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.sopsS3Key">sopsS3Key</a></code> | <code>string</code> | If you want to pass the sops file via s3, you can specify the key inside the bucket you can use cfn parameter here Both, sopsS3Bucket and sopsS3Key have to be specified. |
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.uploadType">uploadType</a></code> | <code><a href="#cdk-sops-secrets.UploadType">UploadType</a></code> | How should the secret be passed to the CustomResource? |
+| <code><a href="#cdk-sops-secrets.SopsSecretProps.property.description">description</a></code> | <code>string</code> | An optional, human-friendly description of the secret. |
+| <code><a href="#cdk-sops-secrets.SopsSecretProps.property.encryptionKey">encryptionKey</a></code> | <code>aws-cdk-lib.aws_kms.IKey</code> | The customer-managed encryption key to use for encrypting the secret value. |
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.rawOutput">rawOutput</a></code> | <code>boolean</code> | Should the secret parsed and transformed to json? |
-
----
-
-##### `description`<sup>Optional</sup> <a name="description" id="cdk-sops-secrets.SopsSecretProps.property.description"></a>
-
-```typescript
-public readonly description: string;
-```
-
-- *Type:* string
-- *Default:* No description.
-
-An optional, human-friendly description of the secret.
-
----
-
-##### `encryptionKey`<sup>Optional</sup> <a name="encryptionKey" id="cdk-sops-secrets.SopsSecretProps.property.encryptionKey"></a>
-
-```typescript
-public readonly encryptionKey: IKey;
-```
-
-- *Type:* aws-cdk-lib.aws_kms.IKey
-- *Default:* A default KMS key for the account and region is used.
-
-The customer-managed encryption key to use for encrypting the secret value.
-
----
-
-##### `generateSecretString`<sup>Optional</sup> <a name="generateSecretString" id="cdk-sops-secrets.SopsSecretProps.property.generateSecretString"></a>
-
-```typescript
-public readonly generateSecretString: SecretStringGenerator;
-```
-
-- *Type:* aws-cdk-lib.aws_secretsmanager.SecretStringGenerator
-- *Default:* 32 characters with upper-case letters, lower-case letters, punctuation and numbers (at least one from each category), per the default values of ``SecretStringGenerator``.
-
-Configuration for how to generate a secret value.
-
-Only one of `secretString` and `generateSecretString` can be provided.
-
----
-
-##### `removalPolicy`<sup>Optional</sup> <a name="removalPolicy" id="cdk-sops-secrets.SopsSecretProps.property.removalPolicy"></a>
-
-```typescript
-public readonly removalPolicy: RemovalPolicy;
-```
-
-- *Type:* aws-cdk-lib.RemovalPolicy
-- *Default:* Not set.
-
-Policy to apply when the secret is removed from this stack.
-
----
-
-##### `replicaRegions`<sup>Optional</sup> <a name="replicaRegions" id="cdk-sops-secrets.SopsSecretProps.property.replicaRegions"></a>
-
-```typescript
-public readonly replicaRegions: ReplicaRegion[];
-```
-
-- *Type:* aws-cdk-lib.aws_secretsmanager.ReplicaRegion[]
-- *Default:* Secret is not replicated
-
-A list of regions where to replicate this secret.
-
----
-
-##### `secretName`<sup>Optional</sup> <a name="secretName" id="cdk-sops-secrets.SopsSecretProps.property.secretName"></a>
-
-```typescript
-public readonly secretName: string;
-```
-
-- *Type:* string
-- *Default:* A name is generated by CloudFormation.
-
-A name for the secret.
-
-Note that deleting secrets from SecretsManager does not happen immediately, but after a 7 to
-30 days blackout period. During that period, it is not possible to create another secret that shares the same name.
-
----
-
-##### `secretObjectValue`<sup>Optional</sup> <a name="secretObjectValue" id="cdk-sops-secrets.SopsSecretProps.property.secretObjectValue"></a>
-
-```typescript
-public readonly secretObjectValue: {[ key: string ]: SecretValue};
-```
-
-- *Type:* {[ key: string ]: aws-cdk-lib.SecretValue}
-- *Default:* SecretsManager generates a new secret value.
-
-Initial value for a JSON secret.
-
-**NOTE:** *It is **highly** encouraged to leave this field undefined and allow SecretsManager to create the secret value.
-The secret object -- if provided -- will be included in the output of the cdk as part of synthesis,
-and will appear in the CloudFormation template in the console. This can be secure(-ish) if that value is merely reference to
-another resource (or one of its attributes), but if the value is a plaintext string, it will be visible to anyone with access
-to the CloudFormation template (via the AWS Console, SDKs, or CLI).
-
-Specifies a JSON object that you want to encrypt and store in this new version of the secret.
-To specify a simple string value instead, use `SecretProps.secretStringValue`
-
-Only one of `secretStringBeta1`, `secretStringValue`, 'secretObjectValue', and `generateSecretString` can be provided.
-
----
-
-*Example*
-
-```typescript
-declare const user: iam.User;
-declare const accessKey: iam.AccessKey;
-declare const stack: Stack;
-new secretsmanager.Secret(stack, 'JSONSecret', {
-  secretObjectValue: {
-    username: SecretValue.unsafePlainText(user.userName), // intrinsic reference, not exposed as plaintext
-    database: SecretValue.unsafePlainText('foo'), // rendered as plain text, but not a secret
-    password: accessKey.secretAccessKey, // SecretValue
-  },
-});
-```
-
-
-##### ~~`secretStringBeta1`~~<sup>Optional</sup> <a name="secretStringBeta1" id="cdk-sops-secrets.SopsSecretProps.property.secretStringBeta1"></a>
-
-- *Deprecated:* Use `secretStringValue` instead.
-
-```typescript
-public readonly secretStringBeta1: SecretStringValueBeta1;
-```
-
-- *Type:* aws-cdk-lib.aws_secretsmanager.SecretStringValueBeta1
-- *Default:* SecretsManager generates a new secret value.
-
-Initial value for the secret.
-
-**NOTE:** *It is **highly** encouraged to leave this field undefined and allow SecretsManager to create the secret value.
-The secret string -- if provided -- will be included in the output of the cdk as part of synthesis,
-and will appear in the CloudFormation template in the console. This can be secure(-ish) if that value is merely reference to
-another resource (or one of its attributes), but if the value is a plaintext string, it will be visible to anyone with access
-to the CloudFormation template (via the AWS Console, SDKs, or CLI).
-
-Specifies text data that you want to encrypt and store in this new version of the secret.
-May be a simple string value, or a string representation of a JSON structure.
-
-Only one of `secretStringBeta1`, `secretStringValue`, and `generateSecretString` can be provided.
-
----
-
-##### `secretStringValue`<sup>Optional</sup> <a name="secretStringValue" id="cdk-sops-secrets.SopsSecretProps.property.secretStringValue"></a>
-
-```typescript
-public readonly secretStringValue: SecretValue;
-```
-
-- *Type:* aws-cdk-lib.SecretValue
-- *Default:* SecretsManager generates a new secret value.
-
-Initial value for the secret.
-
-**NOTE:** *It is **highly** encouraged to leave this field undefined and allow SecretsManager to create the secret value.
-The secret string -- if provided -- will be included in the output of the cdk as part of synthesis,
-and will appear in the CloudFormation template in the console. This can be secure(-ish) if that value is merely reference to
-another resource (or one of its attributes), but if the value is a plaintext string, it will be visible to anyone with access
-to the CloudFormation template (via the AWS Console, SDKs, or CLI).
-
-Specifies text data that you want to encrypt and store in this new version of the secret.
-May be a simple string value. To provide a string representation of JSON structure, use `SecretProps.secretObjectValue` instead.
-
-Only one of `secretStringBeta1`, `secretStringValue`, 'secretObjectValue', and `generateSecretString` can be provided.
+| <code><a href="#cdk-sops-secrets.SopsSecretProps.property.removalPolicy">removalPolicy</a></code> | <code>aws-cdk-lib.RemovalPolicy</code> | Policy to apply when the secret is removed from this stack. |
+| <code><a href="#cdk-sops-secrets.SopsSecretProps.property.replicaRegions">replicaRegions</a></code> | <code>aws-cdk-lib.aws_secretsmanager.ReplicaRegion[]</code> | A list of regions where to replicate this secret. |
+| <code><a href="#cdk-sops-secrets.SopsSecretProps.property.secretName">secretName</a></code> | <code>string</code> | A name for the secret. |
 
 ---
 
@@ -2392,19 +2192,6 @@ public readonly autoGenerateIamPermissions: boolean;
 - *Default:* true
 
 Should this construct automatically create IAM permissions?
-
----
-
-##### `flattenSeparator`<sup>Optional</sup> <a name="flattenSeparator" id="cdk-sops-secrets.SopsSecretProps.property.flattenSeparator"></a>
-
-```typescript
-public readonly flattenSeparator: string;
-```
-
-- *Type:* string
-- *Default:* undefined
-
-If the structure should be flattened use the provided separator between keys.
 
 ---
 
@@ -2514,6 +2301,32 @@ How should the secret be passed to the CustomResource?
 
 ---
 
+##### `description`<sup>Optional</sup> <a name="description" id="cdk-sops-secrets.SopsSecretProps.property.description"></a>
+
+```typescript
+public readonly description: string;
+```
+
+- *Type:* string
+- *Default:* No description.
+
+An optional, human-friendly description of the secret.
+
+---
+
+##### `encryptionKey`<sup>Optional</sup> <a name="encryptionKey" id="cdk-sops-secrets.SopsSecretProps.property.encryptionKey"></a>
+
+```typescript
+public readonly encryptionKey: IKey;
+```
+
+- *Type:* aws-cdk-lib.aws_kms.IKey
+- *Default:* A default KMS key for the account and region is used.
+
+The customer-managed encryption key to use for encrypting the secret value.
+
+---
+
 ##### `rawOutput`<sup>Optional</sup> <a name="rawOutput" id="cdk-sops-secrets.SopsSecretProps.property.rawOutput"></a>
 
 ```typescript
@@ -2524,6 +2337,48 @@ public readonly rawOutput: boolean;
 - *Default:* true
 
 Should the secret parsed and transformed to json?
+
+---
+
+##### `removalPolicy`<sup>Optional</sup> <a name="removalPolicy" id="cdk-sops-secrets.SopsSecretProps.property.removalPolicy"></a>
+
+```typescript
+public readonly removalPolicy: RemovalPolicy;
+```
+
+- *Type:* aws-cdk-lib.RemovalPolicy
+- *Default:* Not set.
+
+Policy to apply when the secret is removed from this stack.
+
+---
+
+##### `replicaRegions`<sup>Optional</sup> <a name="replicaRegions" id="cdk-sops-secrets.SopsSecretProps.property.replicaRegions"></a>
+
+```typescript
+public readonly replicaRegions: ReplicaRegion[];
+```
+
+- *Type:* aws-cdk-lib.aws_secretsmanager.ReplicaRegion[]
+- *Default:* Secret is not replicated
+
+A list of regions where to replicate this secret.
+
+---
+
+##### `secretName`<sup>Optional</sup> <a name="secretName" id="cdk-sops-secrets.SopsSecretProps.property.secretName"></a>
+
+```typescript
+public readonly secretName: string;
+```
+
+- *Type:* string
+- *Default:* A name is generated by CloudFormation.
+
+A name for the secret.
+
+Note that deleting secrets from SecretsManager does not happen immediately, but after a 7 to
+30 days blackout period. During that period, it is not possible to create another secret that shares the same name.
 
 ---
 
@@ -2542,7 +2397,6 @@ const sopsStringParameterProps: SopsStringParameterProps = { ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#cdk-sops-secrets.SopsStringParameterProps.property.autoGenerateIamPermissions">autoGenerateIamPermissions</a></code> | <code>boolean</code> | Should this construct automatically create IAM permissions? |
-| <code><a href="#cdk-sops-secrets.SopsStringParameterProps.property.flattenSeparator">flattenSeparator</a></code> | <code>string</code> | If the structure should be flattened use the provided separator between keys. |
 | <code><a href="#cdk-sops-secrets.SopsStringParameterProps.property.sopsAgeKey">sopsAgeKey</a></code> | <code>aws-cdk-lib.SecretValue</code> | The age key that should be used for encryption. |
 | <code><a href="#cdk-sops-secrets.SopsStringParameterProps.property.sopsFileFormat">sopsFileFormat</a></code> | <code>string</code> | The format of the sops file. |
 | <code><a href="#cdk-sops-secrets.SopsStringParameterProps.property.sopsFilePath">sopsFilePath</a></code> | <code>string</code> | The filepath to the sops file. |
@@ -2551,7 +2405,7 @@ const sopsStringParameterProps: SopsStringParameterProps = { ... }
 | <code><a href="#cdk-sops-secrets.SopsStringParameterProps.property.sopsS3Bucket">sopsS3Bucket</a></code> | <code>string</code> | If you want to pass the sops file via s3, you can specify the bucket you can use cfn parameter here Both, sopsS3Bucket and sopsS3Key have to be specified. |
 | <code><a href="#cdk-sops-secrets.SopsStringParameterProps.property.sopsS3Key">sopsS3Key</a></code> | <code>string</code> | If you want to pass the sops file via s3, you can specify the key inside the bucket you can use cfn parameter here Both, sopsS3Bucket and sopsS3Key have to be specified. |
 | <code><a href="#cdk-sops-secrets.SopsStringParameterProps.property.uploadType">uploadType</a></code> | <code><a href="#cdk-sops-secrets.UploadType">UploadType</a></code> | How should the secret be passed to the CustomResource? |
-| <code><a href="#cdk-sops-secrets.SopsStringParameterProps.property.encryptionKey">encryptionKey</a></code> | <code>aws-cdk-lib.aws_kms.IKey</code> | *No description.* |
+| <code><a href="#cdk-sops-secrets.SopsStringParameterProps.property.encryptionKey">encryptionKey</a></code> | <code>aws-cdk-lib.aws_kms.IKey</code> | The customer-managed encryption key to use for encrypting the secret value. |
 | <code><a href="#cdk-sops-secrets.SopsStringParameterProps.property.description">description</a></code> | <code>string</code> | Information about the parameter that you want to add to the system. |
 | <code><a href="#cdk-sops-secrets.SopsStringParameterProps.property.tier">tier</a></code> | <code>aws-cdk-lib.aws_ssm.ParameterTier</code> | The tier of the string parameter. |
 | <code><a href="#cdk-sops-secrets.SopsStringParameterProps.property.parameterName">parameterName</a></code> | <code>string</code> | The name of the parameter. |
@@ -2568,19 +2422,6 @@ public readonly autoGenerateIamPermissions: boolean;
 - *Default:* true
 
 Should this construct automatically create IAM permissions?
-
----
-
-##### `flattenSeparator`<sup>Optional</sup> <a name="flattenSeparator" id="cdk-sops-secrets.SopsStringParameterProps.property.flattenSeparator"></a>
-
-```typescript
-public readonly flattenSeparator: string;
-```
-
-- *Type:* string
-- *Default:* undefined
-
-If the structure should be flattened use the provided separator between keys.
 
 ---
 
@@ -2697,6 +2538,9 @@ public readonly encryptionKey: IKey;
 ```
 
 - *Type:* aws-cdk-lib.aws_kms.IKey
+- *Default:* A default KMS key for the account and region is used.
+
+The customer-managed encryption key to use for encrypting the secret value.
 
 ---
 
@@ -2756,7 +2600,6 @@ const sopsSyncOptions: SopsSyncOptions = { ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#cdk-sops-secrets.SopsSyncOptions.property.autoGenerateIamPermissions">autoGenerateIamPermissions</a></code> | <code>boolean</code> | Should this construct automatically create IAM permissions? |
-| <code><a href="#cdk-sops-secrets.SopsSyncOptions.property.flattenSeparator">flattenSeparator</a></code> | <code>string</code> | If the structure should be flattened use the provided separator between keys. |
 | <code><a href="#cdk-sops-secrets.SopsSyncOptions.property.sopsAgeKey">sopsAgeKey</a></code> | <code>aws-cdk-lib.SecretValue</code> | The age key that should be used for encryption. |
 | <code><a href="#cdk-sops-secrets.SopsSyncOptions.property.sopsFileFormat">sopsFileFormat</a></code> | <code>string</code> | The format of the sops file. |
 | <code><a href="#cdk-sops-secrets.SopsSyncOptions.property.sopsFilePath">sopsFilePath</a></code> | <code>string</code> | The filepath to the sops file. |
@@ -2778,19 +2621,6 @@ public readonly autoGenerateIamPermissions: boolean;
 - *Default:* true
 
 Should this construct automatically create IAM permissions?
-
----
-
-##### `flattenSeparator`<sup>Optional</sup> <a name="flattenSeparator" id="cdk-sops-secrets.SopsSyncOptions.property.flattenSeparator"></a>
-
-```typescript
-public readonly flattenSeparator: string;
-```
-
-- *Type:* string
-- *Default:* undefined
-
-If the structure should be flattened use the provided separator between keys.
 
 ---
 
@@ -2917,7 +2747,6 @@ const sopsSyncProps: SopsSyncProps = { ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#cdk-sops-secrets.SopsSyncProps.property.autoGenerateIamPermissions">autoGenerateIamPermissions</a></code> | <code>boolean</code> | Should this construct automatically create IAM permissions? |
-| <code><a href="#cdk-sops-secrets.SopsSyncProps.property.flattenSeparator">flattenSeparator</a></code> | <code>string</code> | If the structure should be flattened use the provided separator between keys. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProps.property.sopsAgeKey">sopsAgeKey</a></code> | <code>aws-cdk-lib.SecretValue</code> | The age key that should be used for encryption. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProps.property.sopsFileFormat">sopsFileFormat</a></code> | <code>string</code> | The format of the sops file. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProps.property.sopsFilePath">sopsFilePath</a></code> | <code>string</code> | The filepath to the sops file. |
@@ -2929,6 +2758,7 @@ const sopsSyncProps: SopsSyncProps = { ... }
 | <code><a href="#cdk-sops-secrets.SopsSyncProps.property.resourceType">resourceType</a></code> | <code><a href="#cdk-sops-secrets.ResourceType">ResourceType</a></code> | Will this Sync deploy a Secret or Parameter(s). |
 | <code><a href="#cdk-sops-secrets.SopsSyncProps.property.target">target</a></code> | <code>string</code> | The target to populate with the sops file content. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProps.property.encryptionKey">encryptionKey</a></code> | <code>aws-cdk-lib.aws_kms.IKey</code> | The encryption key used for encrypting the ssm parameter if `parameterName` is set. |
+| <code><a href="#cdk-sops-secrets.SopsSyncProps.property.flattenSeparator">flattenSeparator</a></code> | <code>string</code> | If the structure should be flattened use the provided separator between keys. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProps.property.parameterNames">parameterNames</a></code> | <code>string[]</code> | *No description.* |
 | <code><a href="#cdk-sops-secrets.SopsSyncProps.property.secret">secret</a></code> | <code>aws-cdk-lib.aws_secretsmanager.ISecret</code> | *No description.* |
 
@@ -2944,19 +2774,6 @@ public readonly autoGenerateIamPermissions: boolean;
 - *Default:* true
 
 Should this construct automatically create IAM permissions?
-
----
-
-##### `flattenSeparator`<sup>Optional</sup> <a name="flattenSeparator" id="cdk-sops-secrets.SopsSyncProps.property.flattenSeparator"></a>
-
-```typescript
-public readonly flattenSeparator: string;
-```
-
-- *Type:* string
-- *Default:* undefined
-
-If the structure should be flattened use the provided separator between keys.
 
 ---
 
@@ -3103,6 +2920,19 @@ public readonly encryptionKey: IKey;
 - *Type:* aws-cdk-lib.aws_kms.IKey
 
 The encryption key used for encrypting the ssm parameter if `parameterName` is set.
+
+---
+
+##### `flattenSeparator`<sup>Optional</sup> <a name="flattenSeparator" id="cdk-sops-secrets.SopsSyncProps.property.flattenSeparator"></a>
+
+```typescript
+public readonly flattenSeparator: string;
+```
+
+- *Type:* string
+- *Default:* undefined
+
+If the structure should be flattened use the provided separator between keys.
 
 ---
 

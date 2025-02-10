@@ -237,6 +237,8 @@ func stringifyValues(input any) (any, error) {
 		reflect.Float32, reflect.Float64, reflect.Bool, reflect.Complex64, reflect.Complex128:
 		// If it's a primitive type, convert it to a string
 		return fmt.Sprintf("%v", input), nil
+	case reflect.Invalid:
+		return "", nil
 	default:
 		// If it's an unsupported type, return an error
 		return nil, fmt.Errorf("unsupported type: %v", v.Kind())

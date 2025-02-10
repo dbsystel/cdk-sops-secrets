@@ -11,6 +11,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/aws/aws-sdk-go-v2/service/secretsmanager"
 	"github.com/aws/aws-sdk-go-v2/service/ssm"
+	"github.com/aws/smithy-go/ptr"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -144,6 +145,7 @@ func TestSecretsManagerPutSecretValue(t *testing.T) {
 		mockClient     *MockAwsClient
 		expectedARN    *string
 		expectedErrMsg string
+		binary         *bool
 	}{
 		{
 			name: "successful put secret value",
@@ -155,6 +157,7 @@ func TestSecretsManagerPutSecretValue(t *testing.T) {
 				},
 				ReturnError: nil,
 			},
+			binary:      ptr.Bool(false),
 			expectedARN: aws.String("mock-arn"),
 		},
 		{
@@ -165,6 +168,7 @@ func TestSecretsManagerPutSecretValue(t *testing.T) {
 				PutSecretValueRet: nil,
 				ReturnError:       fmt.Errorf("mock error"),
 			},
+			binary:         ptr.Bool(false),
 			expectedErrMsg: "failed to store secret value:\nsecretArn: test-arn\nClientRequestToken: test-hash\nmock error",
 		},
 	}
@@ -177,7 +181,7 @@ func TestSecretsManagerPutSecretValue(t *testing.T) {
 			}
 
 			content := []byte("content")
-			resp, err := client.SecretsManagerPutSecretValue("hash", "arn", &content)
+			resp, err := client.SecretsManagerPutSecretValue("hash", "arn", &content, tt.binary)
 			assert.Equal(t, tt.mockClient.ReturnError, err)
 			assert.Equal(t, tt.mockClient.PutSecretValueRet, resp)
 		})

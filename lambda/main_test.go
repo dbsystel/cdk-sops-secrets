@@ -19,7 +19,6 @@ type putSecretValueCalls map[string]interface{}
 type getObjectEtagCalls map[string]client.SopsS3File
 type getObjectCalls map[string]client.SopsS3File
 type MockAwsClient struct {
-	snapsFileName  string
 	t              *testing.T
 	putParameter   putParameterCalls
 	putSecretValue putSecretValueCalls
@@ -43,8 +42,8 @@ func (m *MockAwsClient) S3GetObjectETAG(file client.SopsS3File) (*string, error)
 	return &etag, nil
 }
 
-func (m *MockAwsClient) SecretsManagerPutSecretValue(sopsHash string, secretArn string, secretContent *[]byte) (*secretsmanager.PutSecretValueOutput, error) {
-	m.putSecretValue[secretArn] = map[string]interface{}{"sopsHash": sopsHash, "secretContent": string(*secretContent)}
+func (m *MockAwsClient) SecretsManagerPutSecretValue(sopsHash string, secretArn string, secretContent *[]byte, binary *bool) (*secretsmanager.PutSecretValueOutput, error) {
+	m.putSecretValue[secretArn] = map[string]interface{}{"sopsHash": sopsHash, "secretContent": string(*secretContent), "binary": *binary}
 	arn := "mock-arn"
 	return &secretsmanager.PutSecretValueOutput{
 		ARN:           &arn,
@@ -103,7 +102,6 @@ func TestHandleRequestWithClients(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			clients := &MockAwsClient{
-				snapsFileName:  tt.name,
 				t:              t,
 				putParameter:   putParameterCalls{},
 				putSecretValue: putSecretValueCalls{},
@@ -112,7 +110,7 @@ func TestHandleRequestWithClients(t *testing.T) {
 			}
 
 			physicalResourceID, data, err := HandleRequestWithClients(clients, tt.event)
-			snaps.WithConfig(snaps.Filename(tt.name)).MatchSnapshot(t, clients.getObject, clients.getObjectEtag, clients.putParameter, clients.putSecretValue)
+			snaps.WithConfig(snaps.Filename(t.Name()+"/"+tt.name)).MatchSnapshot(t, clients.getObject, clients.getObjectEtag, clients.putParameter, clients.putSecretValue)
 
 			assert.NoError(t, err)
 			assert.NotEmpty(t, physicalResourceID)

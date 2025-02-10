@@ -8,6 +8,7 @@ import (
 	"log/slog"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/aws/retry"
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 	s3Types "github.com/aws/aws-sdk-go-v2/service/s3/types"
@@ -32,7 +33,7 @@ type SsmClient interface {
 type AwsClient interface {
 	S3GetObject(file SopsS3File) (data []byte, err error)
 	S3GetObjectETAG(file SopsS3File) (*string, error)
-	SecretsManagerPutSecretValue(sopsHash string, secretArn string, secretContent *[]byte) (data *secretsmanager.PutSecretValueOutput, err error)
+	SecretsManagerPutSecretValue(sopsHash string, secretArn string, secretContent *[]byte, binary *bool) (data *secretsmanager.PutSecretValueOutput, err error)
 	SsmPutParameter(parameterName string, parameterContent *[]byte, keyId string) (response *ssm.PutParameterOutput, err error)
 }
 
@@ -44,7 +45,9 @@ type Client struct {
 }
 
 func CreateAwsClients(context context.Context) AwsClient {
-	cfg, err := config.LoadDefaultConfig(context)
+	cfg, err := config.LoadDefaultConfig(context, config.WithRetryer(func() aws.Retryer {
+		return retry.AddWithMaxAttempts(retry.NewStandard(), 5)
+	}))
 	if err != nil {
 		log.Fatalf("unable to load SDK config, %v", err)
 	}
@@ -103,11 +106,18 @@ func (c *Client) S3GetObjectETAG(file SopsS3File) (*string, error) {
 	return attr.ETag, nil
 }
 
-func (c *Client) SecretsManagerPutSecretValue(sopsHash string, secretArn string, secretContent *[]byte) (data *secretsmanager.PutSecretValueOutput, err error) {
-	secretContentString := string(*secretContent)
+func (c *Client) SecretsManagerPutSecretValue(sopsHash string, secretArn string, secretStringData *[]byte, binary *bool) (data *secretsmanager.PutSecretValueOutput, err error) {
+	if binary != nil && binary == aws.Bool(true) {
+		input := &secretsmanager.PutSecretValueInput{
+			SecretId:           &secretArn,
+			SecretBinary:       *secretStringData,
+			ClientRequestToken: &sopsHash,
+		}
+		return c.secretsManager.PutSecretValue(c.ctx, input)
+	}
 	input := &secretsmanager.PutSecretValueInput{
 		SecretId:           &secretArn,
-		SecretString:       &secretContentString,
+		SecretString:       aws.String(string(*secretStringData)),
 		ClientRequestToken: &sopsHash,
 	}
 	return c.secretsManager.PutSecretValue(c.ctx, input)

@@ -99,13 +99,6 @@ export interface SopsSyncOptions {
   readonly sopsAgeKey?: SecretValue;
 
   /**
-   * If the structure should be flattened use the provided separator between keys.
-   *
-   * @default - undefined
-   */
-  readonly flattenSeparator?: string;
-
-  /**
    * Should this construct automatically create IAM permissions?
    *
    * @default true
@@ -117,13 +110,20 @@ export interface SopsSyncOptions {
  * The configuration options extended by the target Secret / Parameter
  */
 export interface SopsSyncProps extends SopsSyncOptions {
-    /**
+  /**
    * The target to populate with the sops file content.
    * - for secret, it's the name or arn of the secret
    * - for parameter, it's the name of the parameter
    * - for parameter multi, it's the prefix of the parameters
    */
-  readonly target: string
+  readonly target: string;
+
+  /**
+   * If the structure should be flattened use the provided separator between keys.
+   *
+   * @default - undefined
+   */
+  readonly flattenSeparator?: string;
 
   /**
    * The encryption key used for encrypting the ssm parameter if `parameterName` is set.
@@ -135,7 +135,7 @@ export interface SopsSyncProps extends SopsSyncOptions {
    */
   readonly resourceType: ResourceType;
 
-  readonly secret?: ISecret,
+  readonly secret?: ISecret;
   readonly parameterNames?: string[];
 }
 
@@ -267,7 +267,9 @@ export class SopsSync extends Construct {
             break;
           }
           default: {
-            Annotations.of(this).addError("Failed to determine sops file format. Please specify 'sopsFileFormat'!");
+            Annotations.of(this).addError(
+              "Failed to determine sops file format. Please specify 'sopsFileFormat'!",
+            );
           }
         }
       }

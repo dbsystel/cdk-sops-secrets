@@ -1,0 +1,17 @@
+
+[TestHandleRequestWithClients/33-PARAMETER-dotenv.json - 1]
+main.getObjectCalls{
+    "test-secrets/testsecret.sops.env": {Bucket:"cdk-hnb659fds-assets-505755377845-eu-central-1", Key:"test-secrets/testsecret.sops.env"},
+}
+main.getObjectEtagCalls{
+    "test-secrets/testsecret.sops.env": {Bucket:"cdk-hnb659fds-assets-505755377845-eu-central-1", Key:"test-secrets/testsecret.sops.env"},
+}
+main.putParameterCalls{
+    "/33-PARAMETER-dotenv": map[string]interface {}{
+        "keyId":            "arn:aws:kms:eu-central-1:505755377845:key/58b75958-883a-440c-842c-85af5d33a5bb",
+        "parameterContent": "apiKey=sk-1234567890abcdef\ndatabase:host=db.example.com\ndatabase:password=P@ssw0rd!\ndatabase:user=admin\nsomeOtherKey=base64:aGFsbG8gd2VsdAo=\nspecific:boolean=True\nspecific:SpecialCharacters=\"ajkscbuiuXA34%%&&=\nspecific:HTLMEncodingTest3=@\nspecific:HTMLEncodingTest1=test <test@test.test>\nspecific:HTMLEncodingTest2=&\nspecific:null=\nspecific:number1=123\nspecific:number2=123.456\ntokens:0:service=service1\ntokens:0:token=token1\ntokens:1:service=service2\ntokens:1:token=token2\n",
+    },
+}
+main.putSecretValueCalls{
+}
+---

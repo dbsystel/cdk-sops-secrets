@@ -34,7 +34,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
   // description: undefined,  /* The description is just a string that helps people understand the purpose of the package. */
   devDeps: [
     'json-schema-to-typescript',
-  ],             /* Build dependencies for this module. */
+  ] /* Build dependencies for this module. */,
   integrationTestAutoDiscover: true,
   prettier: true,
   prettierOptions: {

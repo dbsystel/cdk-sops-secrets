@@ -1,0 +1,1060 @@
+{
+ "Resources": {
+  "JsonResourceJsonapiKeyEB6B5C10": {
+   "Type": "AWS::SSM::Parameter",
+   "Properties": {
+    "Name": "/Json/apiKey",
+    "Tier": "Standard",
+    "Type": "String",
+    "Value": " "
+   }
+  },
+  "JsonResourceJsondatabaseuserD88F8D25": {
+   "Type": "AWS::SSM::Parameter",
+   "Properties": {
+    "Name": "/Json/database/user",
+    "Tier": "Standard",
+    "Type": "String",
+    "Value": " "
+   }
+  },
+  "JsonResourceJsondatabasepassword12EBC48E": {
+   "Type": "AWS::SSM::Parameter",
+   "Properties": {
+    "Name": "/Json/database/password",
+    "Tier": "Standard",
+    "Type": "String",
+    "Value": " "
+   }
+  },
+  "JsonResourceJsondatabasehost37888D7D": {
+   "Type": "AWS::SSM::Parameter",
+   "Properties": {
+    "Name": "/Json/database/host",
+    "Tier": "Standard",
+    "Type": "String",
+    "Value": " "
+   }
+  },
+  "JsonResourceJsontokens0service92C0D936": {
+   "Type": "AWS::SSM::Parameter",
+   "Properties": {
+    "Name": "/Json/tokens/0/service",
+    "Tier": "Standard",
+    "Type": "String",
+    "Value": " "
+   }
+  },
+  "JsonResourceJsontokens0token105295EA": {
+   "Type": "AWS::SSM::Parameter",
+   "Properties": {
+    "Name": "/Json/tokens/0/token",
+    "Tier": "Standard",
+    "Type": "String",
+    "Value": " "
+   }
+  },
+  "JsonResourceJsontokens1service387D7891": {
+   "Type": "AWS::SSM::Parameter",
+   "Properties": {
+    "Name": "/Json/tokens/1/service",
+    "Tier": "Standard",
+    "Type": "String",
+    "Value": " "
+   }
+  },
+  "JsonResourceJsontokens1token4D4522D2": {
+   "Type": "AWS::SSM::Parameter",
+   "Properties": {
+    "Name": "/Json/tokens/1/token",
+    "Tier": "Standard",
+    "Type": "String",
+    "Value": " "
+   }
+  },
+  "JsonResourceJsonsomeOtherKey8C556C1F": {
+   "Type": "AWS::SSM::Parameter",
+   "Properties": {
+    "Name": "/Json/someOtherKey",
+    "Tier": "Standard",
+    "Type": "String",
+    "Value": " "
+   }
+  },
+  "JsonResourceJsonspecificSpecialCharacters340895B2": {
+   "Type": "AWS::SSM::Parameter",
+   "Properties": {
+    "Name": "/Json/specific/SpecialCharacters",
+    "Tier": "Standard",
+    "Type": "String",
+    "Value": " "
+   }
+  },
+  "JsonResourceJsonspecificHTMLEncodingTest101B8C7B8": {
+   "Type": "AWS::SSM::Parameter",
+   "Properties": {
+    "Name": "/Json/specific/HTMLEncodingTest1",
+    "Tier": "Standard",
+    "Type": "String",
+    "Value": " "
+   }
+  },
+  "JsonResourceJsonspecificHTMLEncodingTest2479B055F": {
+   "Type": "AWS::SSM::Parameter",
+   "Properties": {
+    "Name": "/Json/specific/HTMLEncodingTest2",
+    "Tier": "Standard",
+    "Type": "String",
+    "Value": " "
+   }
+  },
+  "JsonResourceJsonspecificHTLMEncodingTest3773A92F2": {
+   "Type": "AWS::SSM::Parameter",
+   "Properties": {
+    "Name": "/Json/specific/HTLMEncodingTest3",
+    "Tier": "Standard",
+    "Type": "String",
+    "Value": " "
+   }
+  },
+  "JsonResourceJsonspecificnullEFE6F24D": {
+   "Type": "AWS::SSM::Parameter",
+   "Properties": {
+    "Name": "/Json/specific/null",
+    "Tier": "Standard",
+    "Type": "String",
+    "Value": " "
+   }
+  },
+  "JsonResourceJsonspecificbooleanDCCAF95E": {
+   "Type": "AWS::SSM::Parameter",
+   "Properties": {
+    "Name": "/Json/specific/boolean",
+    "Tier": "Standard",
+    "Type": "String",
+    "Value": " "
+   }
+  },
+  "JsonResourceJsonspecificnumber120FA2919": {
+   "Type": "AWS::SSM::Parameter",
+   "Properties": {
+    "Name": "/Json/specific/number1",
+    "Tier": "Standard",
+    "Type": "String",
+    "Value": " "
+   }
+  },
+  "JsonResourceJsonspecificnumber2B2EBD3ED": {
+   "Type": "AWS::SSM::Parameter",
+   "Properties": {
+    "Name": "/Json/specific/number2",
+    "Tier": "Standard",
+    "Type": "String",
+    "Value": " "
+   }
+  },
+  "JsonSopsSyncSopsSecretParameterProviderManagedPolicyParameterAccess0B4B19A62": {
+   "Type": "AWS::IAM::ManagedPolicy",
+   "Properties": {
+    "Description": "Policy to grant parameter provider permissions to put parameter",
+    "Path": "/",
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": "ssm:PutParameter",
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:aws:ssm:",
+           {
+            "Ref": "AWS::Region"
+           },
+           ":",
+           {
+            "Ref": "AWS::AccountId"
+           },
+           ":parameter/Json/apiKey"
+          ]
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:aws:ssm:",
+           {
+            "Ref": "AWS::Region"
+           },
+           ":",
+           {
+            "Ref": "AWS::AccountId"
+           },
+           ":parameter/Json/database/user"
+          ]
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:aws:ssm:",
+           {
+            "Ref": "AWS::Region"
+           },
+           ":",
+           {
+            "Ref": "AWS::AccountId"
+           },
+           ":parameter/Json/database/password"
+          ]
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:aws:ssm:",
+           {
+            "Ref": "AWS::Region"
+           },
+           ":",
+           {
+            "Ref": "AWS::AccountId"
+           },
+           ":parameter/Json/database/host"
+          ]
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:aws:ssm:",
+           {
+            "Ref": "AWS::Region"
+           },
+           ":",
+           {
+            "Ref": "AWS::AccountId"
+           },
+           ":parameter/Json/tokens/0/service"
+          ]
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:aws:ssm:",
+           {
+            "Ref": "AWS::Region"
+           },
+           ":",
+           {
+            "Ref": "AWS::AccountId"
+           },
+           ":parameter/Json/tokens/0/token"
+          ]
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:aws:ssm:",
+           {
+            "Ref": "AWS::Region"
+           },
+           ":",
+           {
+            "Ref": "AWS::AccountId"
+           },
+           ":parameter/Json/tokens/1/service"
+          ]
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:aws:ssm:",
+           {
+            "Ref": "AWS::Region"
+           },
+           ":",
+           {
+            "Ref": "AWS::AccountId"
+           },
+           ":parameter/Json/tokens/1/token"
+          ]
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:aws:ssm:",
+           {
+            "Ref": "AWS::Region"
+           },
+           ":",
+           {
+            "Ref": "AWS::AccountId"
+           },
+           ":parameter/Json/someOtherKey"
+          ]
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:aws:ssm:",
+           {
+            "Ref": "AWS::Region"
+           },
+           ":",
+           {
+            "Ref": "AWS::AccountId"
+           },
+           ":parameter/Json/specific/SpecialCharacters"
+          ]
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:aws:ssm:",
+           {
+            "Ref": "AWS::Region"
+           },
+           ":",
+           {
+            "Ref": "AWS::AccountId"
+           },
+           ":parameter/Json/specific/HTMLEncodingTest1"
+          ]
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:aws:ssm:",
+           {
+            "Ref": "AWS::Region"
+           },
+           ":",
+           {
+            "Ref": "AWS::AccountId"
+           },
+           ":parameter/Json/specific/HTMLEncodingTest2"
+          ]
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:aws:ssm:",
+           {
+            "Ref": "AWS::Region"
+           },
+           ":",
+           {
+            "Ref": "AWS::AccountId"
+           },
+           ":parameter/Json/specific/HTLMEncodingTest3"
+          ]
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:aws:ssm:",
+           {
+            "Ref": "AWS::Region"
+           },
+           ":",
+           {
+            "Ref": "AWS::AccountId"
+           },
+           ":parameter/Json/specific/null"
+          ]
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:aws:ssm:",
+           {
+            "Ref": "AWS::Region"
+           },
+           ":",
+           {
+            "Ref": "AWS::AccountId"
+           },
+           ":parameter/Json/specific/boolean"
+          ]
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:aws:ssm:",
+           {
+            "Ref": "AWS::Region"
+           },
+           ":",
+           {
+            "Ref": "AWS::AccountId"
+           },
+           ":parameter/Json/specific/number1"
+          ]
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:aws:ssm:",
+           {
+            "Ref": "AWS::Region"
+           },
+           ":",
+           {
+            "Ref": "AWS::AccountId"
+           },
+           ":parameter/Json/specific/number2"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   }
+  },
+  "JsonSopsSync13335C85": {
+   "Type": "Custom::SopsSync",
+   "Properties": {
+    "ServiceToken": {
+     "Fn::GetAtt": [
+      "SingletonLambdaSopsSyncProviderAA18D140",
+      "Arn"
+     ]
+    },
+    "SopsInline": {
+     "Content": "ewoJImFwaUtleSI6ICJFTkNbQUVTMjU2X0dDTSxkYXRhOmxMYlhWRWhCUktYaUdHa0JoNUtsdGdVQm9BPT0saXY6bHVheUpuaWlYSHdBM1owclp5eGVGMDB4bEhmTXdyWU1pWWgrYWhQNkF5bz0sdGFnOmwzazNwU256UlRBS2VBSE94dytmR3c9PSx0eXBlOnN0cl0iLAoJImRhdGFiYXNlIjogewoJCSJ1c2VyIjogIkVOQ1tBRVMyNTZfR0NNLGRhdGE6a1F0a1Fhcz0saXY6K3F5SjlGVVhvTXRjcGNmZFQ3WlRPTkhmM1NzR2JBZkp6bkpGdDVlL3BWRT0sdGFnOjJDaW5telZlcW42NTRNZllkaGtxeGc9PSx0eXBlOnN0cl0iLAoJCSJwYXNzd29yZCI6ICJFTkNbQUVTMjU2X0dDTSxkYXRhOmpId0NFSmgwMkE4cyxpdjppbXdIVzRVN0RWMDltNU5Dek81azBBdVJaZFkvVEsyK0YyOFZiV0ZINnlnPSx0YWc6cGNRM2g0MEQ5QXZCRlFFbmlSeE1vdz09LHR5cGU6c3RyXSIsCgkJImhvc3QiOiAiRU5DW0FFUzI1Nl9HQ00sZGF0YTpVM0p4L0drQnlLTFBuZWJzcDVVPSxpdjpjQ3VXOTlrdHlBSTRkVlF6RHQxL2pzZ0xQNXBNZFlZQ3NpNkFocXNnVlhzPSx0YWc6djE2enlZdTVBMVRWQlA0YmFPeEIxZz09LHR5cGU6c3RyXSIKCX0sCgkidG9rZW5zIjogWwoJCXsKCQkJInNlcnZpY2UiOiAiRU5DW0FFUzI1Nl9HQ00sZGF0YTpNTFFXOHRvY2dDYz0saXY6Ky9mb1F5UjdxMGh2Yk9rR2l2YXVVQVdkaWhmb0hLendnU1lkdjFHcTI5Yz0sdGFnOk8yZWJtVDJ1OU5mVnFvbzBxNEo5N3c9PSx0eXBlOnN0cl0iLAoJCQkidG9rZW4iOiAiRU5DW0FFUzI1Nl9HQ00sZGF0YTpwY3JGUVFEayxpdjorcS8zaTduaVR3bi9qeU9xZUhKOGhVVkE0ak44Q3FQWHVmV3NJUmtrcEpBPSx0YWc6YnVJczhHNE9maXVKUGYxMDgvc0RoUT09LHR5cGU6c3RyXSIKCQl9LAoJCXsKCQkJInNlcnZpY2UiOiAiRU5DW0FFUzI1Nl9HQ00sZGF0YTpneVJuSWlnUFhoOD0saXY6b1ROclhUWktYNzd5eW52Y1F3aHpYaW8yckVKWHNJQk1VRDZET0NScjRmQT0sdGFnOjJPY2habWJxZGNIZGxqQzZDS2t1bEE9PSx0eXBlOnN0cl0iLAoJCQkidG9rZW4iOiAiRU5DW0FFUzI1Nl9HQ00sZGF0YTpFd0dDWVQzayxpdjoxSE16VURxbVhySTNiaEdheGtuTWZ0d0VaOENjMXN6eGFNVjZBMTY0bWZjPSx0YWc6MGI1ZVJ3eFpENGo5dWppeFRqZkZaZz09LHR5cGU6c3RyXSIKCQl9CgldLAoJInNvbWVPdGhlcktleSI6ICJFTkNbQUVTMjU2X0dDTSxkYXRhOnZWbHAzRUUxbWdUUVA5SlNER2RQZi8raDJGU3Fhalk9LGl2OnhZR0lvVFlQRW4rNGF4MkxUS2l4bFFiNU5hb3RWdyswUVZmRlNtOVFOV289LHRhZzorVTRKUWJtLzhtRldBbWxNcnlnN0xBPT0sdHlwZTpzdHJdIiwKCSJzcGVjaWZpYyI6IHsKCQkiU3BlY2lhbENoYXJhY3RlcnMiOiAiRU5DW0FFUzI1Nl9HQ00sZGF0YTp1UHFGT1NqVU1nVmRyb1VCSU02cWVybk9zQT09LGl2OnJTU2NOZ2wzZzY2K0lUQVlZamp5VTJIekJXWUR5OGxCY0NHR1hGdkhJZ289LHRhZzpKRXczeVlkaUxLK0YrTUN5V2N0aDZ3PT0sdHlwZTpzdHJdIiwKCQkiSFRNTEVuY29kaW5nVGVzdDEiOiAiRU5DW0FFUzI1Nl9HQ00sZGF0YTprc0N1M0cwckcyTmY1K2MvOXZTczBhb2wreG52LGl2OjcrUEp0M1E5MUNIbXZSSHFESWJBcFNNYVlMb1pxM0QxL0JuYUEzQ2ZzTXc9LHRhZzpTL0F0MmNsU3NHQXZIU2tqTHdldHFRPT0sdHlwZTpzdHJdIiwKCQkiSFRNTEVuY29kaW5nVGVzdDIiOiAiRU5DW0FFUzI1Nl9HQ00sZGF0YTpadz09LGl2OmpIM1JrUkpzTURMK2dQUHpwTHYxZ1BYL1RMeTlVMXpTUHFJcEY5N3dUYjQ9LHRhZzozWGFmN0pXWVl4SVFRUjg4ZWIrRkRnPT0sdHlwZTpzdHJdIiwKCQkiSFRMTUVuY29kaW5nVGVzdDMiOiAiRU5DW0FFUzI1Nl9HQ00sZGF0YTpVQT09LGl2OlpZcUNoTUxCZlFvS0hjbHU5NHNiY0k5OHNWR3Z5bU0zN0Vzc2h2ejBJdXc9LHRhZzpVVjF6RmltY2dFVEQwbmNUanBnRHZnPT0sdHlwZTpzdHJdIiwKCQkibnVsbCI6IG51bGwsCgkJImJvb2xlYW4iOiAiRU5DW0FFUzI1Nl9HQ00sZGF0YTp3MnNZL0E9PSxpdjpLKzJBTDhEYTcwKzFtQlZ6dXEyZU9nemtFRndlbWJFY3lYOEhYS0lBcVI4PSx0YWc6S1lDdzNtNlBUOHJjdTFpL21HWko1Zz09LHR5cGU6Ym9vbF0iLAoJCSJudW1iZXIxIjogIkVOQ1tBRVMyNTZfR0NNLGRhdGE6M1kxZixpdjpNQ0NUK0V3Tm5wVkxldS9La2lRTmxJR0dva2ltaDZVN1BORUZFeXIxdTRBPSx0YWc6alpWYU1ObjRyZ2grNWtXZ056aUlpZz09LHR5cGU6ZmxvYXRdIiwKCQkibnVtYmVyMiI6ICJFTkNbQUVTMjU2X0dDTSxkYXRhOkVQZ1REN1p4VlE9PSxpdjorWkpnZkQyVi9zM1hCalF1enEweXNTNWZZdFMyUDJoWDcyZGo5cW11SENFPSx0YWc6Zk05Zyt3dHViakFmalhQSEN2c1hWQT09LHR5cGU6ZmxvYXRdIgoJfSwKCSJzb3BzIjogewoJCSJrbXMiOiBudWxsLAoJCSJnY3Bfa21zIjogbnVsbCwKCQkiYXp1cmVfa3YiOiBudWxsLAoJCSJoY192YXVsdCI6IG51bGwsCgkJImFnZSI6IFsKCQkJewoJCQkJInJlY2lwaWVudCI6ICJhZ2UxZGpsbHcycHp1cHJycWMwZW41bTh2YzhrNWdlM3RtMGY2ZzdjajBjMGdsZnpwNDR2ZGM0cWw4bmd2dSIsCgkJCQkiZW5jIjogIi0tLS0tQkVHSU4gQUdFIEVOQ1JZUFRFRCBGSUxFLS0tLS1cbllXZGxMV1Z1WTNKNWNIUnBiMjR1YjNKbkwzWXhDaTArSUZneU5UVXhPU0JqU0N0dE1GbFlaRTlGWmpkSFMyZ3dcblFqZGplRk5tUm1sUVZuVllNSEl2VXpsTFRFSkZaVkZ4WjFFMENtRnhXblJ3ZWpOTVpYcEJObnBsYVVWRGR6WnRcblFXWkdWRUo1UXpNelVVaHVkMGhrU1c1dmRHRmlVMDBLTFMwdElEVnBSVEpITWxocVRHSlpTeXRyYW5aYVNXMWFcbmNsQTBZV0ZVTlhJclkyeDJlbWg1ZEdGVGQxVmpZekFLQTlSOUMrNDJiWjJiS0RVbjhLNlNEZlE1S2tySUNZM3JcbjBOMjdWNThaUEFvNDh0cWtoZWEvbzBEQnRrZGxsckJIT3hHZU9JSm0vd0ZPZm5FVHJaNjhWdz09XG4tLS0tLUVORCBBR0UgRU5DUllQVEVEIEZJTEUtLS0tLVxuIgoJCQl9CgkJXSwKCQkibGFzdG1vZGlmaWVkIjogIjIwMjUtMDItMDdUMTQ6NDc6MTRaIiwKCQkibWFjIjogIkVOQ1tBRVMyNTZfR0NNLGRhdGE6N0N1Q2o3c0plS0ZaRnBGcDZqaTNCZkd6RFkrWDZaNWVmY2NwVHNiRGo0Y2svUVl1K3gzaUxraXJoaHJHSDBoRXVONnhIS0Fqcnkvam1DUkpwR2grN0VHbTNmZlFvU1l1OW9DK3VqU1gzKzdhV2ZoT3Y4Uk90N1IzOFo5anpFbjFxcGhLRVg5bEszTytJcnVYSGZVRSs2dC96cXdsSVZqTUdhSTFBUmJMQktBPSxpdjpuOGNlSGI0V3dYeTRWSXgvbUpOV05Nd0diRjZJdk11T3cvWVFhN0p4UmlZPSx0YWc6aGZVM1NiWkU3Y0FKOVFUWFJHWmo3dz09LHR5cGU6c3RyXSIsCgkJInBncCI6IG51bGwsCgkJInVuZW5jcnlwdGVkX3N1ZmZpeCI6ICJfdW5lbmNyeXB0ZWQiLAoJCSJ2ZXJzaW9uIjogIjMuOS40IgoJfQp9",
+     "Hash": "e79149a81c3a4f62383c195070a39111284086e5c754f516b315c09943583dfb"
+    },
+    "FlattenSeparator": "/",
+    "Format": "json",
+    "EncryptionKey": "58b75958-883a-440c-842c-85af5d33a5bb",
+    "ResourceType": "PARAMETER_MULTI",
+    "Target": "/Json/"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete"
+  },
+  "SingletonLambdaSopsSyncProviderServiceRoleC45BBD25": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     },
+     {
+      "Ref": "JsonSopsSyncSopsSecretParameterProviderManagedPolicyParameterAccess0B4B19A62"
+     },
+     {
+      "Ref": "YamlSopsSyncSopsSecretParameterProviderManagedPolicyParameterAccess0A22A1629"
+     }
+    ]
+   }
+  },
+  "SingletonLambdaSopsSyncProviderServiceRoleDefaultPolicy45D64FF6": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "kms:Decrypt",
+        "kms:Encrypt",
+        "kms:ReEncrypt*",
+        "kms:GenerateDataKey*"
+       ],
+       "Effect": "Allow",
+       "Resource": "arn:aws:kms:eu-central-1:505755377845:key/58b75958-883a-440c-842c-85af5d33a5bb"
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "SingletonLambdaSopsSyncProviderServiceRoleDefaultPolicy45D64FF6",
+    "Roles": [
+     {
+      "Ref": "SingletonLambdaSopsSyncProviderServiceRoleC45BBD25"
+     }
+    ]
+   }
+  },
+  "SingletonLambdaSopsSyncProviderAA18D140": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+     },
+     "S3Key": "d4fa67588efc8e80877fce3ed8397e0350420ed5859c6d2a36fefc0f1604fae4.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "SOPS_AGE_KEY": "AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3"
+     }
+    },
+    "Handler": "bootstrap",
+    "Role": {
+     "Fn::GetAtt": [
+      "SingletonLambdaSopsSyncProviderServiceRoleC45BBD25",
+      "Arn"
+     ]
+    },
+    "Runtime": "provided.al2",
+    "Timeout": 60
+   },
+   "DependsOn": [
+    "SingletonLambdaSopsSyncProviderServiceRoleDefaultPolicy45D64FF6",
+    "SingletonLambdaSopsSyncProviderServiceRoleC45BBD25"
+   ]
+  },
+  "YamlResourceYamlapiKey6387C0EA": {
+   "Type": "AWS::SSM::Parameter",
+   "Properties": {
+    "Name": "/Yaml/apiKey",
+    "Tier": "Standard",
+    "Type": "String",
+    "Value": " "
+   }
+  },
+  "YamlResourceYamldatabaseuser0BD59C5D": {
+   "Type": "AWS::SSM::Parameter",
+   "Properties": {
+    "Name": "/Yaml/database/user",
+    "Tier": "Standard",
+    "Type": "String",
+    "Value": " "
+   }
+  },
+  "YamlResourceYamldatabasepassword99035603": {
+   "Type": "AWS::SSM::Parameter",
+   "Properties": {
+    "Name": "/Yaml/database/password",
+    "Tier": "Standard",
+    "Type": "String",
+    "Value": " "
+   }
+  },
+  "YamlResourceYamldatabasehostB5A0FE91": {
+   "Type": "AWS::SSM::Parameter",
+   "Properties": {
+    "Name": "/Yaml/database/host",
+    "Tier": "Standard",
+    "Type": "String",
+    "Value": " "
+   }
+  },
+  "YamlResourceYamltokens0service8AE519C3": {
+   "Type": "AWS::SSM::Parameter",
+   "Properties": {
+    "Name": "/Yaml/tokens/0/service",
+    "Tier": "Standard",
+    "Type": "String",
+    "Value": " "
+   }
+  },
+  "YamlResourceYamltokens0token8810E18D": {
+   "Type": "AWS::SSM::Parameter",
+   "Properties": {
+    "Name": "/Yaml/tokens/0/token",
+    "Tier": "Standard",
+    "Type": "String",
+    "Value": " "
+   }
+  },
+  "YamlResourceYamltokens1service870E3CC4": {
+   "Type": "AWS::SSM::Parameter",
+   "Properties": {
+    "Name": "/Yaml/tokens/1/service",
+    "Tier": "Standard",
+    "Type": "String",
+    "Value": " "
+   }
+  },
+  "YamlResourceYamltokens1tokenAC2DFE7E": {
+   "Type": "AWS::SSM::Parameter",
+   "Properties": {
+    "Name": "/Yaml/tokens/1/token",
+    "Tier": "Standard",
+    "Type": "String",
+    "Value": " "
+   }
+  },
+  "YamlResourceYamlsomeOtherKey98D03965": {
+   "Type": "AWS::SSM::Parameter",
+   "Properties": {
+    "Name": "/Yaml/someOtherKey",
+    "Tier": "Standard",
+    "Type": "String",
+    "Value": " "
+   }
+  },
+  "YamlResourceYamlspecificSpecialCharacters5B206BEA": {
+   "Type": "AWS::SSM::Parameter",
+   "Properties": {
+    "Name": "/Yaml/specific/SpecialCharacters",
+    "Tier": "Standard",
+    "Type": "String",
+    "Value": " "
+   }
+  },
+  "YamlResourceYamlspecificHTMLEncodingTest10D2233FA": {
+   "Type": "AWS::SSM::Parameter",
+   "Properties": {
+    "Name": "/Yaml/specific/HTMLEncodingTest1",
+    "Tier": "Standard",
+    "Type": "String",
+    "Value": " "
+   }
+  },
+  "YamlResourceYamlspecificHTMLEncodingTest2761B8FA7": {
+   "Type": "AWS::SSM::Parameter",
+   "Properties": {
+    "Name": "/Yaml/specific/HTMLEncodingTest2",
+    "Tier": "Standard",
+    "Type": "String",
+    "Value": " "
+   }
+  },
+  "YamlResourceYamlspecificHTLMEncodingTest32407BA78": {
+   "Type": "AWS::SSM::Parameter",
+   "Properties": {
+    "Name": "/Yaml/specific/HTLMEncodingTest3",
+    "Tier": "Standard",
+    "Type": "String",
+    "Value": " "
+   }
+  },
+  "YamlResourceYamlspecificnull5A2012DC": {
+   "Type": "AWS::SSM::Parameter",
+   "Properties": {
+    "Name": "/Yaml/specific/null",
+    "Tier": "Standard",
+    "Type": "String",
+    "Value": " "
+   }
+  },
+  "YamlResourceYamlspecificboolean377BB393": {
+   "Type": "AWS::SSM::Parameter",
+   "Properties": {
+    "Name": "/Yaml/specific/boolean",
+    "Tier": "Standard",
+    "Type": "String",
+    "Value": " "
+   }
+  },
+  "YamlResourceYamlspecificnumber1E294648B": {
+   "Type": "AWS::SSM::Parameter",
+   "Properties": {
+    "Name": "/Yaml/specific/number1",
+    "Tier": "Standard",
+    "Type": "String",
+    "Value": " "
+   }
+  },
+  "YamlResourceYamlspecificnumber28F676023": {
+   "Type": "AWS::SSM::Parameter",
+   "Properties": {
+    "Name": "/Yaml/specific/number2",
+    "Tier": "Standard",
+    "Type": "String",
+    "Value": " "
+   }
+  },
+  "YamlSopsSyncSopsSecretParameterProviderManagedPolicyParameterAccess0A22A1629": {
+   "Type": "AWS::IAM::ManagedPolicy",
+   "Properties": {
+    "Description": "Policy to grant parameter provider permissions to put parameter",
+    "Path": "/",
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": "ssm:PutParameter",
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:aws:ssm:",
+           {
+            "Ref": "AWS::Region"
+           },
+           ":",
+           {
+            "Ref": "AWS::AccountId"
+           },
+           ":parameter/Yaml/apiKey"
+          ]
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:aws:ssm:",
+           {
+            "Ref": "AWS::Region"
+           },
+           ":",
+           {
+            "Ref": "AWS::AccountId"
+           },
+           ":parameter/Yaml/database/user"
+          ]
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:aws:ssm:",
+           {
+            "Ref": "AWS::Region"
+           },
+           ":",
+           {
+            "Ref": "AWS::AccountId"
+           },
+           ":parameter/Yaml/database/password"
+          ]
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:aws:ssm:",
+           {
+            "Ref": "AWS::Region"
+           },
+           ":",
+           {
+            "Ref": "AWS::AccountId"
+           },
+           ":parameter/Yaml/database/host"
+          ]
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:aws:ssm:",
+           {
+            "Ref": "AWS::Region"
+           },
+           ":",
+           {
+            "Ref": "AWS::AccountId"
+           },
+           ":parameter/Yaml/tokens/0/service"
+          ]
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:aws:ssm:",
+           {
+            "Ref": "AWS::Region"
+           },
+           ":",
+           {
+            "Ref": "AWS::AccountId"
+           },
+           ":parameter/Yaml/tokens/0/token"
+          ]
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:aws:ssm:",
+           {
+            "Ref": "AWS::Region"
+           },
+           ":",
+           {
+            "Ref": "AWS::AccountId"
+           },
+           ":parameter/Yaml/tokens/1/service"
+          ]
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:aws:ssm:",
+           {
+            "Ref": "AWS::Region"
+           },
+           ":",
+           {
+            "Ref": "AWS::AccountId"
+           },
+           ":parameter/Yaml/tokens/1/token"
+          ]
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:aws:ssm:",
+           {
+            "Ref": "AWS::Region"
+           },
+           ":",
+           {
+            "Ref": "AWS::AccountId"
+           },
+           ":parameter/Yaml/someOtherKey"
+          ]
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:aws:ssm:",
+           {
+            "Ref": "AWS::Region"
+           },
+           ":",
+           {
+            "Ref": "AWS::AccountId"
+           },
+           ":parameter/Yaml/specific/SpecialCharacters"
+          ]
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:aws:ssm:",
+           {
+            "Ref": "AWS::Region"
+           },
+           ":",
+           {
+            "Ref": "AWS::AccountId"
+           },
+           ":parameter/Yaml/specific/HTMLEncodingTest1"
+          ]
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:aws:ssm:",
+           {
+            "Ref": "AWS::Region"
+           },
+           ":",
+           {
+            "Ref": "AWS::AccountId"
+           },
+           ":parameter/Yaml/specific/HTMLEncodingTest2"
+          ]
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:aws:ssm:",
+           {
+            "Ref": "AWS::Region"
+           },
+           ":",
+           {
+            "Ref": "AWS::AccountId"
+           },
+           ":parameter/Yaml/specific/HTLMEncodingTest3"
+          ]
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:aws:ssm:",
+           {
+            "Ref": "AWS::Region"
+           },
+           ":",
+           {
+            "Ref": "AWS::AccountId"
+           },
+           ":parameter/Yaml/specific/null"
+          ]
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:aws:ssm:",
+           {
+            "Ref": "AWS::Region"
+           },
+           ":",
+           {
+            "Ref": "AWS::AccountId"
+           },
+           ":parameter/Yaml/specific/boolean"
+          ]
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:aws:ssm:",
+           {
+            "Ref": "AWS::Region"
+           },
+           ":",
+           {
+            "Ref": "AWS::AccountId"
+           },
+           ":parameter/Yaml/specific/number1"
+          ]
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:aws:ssm:",
+           {
+            "Ref": "AWS::Region"
+           },
+           ":",
+           {
+            "Ref": "AWS::AccountId"
+           },
+           ":parameter/Yaml/specific/number2"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   }
+  },
+  "YamlSopsSync65050259": {
+   "Type": "Custom::SopsSync",
+   "Properties": {
+    "ServiceToken": {
+     "Fn::GetAtt": [
+      "SingletonLambdaSopsSyncProviderAA18D140",
+      "Arn"
+     ]
+    },
+    "SopsInline": {
+     "Content": "YXBpS2V5OiBFTkNbQUVTMjU2X0dDTSxkYXRhOnI2WWZyd0drVkZ4QkY4bUhFY3NQYXhNdFVRPT0saXY6LzhycjRLNW1CeExpM2pSMmxIZmVleVZPL3dRWTAwcGMvL093NXZxWTE3UT0sdGFnOitkZ0xhS2VTeE5OQnVPRUZJZnRPWnc9PSx0eXBlOnN0cl0KZGF0YWJhc2U6CiAgICB1c2VyOiBFTkNbQUVTMjU2X0dDTSxkYXRhOnNkc1V5dm89LGl2OklWaW9KQ1Z5Uk9laEF0RzZ4Ym1BWnpkNTJIUXZrMGVaSXRNQmpCQXZxeDg9LHRhZzowcHVtemR5SDV3aUVBck1tbXJhM1VRPT0sdHlwZTpzdHJdCiAgICBwYXNzd29yZDogRU5DW0FFUzI1Nl9HQ00sZGF0YTpDU1E4akZyeG5MUVksaXY6aFhMRU5tRzhxTEdzR2RXdjN3YnJqNUxmMnpiRjFUb05Jd1M0eTF1V0VYZz0sdGFnOjhRRENNeUE2OWRZbDU4eEl1UDFEY0E9PSx0eXBlOnN0cl0KICAgIGhvc3Q6IEVOQ1tBRVMyNTZfR0NNLGRhdGE6eGZVMmVDKy8rdXZDa0hZOFFIWT0saXY6VUxXZHZvYTZyOEYxZzIrWkYzeFB3YWsxRWRoRFdtbmRzTzVSVXhBVlBFOD0sdGFnOktHbEpHMUlNU1duNG5FdE1hT1NzZGc9PSx0eXBlOnN0cl0KdG9rZW5zOgogICAgLSBzZXJ2aWNlOiBFTkNbQUVTMjU2X0dDTSxkYXRhOnRSU1VwR0tJRW1jPSxpdjpoaS8zOGlDL0dsYzRueFVrUllCVjJjeTk0NmsrYXpYRnRFZEpPTlAxZy93PSx0YWc6R1EwL1dFaHRleXFDcHNFdi9TRnJiQT09LHR5cGU6c3RyXQogICAgICB0b2tlbjogRU5DW0FFUzI1Nl9HQ00sZGF0YTpDR25TTzRIRSxpdjpMSDB4VldOVGJCbUhQUTFPaVA1K3VSRmZHL0U3SzdPR1lxS0hYT0tqZThRPSx0YWc6c09ZaGdLS1Yxb2dPczdQSnJCcnNqdz09LHR5cGU6c3RyXQogICAgLSBzZXJ2aWNlOiBFTkNbQUVTMjU2X0dDTSxkYXRhOm9ocVh2Wi83SFd3PSxpdjpDcGpVZFRiR0w0VEdSSVd0RUp4Wjg5MjN0dy9Rb213K2tDdGlIdUZpR1FjPSx0YWc6OTVUUVVhM05TVzFxR1Q4TE5zRWdiUT09LHR5cGU6c3RyXQogICAgICB0b2tlbjogRU5DW0FFUzI1Nl9HQ00sZGF0YTpJMEkvWGdXbCxpdjo4N0UvYzdEaUdLVDIydGRkQ0ZxQnVQT0M3MzZ5djVZRDlNLytnM1BpWlg0PSx0YWc6WjFwcklIZkgzOW0yVTZpMktlVjIyUT09LHR5cGU6c3RyXQpzb21lT3RoZXJLZXk6IEVOQ1tBRVMyNTZfR0NNLGRhdGE6SFNNRndNWEhuaTE4dFRPUHcyREFFMGc1WFFSOW9Vdz0saXY6NHhUUk84VFloYmxhMDFnemF0aGY3VUJIaDhHdGhkOTdHSXhYLzBrQ1h3Zz0sdGFnOjRwc0VGVzNPMlJxcVlONjhVMjNQeHc9PSx0eXBlOnN0cl0Kc3BlY2lmaWM6CiAgICBTcGVjaWFsQ2hhcmFjdGVyczogRU5DW0FFUzI1Nl9HQ00sZGF0YTpFL2pxa1B2VVNiaFpQYm0wdnJDalgxc29MQT09LGl2OlJ0bzBFeVFUMm96Rm1rMXR2azN4UkR3Vm5OcHJBNXhqcENOR1RaaWViMEE9LHRhZzpwUnZoc1huVnJiMnFHRzFvY3U1bUt3PT0sdHlwZTpzdHJdCiAgICBIVE1MRW5jb2RpbmdUZXN0MTogRU5DW0FFUzI1Nl9HQ00sZGF0YTpaZGM1dlpPQklRUjhtY2xyUHl0dm15ZzRIUWVELGl2OldHelMwK0xTUDlYYUZlcWgxYVptbWdPNTRaRG44VGYyWUlPaXdtSkhwMEk9LHRhZzpaZEEveFg3Mkp6Qll4R1ZjVjJhMlJBPT0sdHlwZTpzdHJdCiAgICBIVE1MRW5jb2RpbmdUZXN0MjogRU5DW0FFUzI1Nl9HQ00sZGF0YTpYdz09LGl2OmJsWUpYd1Qrd0VyZ1Zzd2FDVzhvV1lubnk4OG9MMXl2Rng4ZTNKY0UwOVE9LHRhZzorWVV5MDJ4YUpocXFhdEJ0a2o5NzJBPT0sdHlwZTpzdHJdCiAgICBIVExNRW5jb2RpbmdUZXN0MzogRU5DW0FFUzI1Nl9HQ00sZGF0YTovdz09LGl2Oi80ZVNWdEZRN2NHb05JN1VPTXc4bHkwK2FpWDdXaXZVNGloTWxWS1VENWs9LHRhZzpjTFNPOENSMElNK1k1TFpmZE00M0JRPT0sdHlwZTpzdHJdCiAgICAibnVsbCI6IG51bGwKICAgIGJvb2xlYW46IEVOQ1tBRVMyNTZfR0NNLGRhdGE6RDFpYVVBPT0saXY6U3VyVUFCaHFNK1VZaUNaYUVtanlHS1phaTJqREpMM25uWko0MXRNTkhCUT0sdGFnOmdld0ZsY2NVZGIzSXlYN2tQK1NQM3c9PSx0eXBlOmJvb2xdCiAgICBudW1iZXIxOiBFTkNbQUVTMjU2X0dDTSxkYXRhOk1jQk0saXY6VmpZRXBkVmdMc2pYR20yVlJEOUx1MEJYeU9NRmprVU1RSWp2dVZvZDVjcz0sdGFnOjdFZm5LMHFjSVRSZzFPYnJpdTdFZ2c9PSx0eXBlOmludF0KICAgIG51bWJlcjI6IEVOQ1tBRVMyNTZfR0NNLGRhdGE6d0xjdTBYanlKZz09LGl2OnRaVC9BTVlNVG9aaTVudW82alV4d0IwMUhQWDRIaEhwZHQ2djd1elo5U0U9LHRhZzpmZ0s0R2ZpNVlCQTFMdXBKQlgyc0JBPT0sdHlwZTpmbG9hdF0Kc29wczoKICAgIGttczogW10KICAgIGdjcF9rbXM6IFtdCiAgICBhenVyZV9rdjogW10KICAgIGhjX3ZhdWx0OiBbXQogICAgYWdlOgogICAgICAgIC0gcmVjaXBpZW50OiBhZ2UxZGpsbHcycHp1cHJycWMwZW41bTh2YzhrNWdlM3RtMGY2ZzdjajBjMGdsZnpwNDR2ZGM0cWw4bmd2dQogICAgICAgICAgZW5jOiB8CiAgICAgICAgICAgIC0tLS0tQkVHSU4gQUdFIEVOQ1JZUFRFRCBGSUxFLS0tLS0KICAgICAgICAgICAgWVdkbExXVnVZM0o1Y0hScGIyNHViM0puTDNZeENpMCtJRmd5TlRVeE9TQlljM0Y2WkZZNFJGbGxiU3RwTXpFegogICAgICAgICAgICBXbXh1TnpkdU15dGpSa2gxWTI0eE1VTm9WbmRDWVVOaGFHdEpDakp3WjFBelpsQlZjVmQ2WTJORmJHUjRNbVZGCiAgICAgICAgICAgIGJXOU9XV2gyYm1SamFGUnJPRm95ZVdWV2JuSlRlV01LTFMwdElFeHlWRE5GUlhwRlRFcFJNell2V0cxUGFXTnoKICAgICAgICAgICAgVFc5NmQwdHFhakJMYzAxcGFWbEVaSEZYUjFGMmJYY0tMSUpnN3lUbTB1Q2lpUGlLc25zQXlSTS9hRFovZk52dwogICAgICAgICAgICBpaWxLVEI1d1AxcWRzN1N0Y1ZMSjE4UkdVbzl2dUFBOWlQME5aQ1A2a0tMVmdaYmNKL2FTZHc9PQogICAgICAgICAgICAtLS0tLUVORCBBR0UgRU5DUllQVEVEIEZJTEUtLS0tLQogICAgbGFzdG1vZGlmaWVkOiAiMjAyNS0wMi0wN1QxNDo0NzowOVoiCiAgICBtYWM6IEVOQ1tBRVMyNTZfR0NNLGRhdGE6U3gyRDZTRitwUUhRK291eDdsTmV4c2hQb2RjZ2UzdzJnNml4TFRqSy9Oa0VneUJNbWdzVnlCR1dNbCtrU2s2UFk1OEhUNEFRcHlCdHVpVUtqM2pTSjRwWm1lcGdXSUFkeEtwQjNzbHF5MzhnZ2hZUDIvQUhTYkhZUnpoTFFJT3h4RE8waW5Vd3JvSGExM0h0dEpDekRmWEtOaUtyYk1SQVFLaytGV0Y2eDN3PSxpdjo3c0JqU2hWV3JXMTc3d1pCdityeFc2ZXFLMFZRY2pqR1dWdEh3OWRiR1RZPSx0YWc6Qm8zb1lGZ2JBVGJOVndEdFAyUkFhdz09LHR5cGU6c3RyXQogICAgcGdwOiBbXQogICAgdW5lbmNyeXB0ZWRfc3VmZml4OiBfdW5lbmNyeXB0ZWQKICAgIHZlcnNpb246IDMuOS40Cg==",
+     "Hash": "9912a0ccf8001b767579817f902a5d7e030019cc7b6db34c028f4a0f9079fddf"
+    },
+    "FlattenSeparator": "/",
+    "Format": "yaml",
+    "EncryptionKey": "58b75958-883a-440c-842c-85af5d33a5bb",
+    "ResourceType": "PARAMETER_MULTI",
+    "Target": "/Yaml/"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete"
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}

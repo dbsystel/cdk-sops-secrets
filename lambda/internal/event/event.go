@@ -45,7 +45,9 @@ type ResourceType string
 const (
 	// Secret, flattened and stringified
 	SECRET ResourceType = "SECRET"
-	// Secret, just the raw value
+	// Secret, just the raw value stored as binary
+	SECRET_RAW ResourceType = "SECRET_RAW"
+	// Secret, just the raw value stored as binary
 	SECRET_BINARY ResourceType = "SECRET_BINARY"
 	// The JSON object is flattened into multiple parameters
 	PARAMETER_MULTI ResourceType = "PARAMETER_MULTI"
@@ -54,7 +56,7 @@ const (
 )
 
 type SopsSyncResourcePropertys struct {
-	ResourceType     ResourceType `json:"ResourceType" jsonschema:"enum=SECRET,enum=SECRET_BINARY,enum=PARAMETER_MULTI,enum=PARAMETER"`
+	ResourceType     ResourceType `json:"ResourceType" jsonschema:"enum=SECRET,enum=SECRET_RAW,enum=SECRET_BINARY,enum=PARAMETER_MULTI,enum=PARAMETER"`
 	Format           sops.Format  `json:"Format" jsonschema:"enum=json,enum=yaml,enum=dotenv,enum=binary"`
 	Target           string       `json:"Target"`
 	EncryptionKey    *string      `json:"EncryptionKey,omitempty"`

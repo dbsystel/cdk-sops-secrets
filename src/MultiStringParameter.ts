@@ -14,13 +14,13 @@ interface JSONObject {
 export interface MultiStringParameterProps extends SopsCommonParameterProps {
   /**
    * The seperator used to seperate keys
-   * 
+   *
    * @default - '/'
    */
   readonly keySeparator?: string;
   /**
    * The prefix used for all parameters
-   * 
+   *
    * @default - '/'
    */
   readonly keyPrefix?: string;
@@ -76,11 +76,40 @@ export class MultiStringParameter extends Construct {
 
     const keys = this.parseFile(props.sopsFilePath!, this.keySeparator)
       .filter((key) => !key.startsWith('sops'))
-      .map((value) => `${this.keyPrefix}${value}`);
+      .map((value) => {
+        // Ass we flatten array to [number] path notations, we have to fix this for parameter store
+        let fixedKey = value.replace('[', this.keySeparator);
+        fixedKey = fixedKey.replace(']', this.keySeparator);
+        if (fixedKey.endsWith(this.keySeparator)) {
+          fixedKey = fixedKey.slice(0, -1);
+        }
+        fixedKey = fixedKey.replace(
+          this.keySeparator + this.keySeparator,
+          this.keySeparator,
+        );
+
+        // The secret name can contain ASCII letters, numbers, and the following characters: /_+=.@-
+        const allowedChars = '/_+=.@-';
+        for (let i = 0; i < fixedKey.length; i++) {
+          const char = fixedKey[i];
+          if (
+            !(
+              (char >= 'a' && char <= 'z') ||
+              (char >= 'A' && char <= 'Z') ||
+              (char >= '0' && char <= '9') ||
+              allowedChars.includes(char)
+            )
+          ) {
+            fixedKey = fixedKey.slice(0, i) + '_' + fixedKey.slice(i + 1);
+          }
+        }
+        return `${this.keyPrefix}${fixedKey}`;
+      });
 
     keys.forEach((key) => {
       new StringParameter(this, 'Resource' + key, {
         parameterName: key,
+        description: props.description,
         tier: ParameterTier.STANDARD,
         stringValue: ' ',
       });

@@ -54,7 +54,7 @@ func HandleRequestWithClients(clients client.AwsClient, e cfn.Event) (physicalRe
 	}
 
 	switch props.ResourceType {
-	case event.SECRET, event.SECRET_BINARY:
+	case event.SECRET, event.SECRET_RAW, event.SECRET_BINARY:
 		return handleSecret(baseProps)
 	case event.PARAMETER_MULTI:
 		return handleParameterMulti(baseProps)

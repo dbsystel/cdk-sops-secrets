@@ -1,7 +1,6 @@
 package sops
 
 import (
-	"fmt"
 	"os"
 	"testing"
 
@@ -19,10 +18,10 @@ func read(filename string) ([]byte, error) {
 
 func TestDecrypt(t *testing.T) {
 	tests := map[Format]string{
-		BINARY: "sopsfile.enc-age.binary",
-		DOTENV: "encrypted-best-secret.env",
-		JSON:   "sopsfile-complex.enc-age.json",
-		YAML:   "sopsfile.enc-age.yaml",
+		BINARY: "README.sops.binary",
+		DOTENV: "testsecret.sops.env",
+		JSON:   "testsecret.sops.json",
+		YAML:   "testsecret.sops.yaml",
 	}
 
 	t.Setenv("SOPS_AGE_KEY", "AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3")
@@ -30,7 +29,7 @@ func TestDecrypt(t *testing.T) {
 	for format, file := range tests {
 		t.Run(file, func(t *testing.T) {
 
-			content, err := read(fmt.Sprintf("%s/%s", format, file))
+			content, err := read(file)
 
 			if err != nil {
 				t.Fatalf("Failed to read file: %v", err)
