@@ -108,11 +108,7 @@ additionalActions = [
 ];
 
 project.buildWorkflow.preBuildSteps.unshift(...additionalActions);
-[
-  "PARAMETER",
-  "PARAMETER_MULTI",
-  "SECRET"
-].forEach((type) => {
+['PARAMETER', 'PARAMETER_MULTI', 'SECRET'].forEach((type) => {
   project.buildWorkflow.preBuildSteps.push({
     name: `Update snapshots: ${type}`,
     run: `yarn run projen integ:${type}:snapshot`,
