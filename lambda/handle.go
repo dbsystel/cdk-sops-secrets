@@ -24,8 +24,11 @@ func handleSecret(props BaseProps) (physicalResourceID string, data map[string]i
 	logger.Info("Handling secret data", "ResourceType", props.properties.ResourceType)
 
 	var binary *bool
+
+	// Prepare the data depending on the resource type
 	switch props.properties.ResourceType {
 	case event.SECRET:
+		// The secretsmanager does not support nested json objects, so we have to flatten the data
 		seperator := "."
 		if props.properties.FlattenSeparator != nil {
 			seperator = *props.properties.FlattenSeparator
@@ -34,10 +37,14 @@ func handleSecret(props BaseProps) (physicalResourceID string, data map[string]i
 		if err := props.secretDecryptedData.Flatten(seperator); err != nil {
 			return props.properties.GeneratePhysicalResourceId(), nil, err
 		}
+
+		// Make sure the values are strings to avoid issues while storing them in the secrets manager
 		logger.Info("Stringifying secret data", "ResourceType", props.properties.ResourceType)
 		if err := props.secretDecryptedData.StringifyValues(); err != nil {
 			return props.properties.GeneratePhysicalResourceId(), nil, err
 		}
+
+		// Secretsmanager values have to be stored as JSON
 		logger.Info("Converting secret data to JSON", "ResourceType", props.properties.ResourceType)
 		outData, outDataErr = props.secretDecryptedData.ToJSON()
 		binary = ptr.Bool(false)
@@ -96,7 +103,7 @@ func handleParameterMulti(props BaseProps) (physicalResourceID string, data map[
 	}
 	logger.Info("Writing secret data to parameter store")
 	for key, value := range outData {
-		// Ass we flatten array to [number] path notations, we have to fix this for parameter store
+		// As we flatten array to [number] path notations, we have to fix this for parameter store
 		fixedKey := strings.ReplaceAll(key, "[", seperator)
 		fixedKey = strings.ReplaceAll(fixedKey, "]", seperator)
 		fixedKey = strings.TrimSuffix(fixedKey, seperator)

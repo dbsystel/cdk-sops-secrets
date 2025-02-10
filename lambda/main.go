@@ -24,25 +24,26 @@ func HandleRequestWithClients(clients client.AwsClient, e cfn.Event) (physicalRe
 		return "", nil, fmt.Errorf("requestType '%s' not supported", e.RequestType)
 	}
 
+	// Get the event input from the cloudformation event
 	props, err := event.FromCfnEvent(e)
 	if err != nil {
 		return "", nil, err
 	}
 
+	// Get the encrypted secret input provided by the user
 	secretEncrypted, secretEncryptedErr := props.GetEncryptedSopsSecret(clients)
-
 	if secretEncryptedErr != nil {
 		return "", nil, secretEncryptedErr
 	}
 
+	// Decrypt the secret input with sops
 	secretDecrypted, secretDecryptedErr := secretEncrypted.Decrypt()
-
 	if secretDecryptedErr != nil {
 		return "", nil, secretDecryptedErr
 	}
 
+	// Generate a data object by parsing the decrypted secret depending on the data input type
 	secretDecryptedData, secretDecryptedDataErr := secretDecrypted.ToData()
-
 	if secretDecryptedDataErr != nil {
 		return "", nil, secretDecryptedDataErr
 	}
@@ -53,6 +54,7 @@ func HandleRequestWithClients(clients client.AwsClient, e cfn.Event) (physicalRe
 		secretDecryptedData: secretDecryptedData,
 	}
 
+	// Fill the secret values in the ressource depending on the ressource type
 	switch props.ResourceType {
 	case event.SECRET, event.SECRET_RAW, event.SECRET_BINARY:
 		return handleSecret(baseProps)

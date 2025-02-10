@@ -104,14 +104,17 @@ func (p *SopsSyncResourcePropertys) GeneratePhysicalResourceId() string {
 }
 
 func (p *SopsSyncResourcePropertys) sopsInlineToSopsEncryptedSecret() (*sops.EncryptedSopsSecret, error) {
+	// Read the encrypted secret content from inline
 	content, contentErr := base64.StdEncoding.DecodeString(p.SopsInline.Content)
 	if contentErr != nil {
 		return nil, contentErr
 	}
+	// Generate a uniform EncryptedSopsSecret object from the content for later use
 	return sops.CreateEncryptedSopsSecret(content, p.Format, p.SopsInline.Hash)
 }
 
 func (p *SopsSyncResourcePropertys) sopsS3FileToSopsEncryptedSecret(clients client.AwsClient) (*sops.EncryptedSopsSecret, error) {
+	// Read the encrypted secret content from S3
 	s3File := client.SopsS3File{
 		Bucket: p.SopsS3File.Bucket,
 		Key:    p.SopsS3File.Key,
@@ -121,15 +124,18 @@ func (p *SopsSyncResourcePropertys) sopsS3FileToSopsEncryptedSecret(clients clie
 		return nil, s3ContentErr
 	}
 
+	// Get the Hash of the S3 object to compare it later
 	s3Etag, s3EtagErr := clients.S3GetObjectETAG(s3File)
 	if s3EtagErr != nil {
 		return nil, s3EtagErr
 	}
 
+	// Generate a uniform EncryptedSopsSecret object from the content for later use
 	return sops.CreateEncryptedSopsSecret(s3Content, p.Format, *s3Etag)
 }
 
 func (p *SopsSyncResourcePropertys) GetEncryptedSopsSecret(client client.AwsClient) (*sops.EncryptedSopsSecret, error) {
+	// Find out from where to get the secret content
 	if !p.SopsInline.IsEmpty() && !p.SopsS3File.IsEmpty() {
 		return nil, fmt.Errorf("both inline and S3 secret content found")
 	}
@@ -142,6 +148,7 @@ func (p *SopsSyncResourcePropertys) GetEncryptedSopsSecret(client client.AwsClie
 	return nil, fmt.Errorf("no secret content found")
 }
 
+// generates a JSON schema for the SopsSyncResourcePropertys struct
 func GenerateSchema() {
 	schema := jsonSchemaGen.Reflect(&SopsSyncResourcePropertys{})
 

@@ -12,8 +12,16 @@
 
 # Introduction
 
-This construct library offers CDK Constructs that facilitate syncing SOPS-encrypted secrets to AWS Secrets Manager and SSM Parameter Store.
-It enables secure storage of secrets in Git repositories while allowing seamless synchronization and usage within AWS.
+_Create secret values in AWS with infrastructure-as-code easily_
+
+This construct library offers CDK Constructs that facilitate syncing [SOPS-encrypted secrets](https://github.com/getsops/sops) to AWS Secrets Manager and SSM Parameter Store.
+It enables secure storage of secrets in Git repositories while allowing seamless synchronization and usage within AWS. Even large sets of SSM Parameters can be created quickly from a single file.
+
+- Create AWS Secrets Manager secrets
+- Create single SSM Parameter
+- Create multiple SSM Parameter in a batch from a file
+- Use SOPS json, yaml or dotenv as input files, as well as binary data
+- No need for manual permission setups for the Custom Ressource due to automatic least-privilege generation for the SyncProvider
 
 # Table Of Contents
 
@@ -57,8 +65,8 @@ Let's assume we want to store the following secret information in AWS:
     "host": "db.example.com"
   },
   "tokens": [
-    {"service": "github", "token": "ghp_abcd1234"},
-    {"service": "aws", "token": "AKIAIOSFODNN7EXAMPLE"}
+    { "service": "github", "token": "ghp_abcd1234" },
+    { "service": "aws", "token": "AKIAIOSFODNN7EXAMPLE" }
   ],
   "someOtherKey": "base64:VGhpcyBpcyBhIHNlY3JldCBrZXk="
 }
@@ -75,8 +83,8 @@ Minimal Example:
 
 ```ts
 const secret = new SopsSecret(stack, 'MySopsSecret', {
-  secertName: 'mySecret',                                  // name of the secret in AWS SecretsManager
-  sopsFilePath: 'secrets/sopsfile-encrypted-secret.json',  // filepath to the sops encrypted file
+  secertName: 'mySecret', // name of the secret in AWS SecretsManager
+  sopsFilePath: 'secrets/sopsfile-encrypted-secret.json', // filepath to the sops encrypted file
 });
 ```
 
@@ -85,7 +93,7 @@ For convenience, several transformations apply:
 
 - Nested structures and arrays will be resolved and flattened to a JSONPath notation
 - All values will be stored as strings
-  
+
 This is done also because of limitations of CDK in conjunction with
 [dynamic references](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/dynamic-references-secretsmanager.html) and limitiations
 of the `Key/Value` view of the AWS SecretsManager WebConsole. So the result, saved in the AWS SecretsManager will actually be:
@@ -108,7 +116,7 @@ This allows you to access the values from your secret via CDK:
 
 ```ts
 secret.secretValueFromJson('"database.password"').toString(),
-secret.secretValueFromJson('"tokens[0].token"').toString()
+  secret.secretValueFromJson('"tokens[0].token"').toString();
 ```
 
 If you don't want these conversions, you can completely disable them by using the `rawOutput` property.
@@ -119,6 +127,7 @@ const secret = new SopsSecret(stack, 'MySopsSecret', {
   ...
 });
 ```
+
 This will turn off the conversions and just place the decrypted content in the target secret. It's also possible to use
 `RawOutput.BINARY` than the AWS SecretsManager Secret will be populted with binary, instead of string data.
 
@@ -146,8 +155,8 @@ const multi = new MultiStringParameter(stack, 'MyMultiParameter', {
   encryptionKey: Key.fromLookup(stack, 'DefaultKey', {
     aliasName: 'alias/aws/ssm',
   }),
-  sopsFilePath: 'secrets/sopsfile-encrypted-secret.json'
-})
+  sopsFilePath: 'secrets/sopsfile-encrypted-secret.json',
+});
 ```
 
 This will create several AWS SSM ParameterStore Parameters:
@@ -206,15 +215,15 @@ const provider = new SopsSyncProvider(this, 'MySopsSyncProvider', {
       customSubnet1,      // access to any VPC resources.
       customSubnet2,      // But if you want,
     ]                     // you can change this behaviour
-  },                      // and set vpc, subnet and 
+  },                      // and set vpc, subnet and
   securityGroups: [       // securitygroups to your
     customSecurityGroup   // needs.
-  ],                
+  ],
 });
 
 provider.addToRolePolicy( // You cann pass PolicyStatements
   new PolicyStatement({   // via the addToRolePolicy Method
-    actions: ['...'],     // 
+    actions: ['...'],     //
     resources: ['...'],   //
   })                      //
 );                        //
@@ -258,19 +267,19 @@ const construct = new Sops...(this, 'My' {
   /**
    * if you don't want this constructs to take care of passing the encrypted
    * sops file to the sops provider, you can upload them yourself to a
-   * S3 bucket. 
+   * S3 bucket.
    * You can pass bucket and key, and the constructs won't pass the content
    * as ASSET or in the CloudFormation Template.
    * As the construct isn't aware of the sopsfile, we can't derive the required
    * permissions to decrypt the sops file. The same applies to the sopsFileFormat.
    * You have to pass them all manually.
-   */ 
+   */
   sopsS3Bucket: 'my-custom-bucket',
   sopsS3Key: 'encoded-sops.json',
   sopsKmsKey: [
     kmsKeyUsedForEncryption,
   ]
-  sopsFileFormat: 'json',   // Allowed values are json, yaml, dotenv and binary 
+  sopsFileFormat: 'json',   // Allowed values are json, yaml, dotenv and binary
 })
 
 ```
@@ -282,7 +291,7 @@ const construct = new Sops...(this, 'My' {
 I decided, that the default behavior should be "INLINE" because of the following consideration:
 
 - Fewer permissions
-  
+
   _If we use inline content instead of a S3 asset, the SopsSyncProvider does not need permissions to access the asset bucket and its KMS key._
 
 - Faster
@@ -308,16 +317,19 @@ Nevertheless, I would recommend pinning the exact version of this library in you
 It was required to change some user facing configuration properties. So minor changes are required to make things work again.
 
 ### SecretsManager
-- Removed property convertToJSON, flatten, stringifiedValues 
+
+- Removed property convertToJSON, flatten, stringifiedValues
 - Use property rawOutput instaed:
   - `undefined / not set` => (default) convertToJSON and flatten and stringifiedValues = true
   - `RawOutput.STRING` => convertToJSON and flatten and stringifiedValues = false
   - `RawOutput.BINARY` => convertToJSON and flatten and stringifiedValues = false and Secret is binary
 
 ### Parameter
+
 - Removed property convertToJSON, flatten, stringifiedValues => all of them made no sense - now only raw output of decrypted secret
 
 ### MultiParameter
+
 - Removed property convertToJSON, flatten, stringifiedValues => most of this combinations made no sense
 - Allways convertToJson and flatten (as we have to parse it to create multiple parameters)
 - You are allowed to chose the flattenSeperator
@@ -326,7 +338,7 @@ It was required to change some user facing configuration properties. So minor ch
 
 Even if this construct has some unit and integration tests performed, there can be bugs and issues. As everything is performed by a cloudformation custom resource provider, a good starting point is the log of the corresponding lambda function. It should be located in your AWS Account under Cloudwatch -> Log groups:
 
-```/aws/lambda/<YOUR-STACK-NAME>-SingletonLambdaSopsSyncProvider<SOMETHINGsomething1234>```
+`/aws/lambda/<YOUR-STACK-NAME>-SingletonLambdaSopsSyncProvider<SOMETHINGsomething1234>`
 
 ## I get errors with `dotenv` formatted files
 
@@ -340,15 +352,15 @@ comments must be a single line, not after value assignments.
 
 ## Error: Error getting data key: 0 successful groups required, got 0
 
-This error message (and failed sync) is related to the  getsops/sops issues [#948](https://github.com/getsops/sops/issues/948) and [#634](https://github.com/getsops/sops/issues/634). You must not create your secret with the ```--aws-profile``` flag. This profile will be written to your sops filed and is required in every runtime environment. You have to define the profile to use via the environment variable ```AWS_PROFILE``` instead, to avoid this.
+This error message (and failed sync) is related to the getsops/sops issues [#948](https://github.com/getsops/sops/issues/948) and [#634](https://github.com/getsops/sops/issues/634). You must not create your secret with the `--aws-profile` flag. This profile will be written to your sops filed and is required in every runtime environment. You have to define the profile to use via the environment variable `AWS_PROFILE` instead, to avoid this.
 
 ## Error: Asset of sync lambda not found
 
 The lambda asset code is generated relative to the path of the index.ts in this package. With tools like nx this can lead to wrong results, so that the asset could not be found.
 
-You can override the asset path via the [cdk.json](https://docs.aws.amazon.com/cdk/v2/guide/get_context_var.html) or via the flag ```-c```of the cdk cli.
+You can override the asset path via the [cdk.json](https://docs.aws.amazon.com/cdk/v2/guide/get_context_var.html) or via the flag `-c`of the cdk cli.
 
-The context used for this override is ```sops_sync_provider_asset_path```.
+The context used for this override is `sops_sync_provider_asset_path`.
 
 So for example you can use
 
@@ -362,7 +374,7 @@ or in your cdk.json
 {
   "context": {
     "sops_sync_provider_asset_path": "some/path/asset.zip"
-  } 
+  }
 }
 ```
 
@@ -393,7 +405,7 @@ new SopsSecret(stack, 'SopsSecret', {
     sopsKmsKey
   ],
   sopsFileFormat: 'json',
-  ... 
+  ...
 });
 ```
 
@@ -404,13 +416,17 @@ to generate the version information of the AWS SecretsManager secret.
 Therefore, it is possible to reference the entries from a specific AWS SecretsManager version.
 
 ```typescript
-const versionId = cdk.FileSystem.fingerprint(`./sops/SomeSecrets.json`)
-const passphrase = ecs.Secret.fromSecretsManagerVersion(secretMgmt, { versionId: versionId }, 'MY_PRIVATE_PASSPHRASE')
+const versionId = cdk.FileSystem.fingerprint(`./sops/SomeSecrets.json`);
+const passphrase = ecs.Secret.fromSecretsManagerVersion(
+  secretMgmt,
+  { versionId: versionId },
+  'MY_PRIVATE_PASSPHRASE',
+);
 
 const container = TaskDef.addContainer('Container', {
-   secrets: {
-     MY_PRIVATE_PASSPHRASE: passphrase,
-   },
+  secrets: {
+    MY_PRIVATE_PASSPHRASE: passphrase,
+  },
 });
 ```
 

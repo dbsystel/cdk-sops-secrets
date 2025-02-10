@@ -81,3 +81,4 @@ test/SECRET.integ.snapshot/**/tree.json
 .idea
 /assets
 !/.projenrc.js
+*.DS_Store

@@ -20,6 +20,8 @@ var (
 	ErrorUnparsedData = fmt.Errorf("Data does not contain parsed data")
 )
 
+// FromBinary creates a Data object from a binary formatted byte slice.
+// It stores the binary content in the raw field of the Data object without parsing it.
 func FromBinary(in []byte, hash *string) (*Data, error) {
 	return &Data{
 		raw:  &in,
@@ -27,6 +29,7 @@ func FromBinary(in []byte, hash *string) (*Data, error) {
 	}, nil
 }
 
+// Parse from yaml formatted byte slice into a map and stores it in the parsed field of the Data object.
 func FromYAML(in []byte, hash *string) (*Data, error) {
 	var content any
 	err := yaml.Unmarshal(in, &content)
@@ -40,6 +43,7 @@ func FromYAML(in []byte, hash *string) (*Data, error) {
 	}, nil
 }
 
+// Parse from json formatted byte slice into a map and stores it in the parsed field of the Data object.
 func FromJSON(in []byte, hash *string) (*Data, error) {
 	var content any
 	err := json.Unmarshal(in, &content)
@@ -53,15 +57,19 @@ func FromJSON(in []byte, hash *string) (*Data, error) {
 	}, nil
 }
 
+// Parse from dotenv formatted byte slice into a map and stores it in the parsed field of the Data object.
 func FromDotEnv(in []byte, hash *string) (*Data, error) {
 	var dotEnvMap any = map[string]string{}
 	dotenvLines := strings.Split(string(in), "\n")
 	for _, line := range dotenvLines {
+		// Ignore empty lines and comments
 		if line != "" && !strings.HasPrefix(line, "#") {
+			// Split the line into key and value
 			parts := strings.SplitN(line, "=", 2)
 			if len(parts) == 2 {
 				key := strings.TrimSpace(parts[0])
 				value := strings.TrimSpace(parts[1])
+				// Add the key-value pair to the map
 				dotEnvMap.(map[string]string)[key] = value
 			}
 		}
