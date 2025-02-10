@@ -36,5 +36,7 @@ paths = [
 regexTarget = "match"
 regexes = [
   '''AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3''',
+  '''ghp_abcd1234''',
+  '''sk-1234567890abcdef''',
 ]
 

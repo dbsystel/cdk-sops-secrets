@@ -1758,6 +1758,7 @@ const multiStringParameterProps: MultiStringParameterProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
+| <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.assetEncryptionKey">assetEncryptionKey</a></code> | <code>aws-cdk-lib.aws_kms.IKey</code> | The encryption key used by the CDK default Asset S3 Bucket. |
 | <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.autoGenerateIamPermissions">autoGenerateIamPermissions</a></code> | <code>boolean</code> | Should this construct automatically create IAM permissions? |
 | <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.sopsAgeKey">sopsAgeKey</a></code> | <code>aws-cdk-lib.SecretValue</code> | The age key that should be used for encryption. |
 | <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.sopsFileFormat">sopsFileFormat</a></code> | <code>string</code> | The format of the sops file. |
@@ -1772,6 +1773,19 @@ const multiStringParameterProps: MultiStringParameterProps = { ... }
 | <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.tier">tier</a></code> | <code>aws-cdk-lib.aws_ssm.ParameterTier</code> | The tier of the string parameter. |
 | <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.keyPrefix">keyPrefix</a></code> | <code>string</code> | The prefix used for all parameters. |
 | <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.keySeparator">keySeparator</a></code> | <code>string</code> | The seperator used to seperate keys. |
+
+---
+
+##### `assetEncryptionKey`<sup>Optional</sup> <a name="assetEncryptionKey" id="cdk-sops-secrets.MultiStringParameterProps.property.assetEncryptionKey"></a>
+
+```typescript
+public readonly assetEncryptionKey: IKey;
+```
+
+- *Type:* aws-cdk-lib.aws_kms.IKey
+- *Default:* Trying to get the key using the CDK Bootstrap context.
+
+The encryption key used by the CDK default Asset S3 Bucket.
 
 ---
 
@@ -2182,6 +2196,19 @@ const sopsSecretProps: SopsSecretProps = { ... }
 
 ---
 
+##### `assetEncryptionKey`<sup>Optional</sup> <a name="assetEncryptionKey" id="cdk-sops-secrets.SopsSecretProps.property.assetEncryptionKey"></a>
+
+```typescript
+public readonly assetEncryptionKey: IKey;
+```
+
+- *Type:* aws-cdk-lib.aws_kms.IKey
+- *Default:* Trying to get the key using the CDK Bootstrap context.
+
+The encryption key used by the CDK default Asset S3 Bucket.
+
+---
+
 ##### `autoGenerateIamPermissions`<sup>Optional</sup> <a name="autoGenerateIamPermissions" id="cdk-sops-secrets.SopsSecretProps.property.autoGenerateIamPermissions"></a>
 
 ```typescript
@@ -2396,6 +2423,7 @@ const sopsStringParameterProps: SopsStringParameterProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
+| <code><a href="#cdk-sops-secrets.SopsStringParameterProps.property.assetEncryptionKey">assetEncryptionKey</a></code> | <code>aws-cdk-lib.aws_kms.IKey</code> | The encryption key used by the CDK default Asset S3 Bucket. |
 | <code><a href="#cdk-sops-secrets.SopsStringParameterProps.property.autoGenerateIamPermissions">autoGenerateIamPermissions</a></code> | <code>boolean</code> | Should this construct automatically create IAM permissions? |
 | <code><a href="#cdk-sops-secrets.SopsStringParameterProps.property.sopsAgeKey">sopsAgeKey</a></code> | <code>aws-cdk-lib.SecretValue</code> | The age key that should be used for encryption. |
 | <code><a href="#cdk-sops-secrets.SopsStringParameterProps.property.sopsFileFormat">sopsFileFormat</a></code> | <code>string</code> | The format of the sops file. |
@@ -2409,6 +2437,19 @@ const sopsStringParameterProps: SopsStringParameterProps = { ... }
 | <code><a href="#cdk-sops-secrets.SopsStringParameterProps.property.description">description</a></code> | <code>string</code> | Information about the parameter that you want to add to the system. |
 | <code><a href="#cdk-sops-secrets.SopsStringParameterProps.property.tier">tier</a></code> | <code>aws-cdk-lib.aws_ssm.ParameterTier</code> | The tier of the string parameter. |
 | <code><a href="#cdk-sops-secrets.SopsStringParameterProps.property.parameterName">parameterName</a></code> | <code>string</code> | The name of the parameter. |
+
+---
+
+##### `assetEncryptionKey`<sup>Optional</sup> <a name="assetEncryptionKey" id="cdk-sops-secrets.SopsStringParameterProps.property.assetEncryptionKey"></a>
+
+```typescript
+public readonly assetEncryptionKey: IKey;
+```
+
+- *Type:* aws-cdk-lib.aws_kms.IKey
+- *Default:* Trying to get the key using the CDK Bootstrap context.
+
+The encryption key used by the CDK default Asset S3 Bucket.
 
 ---
 
@@ -2599,6 +2640,7 @@ const sopsSyncOptions: SopsSyncOptions = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
+| <code><a href="#cdk-sops-secrets.SopsSyncOptions.property.assetEncryptionKey">assetEncryptionKey</a></code> | <code>aws-cdk-lib.aws_kms.IKey</code> | The encryption key used by the CDK default Asset S3 Bucket. |
 | <code><a href="#cdk-sops-secrets.SopsSyncOptions.property.autoGenerateIamPermissions">autoGenerateIamPermissions</a></code> | <code>boolean</code> | Should this construct automatically create IAM permissions? |
 | <code><a href="#cdk-sops-secrets.SopsSyncOptions.property.sopsAgeKey">sopsAgeKey</a></code> | <code>aws-cdk-lib.SecretValue</code> | The age key that should be used for encryption. |
 | <code><a href="#cdk-sops-secrets.SopsSyncOptions.property.sopsFileFormat">sopsFileFormat</a></code> | <code>string</code> | The format of the sops file. |
@@ -2608,6 +2650,19 @@ const sopsSyncOptions: SopsSyncOptions = { ... }
 | <code><a href="#cdk-sops-secrets.SopsSyncOptions.property.sopsS3Bucket">sopsS3Bucket</a></code> | <code>string</code> | If you want to pass the sops file via s3, you can specify the bucket you can use cfn parameter here Both, sopsS3Bucket and sopsS3Key have to be specified. |
 | <code><a href="#cdk-sops-secrets.SopsSyncOptions.property.sopsS3Key">sopsS3Key</a></code> | <code>string</code> | If you want to pass the sops file via s3, you can specify the key inside the bucket you can use cfn parameter here Both, sopsS3Bucket and sopsS3Key have to be specified. |
 | <code><a href="#cdk-sops-secrets.SopsSyncOptions.property.uploadType">uploadType</a></code> | <code><a href="#cdk-sops-secrets.UploadType">UploadType</a></code> | How should the secret be passed to the CustomResource? |
+
+---
+
+##### `assetEncryptionKey`<sup>Optional</sup> <a name="assetEncryptionKey" id="cdk-sops-secrets.SopsSyncOptions.property.assetEncryptionKey"></a>
+
+```typescript
+public readonly assetEncryptionKey: IKey;
+```
+
+- *Type:* aws-cdk-lib.aws_kms.IKey
+- *Default:* Trying to get the key using the CDK Bootstrap context.
+
+The encryption key used by the CDK default Asset S3 Bucket.
 
 ---
 
@@ -2746,6 +2801,7 @@ const sopsSyncProps: SopsSyncProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
+| <code><a href="#cdk-sops-secrets.SopsSyncProps.property.assetEncryptionKey">assetEncryptionKey</a></code> | <code>aws-cdk-lib.aws_kms.IKey</code> | The encryption key used by the CDK default Asset S3 Bucket. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProps.property.autoGenerateIamPermissions">autoGenerateIamPermissions</a></code> | <code>boolean</code> | Should this construct automatically create IAM permissions? |
 | <code><a href="#cdk-sops-secrets.SopsSyncProps.property.sopsAgeKey">sopsAgeKey</a></code> | <code>aws-cdk-lib.SecretValue</code> | The age key that should be used for encryption. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProps.property.sopsFileFormat">sopsFileFormat</a></code> | <code>string</code> | The format of the sops file. |
@@ -2761,6 +2817,19 @@ const sopsSyncProps: SopsSyncProps = { ... }
 | <code><a href="#cdk-sops-secrets.SopsSyncProps.property.flattenSeparator">flattenSeparator</a></code> | <code>string</code> | If the structure should be flattened use the provided separator between keys. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProps.property.parameterNames">parameterNames</a></code> | <code>string[]</code> | *No description.* |
 | <code><a href="#cdk-sops-secrets.SopsSyncProps.property.secret">secret</a></code> | <code>aws-cdk-lib.aws_secretsmanager.ISecret</code> | *No description.* |
+
+---
+
+##### `assetEncryptionKey`<sup>Optional</sup> <a name="assetEncryptionKey" id="cdk-sops-secrets.SopsSyncProps.property.assetEncryptionKey"></a>
+
+```typescript
+public readonly assetEncryptionKey: IKey;
+```
+
+- *Type:* aws-cdk-lib.aws_kms.IKey
+- *Default:* Trying to get the key using the CDK Bootstrap context.
+
+The encryption key used by the CDK default Asset S3 Bucket.
 
 ---
 
