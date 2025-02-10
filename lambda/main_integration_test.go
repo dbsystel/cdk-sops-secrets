@@ -90,7 +90,7 @@ func cleanupSecret(t *testing.T, resourceProps map[string]interface{}) {
 	secretName := resourceProps["Target"].(string)
 	ResourceType := resourceProps["ResourceType"].(string)
 
-	if ResourceType != "SECRET" && ResourceType != "SECRET_BINARY" {
+	if ResourceType != "SECRET" && ResourceType != "SECRET_BINARY" && ResourceType != "SECRET_RAW" {
 		return
 	}
 
@@ -230,9 +230,9 @@ func snapshotParameter(t *testing.T, resourceProps map[string]interface{}) {
 }
 
 func TestIntegration_HandleRequestWithClients(t *testing.T) {
-	//if os.Getenv("INTEGRATION") == "" {
-	//	return
-	//}
+	if os.Getenv("GITHUB_REPOSITORY") != "" {
+		t.Skip("Skipping test in GitHub Actions environment")
+	}
 	t.Logf("Running at: %s", time.Now().String()) // Forces re-run
 	os.Setenv("AWS_REGION", "eu-central-1")
 	os.Setenv("SOPS_AGE_KEY", "AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3")
@@ -294,8 +294,8 @@ func TestIntegration_HandleRequestWithClients(t *testing.T) {
 }
 
 func TestIntegration_Cleanup(t *testing.T) {
-	if os.Getenv("INTEGRATION") == "" {
-		return
+	if os.Getenv("GITHUB_REPOSITORY") != "" {
+		t.Skip("Skipping test in GitHub Actions environment")
 	}
 	t.Logf("Running at: %s", time.Now().String()) // Forces re-run
 	os.Setenv("AWS_REGION", "eu-central-1")
@@ -330,9 +330,7 @@ func TestIntegration_Cleanup(t *testing.T) {
 }
 
 func Test_CleanUpHard(t *testing.T) {
-	if os.Getenv("DANGER_HARD_CLEAN") == "" {
-		return
-	}
+	t.Skip("Skipping cleanup")
 	deleteAllSecrets()
 	deleteAllParametersExcept([]string{"/cdk-bootstrap/hnb659fds/version"})
 }

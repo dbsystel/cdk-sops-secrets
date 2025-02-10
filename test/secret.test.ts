@@ -14,6 +14,7 @@ import {
   SopsSyncProvider,
   UploadType,
   MultiStringParameter,
+  RawOutput,
 } from '../src';
 
 const keyStatements = [
@@ -32,7 +33,7 @@ test('Upload type ASSET', () => {
   new SopsSecret(stack, 'SopsSecret', {
     sopsFilePath: 'test-secrets/yaml/sopsfile.enc-kms.yaml',
     uploadType: UploadType.ASSET,
-    rawOutput: true,
+    rawOutput: RawOutput.STRING,
   });
   Template.fromStack(stack).hasResource('Custom::SopsSync', {
     Properties: Match.objectLike({

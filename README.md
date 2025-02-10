@@ -18,6 +18,8 @@ It enables secure storage of secrets in Git repositories while allowing seamless
 
 # Table Of Contents
 
+- [Introduction](#introduction)
+- [Table Of Contents](#table-of-contents)
 - [Available Constructs](#available-constructs)
   - [SopsSecret — Sops to SecretsManager](#sopssecret--sops-to-secretsmanager)
   - [SopsStringParameter — Sops to single SSM ParameterStore Parameter](#sopsstringparameter--sops-to-single-ssm-parameterstore-parameter)
@@ -25,7 +27,17 @@ It enables secure storage of secrets in Git repositories while allowing seamless
   - [SopsSyncProvider](#sopssyncprovider)
   - [Common configuration options for SopsSecret, SopsStringParameter and MultiStringParameter](#common-configuration-options-for-sopssecret-sopsstringparameter-and-multistringparameter)
 - [Considerations](#considerations)
+  - [UploadType: INLINE / ASSET](#uploadtype-inline--asset)
+  - [Stability](#stability)
 - [FAQ](#faq)
+  - [It does not work, what can I do?](#it-does-not-work-what-can-i-do)
+  - [I get errors with `dotenv` formatted files](#i-get-errors-with-dotenv-formatted-files)
+  - [Error: Error getting data key: 0 successful groups required, got 0](#error-error-getting-data-key-0-successful-groups-required-got-0)
+  - [Error: Asset of sync lambda not found](#error-asset-of-sync-lambda-not-found)
+  - [Can I upload the sops file myself and provide the required information as CloudFormation Parameter?](#can-i-upload-the-sops-file-myself-and-provide-the-required-information-as-cloudformation-parameter)
+  - [Can I access older versions of the secret stored in the SecretsManager?](#can-i-access-older-versions-of-the-secret-stored-in-the-secretsmanager)
+  - [I want the `raw` content of the sops file, but I always get the content nested in json](#i-want-the-raw-content-of-the-sops-file-but-i-always-get-the-content-nested-in-json)
+- [License](#license)
 
 # Available Constructs
 
@@ -100,12 +112,12 @@ If you don't want these conversions, you can completely disable them by using th
 
 ```ts
 const secret = new SopsSecret(stack, 'MySopsSecret', {
-  rawOutput: true,
+  rawOutput: RawOutput.STRING,
   ...
 });
 ```
-
-This will turn off the conversions and just place the decrypted content in the target secret.
+This will turn off the conversions and just place the decrypted content in the target secret. It's also possible to use
+`RawOutput.BINARY` than the AWS SecretsManager Secret will be populted with binary, instead of string data.
 
 ## SopsStringParameter — Sops to single SSM ParameterStore Parameter
 
@@ -399,6 +411,6 @@ This does not work for `MultiStringParameter`
 
 [^1] Even if sops can handle binary data, only the AWS SecretsManager allows to store it.
 
-## License
+# License
 
 The Apache-2.0 license. Please have a look at the [LICENSE](LICENSE) and [LICENSE-3RD-PARTY](LICENSE-3RD-PARTY).

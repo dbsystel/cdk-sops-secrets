@@ -1,5 +1,5 @@
 import * as cdk from 'aws-cdk-lib';
-import { SopsSecret } from '../src/index';
+import { RawOutput, SopsSecret } from '../src/index';
 
 const app = new cdk.App();
 const stack = new cdk.Stack(app, 'SECRET');
@@ -17,22 +17,22 @@ const tc = [
     additionalProperties: {},
   },
   {
-    name: 'Yaml2Json',
-    sopsFilePath: 'test-secrets/testsecret.sops.yaml',
-    additionalProperties: {},
-  },
-  {
-    name: 'Json2Raw',
+    name: 'Json2RawString',
     sopsFilePath: 'test-secrets/testsecret.sops.json',
     additionalProperties: {
-      rawOutput: true,
+      rawOutput: RawOutput.STRING,
     },
   },
   {
-    name: 'Yaml2Raw',
+    name: 'Yaml2Json',
+    sopsFilePath: 'test-secrets/testsecret.sops.yaml',
+    additionalProperties: {},
+  },  
+  {
+    name: 'Yaml2RawString',
     sopsFilePath: 'test-secrets/testsecret.sops.yaml',
     additionalProperties: {
-      rawOutput: true,
+      rawOutput: RawOutput.STRING,
     },
   },
   {
@@ -41,17 +41,24 @@ const tc = [
     additionalProperties: {},
   },
   {
-    name: 'DotEnv2Raw',
+    name: 'DotEnv2RawString',
     sopsFilePath: 'test-secrets/README.sops.binary',
     additionalProperties: {
-      rawOutput: true,
+      rawOutput: RawOutput.STRING,
     },
   },
   {
-    name: 'Binary2Raw',
+    name: 'Binary2RawString',
     sopsFilePath: 'test-secrets/README.sops.binary',
     additionalProperties: {
-      rawOutput: true,
+      rawOutput: RawOutput.STRING,
+    },
+  },
+  {
+    name: 'Binary2RawBinary',
+    sopsFilePath: 'test-secrets/README.gz.sops.binary',
+    additionalProperties: {
+      rawOutput: RawOutput.BINARY,
     },
   },
 ] satisfies TestCase[];

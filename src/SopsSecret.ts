@@ -23,15 +23,26 @@ import {
 import { Construct } from 'constructs';
 import { ResourceType, SopsSync, SopsSyncOptions } from './SopsSync';
 
+export enum RawOutput {
+  /**
+   * Parse the secret as a string
+   */
+  STRING = 'STRING',
+  /**
+   * Parse the secret as a binary
+   */
+  BINARY = 'BINARY',
+}
+
 /**
  * The configuration options of the SopsSecret
  */
 export interface SopsSecretProps extends SopsSyncOptions {
   /**
    * Should the secret parsed and transformed to json?
-   * @default - true
+   * @default - undefined - no raw output
    */
-  readonly rawOutput?: boolean;
+  readonly rawOutput?: RawOutput;
   /**
    * An optional, human-friendly description of the secret.
    *
@@ -93,12 +104,17 @@ export class SopsSecret extends Construct implements ISecret {
       region: this.stack.region,
     };
 
+    let resourceType = ResourceType.SECRET;
+    if (props.rawOutput === RawOutput.BINARY) {
+      resourceType = ResourceType.SECRET_BINARY;
+    }
+    if (props.rawOutput === RawOutput.STRING) {
+      resourceType = ResourceType.SECRET_RAW;
+    }
+
     this.sync = new SopsSync(this, 'SopsSync', {
       target: this.secret.secretArn,
-      resourceType:
-        props.rawOutput === true
-          ? ResourceType.SECRET_BINARY
-          : ResourceType.SECRET,
+      resourceType,
       flattenSeparator: '.',
       secret: this.secret,
       ...(props as SopsSyncOptions),

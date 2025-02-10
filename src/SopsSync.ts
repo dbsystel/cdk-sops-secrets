@@ -36,6 +36,7 @@ export enum UploadType {
 
 export enum ResourceType {
   SECRET = 'SECRET',
+  SECRET_RAW = 'SECRET_RAW',
   SECRET_BINARY = 'SECRET_BINARY',
   PARAMETER = 'PARAMETER',
   PARAMETER_MULTI = 'PARAMETER_MULTI',

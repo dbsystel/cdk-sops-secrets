@@ -107,7 +107,7 @@ func (c *Client) S3GetObjectETAG(file SopsS3File) (*string, error) {
 }
 
 func (c *Client) SecretsManagerPutSecretValue(sopsHash string, secretArn string, secretStringData *[]byte, binary *bool) (data *secretsmanager.PutSecretValueOutput, err error) {
-	if binary != nil && binary == aws.Bool(true) {
+	if binary != nil && *binary {
 		input := &secretsmanager.PutSecretValueInput{
 			SecretId:           &secretArn,
 			SecretBinary:       *secretStringData,
