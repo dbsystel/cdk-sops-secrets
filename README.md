@@ -30,6 +30,10 @@ It enables secure storage of secrets in Git repositories while allowing seamless
   - [UploadType: INLINE / ASSET](#uploadtype-inline--asset)
   - [Stability](#stability)
 - [FAQ](#faq)
+  - [How can I migrate to V2](#how-can-i-migrate-to-v2)
+    - [SecretsManager](#secretsmanager)
+    - [Parameter](#parameter)
+    - [MultiParameter](#multiparameter)
   - [It does not work, what can I do?](#it-does-not-work-what-can-i-do)
   - [I get errors with `dotenv` formatted files](#i-get-errors-with-dotenv-formatted-files)
   - [Error: Error getting data key: 0 successful groups required, got 0](#error-error-getting-data-key-0-successful-groups-required-got-0)
@@ -299,6 +303,25 @@ You can consider this package as stable. Updates will follow [Semantic Versionin
 Nevertheless, I would recommend pinning the exact version of this library in your `package.json`.
 
 # FAQ
+
+## How can I migrate to V2
+
+It was required to change some user facing configuration properties. So minor changes are required to make things work again.
+
+### SecretsManager
+- Removed property convertToJSON, flatten, stringifiedValues 
+- Use property rawOutput instaed:
+  - `undefined / not set` => (default) convertToJSON and flatten and stringifiedValues = true
+  - `RawOutput.STRING` => convertToJSON and flatten and stringifiedValues = false
+  - `RawOutput.BINARY` => convertToJSON and flatten and stringifiedValues = false and Secret is binary
+
+### Parameter
+- Removed property convertToJSON, flatten, stringifiedValues => all of them made no sense - now only raw output of decrypted secret
+
+### MultiParameter
+- Removed property convertToJSON, flatten, stringifiedValues => most of this combinations made no sense
+- Allways convertToJson and flatten (as we have to parse it to create multiple parameters)
+- You are allowed to chose the flattenSeperator
 
 ## It does not work, what can I do?
 
