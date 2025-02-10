@@ -27,7 +27,7 @@ const tc = [
     name: 'Yaml2Json',
     sopsFilePath: 'test-secrets/testsecret.sops.yaml',
     additionalProperties: {},
-  },  
+  },
   {
     name: 'Yaml2RawString',
     sopsFilePath: 'test-secrets/testsecret.sops.yaml',

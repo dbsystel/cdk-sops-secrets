@@ -1989,6 +1989,7 @@ const sopsCommonParameterProps: SopsCommonParameterProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
+| <code><a href="#cdk-sops-secrets.SopsCommonParameterProps.property.assetEncryptionKey">assetEncryptionKey</a></code> | <code>aws-cdk-lib.aws_kms.IKey</code> | The encryption key used by the CDK default Asset S3 Bucket. |
 | <code><a href="#cdk-sops-secrets.SopsCommonParameterProps.property.autoGenerateIamPermissions">autoGenerateIamPermissions</a></code> | <code>boolean</code> | Should this construct automatically create IAM permissions? |
 | <code><a href="#cdk-sops-secrets.SopsCommonParameterProps.property.sopsAgeKey">sopsAgeKey</a></code> | <code>aws-cdk-lib.SecretValue</code> | The age key that should be used for encryption. |
 | <code><a href="#cdk-sops-secrets.SopsCommonParameterProps.property.sopsFileFormat">sopsFileFormat</a></code> | <code>string</code> | The format of the sops file. |
@@ -2001,6 +2002,19 @@ const sopsCommonParameterProps: SopsCommonParameterProps = { ... }
 | <code><a href="#cdk-sops-secrets.SopsCommonParameterProps.property.encryptionKey">encryptionKey</a></code> | <code>aws-cdk-lib.aws_kms.IKey</code> | The customer-managed encryption key to use for encrypting the secret value. |
 | <code><a href="#cdk-sops-secrets.SopsCommonParameterProps.property.description">description</a></code> | <code>string</code> | Information about the parameter that you want to add to the system. |
 | <code><a href="#cdk-sops-secrets.SopsCommonParameterProps.property.tier">tier</a></code> | <code>aws-cdk-lib.aws_ssm.ParameterTier</code> | The tier of the string parameter. |
+
+---
+
+##### `assetEncryptionKey`<sup>Optional</sup> <a name="assetEncryptionKey" id="cdk-sops-secrets.SopsCommonParameterProps.property.assetEncryptionKey"></a>
+
+```typescript
+public readonly assetEncryptionKey: IKey;
+```
+
+- *Type:* aws-cdk-lib.aws_kms.IKey
+- *Default:* Trying to get the key using the CDK Bootstrap context.
+
+The encryption key used by the CDK default Asset S3 Bucket.
 
 ---
 
@@ -2178,6 +2192,7 @@ const sopsSecretProps: SopsSecretProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
+| <code><a href="#cdk-sops-secrets.SopsSecretProps.property.assetEncryptionKey">assetEncryptionKey</a></code> | <code>aws-cdk-lib.aws_kms.IKey</code> | The encryption key used by the CDK default Asset S3 Bucket. |
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.autoGenerateIamPermissions">autoGenerateIamPermissions</a></code> | <code>boolean</code> | Should this construct automatically create IAM permissions? |
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.sopsAgeKey">sopsAgeKey</a></code> | <code>aws-cdk-lib.SecretValue</code> | The age key that should be used for encryption. |
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.sopsFileFormat">sopsFileFormat</a></code> | <code>string</code> | The format of the sops file. |
@@ -2189,7 +2204,7 @@ const sopsSecretProps: SopsSecretProps = { ... }
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.uploadType">uploadType</a></code> | <code><a href="#cdk-sops-secrets.UploadType">UploadType</a></code> | How should the secret be passed to the CustomResource? |
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.description">description</a></code> | <code>string</code> | An optional, human-friendly description of the secret. |
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.encryptionKey">encryptionKey</a></code> | <code>aws-cdk-lib.aws_kms.IKey</code> | The customer-managed encryption key to use for encrypting the secret value. |
-| <code><a href="#cdk-sops-secrets.SopsSecretProps.property.rawOutput">rawOutput</a></code> | <code>boolean</code> | Should the secret parsed and transformed to json? |
+| <code><a href="#cdk-sops-secrets.SopsSecretProps.property.rawOutput">rawOutput</a></code> | <code><a href="#cdk-sops-secrets.RawOutput">RawOutput</a></code> | Should the secret parsed and transformed to json? |
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.removalPolicy">removalPolicy</a></code> | <code>aws-cdk-lib.RemovalPolicy</code> | Policy to apply when the secret is removed from this stack. |
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.replicaRegions">replicaRegions</a></code> | <code>aws-cdk-lib.aws_secretsmanager.ReplicaRegion[]</code> | A list of regions where to replicate this secret. |
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.secretName">secretName</a></code> | <code>string</code> | A name for the secret. |
@@ -2357,11 +2372,11 @@ The customer-managed encryption key to use for encrypting the secret value.
 ##### `rawOutput`<sup>Optional</sup> <a name="rawOutput" id="cdk-sops-secrets.SopsSecretProps.property.rawOutput"></a>
 
 ```typescript
-public readonly rawOutput: boolean;
+public readonly rawOutput: RawOutput;
 ```
 
-- *Type:* boolean
-- *Default:* true
+- *Type:* <a href="#cdk-sops-secrets.RawOutput">RawOutput</a>
+- *Default:* undefined - no raw output
 
 Should the secret parsed and transformed to json?
 
@@ -3106,6 +3121,31 @@ Where to place the network interfaces within the VPC.
 
 ## Enums <a name="Enums" id="Enums"></a>
 
+### RawOutput <a name="RawOutput" id="cdk-sops-secrets.RawOutput"></a>
+
+#### Members <a name="Members" id="Members"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#cdk-sops-secrets.RawOutput.STRING">STRING</a></code> | Parse the secret as a string. |
+| <code><a href="#cdk-sops-secrets.RawOutput.BINARY">BINARY</a></code> | Parse the secret as a binary. |
+
+---
+
+##### `STRING` <a name="STRING" id="cdk-sops-secrets.RawOutput.STRING"></a>
+
+Parse the secret as a string.
+
+---
+
+
+##### `BINARY` <a name="BINARY" id="cdk-sops-secrets.RawOutput.BINARY"></a>
+
+Parse the secret as a binary.
+
+---
+
+
 ### ResourceType <a name="ResourceType" id="cdk-sops-secrets.ResourceType"></a>
 
 #### Members <a name="Members" id="Members"></a>
@@ -3113,6 +3153,7 @@ Where to place the network interfaces within the VPC.
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#cdk-sops-secrets.ResourceType.SECRET">SECRET</a></code> | *No description.* |
+| <code><a href="#cdk-sops-secrets.ResourceType.SECRET_RAW">SECRET_RAW</a></code> | *No description.* |
 | <code><a href="#cdk-sops-secrets.ResourceType.SECRET_BINARY">SECRET_BINARY</a></code> | *No description.* |
 | <code><a href="#cdk-sops-secrets.ResourceType.PARAMETER">PARAMETER</a></code> | *No description.* |
 | <code><a href="#cdk-sops-secrets.ResourceType.PARAMETER_MULTI">PARAMETER_MULTI</a></code> | *No description.* |
@@ -3120,6 +3161,11 @@ Where to place the network interfaces within the VPC.
 ---
 
 ##### `SECRET` <a name="SECRET" id="cdk-sops-secrets.ResourceType.SECRET"></a>
+
+---
+
+
+##### `SECRET_RAW` <a name="SECRET_RAW" id="cdk-sops-secrets.ResourceType.SECRET_RAW"></a>
 
 ---
 
