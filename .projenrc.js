@@ -2,25 +2,25 @@ const { awscdk } = require('projen');
 
 const actions_SetupGo = [
   {
-    name: "Setup Go 1.23.5",
-    uses: "actions/setup-go@v5",
+    name: 'Setup Go 1.23.5',
+    uses: 'actions/setup-go@v5',
     with: {
-      "go-version": "1.23.5",
-      "cache-dependency-path": "lambda/go.sum",
+      'go-version': '1.23.5',
+      'cache-dependency-path': 'lambda/go.sum',
     },
   },
   {
-    name: "Display Go version",
-    run: "go version"
+    name: 'Display Go version',
+    run: 'go version',
   },
-]
+];
 
 const actions_UpgradeGoDeps = [
   {
-    name: "Upgrade Go dependencies",
-    run: "cd lambda && go get -u && go mod tidy && cd .."
-  }
-]
+    name: 'Upgrade Go dependencies',
+    run: 'cd lambda && go get -u && go mod tidy && cd ..',
+  },
+];
 
 const actions_TestBuild = [
   {
@@ -31,7 +31,7 @@ const actions_TestBuild = [
     name: 'Build lambda code and create zip',
     run: 'scripts/build.sh',
   },
-]
+];
 
 const project = new awscdk.AwsCdkConstructLibrary({
   author: 'Markus Siebert',
@@ -67,10 +67,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
   },
   buildWorkflowOptions: {
     mutableBuild: true,
-    preBuildSteps: [
-      ...actions_SetupGo,
-      ...actions_TestBuild,
-    ]
+    preBuildSteps: [...actions_SetupGo, ...actions_TestBuild],
   },
   name: 'cdk-sops-secrets',
   repositoryUrl: 'https://github.com/dbsystel/cdk-sops-secrets.git',
@@ -144,7 +141,7 @@ const upgradeJob = project.github.workflows
 
 // Find the index of the upgrade step (npm packages)
 const upgradeIndex = upgradeJob.findIndex(
-  (step) => step.name === 'Upgrade dependencies'
+  (step) => step.name === 'Upgrade dependencies',
 );
 
 upgradeJob.splice(
@@ -156,7 +153,7 @@ upgradeJob.splice(
   {
     name: 'Create new Snapshots',
     run: 'npx projen "integ:snapshot-all"',
-  }
+  },
 );
 
 project.synth();
