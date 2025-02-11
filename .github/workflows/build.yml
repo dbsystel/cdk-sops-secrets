@@ -295,13 +295,6 @@ jobs:
         run: git fetch --force --tags
       - name: Test
         run: scripts/lambda-test.sh
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v4
-        env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-        with:
-          files: ./coverage/coverage.out
-          flags: go-lambda
       - name: Build
         run: scripts/lambda-build.sh
       - name: Upload artifact

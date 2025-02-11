@@ -17,6 +17,9 @@ const project = new awscdk.AwsCdkConstructLibrary({
     'secrets management',
     'secrets',
   ],
+  githubOptions: {
+    mergify: false,
+  },
   defaultReleaseBranch: 'main',
   npmignoreEnabled: true,
   autoApproveUpgrades: true,
