@@ -26,6 +26,21 @@ jobs:
         run: yarn install --check-files --frozen-lockfile
       - name: Upgrade dependencies
         run: npx projen upgrade
+      - name: Setup Go 1.23.5
+        uses: actions/setup-go@v5
+        with:
+          go-version: 1.23.5
+          cache-dependency-path: lambda/go.sum
+      - name: Display Go version
+        run: go version
+      - name: Upgrade Go dependencies
+        run: cd lambda && go get -u && go mod tidy && cd ..
+      - name: Test lambda code
+        run: scripts/lambda-test.sh
+      - name: Build lambda code and create zip
+        run: scripts/build.sh
+      - name: Create new Snapshots
+        run: npx projen "integ:snapshot-all"
       - name: Find mutations
         id: create_patch
         run: |-

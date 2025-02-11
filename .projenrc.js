@@ -72,11 +72,6 @@ const project = new awscdk.AwsCdkConstructLibrary({
       ...actions_TestBuild,
     ]
   },
-  depsUpgradeOptions: {
-    workflowOptions: {
-      
-    }
-  }
   name: 'cdk-sops-secrets',
   repositoryUrl: 'https://github.com/dbsystel/cdk-sops-secrets.git',
   bundledDeps: ['yaml'],
@@ -142,6 +137,26 @@ project.npmignore.addPatterns(
   '/.gitattributes',
 );
 
-goreleaserArtifactsNamespace = 'build-artifact-goreleaser';
+// Find UpgradeJob
+const upgradeJob = project.github.workflows
+  .find((wf) => ['upgrade-main'].includes(wf.name))
+  .getJob('upgrade').steps;
+
+// Find the index of the upgrade step (npm packages)
+const upgradeIndex = upgradeJob.findIndex(
+  (step) => step.name === 'Upgrade dependencies'
+);
+
+upgradeJob.splice(
+  upgradeIndex + 1, // After upgrading the npm deps
+  0,
+  ...actions_SetupGo,
+  ...actions_UpgradeGoDeps,
+  ...actions_TestBuild,
+  {
+    name: 'Create new Snapshots',
+    run: 'npx projen "integ:snapshot-all"',
+  }
+);
 
 project.synth();
