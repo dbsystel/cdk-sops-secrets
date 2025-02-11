@@ -1,0 +1,5 @@
+
+[TestIntegration_HandleRequestWithClients/33-PARAMETER-dotenv.json - 1]
+&"/33-PARAMETER-dotenv"
+&"apiKey=sk-1234567890abcdef\ndatabase:host=db.example.com\ndatabase:password=P@ssw0rd!\ndatabase:user=admin\nsomeOtherKey=base64:aGFsbG8gd2VsdAo=\nspecific:boolean=True\nspecific:SpecialCharacters=\"ajkscbuiuXA34%%&&=\nspecific:HTLMEncodingTest3=@\nspecific:HTMLEncodingTest1=test <test@test.test>\nspecific:HTMLEncodingTest2=&\nspecific:null=\nspecific:number1=123\nspecific:number2=123.456\ntokens:0:service=service1\ntokens:0:token=token1\ntokens:1:service=service2\ntokens:1:token=token2\n"
+---

@@ -9,19 +9,30 @@ We are committed to fostering a welcoming, respectful, and harassment-free envir
 Install all necessary tools with `yarn install` and others manually like `go`
 
 Build the go Lambda code:
+
 ```
 ./scripts/build.sh
 ```
+
 Build the package (for CDK development only the first `js` build has to complete):
+
 ```
 yarn projen build
+
+// to skip the tests you can also do
+
+yarn projen package
 ```
+
 Link the package:
+
 ```
 yarn link
 ```
+
 Switch to the path/project where you would like to use cdk-sops-secrets. \
 Link the package to your local build source:
+
 ```
 yarn link "cdk-sops-secrets"
 ```

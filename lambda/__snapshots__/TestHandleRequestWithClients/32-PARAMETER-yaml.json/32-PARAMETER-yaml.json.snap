@@ -1,0 +1,17 @@
+
+[TestHandleRequestWithClients/32-PARAMETER-yaml.json - 1]
+main.getObjectCalls{
+    "test-secrets/testsecret.sops.yaml": {Bucket:"cdk-hnb659fds-assets-505755377845-eu-central-1", Key:"test-secrets/testsecret.sops.yaml"},
+}
+main.getObjectEtagCalls{
+    "test-secrets/testsecret.sops.yaml": {Bucket:"cdk-hnb659fds-assets-505755377845-eu-central-1", Key:"test-secrets/testsecret.sops.yaml"},
+}
+main.putParameterCalls{
+    "/32-PARAMETER-yaml": map[string]interface {}{
+        "keyId":            "arn:aws:kms:eu-central-1:505755377845:key/58b75958-883a-440c-842c-85af5d33a5bb",
+        "parameterContent": "apiKey: sk-1234567890abcdef\ndatabase:\n    user: admin\n    password: P@ssw0rd!\n    host: db.example.com\ntokens:\n    - service: service1\n      token: token1\n    - service: service2\n      token: token2\nsomeOtherKey: base64:aGFsbG8gd2VsdAo=\nspecific:\n    SpecialCharacters: '\"ajkscbuiuXA34%%&&='\n    HTMLEncodingTest1: test <test@test.test>\n    HTMLEncodingTest2: '&'\n    HTLMEncodingTest3: '@'\n    \"null\": null\n    boolean: true\n    number1: 123\n    number2: 123.456\n",
+    },
+}
+main.putSecretValueCalls{
+}
+---

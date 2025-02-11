@@ -1,0 +1,85 @@
+
+[TestIntegration_HandleRequestWithClients/41-PARAMETER_MULTI-json.json - 1]
+&"/41-PARAMETER_MULTI-json/apiKey"
+&"sk-1234567890abcdef"
+---
+
+[TestIntegration_HandleRequestWithClients/41-PARAMETER_MULTI-json.json - 2]
+&"/41-PARAMETER_MULTI-json/database/host"
+&"db.example.com"
+---
+
+[TestIntegration_HandleRequestWithClients/41-PARAMETER_MULTI-json.json - 3]
+&"/41-PARAMETER_MULTI-json/database/password"
+&"P@ssw0rd!"
+---
+
+[TestIntegration_HandleRequestWithClients/41-PARAMETER_MULTI-json.json - 4]
+&"/41-PARAMETER_MULTI-json/database/user"
+&"admin"
+---
+
+[TestIntegration_HandleRequestWithClients/41-PARAMETER_MULTI-json.json - 5]
+&"/41-PARAMETER_MULTI-json/someOtherKey"
+&"base64:aGFsbG8gd2VsdAo="
+---
+
+[TestIntegration_HandleRequestWithClients/41-PARAMETER_MULTI-json.json - 6]
+&"/41-PARAMETER_MULTI-json/specific/HTMLEncodingTest2"
+&"&"
+---
+
+[TestIntegration_HandleRequestWithClients/41-PARAMETER_MULTI-json.json - 7]
+&"/41-PARAMETER_MULTI-json/specific/HTLMEncodingTest3"
+&"@"
+---
+
+[TestIntegration_HandleRequestWithClients/41-PARAMETER_MULTI-json.json - 8]
+&"/41-PARAMETER_MULTI-json/specific/HTMLEncodingTest1"
+&"test <test@test.test>"
+---
+
+[TestIntegration_HandleRequestWithClients/41-PARAMETER_MULTI-json.json - 9]
+&"/41-PARAMETER_MULTI-json/specific/SpecialCharacters"
+&"\"ajkscbuiuXA34%%&&="
+---
+
+[TestIntegration_HandleRequestWithClients/41-PARAMETER_MULTI-json.json - 10]
+&"/41-PARAMETER_MULTI-json/specific/boolean"
+&"true"
+---
+
+[TestIntegration_HandleRequestWithClients/41-PARAMETER_MULTI-json.json - 11]
+&"/41-PARAMETER_MULTI-json/specific/null"
+&"<empty>"
+---
+
+[TestIntegration_HandleRequestWithClients/41-PARAMETER_MULTI-json.json - 12]
+&"/41-PARAMETER_MULTI-json/specific/number1"
+&"123"
+---
+
+[TestIntegration_HandleRequestWithClients/41-PARAMETER_MULTI-json.json - 13]
+&"/41-PARAMETER_MULTI-json/specific/number2"
+&"123.456"
+---
+
+[TestIntegration_HandleRequestWithClients/41-PARAMETER_MULTI-json.json - 14]
+&"/41-PARAMETER_MULTI-json/tokens/0/service"
+&"service1"
+---
+
+[TestIntegration_HandleRequestWithClients/41-PARAMETER_MULTI-json.json - 15]
+&"/41-PARAMETER_MULTI-json/tokens/0/token"
+&"token1"
+---
+
+[TestIntegration_HandleRequestWithClients/41-PARAMETER_MULTI-json.json - 16]
+&"/41-PARAMETER_MULTI-json/tokens/1/service"
+&"service2"
+---
+
+[TestIntegration_HandleRequestWithClients/41-PARAMETER_MULTI-json.json - 17]
+&"/41-PARAMETER_MULTI-json/tokens/1/token"
+&"token2"
+---

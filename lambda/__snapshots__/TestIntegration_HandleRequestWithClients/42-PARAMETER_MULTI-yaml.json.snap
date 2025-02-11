@@ -1,0 +1,85 @@
+
+[TestIntegration_HandleRequestWithClients/42-PARAMETER_MULTI-yaml.json - 1]
+&"/42-PARAMETER_MULTI-yaml/apiKey"
+&"sk-1234567890abcdef"
+---
+
+[TestIntegration_HandleRequestWithClients/42-PARAMETER_MULTI-yaml.json - 2]
+&"/42-PARAMETER_MULTI-yaml/database/host"
+&"db.example.com"
+---
+
+[TestIntegration_HandleRequestWithClients/42-PARAMETER_MULTI-yaml.json - 3]
+&"/42-PARAMETER_MULTI-yaml/database/password"
+&"P@ssw0rd!"
+---
+
+[TestIntegration_HandleRequestWithClients/42-PARAMETER_MULTI-yaml.json - 4]
+&"/42-PARAMETER_MULTI-yaml/database/user"
+&"admin"
+---
+
+[TestIntegration_HandleRequestWithClients/42-PARAMETER_MULTI-yaml.json - 5]
+&"/42-PARAMETER_MULTI-yaml/someOtherKey"
+&"base64:aGFsbG8gd2VsdAo="
+---
+
+[TestIntegration_HandleRequestWithClients/42-PARAMETER_MULTI-yaml.json - 6]
+&"/42-PARAMETER_MULTI-yaml/specific/HTMLEncodingTest2"
+&"&"
+---
+
+[TestIntegration_HandleRequestWithClients/42-PARAMETER_MULTI-yaml.json - 7]
+&"/42-PARAMETER_MULTI-yaml/specific/boolean"
+&"true"
+---
+
+[TestIntegration_HandleRequestWithClients/42-PARAMETER_MULTI-yaml.json - 8]
+&"/42-PARAMETER_MULTI-yaml/specific/null"
+&"<empty>"
+---
+
+[TestIntegration_HandleRequestWithClients/42-PARAMETER_MULTI-yaml.json - 9]
+&"/42-PARAMETER_MULTI-yaml/specific/number2"
+&"123.456"
+---
+
+[TestIntegration_HandleRequestWithClients/42-PARAMETER_MULTI-yaml.json - 10]
+&"/42-PARAMETER_MULTI-yaml/specific/HTLMEncodingTest3"
+&"@"
+---
+
+[TestIntegration_HandleRequestWithClients/42-PARAMETER_MULTI-yaml.json - 11]
+&"/42-PARAMETER_MULTI-yaml/specific/HTMLEncodingTest1"
+&"test <test@test.test>"
+---
+
+[TestIntegration_HandleRequestWithClients/42-PARAMETER_MULTI-yaml.json - 12]
+&"/42-PARAMETER_MULTI-yaml/specific/SpecialCharacters"
+&"\"ajkscbuiuXA34%%&&="
+---
+
+[TestIntegration_HandleRequestWithClients/42-PARAMETER_MULTI-yaml.json - 13]
+&"/42-PARAMETER_MULTI-yaml/specific/number1"
+&"123"
+---
+
+[TestIntegration_HandleRequestWithClients/42-PARAMETER_MULTI-yaml.json - 14]
+&"/42-PARAMETER_MULTI-yaml/tokens/0/service"
+&"service1"
+---
+
+[TestIntegration_HandleRequestWithClients/42-PARAMETER_MULTI-yaml.json - 15]
+&"/42-PARAMETER_MULTI-yaml/tokens/0/token"
+&"token1"
+---
+
+[TestIntegration_HandleRequestWithClients/42-PARAMETER_MULTI-yaml.json - 16]
+&"/42-PARAMETER_MULTI-yaml/tokens/1/service"
+&"service2"
+---
+
+[TestIntegration_HandleRequestWithClients/42-PARAMETER_MULTI-yaml.json - 17]
+&"/42-PARAMETER_MULTI-yaml/tokens/1/token"
+&"token2"
+---

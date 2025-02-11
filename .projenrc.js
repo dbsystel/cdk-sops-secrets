@@ -2,7 +2,8 @@ const { awscdk } = require('projen');
 const project = new awscdk.AwsCdkConstructLibrary({
   author: 'Markus Siebert',
   authorAddress: 'markus.siebert@deutschebahn.com',
-  cdkVersion: '2.144.0',
+  cdkVersion: '2.177.0',
+  majorVersion: 2,
   stability: 'stable',
   homepage: 'https://constructs.dev/packages/cdk-sops-secrets',
   description:
@@ -32,7 +33,9 @@ const project = new awscdk.AwsCdkConstructLibrary({
   bundledDeps: ['yaml'],
   // deps: [], /* Runtime dependencies of this module. */,
   // description: undefined,  /* The description is just a string that helps people understand the purpose of the package. */
-  // devDeps: [],             /* Build dependencies for this module. */
+  devDeps: [
+    'json-schema-to-typescript',
+  ] /* Build dependencies for this module. */,
   integrationTestAutoDiscover: true,
   prettier: true,
   prettierOptions: {
@@ -105,22 +108,13 @@ additionalActions = [
 ];
 
 project.buildWorkflow.preBuildSteps.unshift(...additionalActions);
-project.buildWorkflow.preBuildSteps.push({
-  name: 'Update snapshots: secret-inline',
-  run: 'yarn run projen integ:secret-inline:snapshot',
+['PARAMETER', 'PARAMETER_MULTI', 'SECRET'].forEach((type) => {
+  project.buildWorkflow.preBuildSteps.push({
+    name: `Update snapshots: ${type}`,
+    run: `yarn run projen integ:${type}:snapshot`,
+  });
 });
-project.buildWorkflow.preBuildSteps.push({
-  name: 'Update snapshots: secret-asset',
-  run: 'yarn run projen integ:secret-asset:snapshot',
-});
-project.buildWorkflow.preBuildSteps.push({
-  name: 'Update snapshots: secret-multikms',
-  run: 'yarn run projen integ:secret-multikms:snapshot',
-});
-project.buildWorkflow.preBuildSteps.push({
-  name: 'Update snapshots: secret-manual',
-  run: 'yarn run projen integ:secret-manual:snapshot',
-});
+
 project.buildWorkflow.addPostBuildSteps({
   name: 'Upload coverage to Codecov',
   uses: 'codecov/codecov-action@v4',

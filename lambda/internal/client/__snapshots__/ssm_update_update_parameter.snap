@@ -1,0 +1,34 @@
+
+[TestSsmUpdateUpdateParameter - 1]
+&ssm.PutParameterInput{
+    Name:                  &"parameter",
+    Value:                 &"content",
+    AllowedPattern:        (*string)(nil),
+    DataType:              (*string)(nil),
+    Description:           (*string)(nil),
+    KeyId:                 &"key",
+    Overwrite:             &bool(true),
+    Policies:              (*string)(nil),
+    Tags:                  nil,
+    Tier:                  "",
+    Type:                  "SecureString",
+    noSmithyDocumentSerde: document.NoSerde{},
+}
+---
+
+[TestSsmPutParameter - 1]
+&ssm.PutParameterInput{
+    Name:                  &"parameter",
+    Value:                 &"content",
+    AllowedPattern:        (*string)(nil),
+    DataType:              (*string)(nil),
+    Description:           (*string)(nil),
+    KeyId:                 &"key",
+    Overwrite:             &bool(true),
+    Policies:              (*string)(nil),
+    Tags:                  nil,
+    Tier:                  "",
+    Type:                  "SecureString",
+    noSmithyDocumentSerde: document.NoSerde{},
+}
+---

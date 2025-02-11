@@ -153,255 +153,192 @@
         }
       ]
     },
-    "integ:secret-asset:assert": {
-      "name": "integ:secret-asset:assert",
-      "description": "assert the snapshot of integration test 'secret-asset'",
+    "integ:PARAMETER_MULTI:assert": {
+      "name": "integ:PARAMETER_MULTI:assert",
+      "description": "assert the snapshot of integration test 'PARAMETER_MULTI'",
       "steps": [
         {
-          "exec": "[ -d \"test/secret-asset.integ.snapshot\" ] || (echo \"No snapshot available for integration test 'secret-asset'. Run 'projen integ:secret-asset:deploy' to capture.\" && exit 1)"
+          "exec": "[ -d \"test/PARAMETER_MULTI.integ.snapshot\" ] || (echo \"No snapshot available for integration test 'PARAMETER_MULTI'. Run 'projen integ:PARAMETER_MULTI:deploy' to capture.\" && exit 1)"
         },
         {
-          "exec": "cdk synth --app \"ts-node -P tsconfig.dev.json test/secret-asset.integ.ts\" --no-notices --no-version-reporting --no-asset-metadata --no-path-metadata -o test/.tmp/secret-asset.integ/assert.cdk.out > /dev/null"
+          "exec": "cdk synth --app \"ts-node -P tsconfig.dev.json test/PARAMETER_MULTI.integ.ts\" --no-notices --no-version-reporting --no-asset-metadata --no-path-metadata -o test/.tmp/PARAMETER_MULTI.integ/assert.cdk.out > /dev/null"
         },
         {
-          "exec": "diff -r -x asset.* -x cdk.out -x manifest.json -x tree.json test/secret-asset.integ.snapshot/ test/.tmp/secret-asset.integ/assert.cdk.out/"
+          "exec": "diff -r -x asset.* -x cdk.out -x manifest.json -x tree.json test/PARAMETER_MULTI.integ.snapshot/ test/.tmp/PARAMETER_MULTI.integ/assert.cdk.out/"
         }
       ]
     },
-    "integ:secret-asset:deploy": {
-      "name": "integ:secret-asset:deploy",
-      "description": "deploy integration test 'secret-asset' and capture snapshot",
+    "integ:PARAMETER_MULTI:deploy": {
+      "name": "integ:PARAMETER_MULTI:deploy",
+      "description": "deploy integration test 'PARAMETER_MULTI' and capture snapshot",
       "steps": [
         {
-          "exec": "rm -fr test/.tmp/secret-asset.integ/deploy.cdk.out"
+          "exec": "rm -fr test/.tmp/PARAMETER_MULTI.integ/deploy.cdk.out"
         },
         {
-          "exec": "cdk deploy --app \"ts-node -P tsconfig.dev.json test/secret-asset.integ.ts\" --no-notices --no-version-reporting --no-asset-metadata --no-path-metadata '**' --require-approval=never -o test/.tmp/secret-asset.integ/deploy.cdk.out"
+          "exec": "cdk deploy --app \"ts-node -P tsconfig.dev.json test/PARAMETER_MULTI.integ.ts\" --no-notices --no-version-reporting --no-asset-metadata --no-path-metadata '**' --require-approval=never -o test/.tmp/PARAMETER_MULTI.integ/deploy.cdk.out"
         },
         {
-          "exec": "rm -fr test/secret-asset.integ.snapshot"
+          "exec": "rm -fr test/PARAMETER_MULTI.integ.snapshot"
         },
         {
-          "exec": "mv test/.tmp/secret-asset.integ/deploy.cdk.out test/secret-asset.integ.snapshot"
+          "exec": "mv test/.tmp/PARAMETER_MULTI.integ/deploy.cdk.out test/PARAMETER_MULTI.integ.snapshot"
         },
         {
-          "spawn": "integ:secret-asset:destroy"
+          "spawn": "integ:PARAMETER_MULTI:destroy"
         }
       ]
     },
-    "integ:secret-asset:destroy": {
-      "name": "integ:secret-asset:destroy",
-      "description": "destroy integration test 'secret-asset'",
+    "integ:PARAMETER_MULTI:destroy": {
+      "name": "integ:PARAMETER_MULTI:destroy",
+      "description": "destroy integration test 'PARAMETER_MULTI'",
       "steps": [
         {
-          "exec": "cdk destroy --app test/secret-asset.integ.snapshot '**' --no-version-reporting"
+          "exec": "cdk destroy --app test/PARAMETER_MULTI.integ.snapshot '**' --no-version-reporting"
         }
       ]
     },
-    "integ:secret-asset:snapshot": {
-      "name": "integ:secret-asset:snapshot",
-      "description": "update snapshot for integration test \"secret-asset\"",
+    "integ:PARAMETER_MULTI:snapshot": {
+      "name": "integ:PARAMETER_MULTI:snapshot",
+      "description": "update snapshot for integration test \"PARAMETER_MULTI\"",
       "steps": [
         {
-          "exec": "cdk synth --app \"ts-node -P tsconfig.dev.json test/secret-asset.integ.ts\" --no-notices --no-version-reporting --no-asset-metadata --no-path-metadata -o test/secret-asset.integ.snapshot > /dev/null"
+          "exec": "cdk synth --app \"ts-node -P tsconfig.dev.json test/PARAMETER_MULTI.integ.ts\" --no-notices --no-version-reporting --no-asset-metadata --no-path-metadata -o test/PARAMETER_MULTI.integ.snapshot > /dev/null"
         }
       ]
     },
-    "integ:secret-asset:watch": {
-      "name": "integ:secret-asset:watch",
-      "description": "watch integration test 'secret-asset' (without updating snapshots)",
+    "integ:PARAMETER_MULTI:watch": {
+      "name": "integ:PARAMETER_MULTI:watch",
+      "description": "watch integration test 'PARAMETER_MULTI' (without updating snapshots)",
       "steps": [
         {
-          "exec": "cdk watch --app \"ts-node -P tsconfig.dev.json test/secret-asset.integ.ts\" --no-notices --no-version-reporting --no-asset-metadata --no-path-metadata '**' -o test/.tmp/secret-asset.integ/deploy.cdk.out"
+          "exec": "cdk watch --app \"ts-node -P tsconfig.dev.json test/PARAMETER_MULTI.integ.ts\" --no-notices --no-version-reporting --no-asset-metadata --no-path-metadata '**' -o test/.tmp/PARAMETER_MULTI.integ/deploy.cdk.out"
         }
       ]
     },
-    "integ:secret-inline:assert": {
-      "name": "integ:secret-inline:assert",
-      "description": "assert the snapshot of integration test 'secret-inline'",
+    "integ:PARAMETER:assert": {
+      "name": "integ:PARAMETER:assert",
+      "description": "assert the snapshot of integration test 'PARAMETER'",
       "steps": [
         {
-          "exec": "[ -d \"test/secret-inline.integ.snapshot\" ] || (echo \"No snapshot available for integration test 'secret-inline'. Run 'projen integ:secret-inline:deploy' to capture.\" && exit 1)"
+          "exec": "[ -d \"test/PARAMETER.integ.snapshot\" ] || (echo \"No snapshot available for integration test 'PARAMETER'. Run 'projen integ:PARAMETER:deploy' to capture.\" && exit 1)"
         },
         {
-          "exec": "cdk synth --app \"ts-node -P tsconfig.dev.json test/secret-inline.integ.ts\" --no-notices --no-version-reporting --no-asset-metadata --no-path-metadata -o test/.tmp/secret-inline.integ/assert.cdk.out > /dev/null"
+          "exec": "cdk synth --app \"ts-node -P tsconfig.dev.json test/PARAMETER.integ.ts\" --no-notices --no-version-reporting --no-asset-metadata --no-path-metadata -o test/.tmp/PARAMETER.integ/assert.cdk.out > /dev/null"
         },
         {
-          "exec": "diff -r -x asset.* -x cdk.out -x manifest.json -x tree.json test/secret-inline.integ.snapshot/ test/.tmp/secret-inline.integ/assert.cdk.out/"
+          "exec": "diff -r -x asset.* -x cdk.out -x manifest.json -x tree.json test/PARAMETER.integ.snapshot/ test/.tmp/PARAMETER.integ/assert.cdk.out/"
         }
       ]
     },
-    "integ:secret-inline:deploy": {
-      "name": "integ:secret-inline:deploy",
-      "description": "deploy integration test 'secret-inline' and capture snapshot",
+    "integ:PARAMETER:deploy": {
+      "name": "integ:PARAMETER:deploy",
+      "description": "deploy integration test 'PARAMETER' and capture snapshot",
       "steps": [
         {
-          "exec": "rm -fr test/.tmp/secret-inline.integ/deploy.cdk.out"
+          "exec": "rm -fr test/.tmp/PARAMETER.integ/deploy.cdk.out"
         },
         {
-          "exec": "cdk deploy --app \"ts-node -P tsconfig.dev.json test/secret-inline.integ.ts\" --no-notices --no-version-reporting --no-asset-metadata --no-path-metadata '**' --require-approval=never -o test/.tmp/secret-inline.integ/deploy.cdk.out"
+          "exec": "cdk deploy --app \"ts-node -P tsconfig.dev.json test/PARAMETER.integ.ts\" --no-notices --no-version-reporting --no-asset-metadata --no-path-metadata '**' --require-approval=never -o test/.tmp/PARAMETER.integ/deploy.cdk.out"
         },
         {
-          "exec": "rm -fr test/secret-inline.integ.snapshot"
+          "exec": "rm -fr test/PARAMETER.integ.snapshot"
         },
         {
-          "exec": "mv test/.tmp/secret-inline.integ/deploy.cdk.out test/secret-inline.integ.snapshot"
+          "exec": "mv test/.tmp/PARAMETER.integ/deploy.cdk.out test/PARAMETER.integ.snapshot"
         },
         {
-          "spawn": "integ:secret-inline:destroy"
+          "spawn": "integ:PARAMETER:destroy"
         }
       ]
     },
-    "integ:secret-inline:destroy": {
-      "name": "integ:secret-inline:destroy",
-      "description": "destroy integration test 'secret-inline'",
+    "integ:PARAMETER:destroy": {
+      "name": "integ:PARAMETER:destroy",
+      "description": "destroy integration test 'PARAMETER'",
       "steps": [
         {
-          "exec": "cdk destroy --app test/secret-inline.integ.snapshot '**' --no-version-reporting"
+          "exec": "cdk destroy --app test/PARAMETER.integ.snapshot '**' --no-version-reporting"
         }
       ]
     },
-    "integ:secret-inline:snapshot": {
-      "name": "integ:secret-inline:snapshot",
-      "description": "update snapshot for integration test \"secret-inline\"",
+    "integ:PARAMETER:snapshot": {
+      "name": "integ:PARAMETER:snapshot",
+      "description": "update snapshot for integration test \"PARAMETER\"",
       "steps": [
         {
-          "exec": "cdk synth --app \"ts-node -P tsconfig.dev.json test/secret-inline.integ.ts\" --no-notices --no-version-reporting --no-asset-metadata --no-path-metadata -o test/secret-inline.integ.snapshot > /dev/null"
+          "exec": "cdk synth --app \"ts-node -P tsconfig.dev.json test/PARAMETER.integ.ts\" --no-notices --no-version-reporting --no-asset-metadata --no-path-metadata -o test/PARAMETER.integ.snapshot > /dev/null"
         }
       ]
     },
-    "integ:secret-inline:watch": {
-      "name": "integ:secret-inline:watch",
-      "description": "watch integration test 'secret-inline' (without updating snapshots)",
+    "integ:PARAMETER:watch": {
+      "name": "integ:PARAMETER:watch",
+      "description": "watch integration test 'PARAMETER' (without updating snapshots)",
       "steps": [
         {
-          "exec": "cdk watch --app \"ts-node -P tsconfig.dev.json test/secret-inline.integ.ts\" --no-notices --no-version-reporting --no-asset-metadata --no-path-metadata '**' -o test/.tmp/secret-inline.integ/deploy.cdk.out"
+          "exec": "cdk watch --app \"ts-node -P tsconfig.dev.json test/PARAMETER.integ.ts\" --no-notices --no-version-reporting --no-asset-metadata --no-path-metadata '**' -o test/.tmp/PARAMETER.integ/deploy.cdk.out"
         }
       ]
     },
-    "integ:secret-manual:assert": {
-      "name": "integ:secret-manual:assert",
-      "description": "assert the snapshot of integration test 'secret-manual'",
+    "integ:SECRET:assert": {
+      "name": "integ:SECRET:assert",
+      "description": "assert the snapshot of integration test 'SECRET'",
       "steps": [
         {
-          "exec": "[ -d \"test/secret-manual.integ.snapshot\" ] || (echo \"No snapshot available for integration test 'secret-manual'. Run 'projen integ:secret-manual:deploy' to capture.\" && exit 1)"
+          "exec": "[ -d \"test/SECRET.integ.snapshot\" ] || (echo \"No snapshot available for integration test 'SECRET'. Run 'projen integ:SECRET:deploy' to capture.\" && exit 1)"
         },
         {
-          "exec": "cdk synth --app \"ts-node -P tsconfig.dev.json test/secret-manual.integ.ts\" --no-notices --no-version-reporting --no-asset-metadata --no-path-metadata -o test/.tmp/secret-manual.integ/assert.cdk.out > /dev/null"
+          "exec": "cdk synth --app \"ts-node -P tsconfig.dev.json test/SECRET.integ.ts\" --no-notices --no-version-reporting --no-asset-metadata --no-path-metadata -o test/.tmp/SECRET.integ/assert.cdk.out > /dev/null"
         },
         {
-          "exec": "diff -r -x asset.* -x cdk.out -x manifest.json -x tree.json test/secret-manual.integ.snapshot/ test/.tmp/secret-manual.integ/assert.cdk.out/"
+          "exec": "diff -r -x asset.* -x cdk.out -x manifest.json -x tree.json test/SECRET.integ.snapshot/ test/.tmp/SECRET.integ/assert.cdk.out/"
         }
       ]
     },
-    "integ:secret-manual:deploy": {
-      "name": "integ:secret-manual:deploy",
-      "description": "deploy integration test 'secret-manual' and capture snapshot",
+    "integ:SECRET:deploy": {
+      "name": "integ:SECRET:deploy",
+      "description": "deploy integration test 'SECRET' and capture snapshot",
       "steps": [
         {
-          "exec": "rm -fr test/.tmp/secret-manual.integ/deploy.cdk.out"
+          "exec": "rm -fr test/.tmp/SECRET.integ/deploy.cdk.out"
         },
         {
-          "exec": "cdk deploy --app \"ts-node -P tsconfig.dev.json test/secret-manual.integ.ts\" --no-notices --no-version-reporting --no-asset-metadata --no-path-metadata '**' --require-approval=never -o test/.tmp/secret-manual.integ/deploy.cdk.out"
+          "exec": "cdk deploy --app \"ts-node -P tsconfig.dev.json test/SECRET.integ.ts\" --no-notices --no-version-reporting --no-asset-metadata --no-path-metadata '**' --require-approval=never -o test/.tmp/SECRET.integ/deploy.cdk.out"
         },
         {
-          "exec": "rm -fr test/secret-manual.integ.snapshot"
+          "exec": "rm -fr test/SECRET.integ.snapshot"
         },
         {
-          "exec": "mv test/.tmp/secret-manual.integ/deploy.cdk.out test/secret-manual.integ.snapshot"
+          "exec": "mv test/.tmp/SECRET.integ/deploy.cdk.out test/SECRET.integ.snapshot"
         },
         {
-          "spawn": "integ:secret-manual:destroy"
+          "spawn": "integ:SECRET:destroy"
         }
       ]
     },
-    "integ:secret-manual:destroy": {
-      "name": "integ:secret-manual:destroy",
-      "description": "destroy integration test 'secret-manual'",
+    "integ:SECRET:destroy": {
+      "name": "integ:SECRET:destroy",
+      "description": "destroy integration test 'SECRET'",
       "steps": [
         {
-          "exec": "cdk destroy --app test/secret-manual.integ.snapshot '**' --no-version-reporting"
+          "exec": "cdk destroy --app test/SECRET.integ.snapshot '**' --no-version-reporting"
         }
       ]
     },
-    "integ:secret-manual:snapshot": {
-      "name": "integ:secret-manual:snapshot",
-      "description": "update snapshot for integration test \"secret-manual\"",
+    "integ:SECRET:snapshot": {
+      "name": "integ:SECRET:snapshot",
+      "description": "update snapshot for integration test \"SECRET\"",
       "steps": [
         {
-          "exec": "cdk synth --app \"ts-node -P tsconfig.dev.json test/secret-manual.integ.ts\" --no-notices --no-version-reporting --no-asset-metadata --no-path-metadata -o test/secret-manual.integ.snapshot > /dev/null"
+          "exec": "cdk synth --app \"ts-node -P tsconfig.dev.json test/SECRET.integ.ts\" --no-notices --no-version-reporting --no-asset-metadata --no-path-metadata -o test/SECRET.integ.snapshot > /dev/null"
         }
       ]
     },
-    "integ:secret-manual:watch": {
-      "name": "integ:secret-manual:watch",
-      "description": "watch integration test 'secret-manual' (without updating snapshots)",
+    "integ:SECRET:watch": {
+      "name": "integ:SECRET:watch",
+      "description": "watch integration test 'SECRET' (without updating snapshots)",
       "steps": [
         {
-          "exec": "cdk watch --app \"ts-node -P tsconfig.dev.json test/secret-manual.integ.ts\" --no-notices --no-version-reporting --no-asset-metadata --no-path-metadata '**' -o test/.tmp/secret-manual.integ/deploy.cdk.out"
-        }
-      ]
-    },
-    "integ:secret-multikms:assert": {
-      "name": "integ:secret-multikms:assert",
-      "description": "assert the snapshot of integration test 'secret-multikms'",
-      "steps": [
-        {
-          "exec": "[ -d \"test/secret-multikms.integ.snapshot\" ] || (echo \"No snapshot available for integration test 'secret-multikms'. Run 'projen integ:secret-multikms:deploy' to capture.\" && exit 1)"
-        },
-        {
-          "exec": "cdk synth --app \"ts-node -P tsconfig.dev.json test/secret-multikms.integ.ts\" --no-notices --no-version-reporting --no-asset-metadata --no-path-metadata -o test/.tmp/secret-multikms.integ/assert.cdk.out > /dev/null"
-        },
-        {
-          "exec": "diff -r -x asset.* -x cdk.out -x manifest.json -x tree.json test/secret-multikms.integ.snapshot/ test/.tmp/secret-multikms.integ/assert.cdk.out/"
-        }
-      ]
-    },
-    "integ:secret-multikms:deploy": {
-      "name": "integ:secret-multikms:deploy",
-      "description": "deploy integration test 'secret-multikms' and capture snapshot",
-      "steps": [
-        {
-          "exec": "rm -fr test/.tmp/secret-multikms.integ/deploy.cdk.out"
-        },
-        {
-          "exec": "cdk deploy --app \"ts-node -P tsconfig.dev.json test/secret-multikms.integ.ts\" --no-notices --no-version-reporting --no-asset-metadata --no-path-metadata '**' --require-approval=never -o test/.tmp/secret-multikms.integ/deploy.cdk.out"
-        },
-        {
-          "exec": "rm -fr test/secret-multikms.integ.snapshot"
-        },
-        {
-          "exec": "mv test/.tmp/secret-multikms.integ/deploy.cdk.out test/secret-multikms.integ.snapshot"
-        },
-        {
-          "spawn": "integ:secret-multikms:destroy"
-        }
-      ]
-    },
-    "integ:secret-multikms:destroy": {
-      "name": "integ:secret-multikms:destroy",
-      "description": "destroy integration test 'secret-multikms'",
-      "steps": [
-        {
-          "exec": "cdk destroy --app test/secret-multikms.integ.snapshot '**' --no-version-reporting"
-        }
-      ]
-    },
-    "integ:secret-multikms:snapshot": {
-      "name": "integ:secret-multikms:snapshot",
-      "description": "update snapshot for integration test \"secret-multikms\"",
-      "steps": [
-        {
-          "exec": "cdk synth --app \"ts-node -P tsconfig.dev.json test/secret-multikms.integ.ts\" --no-notices --no-version-reporting --no-asset-metadata --no-path-metadata -o test/secret-multikms.integ.snapshot > /dev/null"
-        }
-      ]
-    },
-    "integ:secret-multikms:watch": {
-      "name": "integ:secret-multikms:watch",
-      "description": "watch integration test 'secret-multikms' (without updating snapshots)",
-      "steps": [
-        {
-          "exec": "cdk watch --app \"ts-node -P tsconfig.dev.json test/secret-multikms.integ.ts\" --no-notices --no-version-reporting --no-asset-metadata --no-path-metadata '**' -o test/.tmp/secret-multikms.integ/deploy.cdk.out"
+          "exec": "cdk watch --app \"ts-node -P tsconfig.dev.json test/SECRET.integ.ts\" --no-notices --no-version-reporting --no-asset-metadata --no-path-metadata '**' -o test/.tmp/SECRET.integ/deploy.cdk.out"
         }
       ]
     },
@@ -410,16 +347,13 @@
       "description": "update snapshot for all integration tests",
       "steps": [
         {
-          "spawn": "integ:secret-asset:snapshot"
+          "spawn": "integ:PARAMETER_MULTI:snapshot"
         },
         {
-          "spawn": "integ:secret-inline:snapshot"
+          "spawn": "integ:PARAMETER:snapshot"
         },
         {
-          "spawn": "integ:secret-manual:snapshot"
-        },
-        {
-          "spawn": "integ:secret-multikms:snapshot"
+          "spawn": "integ:SECRET:snapshot"
         }
       ]
     },
@@ -512,7 +446,8 @@
       "name": "release",
       "description": "Prepare a release from \"main\" branch",
       "env": {
-        "RELEASE": "true"
+        "RELEASE": "true",
+        "MAJOR": "2"
       },
       "steps": [
         {
@@ -544,16 +479,13 @@
           "spawn": "eslint"
         },
         {
-          "spawn": "integ:secret-asset:assert"
+          "spawn": "integ:PARAMETER_MULTI:assert"
         },
         {
-          "spawn": "integ:secret-inline:assert"
+          "spawn": "integ:PARAMETER:assert"
         },
         {
-          "spawn": "integ:secret-manual:assert"
-        },
-        {
-          "spawn": "integ:secret-multikms:assert"
+          "spawn": "integ:SECRET:assert"
         }
       ]
     },
@@ -591,13 +523,13 @@
       },
       "steps": [
         {
-          "exec": "npx npm-check-updates@16 --upgrade --target=minor --peer --no-deprecated --dep=dev,peer,prod,optional --filter=@types/jest,@types/node,eslint-config-prettier,eslint-import-resolver-typescript,eslint-plugin-import,eslint-plugin-prettier,jest,jsii-diff,jsii-pacmak,prettier,projen,ts-jest,ts-node,typescript,yaml"
+          "exec": "npx npm-check-updates@16 --upgrade --target=minor --peer --no-deprecated --dep=dev,peer,prod,optional --filter=@types/jest,@types/node,eslint-config-prettier,eslint-import-resolver-typescript,eslint-plugin-import,eslint-plugin-prettier,jest,jsii-diff,jsii-pacmak,json-schema-to-typescript,prettier,projen,ts-jest,ts-node,typescript,yaml"
         },
         {
           "exec": "yarn install --check-files"
         },
         {
-          "exec": "yarn upgrade @types/jest @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser aws-cdk commit-and-tag-version eslint-config-prettier eslint-import-resolver-typescript eslint-plugin-import eslint-plugin-prettier eslint jest jest-junit jsii-diff jsii-docgen jsii-pacmak jsii-rosetta jsii prettier projen ts-jest ts-node typescript yaml aws-cdk-lib constructs"
+          "exec": "yarn upgrade @types/jest @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser aws-cdk commit-and-tag-version eslint-config-prettier eslint-import-resolver-typescript eslint-plugin-import eslint-plugin-prettier eslint jest jest-junit jsii-diff jsii-docgen jsii-pacmak jsii-rosetta jsii json-schema-to-typescript prettier projen ts-jest ts-node typescript yaml aws-cdk-lib constructs"
         },
         {
           "exec": "npx projen"

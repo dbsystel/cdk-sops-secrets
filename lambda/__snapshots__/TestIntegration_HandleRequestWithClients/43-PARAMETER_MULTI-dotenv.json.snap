@@ -1,0 +1,85 @@
+
+[TestIntegration_HandleRequestWithClients/43-PARAMETER_MULTI-dotenv.json - 1]
+&"/43-PARAMETER_MULTI-dotenv/specific_number1"
+&"123"
+---
+
+[TestIntegration_HandleRequestWithClients/43-PARAMETER_MULTI-dotenv.json - 2]
+&"/43-PARAMETER_MULTI-dotenv/tokens_1_service"
+&"service2"
+---
+
+[TestIntegration_HandleRequestWithClients/43-PARAMETER_MULTI-dotenv.json - 3]
+&"/43-PARAMETER_MULTI-dotenv/apiKey"
+&"sk-1234567890abcdef"
+---
+
+[TestIntegration_HandleRequestWithClients/43-PARAMETER_MULTI-dotenv.json - 4]
+&"/43-PARAMETER_MULTI-dotenv/database_password"
+&"P@ssw0rd!"
+---
+
+[TestIntegration_HandleRequestWithClients/43-PARAMETER_MULTI-dotenv.json - 5]
+&"/43-PARAMETER_MULTI-dotenv/database_user"
+&"admin"
+---
+
+[TestIntegration_HandleRequestWithClients/43-PARAMETER_MULTI-dotenv.json - 6]
+&"/43-PARAMETER_MULTI-dotenv/specific_HTLMEncodingTest3"
+&"@"
+---
+
+[TestIntegration_HandleRequestWithClients/43-PARAMETER_MULTI-dotenv.json - 7]
+&"/43-PARAMETER_MULTI-dotenv/specific_HTMLEncodingTest1"
+&"test <test@test.test>"
+---
+
+[TestIntegration_HandleRequestWithClients/43-PARAMETER_MULTI-dotenv.json - 8]
+&"/43-PARAMETER_MULTI-dotenv/specific_HTMLEncodingTest2"
+&"&"
+---
+
+[TestIntegration_HandleRequestWithClients/43-PARAMETER_MULTI-dotenv.json - 9]
+&"/43-PARAMETER_MULTI-dotenv/specific_null"
+&"<empty>"
+---
+
+[TestIntegration_HandleRequestWithClients/43-PARAMETER_MULTI-dotenv.json - 10]
+&"/43-PARAMETER_MULTI-dotenv/specific_number2"
+&"123.456"
+---
+
+[TestIntegration_HandleRequestWithClients/43-PARAMETER_MULTI-dotenv.json - 11]
+&"/43-PARAMETER_MULTI-dotenv/tokens_0_service"
+&"service1"
+---
+
+[TestIntegration_HandleRequestWithClients/43-PARAMETER_MULTI-dotenv.json - 12]
+&"/43-PARAMETER_MULTI-dotenv/tokens_1_token"
+&"token2"
+---
+
+[TestIntegration_HandleRequestWithClients/43-PARAMETER_MULTI-dotenv.json - 13]
+&"/43-PARAMETER_MULTI-dotenv/database_host"
+&"db.example.com"
+---
+
+[TestIntegration_HandleRequestWithClients/43-PARAMETER_MULTI-dotenv.json - 14]
+&"/43-PARAMETER_MULTI-dotenv/someOtherKey"
+&"base64:aGFsbG8gd2VsdAo="
+---
+
+[TestIntegration_HandleRequestWithClients/43-PARAMETER_MULTI-dotenv.json - 15]
+&"/43-PARAMETER_MULTI-dotenv/specific_SpecialCharacters"
+&"\"ajkscbuiuXA34%%&&="
+---
+
+[TestIntegration_HandleRequestWithClients/43-PARAMETER_MULTI-dotenv.json - 16]
+&"/43-PARAMETER_MULTI-dotenv/specific_boolean"
+&"True"
+---
+
+[TestIntegration_HandleRequestWithClients/43-PARAMETER_MULTI-dotenv.json - 17]
+&"/43-PARAMETER_MULTI-dotenv/tokens_0_token"
+&"token1"
+---

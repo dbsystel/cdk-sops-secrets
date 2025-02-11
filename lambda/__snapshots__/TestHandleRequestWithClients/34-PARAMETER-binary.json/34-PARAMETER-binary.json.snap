@@ -1,0 +1,17 @@
+
+[TestHandleRequestWithClients/34-PARAMETER-binary.json - 1]
+main.getObjectCalls{
+    "test-secrets/README.sops.binary": {Bucket:"cdk-hnb659fds-assets-505755377845-eu-central-1", Key:"test-secrets/README.sops.binary"},
+}
+main.getObjectEtagCalls{
+    "test-secrets/README.sops.binary": {Bucket:"cdk-hnb659fds-assets-505755377845-eu-central-1", Key:"test-secrets/README.sops.binary"},
+}
+main.putParameterCalls{
+    "/34-PARAMETER-binary": map[string]interface {}{
+        "keyId":            "arn:aws:kms:eu-central-1:505755377845:key/58b75958-883a-440c-842c-85af5d33a5bb",
+        "parameterContent": "# SOPS files for testing purpose\n\nThe sops files in this directory were created for testing purpose. As encryption algorithm [age](https://age-encryption.org/) is used, as it allows easy sharing of encryption information.\n\nThe following keys were used:\n\n```yaml\npublic: age1djllw2pzuprrqc0en5m8vc8k5ge3tm0f6g7cj0c0glfzp44vdc4ql8ngvu\nprivate: AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3\n```\n",
+    },
+}
+main.putSecretValueCalls{
+}
+---

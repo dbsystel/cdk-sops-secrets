@@ -1,0 +1,15 @@
+
+[Test_Flatten/3.array - 1]
+&data.Data{
+    parsed: &map[string]interface {}{
+        "[0].bool":   bool(true),
+        "[0].number": float64(1.1),
+        "[0].string": "examplestring",
+        "[1].bool":   bool(true),
+        "[1].number": float64(1.1),
+        "[1].string": "examplestring",
+    },
+    raw:  (*[]uint8)(nil),
+    Hash: (*string)(nil),
+}
+---

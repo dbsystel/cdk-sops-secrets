@@ -31,14 +31,12 @@ jobs:
           node-version: lts/*
       - name: Install dependencies
         run: yarn install --check-files
-      - name: "Update snapshots: secret-inline"
-        run: yarn run projen integ:secret-inline:snapshot
-      - name: "Update snapshots: secret-asset"
-        run: yarn run projen integ:secret-asset:snapshot
-      - name: "Update snapshots: secret-multikms"
-        run: yarn run projen integ:secret-multikms:snapshot
-      - name: "Update snapshots: secret-manual"
-        run: yarn run projen integ:secret-manual:snapshot
+      - name: "Update snapshots: PARAMETER"
+        run: yarn run projen integ:PARAMETER:snapshot
+      - name: "Update snapshots: PARAMETER_MULTI"
+        run: yarn run projen integ:PARAMETER_MULTI:snapshot
+      - name: "Update snapshots: SECRET"
+        run: yarn run projen integ:SECRET:snapshot
       - name: build
         run: npx projen build
       - name: Upload coverage to Codecov

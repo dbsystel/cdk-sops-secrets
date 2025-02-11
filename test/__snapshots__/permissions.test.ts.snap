@@ -31,6 +31,9 @@ Object {
         ],
         "Version": "2012-10-17",
       },
+      "Roles": Array [
+        "test-role",
+      ],
     },
     "Type": "AWS::IAM::ManagedPolicy",
   },

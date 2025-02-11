@@ -1,0 +1,17 @@
+
+[TestHandleRequestWithClients/31-PARAMETER-json.json - 1]
+main.getObjectCalls{
+    "test-secrets/testsecret.sops.json": {Bucket:"cdk-hnb659fds-assets-505755377845-eu-central-1", Key:"test-secrets/testsecret.sops.json"},
+}
+main.getObjectEtagCalls{
+    "test-secrets/testsecret.sops.json": {Bucket:"cdk-hnb659fds-assets-505755377845-eu-central-1", Key:"test-secrets/testsecret.sops.json"},
+}
+main.putParameterCalls{
+    "/31-PARAMETER-json": map[string]interface {}{
+        "keyId":            "arn:aws:kms:eu-central-1:505755377845:key/58b75958-883a-440c-842c-85af5d33a5bb",
+        "parameterContent": "{\n\t\"apiKey\": \"sk-1234567890abcdef\",\n\t\"database\": {\n\t\t\"host\": \"db.example.com\",\n\t\t\"password\": \"P@ssw0rd!\",\n\t\t\"user\": \"admin\"\n\t},\n\t\"someOtherKey\": \"base64:aGFsbG8gd2VsdAo=\",\n\t\"specific\": {\n\t\t\"HTLMEncodingTest3\": \"@\",\n\t\t\"HTMLEncodingTest1\": \"test <test@test.test>\",\n\t\t\"HTMLEncodingTest2\": \"&\",\n\t\t\"SpecialCharacters\": \"\\\"ajkscbuiuXA34%%&&=\",\n\t\t\"boolean\": true,\n\t\t\"null\": null,\n\t\t\"number1\": 123,\n\t\t\"number2\": 123.456\n\t},\n\t\"tokens\": [\n\t\t{\n\t\t\t\"service\": \"service1\",\n\t\t\t\"token\": \"token1\"\n\t\t},\n\t\t{\n\t\t\t\"service\": \"service2\",\n\t\t\t\"token\": \"token2\"\n\t\t}\n\t]\n}",
+    },
+}
+main.putSecretValueCalls{
+}
+---

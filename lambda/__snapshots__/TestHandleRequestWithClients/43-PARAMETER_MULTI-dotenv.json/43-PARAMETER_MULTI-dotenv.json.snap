@@ -1,0 +1,81 @@
+
+[TestHandleRequestWithClients/43-PARAMETER_MULTI-dotenv.json - 1]
+main.getObjectCalls{
+    "test-secrets/testsecret.sops.env": {Bucket:"cdk-hnb659fds-assets-505755377845-eu-central-1", Key:"test-secrets/testsecret.sops.env"},
+}
+main.getObjectEtagCalls{
+    "test-secrets/testsecret.sops.env": {Bucket:"cdk-hnb659fds-assets-505755377845-eu-central-1", Key:"test-secrets/testsecret.sops.env"},
+}
+main.putParameterCalls{
+    "/43-PARAMETER_MULTI-dotenv/apiKey": map[string]interface {}{
+        "keyId":            "arn:aws:kms:eu-central-1:505755377845:key/58b75958-883a-440c-842c-85af5d33a5bb",
+        "parameterContent": "sk-1234567890abcdef",
+    },
+    "/43-PARAMETER_MULTI-dotenv/database_host": map[string]interface {}{
+        "keyId":            "arn:aws:kms:eu-central-1:505755377845:key/58b75958-883a-440c-842c-85af5d33a5bb",
+        "parameterContent": "db.example.com",
+    },
+    "/43-PARAMETER_MULTI-dotenv/database_password": map[string]interface {}{
+        "keyId":            "arn:aws:kms:eu-central-1:505755377845:key/58b75958-883a-440c-842c-85af5d33a5bb",
+        "parameterContent": "P@ssw0rd!",
+    },
+    "/43-PARAMETER_MULTI-dotenv/database_user": map[string]interface {}{
+        "keyId":            "arn:aws:kms:eu-central-1:505755377845:key/58b75958-883a-440c-842c-85af5d33a5bb",
+        "parameterContent": "admin",
+    },
+    "/43-PARAMETER_MULTI-dotenv/someOtherKey": map[string]interface {}{
+        "keyId":            "arn:aws:kms:eu-central-1:505755377845:key/58b75958-883a-440c-842c-85af5d33a5bb",
+        "parameterContent": "base64:aGFsbG8gd2VsdAo=",
+    },
+    "/43-PARAMETER_MULTI-dotenv/specific_HTLMEncodingTest3": map[string]interface {}{
+        "keyId":            "arn:aws:kms:eu-central-1:505755377845:key/58b75958-883a-440c-842c-85af5d33a5bb",
+        "parameterContent": "@",
+    },
+    "/43-PARAMETER_MULTI-dotenv/specific_HTMLEncodingTest1": map[string]interface {}{
+        "keyId":            "arn:aws:kms:eu-central-1:505755377845:key/58b75958-883a-440c-842c-85af5d33a5bb",
+        "parameterContent": "test <test@test.test>",
+    },
+    "/43-PARAMETER_MULTI-dotenv/specific_HTMLEncodingTest2": map[string]interface {}{
+        "keyId":            "arn:aws:kms:eu-central-1:505755377845:key/58b75958-883a-440c-842c-85af5d33a5bb",
+        "parameterContent": "&",
+    },
+    "/43-PARAMETER_MULTI-dotenv/specific_SpecialCharacters": map[string]interface {}{
+        "keyId":            "arn:aws:kms:eu-central-1:505755377845:key/58b75958-883a-440c-842c-85af5d33a5bb",
+        "parameterContent": "\"ajkscbuiuXA34%%&&=",
+    },
+    "/43-PARAMETER_MULTI-dotenv/specific_boolean": map[string]interface {}{
+        "keyId":            "arn:aws:kms:eu-central-1:505755377845:key/58b75958-883a-440c-842c-85af5d33a5bb",
+        "parameterContent": "True",
+    },
+    "/43-PARAMETER_MULTI-dotenv/specific_null": map[string]interface {}{
+        "keyId":            "arn:aws:kms:eu-central-1:505755377845:key/58b75958-883a-440c-842c-85af5d33a5bb",
+        "parameterContent": "<empty>",
+    },
+    "/43-PARAMETER_MULTI-dotenv/specific_number1": map[string]interface {}{
+        "keyId":            "arn:aws:kms:eu-central-1:505755377845:key/58b75958-883a-440c-842c-85af5d33a5bb",
+        "parameterContent": "123",
+    },
+    "/43-PARAMETER_MULTI-dotenv/specific_number2": map[string]interface {}{
+        "keyId":            "arn:aws:kms:eu-central-1:505755377845:key/58b75958-883a-440c-842c-85af5d33a5bb",
+        "parameterContent": "123.456",
+    },
+    "/43-PARAMETER_MULTI-dotenv/tokens_0_service": map[string]interface {}{
+        "keyId":            "arn:aws:kms:eu-central-1:505755377845:key/58b75958-883a-440c-842c-85af5d33a5bb",
+        "parameterContent": "service1",
+    },
+    "/43-PARAMETER_MULTI-dotenv/tokens_0_token": map[string]interface {}{
+        "keyId":            "arn:aws:kms:eu-central-1:505755377845:key/58b75958-883a-440c-842c-85af5d33a5bb",
+        "parameterContent": "token1",
+    },
+    "/43-PARAMETER_MULTI-dotenv/tokens_1_service": map[string]interface {}{
+        "keyId":            "arn:aws:kms:eu-central-1:505755377845:key/58b75958-883a-440c-842c-85af5d33a5bb",
+        "parameterContent": "service2",
+    },
+    "/43-PARAMETER_MULTI-dotenv/tokens_1_token": map[string]interface {}{
+        "keyId":            "arn:aws:kms:eu-central-1:505755377845:key/58b75958-883a-440c-842c-85af5d33a5bb",
+        "parameterContent": "token2",
+    },
+}
+main.putSecretValueCalls{
+}
+---
