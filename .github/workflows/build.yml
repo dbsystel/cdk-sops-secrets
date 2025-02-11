@@ -32,10 +32,10 @@ jobs:
           cache-dependency-path: lambda/go.sum
       - name: Display Go version
         run: go version
-      - name: Test
+      - name: test lambda code
         run: scripts/lambda-test.sh
-      - name: Build
-        run: scripts/lambda-build.sh
+      - name: build lambda code and create zip
+        run: scripts/build.sh
       - name: build
         run: npx projen build
       - name: Find mutations

@@ -32,7 +32,6 @@ const project = new awscdk.AwsCdkConstructLibrary({
     ],
   },
   buildWorkflowOptions: {
-
     preBuildSteps: [
       {
         name: "Setup Go 1.23.5",
@@ -47,12 +46,12 @@ const project = new awscdk.AwsCdkConstructLibrary({
         run: "go version"
       },
       {
-        name: 'Test',
+        name: 'test lambda code',
         run: 'scripts/lambda-test.sh',
       },
       {
-        name: 'Build',
-        run: 'scripts/lambda-build.sh',
+        name: 'build lambda code and create zip',
+        run: 'scripts/build.sh',
       },
     ]
   },
