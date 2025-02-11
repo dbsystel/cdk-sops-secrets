@@ -31,7 +31,34 @@ const project = new awscdk.AwsCdkConstructLibrary({
       'renovate[bot]',
     ],
   },
+  buildWorkflowOptions: {
 
+    preBuildSteps: [
+      {
+        name: "Setup Go ${{ matrix.go-version }}",
+        uses: "actions/setup-go@v5",
+        with: {
+          "go-version": "${{ matrix.go-version }}",
+        },
+      },
+      {
+        name: "Display Go version",
+        run: "go version"
+      },
+      {
+        name: 'Test',
+        run: 'scripts/lambda-test.sh',
+      },
+      {
+        name: 'Build',
+        run: 'scripts/lambda-build.sh',
+      },
+      {
+        name: 'Upload artifact',
+        uses: 'actions/upload-artifact@v4',
+      },
+    ]
+  },
   name: 'cdk-sops-secrets',
   repositoryUrl: 'https://github.com/dbsystel/cdk-sops-secrets.git',
   bundledDeps: ['yaml'],
@@ -98,141 +125,5 @@ project.npmignore.addPatterns(
 );
 
 goreleaserArtifactsNamespace = 'build-artifact-goreleaser';
-
-additionalActions = [
-  {
-    name: 'Download zipper artifacts',
-    uses: 'actions/download-artifact@v4',
-    with: {
-      name: 'zipper',
-      path: 'assets',
-    },
-  },
-];
-
-project.buildWorkflow.preBuildSteps.unshift(...additionalActions);
-['PARAMETER', 'PARAMETER_MULTI', 'SECRET'].forEach((type) => {
-  project.buildWorkflow.preBuildSteps.push({
-    name: `Update snapshots: ${type}`,
-    run: `yarn run projen integ:${type}:snapshot`,
-  });
-});
-
-const fixme = project.github.workflows.filter((wf) =>
-  ['build', 'release'].includes(wf.name),
-);
-
-fixme.forEach((wf) => {
-  Object.keys(wf.jobs).forEach((key) => {
-    if (key !== 'build') {
-      wf.jobs[key].steps.splice(1, 0, ...additionalActions);
-    }
-    wf.jobs[key] = {
-      ...wf.jobs[key],
-      needs: [...(wf.jobs[key].needs || []), 'zipper'],
-    };
-  });
-
-  wf.addJob('gobuild', {
-    name: 'gobuild',
-    runsOn: 'ubuntu-latest',
-    container: {
-      image: 'golang:1.23-bullseye',
-    },
-    on: {
-      pull_request: null,
-      push: null,
-    },
-    permissions: {
-      contents: 'write',
-    },
-    steps: [
-      {
-        name: 'Temporary workaround Checkout Issue #760 ',
-        run: 'git config --global --add safe.directory /__w/cdk-sops-secrets/cdk-sops-secrets',
-      },
-      {
-        name: 'Checkout',
-        uses: 'actions/checkout@v4',
-        with: {
-          'fetch-depth': 0,
-        },
-      },
-      {
-        name: 'Fetch all tags',
-        run: 'git fetch --force --tags',
-      },
-      {
-        name: 'Test',
-        run: 'scripts/lambda-test.sh',
-      },
-      {
-        name: 'Build',
-        run: 'scripts/lambda-build.sh',
-      },
-      {
-        name: 'Upload artifact',
-        uses: 'actions/upload-artifact@v4',
-        with: {
-          name: 'gobuild',
-          path: 'lambda/bootstrap',
-        },
-      },
-    ],
-  });
-
-  wf.addJob('zipper', {
-    name: 'zipper',
-    needs: 'gobuild',
-    runsOn: 'ubuntu-latest',
-    container: {
-      image: 'alpine:latest',
-    },
-    on: {
-      pull_request: null,
-      push: null,
-    },
-    permissions: {
-      contents: 'write',
-    },
-    steps: [
-      {
-        name: 'Prepare',
-        run: 'apk add zip git',
-      },
-      {
-        name: 'Temporary workaround',
-        run: 'git config --global --add safe.directory /__w/cdk-sops-secrets/cdk-sops-secrets',
-      },
-      {
-        name: 'Checkout',
-        uses: 'actions/checkout@v4',
-        with: {
-          'fetch-depth': 0,
-        },
-      },
-      {
-        name: 'Download gobuild artifacts',
-        uses: 'actions/download-artifact@v4',
-        with: {
-          name: 'gobuild',
-          path: 'lambda',
-        },
-      },
-      {
-        name: 'Zip',
-        run: 'scripts/lambda-zip.sh',
-      },
-      {
-        name: 'Upload artifact',
-        uses: 'actions/upload-artifact@v4',
-        with: {
-          name: 'zipper',
-          path: 'assets/cdk-sops-lambda.zip',
-        },
-      },
-    ],
-  });
-});
 
 project.synth();
