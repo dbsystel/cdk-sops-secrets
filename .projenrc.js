@@ -1,4 +1,38 @@
 const { awscdk } = require('projen');
+
+const actions_SetupGo = [
+  {
+    name: "Setup Go 1.23.5",
+    uses: "actions/setup-go@v5",
+    with: {
+      "go-version": "1.23.5",
+      "cache-dependency-path": "lambda/go.sum",
+    },
+  },
+  {
+    name: "Display Go version",
+    run: "go version"
+  },
+]
+
+const actions_UpgradeGoDeps = [
+  {
+    name: "Upgrade Go dependencies",
+    run: "cd lambda && go get -u && go mod tidy && cd .."
+  }
+]
+
+const actions_TestBuild = [
+  {
+    name: 'Test lambda code',
+    run: 'scripts/lambda-test.sh',
+  },
+  {
+    name: 'Build lambda code and create zip',
+    run: 'scripts/build.sh',
+  },
+]
+
 const project = new awscdk.AwsCdkConstructLibrary({
   author: 'Markus Siebert',
   authorAddress: 'markus.siebert@deutschebahn.com',
@@ -32,29 +66,17 @@ const project = new awscdk.AwsCdkConstructLibrary({
     ],
   },
   buildWorkflowOptions: {
+    mutableBuild: true,
     preBuildSteps: [
-      {
-        name: "Setup Go 1.23.5",
-        uses: "actions/setup-go@v5",
-        with: {
-          "go-version": "1.23.5",
-          "cache-dependency-path": "lambda/go.sum",
-        },
-      },
-      {
-        name: "Display Go version",
-        run: "go version"
-      },
-      {
-        name: 'test lambda code',
-        run: 'scripts/lambda-test.sh',
-      },
-      {
-        name: 'build lambda code and create zip',
-        run: 'scripts/build.sh',
-      },
+      ...actions_SetupGo,
+      ...actions_TestBuild,
     ]
   },
+  depsUpgradeOptions: {
+    workflowOptions: {
+      
+    }
+  }
   name: 'cdk-sops-secrets',
   repositoryUrl: 'https://github.com/dbsystel/cdk-sops-secrets.git',
   bundledDeps: ['yaml'],
