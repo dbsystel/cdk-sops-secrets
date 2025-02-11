@@ -9,7 +9,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.70.0
 	github.com/aws/aws-sdk-go-v2/service/secretsmanager v1.34.16
 	github.com/aws/aws-sdk-go-v2/service/ssm v1.56.10
-	github.com/getsops/sops/v3 v3.9.2
+	github.com/getsops/sops/v3 v3.9.4
 	github.com/gkampitakis/go-snaps v0.5.9
 	github.com/invopop/jsonschema v0.13.0
 	github.com/kaptinlin/jsonschema v0.2.2
