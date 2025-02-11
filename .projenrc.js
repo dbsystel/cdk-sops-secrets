@@ -54,10 +54,6 @@ const project = new awscdk.AwsCdkConstructLibrary({
         name: 'Build',
         run: 'scripts/lambda-build.sh',
       },
-      {
-        name: 'Upload artifact',
-        uses: 'actions/upload-artifact@v4',
-      },
     ]
   },
   name: 'cdk-sops-secrets',
