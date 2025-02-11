@@ -35,10 +35,10 @@ const project = new awscdk.AwsCdkConstructLibrary({
 
     preBuildSteps: [
       {
-        name: "Setup Go ${{ matrix.go-version }}",
+        name: "Setup Go 1.23.5",
         uses: "actions/setup-go@v5",
         with: {
-          "go-version": "${{ matrix.go-version }}",
+          "go-version": "1.23.5",
         },
       },
       {
