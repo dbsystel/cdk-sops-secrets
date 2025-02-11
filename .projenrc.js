@@ -135,9 +135,10 @@ project.npmignore.addPatterns(
 );
 
 // Find UpgradeJob
-const upgradeJob = project.github.workflows
-  .find((wf) => ['upgrade-main'].includes(wf.name))
-  .getJob('upgrade').steps;
+const upgradeWF = project.github.workflows
+  .find((wf) => wf.name == 'upgrade-main')
+  
+const upgradeJob = upgradeWF.getJob('upgrade').steps;
 
 // Find the index of the upgrade step (npm packages)
 const upgradeIndex = upgradeJob.findIndex(
@@ -155,5 +156,15 @@ upgradeJob.splice(
     run: 'npx projen "integ:snapshot-all"',
   },
 );
+
+const prJob = upgradeWF.getJob('pr').steps;
+
+prJob.push({
+  name: 'Enable Pull Request Automerge',
+  run: 'gh pr merge --merge --auto "1"',
+  env: {
+    GH_TOKEN: '${{ secrets.PROJEN_GITHUB_TOKEN }}',
+  },
+});
 
 project.synth();

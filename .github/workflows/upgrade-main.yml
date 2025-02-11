@@ -106,3 +106,7 @@ jobs:
           author: github-actions <github-actions@github.com>
           committer: github-actions <github-actions@github.com>
           signoff: true
+      - name: Enable Pull Request Automerge
+        env:
+          GH_TOKEN: ${{ secrets.PROJEN_GITHUB_TOKEN }}
+        run: gh pr merge --merge --auto "1"
