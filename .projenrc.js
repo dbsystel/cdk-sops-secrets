@@ -135,9 +135,10 @@ project.npmignore.addPatterns(
 );
 
 // Find UpgradeJob
-const upgradeWF = project.github.workflows
-  .find((wf) => wf.name == 'upgrade-main')
-  
+const upgradeWF = project.github.workflows.find(
+  (wf) => wf.name == 'upgrade-main',
+);
+
 const upgradeJob = upgradeWF.getJob('upgrade').steps;
 
 // Find the index of the upgrade step (npm packages)
