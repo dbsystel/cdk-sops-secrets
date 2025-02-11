@@ -1,213 +1,346 @@
 <img src="https://github.com/dbsystel/cdk-sops-secrets/blob/main/img/banner-dl-small.png?raw=true">
-<p/>
 
-![stability](https://img.shields.io/badge/Stability-stable-green)&nbsp;
-[![release](https://github.com/dbsystel/cdk-sops-secrets/actions/workflows/release.yml/badge.svg)](https://github.com/dbsystel/cdk-sops-secrets/actions/workflows/release.yml)<br>
+![stability](https://img.shields.io/badge/Stability-stable-green)
+[![release](https://github.com/dbsystel/cdk-sops-secrets/actions/workflows/release.yml/badge.svg)](https://github.com/dbsystel/cdk-sops-secrets/actions/workflows/release.yml)
+[![cdk-construct-hub](https://img.shields.io/badge/CDK-ConstructHub-blue)](https://constructs.dev/packages/cdk-sops-secrets)
+[![npm](https://img.shields.io/npm/v/cdk-sops-secrets.svg)](https://www.npmjs.com/package/cdk-sops-secrets)
+[![npm downloads](https://img.shields.io/npm/dw/cdk-sops-secrets)](https://www.npmjs.com/package/cdk-sops-secrets)
+[![pypi](https://img.shields.io/pypi/v/cdk-sops-secrets.svg)](https://pypi.org/project/cdk-sops-secrets)
+[![pypi downloads](https://img.shields.io/pypi/dw/cdk-sops-secrets)](https://pypi.org/project/cdk-sops-secrets)
+[![codecov](https://codecov.io/gh/dbsystel/cdk-sops-secrets/branch/main/graph/badge.svg?token=OT7P7HQHXB)](https://codecov.io/gh/dbsystel/cdk-sops-secrets)
+[![security-vulnerabilities](https://img.shields.io/github/issues-search/dbsystel/cdk-sops-secrets?color=%23ff0000&label=security-vulnerabilities&query=is%3Aissue%20is%3Aopen%20label%3A%22Mend%3A%20dependency%20security%20vulnerability%22)](https://github.com/dbsystel/cdk-sops-secrets/issues?q=is%3Aissue+is%3Aopen+label%3A%22security+vulnerability%22)
 
-[![cdk-construct-hub](https://img.shields.io/badge/CDK-ConstructHub-blue)](https://constructs.dev/packages/cdk-sops-secrets)<br>
-[![npm](https://img.shields.io/npm/v/cdk-sops-secrets.svg)](https://www.npmjs.com/package/cdk-sops-secrets)&nbsp;
-[![npm downloads](https://img.shields.io/npm/dw/cdk-sops-secrets)](https://www.npmjs.com/package/cdk-sops-secrets)<br>
-[![pypi](https://img.shields.io/pypi/v/cdk-sops-secrets.svg)](https://pypi.org/project/cdk-sops-secrets)&nbsp;
-[![pypi downloads](https://img.shields.io/pypi/dw/cdk-sops-secrets)](https://pypi.org/project/cdk-sops-secrets)<br>
+# Introduction
 
-[![codecov](https://codecov.io/gh/dbsystel/cdk-sops-secrets/branch/main/graph/badge.svg?token=OT7P7HQHXB)](https://codecov.io/gh/dbsystel/cdk-sops-secrets)&nbsp;&nbsp;
-[![security-vulnerabilities](https://img.shields.io/github/issues-search/dbsystel/cdk-sops-secrets?color=%23ff0000&label=security-vulnerabilities&query=is%3Aissue%20is%3Aopen%20label%3A%22Mend%3A%20dependency%20security%20vulnerability%22)](https://github.com/dbsystel/cdk-sops-secrets/issues?q=is%3Aissue+is%3Aopen+label%3A%22security+vulnerability%22)&nbsp;
+_Create secret values in AWS with infrastructure-as-code easily_
 
-## Introduction
+This construct library offers CDK Constructs that facilitate syncing [SOPS-encrypted secrets](https://github.com/getsops/sops) to AWS Secrets Manager and SSM Parameter Store.
+It enables secure storage of secrets in Git repositories while allowing seamless synchronization and usage within AWS. Even large sets of SSM Parameters can be created quickly from a single file.
 
-This construct library provides a replacement for CDK SecretsManager secrets, with extended functionality for Mozilla/sops.
+- Create AWS Secrets Manager secrets
+- Create single SSM Parameter
+- Create multiple SSM Parameter in a batch from a file
+- Use SOPS json, yaml or dotenv as input files, as well as binary data
+- No need for manual permission setups for the Custom Ressource due to automatic least-privilege generation for the SyncProvider
 
-<p/><center><img src="img/flow.drawio.svg"></center><p/>
-Using this library it is possible to populate Secrets with values from a Mozilla/sops file without additional scripts and steps in the CI stage. Thereby transformations like JSON conversion of YAML files and transformation into a flat, JSONPath like structure will be performed, but can be disabled.
+# Table Of Contents
 
-Secrets filled in this way can be used immediately within the CloudFormation stack and dynamic references. This construct should handle all dependencies, if you use the `secretValueFromJson()` or `secretValue()` call to access secret values.
+- [Introduction](#introduction)
+- [Table Of Contents](#table-of-contents)
+- [Available Constructs](#available-constructs)
+  - [SopsSecret — Sops to SecretsManager](#sopssecret--sops-to-secretsmanager)
+  - [SopsStringParameter — Sops to single SSM ParameterStore Parameter](#sopsstringparameter--sops-to-single-ssm-parameterstore-parameter)
+  - [MultiStringParameter — Sops to multiple SSM ParameterStore Parameters](#multistringparameter--sops-to-multiple-ssm-parameterstore-parameters)
+  - [SopsSyncProvider](#sopssyncprovider)
+  - [Common configuration options for SopsSecret, SopsStringParameter and MultiStringParameter](#common-configuration-options-for-sopssecret-sopsstringparameter-and-multistringparameter)
+- [Considerations](#considerations)
+  - [UploadType: INLINE / ASSET](#uploadtype-inline--asset)
+  - [Stability](#stability)
+- [FAQ](#faq)
+  - [How can I migrate to V2](#how-can-i-migrate-to-v2)
+    - [SecretsManager](#secretsmanager)
+    - [Parameter](#parameter)
+    - [MultiParameter](#multiparameter)
+  - [It does not work, what can I do?](#it-does-not-work-what-can-i-do)
+  - [I get errors with `dotenv` formatted files](#i-get-errors-with-dotenv-formatted-files)
+  - [Error: Error getting data key: 0 successful groups required, got 0](#error-error-getting-data-key-0-successful-groups-required-got-0)
+  - [Error: Asset of sync lambda not found](#error-asset-of-sync-lambda-not-found)
+  - [Can I upload the sops file myself and provide the required information as CloudFormation Parameter?](#can-i-upload-the-sops-file-myself-and-provide-the-required-information-as-cloudformation-parameter)
+  - [Can I access older versions of the secret stored in the SecretsManager?](#can-i-access-older-versions-of-the-secret-stored-in-the-secretsmanager)
+  - [I want the `raw` content of the sops file, but I always get the content nested in json](#i-want-the-raw-content-of-the-sops-file-but-i-always-get-the-content-nested-in-json)
+- [License](#license)
 
-This way, secrets can be securely stored in git repositories and easily synchronized into AWS SecretsManager secrets.
+# Available Constructs
 
-## Stability
+The construct library cdk-sops-secrets supports three different Constructs that help you to sync your encrypted sops secrets to secure places in AWS.
 
-You can consider this package as stable. Updates will follow [Semantic Versioning](https://semver.org/).<br>
-Nevertheless, I would recommend pinning the exact version of this library in your `package.json`.
+Let's assume we want to store the following secret information in AWS:
 
-## Prerequisites
+```json
+{
+  "apiKey": "sk-1234567890abcdef",
+  "database": {
+    "user": "admin",
+    "password": "P@ssw0rd!",
+    "host": "db.example.com"
+  },
+  "tokens": [
+    { "service": "github", "token": "ghp_abcd1234" },
+    { "service": "aws", "token": "AKIAIOSFODNN7EXAMPLE" }
+  ],
+  "someOtherKey": "base64:VGhpcyBpcyBhIHNlY3JldCBrZXk="
+}
+```
 
-- [AWS](https://aws.amazon.com/): I think you already knew it, but this construct will only work with an AWS account.
+It doesn't matter if this data is in `json`, `yaml` or `dotenv` format, `cdk-sops-secret` can handle them all.
+Even binary data is supported with some limitations.
 
-* [KMS Key](https://aws.amazon.com/kms/?nc1=h_ls): It makes most sense to encrypt your secrets with AWS KMS if you want to sync and use the secret content afterwards in your AWS account.
-* [mozilla/sops](https://github.com/mozilla/sops): This construct assumes that you store your secrets encrypted via sops in your git repository.
-* [CDK](https://aws.amazon.com/cdk/?nc1=h_ls): As this is a CDK construct, it's only useful if you use the CloudDevelopmentToolkit.
+## SopsSecret — Sops to SecretsManager
 
-## Getting started
+If you want to store your secret data in the AWS SecretsManager, use the `SopsSecret` construct. This is a "drop-in-replacement" for the [Secret Construct](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_secretsmanager.Secret.html) of the AWS CDK.
 
-1. Create a Mozilla/sops secrets file (encrypted with an already existing KMS key) and place it somewhere in your git repository
-2. Create a secret with the SopsSecret construct inside your app
-   ```ts
-   const secret = new SopsSecret(stack, 'SopsComplexSecretJSON', {
-     sopsFilePath: 'secrets/sopsfile-encrypted.json',
-   });
-   ```
-3. Optional: Access the secret via dynamic references
-   ```ts
-   secret.secretValueFromJson('json.path.dotted.notation.accessor[0]').toString(),
-   ```
+Minimal Example:
 
-## Advanced configuration examples
+```ts
+const secret = new SopsSecret(stack, 'MySopsSecret', {
+  secertName: 'mySecret', // name of the secret in AWS SecretsManager
+  sopsFilePath: 'secrets/sopsfile-encrypted-secret.json', // filepath to the sops encrypted file
+});
+```
 
-Even if using the main functionality should be done in 3 lines of code, there are more options to configure the constructs of this library. If you want to get an Overview of all available configuration options take a look at the [documentation at the CDK ConstructHub](https://constructs.dev/packages/cdk-sops-secrets).
+The content referenced sops secret file will be synced to the AWS SecretsManager Secret with the name `mySecret`.
+For convenience, several transformations apply:
 
-The most useful settings will be explained in the further chapters:
+- Nested structures and arrays will be resolved and flattened to a JSONPath notation
+- All values will be stored as strings
 
-### Binary - Just the raw file
+This is done also because of limitations of CDK in conjunction with
+[dynamic references](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/dynamic-references-secretsmanager.html) and limitiations
+of the `Key/Value` view of the AWS SecretsManager WebConsole. So the result, saved in the AWS SecretsManager will actually be:
 
-If you have the need to just upload a sops encrypted binary file, just name your sops encrypted file *.binary, or specify the option "binary" as format.
+```json
+{
+  "apiKey": "sk-1234567890abcdef",
+  "database.user": "admin",
+  "database.password": "P@ssw0rd!",
+  "database.host": "db.example.com",
+  "tokens[0].service": "github",
+  "tokens[0].token": "ghp_abcd1234",
+  "tokens[1].service": "aws",
+  "tokens[1].token": "AKIAIOSFODNN7EXAMPLE",
+  "someOtherKey": "base64:VGhpcyBpcyBhIHNlY3JldCBrZXk="
+}
+```
 
+This allows you to access the values from your secret via CDK:
 
-```typescript
-const secret = new SopsSecret(this, 'SopsComplexSecretJSON', {
+```ts
+secret.secretValueFromJson('"database.password"').toString(),
+  secret.secretValueFromJson('"tokens[0].token"').toString();
+```
+
+If you don't want these conversions, you can completely disable them by using the `rawOutput` property.
+
+```ts
+const secret = new SopsSecret(stack, 'MySopsSecret', {
+  rawOutput: RawOutput.STRING,
   ...
-  sopsFilePath: 'secrets/sopsfile-encrypted.binary',
 });
 ```
 
-or
+This will turn off the conversions and just place the decrypted content in the target secret. It's also possible to use
+`RawOutput.BINARY` than the AWS SecretsManager Secret will be populted with binary, instead of string data.
 
-```typescript
-const secret = new SopsSecret(this, 'SopsComplexSecretJSON', {
-  ...
-  sopsFilePath: 'secrets/sopsfile-encrypted.something',
-  sopsFileFormat: 'binary',
-});
-```
+## SopsStringParameter — Sops to single SSM ParameterStore Parameter
 
+If you want to sync the whole content of a sops encrypted file to an encrypted AWS SSM ParameterStore Parameter, you can use the SopsStringParameter Construct.
 
-### Getting a specific (older version)
-
-While creating the secret or updating the entries of a secret, the native CDK function ```cdk.FileSystem.fingerprint(...)``` is used to generate the version information of the AWS SecretsManager secret.
-Therefore, it is possible to reference the entries from a specific AWS SecretsManager version.
-
-```typescript
-const versionId = cdk.FileSystem.fingerprint(`./sops/SomeSecrets.json`)
-const passphrase = ecs.Secret.fromSecretsManagerVersion(secretMgmt, { versionId: versionId }, 'MY_PRIVATE_PASSPHRASE')
-
-const container = TaskDef.addContainer('Container', {
-   secrets: {
-     MY_PRIVATE_PASSPHRASE: passphrase,
-   },
-});
-```
-
-### Default conversions and how to disable them?
-
-As default behavior, the SopsSecret (via the SopsSync) will convert all content to JSON and flatten its structure. This is useful, because the AWS SecretsManager has some limitations if it comes to YAML and/or complex objects and decimal values. Even if you can store YAML, complex objects and even binaries in AWS SecretsManager secrets, you can't access their values via the SecretsManager API — you can only return them as is. So accessing (nested) values or values from YAML files won't be possible via [dynamic references](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/dynamic-references.html) in CloudFormation (and CDK). That's why I decided that conversion to JSON, flatten the structure and stringify all values should be the default behavior. But you can turn off all of these conversion steps:
-
-```typescript
-const secret = new SopsSecret(this, 'SopsComplexSecretJSON', {
-  convertToJSON: false, // disable converting the encrypted content to JSON
-  stringify: false, // disable stringifying all values
-  flatten: false, // disable flattening of the object structure
-  sopsFilePath: 'secrets/sopsfile-encrypted.json',
-});
-```
-
-### Resource provider is missing permissions
-
-Sometimes it can be necessary to access the IAM role of the SopsSync provider. If this is the case, you should create the provider before creating the SopsSecret, and pass the provider to it like this:
-
-```typescript
-// Create the provider
-const provider = new SopsSyncProvider(this, 'CustomSopsSyncProvider');
-// Grant whatever you need to the provider
-const myExtraKmsKey = Key.fromKeyArn(this, 'MyExtraKmsKey', 'YourKeyArn');
-myExtraKmsKey.grantDecrypt(provider);
-// create the secret and pass the the provider to it
-const secret = new SopsSecret(this, 'SopsComplexSecretJSON', {
-  sopsProvider: provider,
-  secretName: 'myCoolSecret',
-  sopsFilePath: 'secrets/sopsfile-encrypted.json',
-});
-```
-
-### User Provided IAM Permissions
-
-If you don't want to use the IAM autogenration, you can provide your own IAM Role with all required permissions:
-
-```typescript
-const sopsProviderRole = new Role(stack, 'SopsProviderRole', {
-  assumedBy: new ServicePrincipal('lambda.amazonaws.com'),
-});
-
-sopsProviderRole.addManagedPolicy({
-  managedPolicyArn:
-    'arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole',
-});
-
-sopsProviderRole.addToPolicy(
-  new PolicyStatement({
-    actions: ['todo:WriteYourRequiredPermissions'],
-    resources: ['*'],
+```ts
+const parameter = new SopsStringParameter(stack, 'MySopsParameter', {
+  encryptionKey: Key.fromLookup(stack, 'DefaultKey', {
+    aliasName: 'alias/aws/ssm',
   }),
-);
-
-new SopsSyncProvider(stack, 'SopsSyncProvider', {
-  role: sopsProviderRole,
-});
-
-new SopsSecret(stack, 'SopsSecretJSON', {
-  sopsFilePath: 'test-secrets/json/sopsfile.enc-age.json',
-  uploadType: UploadType.ASSET,
-  // disable auto IAM generation
-  autoGenerateIamPermissions: false,
+  sopsFilePath: 'secrets/sopsfile-encrypted-secret.json',
 });
 ```
 
-### Use a VPC for the Lambda Function
+This will create a Parameter with the value of the decrypted sops file content. No transformations are applied.
 
-Internally, SopsSync uses a lambda function. In some environments it may be necessary to place this lambda function into a VPC and configure subnets and/or security groups for it.
-This can be done by creating a custom `SopsSyncProvider`, setting the required networking configuration and passing it to the secret like this:
+## MultiStringParameter — Sops to multiple SSM ParameterStore Parameters
 
-```typescript
-// Create the provider
-const provider = new SopsSyncProvider(this, 'CustomSopsSyncProvider', {
-  vpc: myVpc,
-  vpcSubnets: subnetSelection,
-  securityGroups: [mySecurityGroup],
-});
-// create the secret and pass the the provider to it
-const secret = new SopsSecret(this, 'SopsSecret', {
-  sopsProvider: provider,
-  secretName: 'myCoolSecret',
-  sopsFilePath: 'secrets/sopsfile-encrypted.json',
+If you have a structured sops file (yaml, json, dotenv) and want to populate the AWS SSM ParameterStore with it, you want to use the MultiStringParameter Construct.
+
+```ts
+const multi = new MultiStringParameter(stack, 'MyMultiParameter', {
+  encryptionKey: Key.fromLookup(stack, 'DefaultKey', {
+    aliasName: 'alias/aws/ssm',
+  }),
+  sopsFilePath: 'secrets/sopsfile-encrypted-secret.json',
 });
 ```
 
+This will create several AWS SSM ParameterStore Parameters:
 
-### UploadType: INLINE / ASSET
+```bash
+ParameterName       => Value
+
+/apiKey             => "sk-1234567890abcdef"
+/database/user      => "admin"
+/database/password  => "P@ssw0rd!"
+/database/host      => "db.example.com"
+/tokens/0/service   => "github"
+/tokens/0/token     => "ghp_abcd1234"
+/tokens/1/service   => "aws"
+/tokens/1/token     => "AKIAIOSFODNN7EXAMPLE"
+/someOtherKey       => "base64:VGhpcyBpcyBhIHNlY3JldCBrZXk="
+```
+
+You can configure the naming schema via the properties `keySeperator` and `keyPrefix`:
+
+```ts
+const multi = new MultiStringParameter(stack, 'MyMultiParameter', {
+  keyPrefix: 'mykeyprefix.'  // All keys will start with this string, default '/'
+  keySeperator: '-'         // This seperator is used when converting to a flat structure, default '/'
+})
+```
+
+This would lead to Parameters
+
+```bash
+ParameterName       => Value
+
+mykeyprefix.apiKey             => "sk-1234567890abcdef"
+mykeyprefix.database-user      => "admin"
+mykeyprefix.tokens-0-service   => "github"
+...
+```
+
+## SopsSyncProvider
+
+The SOPS-Provider is the custom resource AWS Lambda Function, that is doing all the work. It downloads, decrypts
+and stores the secret content in your desired location. This Lambda Function needs several IAM permissions to do it's work.
+
+For most use cases, you don't need to create it on your own, as the other Constructs try to create this and derive the required IAM permissions from your input.
+
+But there are use cases, that require you to change the defaults of this Provider. If this is the case,
+you have to create the provider on your own and add it to the other constructs.
+
+```ts
+const provider = new SopsSyncProvider(this, 'MySopsSyncProvider', {
+  role: customRole,       // you can pass a custom role
+
+  vpc: customVpc,         // The default SopsSync Provider
+  vpcSubnets: {           // won't run in any VPC,
+    subnets: [            // as it does not require
+      customSubnet1,      // access to any VPC resources.
+      customSubnet2,      // But if you want,
+    ]                     // you can change this behaviour
+  },                      // and set vpc, subnet and
+  securityGroups: [       // securitygroups to your
+    customSecurityGroup   // needs.
+  ],
+});
+
+provider.addToRolePolicy( // You cann pass PolicyStatements
+  new PolicyStatement({   // via the addToRolePolicy Method
+    actions: ['...'],     //
+    resources: ['...'],   //
+  })                      //
+);                        //
+
+kmsKey.grantDecrypt(      // The provider implements
+  provider                // the IGrantable interface,
+);                        // so you can use it as grant target
+
+const secret = new SopsSecret(this, 'MySecret', {
+  sopsProvider: provider, // this property is available in all Constructs
+  ...
+});
+```
+
+## Common configuration options for SopsSecret, SopsStringParameter and MultiStringParameter
+
+```ts
+
+const construct = new Sops...(this, 'My' {
+  /**
+   * use your own SopsSyncProvider
+   * @see SopsSyncProvider
+   */
+  sopsProvider: myCustomProvider      // default - a new provider will be created
+
+  /**
+   * the constructs try to derive the required iam permissions from the sops file
+   * and the target. If you don't want this, you can disable this behaviour.
+   * You have to take care of all required permissions on your own.
+   */
+  autoGenerateIamPermissions: false,  // default: true
+
+  /**
+   * the default behaviour of passing the sops file content to the provider is
+   * by embedding the base64 encoded content in the cloudformation template.
+   * Using CKD Assets is also supported. It might be required to switch to
+   * Assets, if your sops files are very large.
+   */
+  uploadType: UploadType.ASSET,       // default: UploadType.INLINE
+
+  /**
+   * if you don't want this constructs to take care of passing the encrypted
+   * sops file to the sops provider, you can upload them yourself to a
+   * S3 bucket.
+   * You can pass bucket and key, and the constructs won't pass the content
+   * as ASSET or in the CloudFormation Template.
+   * As the construct isn't aware of the sopsfile, we can't derive the required
+   * permissions to decrypt the sops file. The same applies to the sopsFileFormat.
+   * You have to pass them all manually.
+   */
+  sopsS3Bucket: 'my-custom-bucket',
+  sopsS3Key: 'encoded-sops.json',
+  sopsKmsKey: [
+    kmsKeyUsedForEncryption,
+  ]
+  sopsFileFormat: 'json',   // Allowed values are json, yaml, dotenv and binary
+})
+
+```
+
+# Considerations
+
+## UploadType: INLINE / ASSET
 
 I decided, that the default behavior should be "INLINE" because of the following consideration:
 
-- Fewer permissions: If we use inline content instead of a S3 asset, the SopsSyncProvider does not need permissions to access the asset bucket and its KMS key.
-- Faster: If we don't have to upload and download things from and to S3, it should be a little faster.
-- Interchangeable: As we use the same information to generate the version of the secret, no new version of the secret should be created, if you change from INLINE to ASSET or vice versa, even if the CloudFormation resource updates.
-- I personally think sops files are not that big, that we should run into limits, but if so — we can change to asset `uploadType`.
+- Fewer permissions
 
-You can change the uplaodType via the properties:
+  _If we use inline content instead of a S3 asset, the SopsSyncProvider does not need permissions to access the asset bucket and its KMS key._
 
-```typescript
-const secret = new SopsSecret(this, 'SopsWithAssetUpload', {
-  sopsFilePath: 'secrets/sopsfile-encrypted.json',
-  uploadType: UploadType.ASSET, // instead of the default UploadType.INLINE
-});
-```
+- Faster
 
-## FAQ
+  _If we don't have to upload and download things from and to S3, it should be a little faster._
 
-### It does not work, what can I do?
+- Interchangeable
 
-Even if this construct has some unit and integration tests performed, there can be bugs and issues. As everything is performed by a cloudformation custom resource provider, a good starting point is the log of the corresponding lambda function. It should be located in your AWS Account under Cloudwatch -> Log groups: 
+  _As we use the same information to generate the version of the secret,
+  no new version of the secret should be created, if you change from INLINE to ASSET or vice versa,
+  even if the CloudFormation resource updates._
 
-```/aws/lambda/<YOUR-STACK-NAME>-SingletonLambdaSopsSyncProvider<SOMETHINGsomething1234>```
+## Stability
 
-### I get errors with dotenv formatted files
+You can consider this package as stable. Updates will follow [Semantic Versioning](https://semver.org/).
+
+Nevertheless, I would recommend pinning the exact version of this library in your `package.json`.
+
+# FAQ
+
+## How can I migrate to V2
+
+It was required to change some user facing configuration properties. So minor changes are required to make things work again.
+
+### SecretsManager
+
+- Removed property convertToJSON, flatten, stringifiedValues
+- Use property rawOutput instaed:
+  - `undefined / not set` => (default) convertToJSON and flatten and stringifiedValues = true
+  - `RawOutput.STRING` => convertToJSON and flatten and stringifiedValues = false
+  - `RawOutput.BINARY` => convertToJSON and flatten and stringifiedValues = false and Secret is binary
+
+### Parameter
+
+- Removed property convertToJSON, flatten, stringifiedValues => all of them made no sense - now only raw output of decrypted secret
+
+### MultiParameter
+
+- Removed property convertToJSON, flatten, stringifiedValues => most of this combinations made no sense
+- Allways convertToJson and flatten (as we have to parse it to create multiple parameters)
+- You are allowed to chose the flattenSeperator
+
+## It does not work, what can I do?
+
+Even if this construct has some unit and integration tests performed, there can be bugs and issues. As everything is performed by a cloudformation custom resource provider, a good starting point is the log of the corresponding lambda function. It should be located in your AWS Account under Cloudwatch -> Log groups:
+
+`/aws/lambda/<YOUR-STACK-NAME>-SingletonLambdaSopsSyncProvider<SOMETHINGsomething1234>`
+
+## I get errors with `dotenv` formatted files
 
 Only very basic dotenv syntax is working right now. Only single line values are accepted. The format must match:
 
@@ -217,19 +350,19 @@ key=value
 
 comments must be a single line, not after value assignments.
 
-### Error getting data key: 0 successful groups required, got 0
+## Error: Error getting data key: 0 successful groups required, got 0
 
-This error message (and failed sync) is related to the  mozilla/sops issues [#948](https://github.com/mozilla/sops/issues/948) and [#634](https://github.com/mozilla/sops/issues/634). You must not create your secret with the ```--aws-profile``` flag. This profile will be written to your sops filed and is required in every runtime environment. You have to define the profile to use via the environment variable ```AWS_PROFILE``` instead, to avoid this.
+This error message (and failed sync) is related to the getsops/sops issues [#948](https://github.com/getsops/sops/issues/948) and [#634](https://github.com/getsops/sops/issues/634). You must not create your secret with the `--aws-profile` flag. This profile will be written to your sops filed and is required in every runtime environment. You have to define the profile to use via the environment variable `AWS_PROFILE` instead, to avoid this.
 
-### Asset of sync lambda not found
+## Error: Asset of sync lambda not found
 
 The lambda asset code is generated relative to the path of the index.ts in this package. With tools like nx this can lead to wrong results, so that the asset could not be found.
 
-You can override the asset path via the [cdk.json](https://docs.aws.amazon.com/cdk/v2/guide/get_context_var.html) or via the flag ```-c```of the cdk cli.
+You can override the asset path via the [cdk.json](https://docs.aws.amazon.com/cdk/v2/guide/get_context_var.html) or via the flag `-c`of the cdk cli.
 
-The context used for this override is ```sops_sync_provider_asset_path```.
+The context used for this override is `sops_sync_provider_asset_path`.
 
-So for example you can use 
+So for example you can use
 
 ```bash
 cdk deploy -c "sops_sync_provider_asset_path=some/path/asset.zip"
@@ -241,27 +374,16 @@ or in your cdk.json
 {
   "context": {
     "sops_sync_provider_asset_path": "some/path/asset.zip"
-  } 
+  }
 }
 ```
 
-### I want to upload the sops file myself and only want to reference it
+## Can I upload the sops file myself and provide the required information as CloudFormation Parameter?
 
-That's possible since version 1.8.0. You can reference the file in S3 like:
-
-```typescript
-new SopsSecret(stack, 'SopsSecret', {
-  sopsS3Bucket: 'testbucket',
-  sopsS3Key: 'secret.json',
-  sopsFileFormat: 'json',
-  // ... 
-});
-```
-
-Passing those values as CloudFormation parameters should also be possible:
+This should be possible the following way. Ensure, that you have created a custom sops provider,
+with proper IAM permissions.
 
 ```typescript
-
 const sopsS3BucketParam = new CfnParameter(this, "s3BucketName", {
   type: "String",
   description: "The name of the Amazon S3 bucket where your sopsFile was uploaded."});
@@ -270,36 +392,63 @@ const sopsS3KeyParam = new CfnParameter(this, "s3KeyName", {
   type: "String",
   description: "The name of the key of the sopsFile inside the Amazon S3 bucket."});
 
+const sopsKmsKeyArn = new CfnParameter(this, "sopsKeyArn", {
+  type: "String",
+  description: "The ARN of the KMS Key used for sops encryption"});
+
+const sopsKmsKey = Key.fromKeyArn(this, 'Key', sopsKmsKeyArn.valueAsString)
+
 new SopsSecret(stack, 'SopsSecret', {
   sopsS3Bucket: sopsS3BucketParam.valueAsString,
   sopsS3Key: sopsS3KeyParam.valueAsString,
+  sopsKmsKey: [
+    sopsKmsKey
+  ],
   sopsFileFormat: 'json',
-  // ... 
+  ...
 });
 ```
 
-## Motivation
+## Can I access older versions of the secret stored in the SecretsManager?
 
-I have created this project to solve a recurring problem of syncing Mozilla/sops secrets into AWS SecretsManager in a convenient, secure way.
+While creating the secret or updating the entries of a secret, the native CDK function `cdk.FileSystem.fingerprint(...)` is used
+to generate the version information of the AWS SecretsManager secret.
+Therefore, it is possible to reference the entries from a specific AWS SecretsManager version.
 
-Other than that, or perhaps more importantly, my goal was to learn new things:
+```typescript
+const versionId = cdk.FileSystem.fingerprint(`./sops/SomeSecrets.json`);
+const passphrase = ecs.Secret.fromSecretsManagerVersion(
+  secretMgmt,
+  { versionId: versionId },
+  'MY_PRIVATE_PASSPHRASE',
+);
 
-- Write a Golang lambda
-- Writing unit tests incl. mocks in Golang
-- Reproducible builds of Golang binaries (byte-by-byte identical)
-- Build reproducible zips (byte-by-byte identical)
-- Release a NPM package
-- Setting up projects with projen
-- CI/CD with GitHub actions
-- CDK unit and integration tests
+const container = TaskDef.addContainer('Container', {
+  secrets: {
+    MY_PRIVATE_PASSPHRASE: passphrase,
+  },
+});
+```
 
-## Other Tools like this
+## I want the `raw` content of the sops file, but I always get the content nested in json
 
-The problem this Construct addresses is so good, already two other implementations exist:
+To get the best raw experience, you should encrypt your sops files in binary format:
 
-- [isotoma/sops-secretsmanager-cdk](https://github.com/isotoma/sops-secretsmanager-cdk): Does nearly the same. Uses CustomResource, wraps the sops CLI, does not support flatten. Found it after I published my solution to NPM :-/
-- [taimos/secretsmanager-versioning](https://github.com/taimos/secretsmanager-versioning): Different approach on the same problem. This is a CLI tool with very nice integration into CDK and also handles git versioning information.
+```bash
+sops encrypt ... my-whatever-file --output my-secret-information.sops.binary --input-type binary
+```
 
-## License
+You will lose features like only encrypting the values, not the keys.
+The whole file content will be stored in the sops file.
+You can store everything you like as binary, even binary data[^1].
+
+When using binary encrypted secrets with this constructs, ensure the ending is also binary, or override via
+`sopsFormat` property.
+
+This does not work for `MultiStringParameter`
+
+[^1] Even if sops can handle binary data, only the AWS SecretsManager allows to store it.
+
+# License
 
 The Apache-2.0 license. Please have a look at the [LICENSE](LICENSE) and [LICENSE-3RD-PARTY](LICENSE-3RD-PARTY).

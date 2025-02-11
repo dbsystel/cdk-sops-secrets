@@ -14,6 +14,7 @@ import {
   SopsSyncProvider,
   UploadType,
   MultiStringParameter,
+  RawOutput,
 } from '../src';
 
 const keyStatements = [
@@ -32,6 +33,7 @@ test('Upload type ASSET', () => {
   new SopsSecret(stack, 'SopsSecret', {
     sopsFilePath: 'test-secrets/yaml/sopsfile.enc-kms.yaml',
     uploadType: UploadType.ASSET,
+    rawOutput: RawOutput.STRING,
   });
   Template.fromStack(stack).hasResource('Custom::SopsSync', {
     Properties: Match.objectLike({
@@ -219,9 +221,9 @@ test('Exception when derive format: notsupported', () => {
   expect(
     () =>
       new SopsSecret(stack, 'SopsSecret', {
-        sopsFilePath: 'test-secrets/json/sopsfile.enc-age.notsupported',
+        sopsFilePath: 'test-secrets/testsecret.notsupported',
       }),
-  ).toThrowError('Unsupported sopsFileFormat notsupported');
+  ).toThrowError('You have to specify sopsFileFormat!');
 });
 
 test('Set format: json', () => {
@@ -529,14 +531,12 @@ test('Multiple parameters from yaml file', () => {
   const app = new App();
   const stack = new Stack(app, 'ParameterIntegration');
   new MultiStringParameter(stack, 'SopsSecret1', {
-    simpleName: false,
     sopsFilePath: 'test-secrets/yaml/sopsfile-complex-parameters.enc-age.yaml',
     encryptionKey: Key.fromKeyArn(
       stack,
       'Key',
       'arn:aws:kms:eu-central-1:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab',
     ),
-    stringValue: ' ',
   });
   const template = Template.fromStack(stack);
 
@@ -608,7 +608,6 @@ test('Multiple parameters from yaml file with custom key structure', () => {
   const app = new App();
   const stack = new Stack(app, 'ParameterIntegration');
   new MultiStringParameter(stack, 'SopsSecret1', {
-    simpleName: false,
     sopsFilePath: 'test-secrets/yaml/sopsfile-complex-parameters.enc-age.yaml',
     keyPrefix: '_',
     keySeparator: '.',
@@ -617,7 +616,6 @@ test('Multiple parameters from yaml file with custom key structure', () => {
       'Key',
       'arn:aws:kms:eu-central-1:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab',
     ),
-    stringValue: ' ',
   });
   const template = Template.fromStack(stack);
 
@@ -689,7 +687,6 @@ test('Large set of parameters to split in multiple policies', () => {
   const app = new App();
   const stack = new Stack(app, 'ParameterIntegration');
   new MultiStringParameter(stack, 'SopsSecret1', {
-    simpleName: false,
     sopsFilePath: 'test-secrets/yaml/sopsfile-parameters-large.yaml',
     keyPrefix: '_',
     keySeparator: '.',
@@ -698,7 +695,6 @@ test('Large set of parameters to split in multiple policies', () => {
       'Key',
       'arn:aws:kms:eu-central-1:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab',
     ),
-    stringValue: ' ',
   });
   const template = Template.fromStack(stack);
 

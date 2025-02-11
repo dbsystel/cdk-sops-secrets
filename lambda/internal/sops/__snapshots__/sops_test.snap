@@ -1,0 +1,44 @@
+
+[TestToData/Test_JSON_ToData - 1]
+&data.Data{
+    parsed: &map[string]interface {}{
+        "key": "value",
+    },
+    raw:  &[]uint8{0x7b, 0x22, 0x6b, 0x65, 0x79, 0x22, 0x3a, 0x20, 0x22, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x22, 0x7d},
+    Hash: &"",
+}
+---
+
+[TestToData/Test_YAML_ToData - 1]
+&data.Data{
+    parsed: &map[string]interface {}{
+        "key": "value",
+    },
+    raw:  &[]uint8{0x6b, 0x65, 0x79, 0x3a, 0x20, 0x76, 0x61, 0x6c, 0x75, 0x65},
+    Hash: &"",
+}
+---
+
+[TestToData/Test_DotEnv_ToData - 1]
+&data.Data{
+    parsed: &map[string]string{"KEY":"value"},
+    raw:    &[]uint8{0x4b, 0x45, 0x59, 0x3d, 0x76, 0x61, 0x6c, 0x75, 0x65},
+    Hash:   &"",
+}
+---
+
+[TestToData/Test_Binary_ToData - 1]
+&data.Data{
+    parsed: (*interface {})(nil),
+    raw:    &[]uint8{0x0, 0x1, 0x2, 0x3},
+    Hash:   &"",
+}
+---
+
+[TestCreateEncryptedSopsSecret/Valid_JSON_Secret - 1]
+&sops.EncryptedSopsSecret{
+    Content: {0x7b, 0x22, 0x6b, 0x65, 0x79, 0x22, 0x3a, 0x20, 0x22, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x22, 0x7d},
+    Format:  "json",
+    Hash:    "somehash",
+}
+---

@@ -1,0 +1,15 @@
+
+[Test_Flatten/2.nested - 1]
+&data.Data{
+    parsed: &map[string]interface {}{
+        "bool":          bool(true),
+        "nested.bool":   bool(true),
+        "nested.number": float64(1.1),
+        "nested.string": "examplestring",
+        "number":        float64(1.1),
+        "string":        "examplestring",
+    },
+    raw:  (*[]uint8)(nil),
+    Hash: (*string)(nil),
+}
+---

@@ -1,0 +1,20 @@
+{
+    "OutputFormat": "json",
+    "EncryptionKey": "string",
+    "Flatten": false,
+    "FlattenSeparator": "string",
+    "Format": "json",
+    "ParameterKeyPrefix": "string",
+    "ParameterName": "string",
+    "ResourceType": "SECRET",
+    "SecretARN": "string",
+    "SopsInline": {
+        "Content": "string",
+        "Hash": "string"
+    },
+    "SopsS3File": {
+        "Bucket": "string",
+        "Key": "string"
+    },
+    "StringifyValues": false
+}

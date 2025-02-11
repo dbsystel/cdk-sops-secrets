@@ -1,73 +1,120 @@
 package main
 
 import (
+	"encoding/json"
 	"os"
 	"testing"
+	"time"
 
+	"github.com/aws/aws-lambda-go/cfn"
+	"github.com/aws/aws-sdk-go-v2/service/secretsmanager"
+	"github.com/aws/aws-sdk-go-v2/service/ssm"
 	"github.com/gkampitakis/go-snaps/snaps"
-	"github.com/go-test/deep"
+	"github.com/markussiebert/cdk-sops-secrets/internal/client"
+	"github.com/stretchr/testify/assert"
 )
 
-func TestMain(t *testing.M) {
-
-	//log.SetOutput(ioutil.Discard)
-
-	v := t.Run()
-	// After all tests have run `go-snaps` can check for not used snapshots
-	snaps.Clean(t)
-
-	os.Exit(v)
+type putParameterCalls map[string]interface{}
+type putSecretValueCalls map[string]interface{}
+type getObjectEtagCalls map[string]client.SopsS3File
+type getObjectCalls map[string]client.SopsS3File
+type MockAwsClient struct {
+	t              *testing.T
+	putParameter   putParameterCalls
+	putSecretValue putSecretValueCalls
+	getObjectEtag  getObjectEtagCalls
+	getObject      getObjectCalls
 }
 
-func Test_GetS3FileContent(t *testing.T) {
-	mocks := getMocks(t)
-	data, err := mocks.getS3FileContent(SopsS3File{
-		Bucket: "..",
-		Key:    "../test-secrets/json/sopsfile.enc-age.json",
-	})
-	check(err)
-	snaps.MatchSnapshot(t, string(data))
+func (m *MockAwsClient) S3GetObject(file client.SopsS3File) ([]byte, error) {
+	m.getObject[file.Key] = file
+	localFile := "../" + file.Key
+	content, err := os.ReadFile(localFile)
+	if err != nil {
+		return nil, err
+	}
+	return content, nil
 }
 
-func Test_UpdateSecret(t *testing.T) {
-	mocks := getMocks(t)
-	fileName := "4547532a137611d83958d17095c6c2d38ae0036a760c3b79c9dd5957d1c20cf2.yaml"
-	inputArn := "arn:${Partition}:secretsmanager:${Region}:${Account}:secret:${SecretId}"
-	secretValue := []byte("some-secret-data")
-
-	response, err := mocks.updateSecret(fileName, inputArn, secretValue)
-	check(err)
-
-	snaps.MatchSnapshot(t, response)
+func (m *MockAwsClient) S3GetObjectETAG(file client.SopsS3File) (*string, error) {
+	etag := "mock-etag"
+	m.getObjectEtag[file.Key] = file
+	return &etag, nil
 }
 
-func Test_UpdateSSMParameter(t *testing.T) {
-	mocks := getMocks(t)
-
-	paramterName := "/foo/bar"
-	parameterValue := []byte("some-secret-data")
-
-	response, err := mocks.updateSSMParameter(paramterName, parameterValue, "key")
-	check(err)
-
-	snaps.MatchSnapshot(t, response)
+func (m *MockAwsClient) SecretsManagerPutSecretValue(sopsHash string, secretArn string, secretContent *[]byte, binary *bool) (*secretsmanager.PutSecretValueOutput, error) {
+	m.putSecretValue[secretArn] = map[string]interface{}{"sopsHash": sopsHash, "secretContent": string(*secretContent), "binary": *binary}
+	arn := "mock-arn"
+	return &secretsmanager.PutSecretValueOutput{
+		ARN:           &arn,
+		Name:          &secretArn,
+		VersionStages: []string{"mock-version-stage"},
+		VersionId:     &sopsHash,
+	}, nil
 }
 
-func Test_DecryptSopsFileContent(t *testing.T) {
+func (m *MockAwsClient) SsmPutParameter(parameterName string, parameterContent *[]byte, keyId string) (*ssm.PutParameterOutput, error) {
+	m.putParameter[parameterName] = map[string]interface{}{"parameterContent": string(*parameterContent), "keyId": keyId}
+	return &ssm.PutParameterOutput{Version: 1}, nil
+}
 
+func TestHandleRequestWithClients(t *testing.T) {
+	t.Logf("Running at: %s", time.Now().String()) // Forces re-run
+	os.Setenv("AWS_REGION", "eu-central-1")
 	os.Setenv("SOPS_AGE_KEY", "AGE-SECRET-KEY-1EFUWJ0G2XJTJFWTAM2DGMA4VCK3R05W58FSMHZP3MZQ0ZTAQEAFQC6T7T3")
+	files, err := os.ReadDir("events")
+	if err != nil {
+		t.Fatalf("failed to read events directory: %v", err)
+	}
 
-	sopsEncrypted, err := os.ReadFile("../test-secrets/json/sopsfile.enc-age.json")
-	check(err)
-	sopsDecrypted, err := decryptSopsFileContent(sopsEncrypted, "json")
-	check(err)
-	sopsExpected, err := os.ReadFile("../test-secrets/json/sopsfile.json")
-	check(err)
+	var tests []struct {
+		name  string
+		event cfn.Event
+	}
 
-	sopsDecryptedJ := UnmarshalAny(sopsDecrypted)
-	sopsExpectedJ := UnmarshalAny(sopsExpected)
+	for _, file := range files {
+		if file.IsDir() {
+			continue
+		}
 
-	if diff := deep.Equal(sopsDecryptedJ, sopsExpectedJ); diff != nil {
-		t.Error(diff)
+		content, err := os.ReadFile("events/" + file.Name())
+		if err != nil {
+			t.Fatalf("failed to read file %s: %v", file.Name(), err)
+		}
+
+		var resourceProperties map[string]interface{}
+		if err := json.Unmarshal(content, &resourceProperties); err != nil {
+			t.Fatalf("failed to unmarshal JSON from file %s: %v", file.Name(), err)
+		}
+
+		tests = append(tests, struct {
+			name  string
+			event cfn.Event
+		}{
+			name: file.Name(),
+			event: cfn.Event{
+				RequestType:        cfn.RequestCreate,
+				ResourceProperties: resourceProperties,
+			},
+		})
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			clients := &MockAwsClient{
+				t:              t,
+				putParameter:   putParameterCalls{},
+				putSecretValue: putSecretValueCalls{},
+				getObjectEtag:  getObjectEtagCalls{},
+				getObject:      getObjectCalls{},
+			}
+
+			physicalResourceID, data, err := HandleRequestWithClients(clients, tt.event)
+			snaps.WithConfig(snaps.Filename(t.Name()+"/"+tt.name)).MatchSnapshot(t, clients.getObject, clients.getObjectEtag, clients.putParameter, clients.putSecretValue)
+
+			assert.NoError(t, err)
+			assert.NotEmpty(t, physicalResourceID)
+			assert.NotNil(t, data)
+		})
 	}
 }
