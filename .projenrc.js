@@ -39,6 +39,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
         uses: "actions/setup-go@v5",
         with: {
           "go-version": "1.23.5",
+          "cache-dependency-path": "lambda/go.sum",
         },
       },
       {
