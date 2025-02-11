@@ -39,11 +39,6 @@ jobs:
         run: yarn run projen integ:SECRET:snapshot
       - name: build
         run: npx projen build
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v4
-        with:
-          flags: cdk
-          directory: coverage
       - name: Find mutations
         id: self_mutation
         run: |-
@@ -72,8 +67,6 @@ jobs:
           name: build-artifact
           path: dist
           overwrite: true
-    container:
-      image: jsii/superchain:1-buster-slim-node16
   self-mutation:
     needs:
       - build

@@ -36,7 +36,6 @@ test/SECRET.integ.snapshot
 /img/
 /test-secrets/
 /renovate.json
-/codecov.yaml
 /.prettier*
 /.whitesource
 /.gitattributes

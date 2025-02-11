@@ -40,11 +40,6 @@ jobs:
           node-version: lts/*
       - name: Install dependencies
         run: yarn install --check-files --frozen-lockfile
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v4
-        with:
-          flags: cdk
-          directory: coverage
       - name: release
         run: npx projen release
       - name: Check if version has already been tagged
@@ -69,8 +64,6 @@ jobs:
           name: build-artifact
           path: dist
           overwrite: true
-    container:
-      image: jsii/superchain:1-buster-slim-node16
   gobuild:
     name: gobuild
     runs-on: ubuntu-latest

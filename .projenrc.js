@@ -10,6 +10,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
     'CDK Constructs that syncs your sops secrets into AWS SecretsManager secrets.',
   keywords: [
     'mozilla/sops',
+    'getsops/sops',
     'sops',
     'kms',
     'gitops',
@@ -88,7 +89,6 @@ project.npmignore.addPatterns(
   '/img/',
   '/test-secrets/',
   '/renovate.json',
-  '/codecov.yaml',
   '/.prettier*',
   '/.whitesource',
   '/.gitattributes',
@@ -115,14 +115,6 @@ project.buildWorkflow.preBuildSteps.unshift(...additionalActions);
   });
 });
 
-project.buildWorkflow.addPostBuildSteps({
-  name: 'Upload coverage to Codecov',
-  uses: 'codecov/codecov-action@v4',
-  with: {
-    flags: 'cdk',
-    directory: 'coverage',
-  },
-});
 const fixme = project.github.workflows.filter((wf) =>
   ['build', 'release'].includes(wf.name),
 );
@@ -132,26 +124,10 @@ fixme.forEach((wf) => {
     if (key !== 'build') {
       wf.jobs[key].steps.splice(1, 0, ...additionalActions);
     }
-    if (['build', 'release'].includes(key)) {
-      wf.jobs[key] = {
-        ...wf.jobs[key],
-        container: { image: 'jsii/superchain:1-buster-slim-node16' },
-      };
-    }
     wf.jobs[key] = {
       ...wf.jobs[key],
       needs: [...(wf.jobs[key].needs || []), 'zipper'],
     };
-    if (['release'].includes(key)) {
-      wf.jobs[key].steps.splice(5, 0, {
-        name: 'Upload coverage to Codecov',
-        uses: 'codecov/codecov-action@v4',
-        with: {
-          flags: 'cdk',
-          directory: 'coverage',
-        },
-      });
-    }
   });
 
   wf.addJob('gobuild', {
@@ -186,17 +162,6 @@ fixme.forEach((wf) => {
       {
         name: 'Test',
         run: 'scripts/lambda-test.sh',
-      },
-      {
-        name: 'Upload coverage to Codecov',
-        uses: 'codecov/codecov-action@v4',
-        env: {
-          CODECOV_TOKEN: '${{ secrets.CODECOV_TOKEN }}',
-        },
-        with: {
-          files: './coverage/coverage.out',
-          flags: 'go-lambda',
-        },
       },
       {
         name: 'Build',

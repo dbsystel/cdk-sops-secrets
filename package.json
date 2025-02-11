@@ -93,6 +93,7 @@
   ],
   "keywords": [
     "cdk",
+    "getsops/sops",
     "gitops",
     "kms",
     "mozilla/sops",
