@@ -60,9 +60,6 @@ const project = new awscdk.AwsCdkConstructLibrary({
   autoApproveOptions: {
     allowedUsernames: [
       'markussiebert',
-      'renovate-bot',
-      'renovate',
-      'renovate[bot]',
     ],
   },
   buildWorkflowOptions: {
@@ -138,6 +135,9 @@ project.npmignore.addPatterns(
 const upgradeWF = project.github.workflows.find(
   (wf) => wf.name == 'upgrade-main',
 );
+upgradeWF.events.schedule[0] = {
+  cron: '0 6 * * 0', // every Sunday at 6:00
+};
 
 // const upgradeJob = upgradeWF.getJob('upgrade').steps;
 //
