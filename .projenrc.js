@@ -139,24 +139,24 @@ const upgradeWF = project.github.workflows.find(
   (wf) => wf.name == 'upgrade-main',
 );
 
-const upgradeJob = upgradeWF.getJob('upgrade').steps;
-
+// const upgradeJob = upgradeWF.getJob('upgrade').steps;
+//
 // Find the index of the upgrade step (npm packages)
-const upgradeIndex = upgradeJob.findIndex(
-  (step) => step.name === 'Upgrade dependencies',
-);
-
-upgradeJob.splice(
-  upgradeIndex + 1, // After upgrading the npm deps
-  0,
-  ...actions_SetupGo,
-  ...actions_UpgradeGoDeps,
-  ...actions_TestBuild,
-  {
-    name: 'Create new Snapshots',
-    run: 'npx projen "integ:snapshot-all"',
-  },
-);
+// const upgradeIndex = upgradeJob.findIndex(
+//   (step) => step.name === 'Upgrade dependencies',
+// );
+// 
+// upgradeJob.splice(
+//   upgradeIndex + 1, // After upgrading the npm deps
+//   0,
+//   ...actions_SetupGo,
+//   ...actions_UpgradeGoDeps,
+//   ...actions_TestBuild,
+//   {
+//     name: 'Create new Snapshots',
+//     run: 'npx projen "integ:snapshot-all"',
+//   },
+// );
 
 const prJob = upgradeWF.getJob('pr').steps;
 
