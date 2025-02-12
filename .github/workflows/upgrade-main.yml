@@ -4,7 +4,7 @@ name: upgrade-main
 on:
   workflow_dispatch: {}
   schedule:
-    - cron: 0 0 * * *
+    - cron: 0 6 * * 0
 jobs:
   upgrade:
     name: Upgrade
@@ -91,3 +91,7 @@ jobs:
           author: github-actions <github-actions@github.com>
           committer: github-actions <github-actions@github.com>
           signoff: true
+      - name: Enable Pull Request Automerge
+        env:
+          GH_TOKEN: ${{ secrets.PROJEN_GITHUB_TOKEN }}
+        run: gh pr merge ${{ steps.create-pr.outputs.pull-request-number }} --merge --auto --delete-branch

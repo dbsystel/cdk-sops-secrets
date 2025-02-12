@@ -1,4 +1,38 @@
 const { awscdk } = require('projen');
+
+const actions_SetupGo = [
+  {
+    name: 'Setup Go 1.23.5',
+    uses: 'actions/setup-go@v5',
+    with: {
+      'go-version': '1.23.5',
+      'cache-dependency-path': 'lambda/go.sum',
+    },
+  },
+  {
+    name: 'Display Go version',
+    run: 'go version',
+  },
+];
+
+const actions_UpgradeGoDeps = [
+  {
+    name: 'Upgrade Go dependencies',
+    run: 'cd lambda && go get -u && go mod tidy && cd ..',
+  },
+];
+
+const actions_TestBuild = [
+  {
+    name: 'Test lambda code',
+    run: 'scripts/lambda-test.sh',
+  },
+  {
+    name: 'Build lambda code and create zip',
+    run: 'scripts/build.sh',
+  },
+];
+
 const project = new awscdk.AwsCdkConstructLibrary({
   author: 'Markus Siebert',
   authorAddress: 'markus.siebert@deutschebahn.com',
@@ -10,24 +44,26 @@ const project = new awscdk.AwsCdkConstructLibrary({
     'CDK Constructs that syncs your sops secrets into AWS SecretsManager secrets.',
   keywords: [
     'mozilla/sops',
+    'getsops/sops',
     'sops',
     'kms',
     'gitops',
     'secrets management',
     'secrets',
   ],
+  githubOptions: {
+    mergify: false,
+  },
   defaultReleaseBranch: 'main',
   npmignoreEnabled: true,
   autoApproveUpgrades: true,
   autoApproveOptions: {
-    allowedUsernames: [
-      'markussiebert',
-      'renovate-bot',
-      'renovate',
-      'renovate[bot]',
-    ],
+    allowedUsernames: ['markussiebert'],
   },
-
+  buildWorkflowOptions: {
+    mutableBuild: true,
+    preBuildSteps: [...actions_SetupGo, ...actions_TestBuild],
+  },
   name: 'cdk-sops-secrets',
   repositoryUrl: 'https://github.com/dbsystel/cdk-sops-secrets.git',
   bundledDeps: ['yaml'],
@@ -88,183 +124,46 @@ project.npmignore.addPatterns(
   '/img/',
   '/test-secrets/',
   '/renovate.json',
-  '/codecov.yaml',
   '/.prettier*',
   '/.whitesource',
   '/.gitattributes',
 );
 
-goreleaserArtifactsNamespace = 'build-artifact-goreleaser';
-
-additionalActions = [
-  {
-    name: 'Download zipper artifacts',
-    uses: 'actions/download-artifact@v4',
-    with: {
-      name: 'zipper',
-      path: 'assets',
-    },
-  },
-];
-
-project.buildWorkflow.preBuildSteps.unshift(...additionalActions);
-['PARAMETER', 'PARAMETER_MULTI', 'SECRET'].forEach((type) => {
-  project.buildWorkflow.preBuildSteps.push({
-    name: `Update snapshots: ${type}`,
-    run: `yarn run projen integ:${type}:snapshot`,
-  });
-});
-
-project.buildWorkflow.addPostBuildSteps({
-  name: 'Upload coverage to Codecov',
-  uses: 'codecov/codecov-action@v4',
-  with: {
-    flags: 'cdk',
-    directory: 'coverage',
-  },
-});
-const fixme = project.github.workflows.filter((wf) =>
-  ['build', 'release'].includes(wf.name),
+// Find UpgradeJob
+const upgradeWF = project.github.workflows.find(
+  (wf) => wf.name == 'upgrade-main',
 );
+upgradeWF.events.schedule[0] = {
+  cron: '0 6 * * 0', // every Sunday at 6:00
+};
 
-fixme.forEach((wf) => {
-  Object.keys(wf.jobs).forEach((key) => {
-    if (key !== 'build') {
-      wf.jobs[key].steps.splice(1, 0, ...additionalActions);
-    }
-    if (['build', 'release'].includes(key)) {
-      wf.jobs[key] = {
-        ...wf.jobs[key],
-        container: { image: 'jsii/superchain:1-buster-slim-node16' },
-      };
-    }
-    wf.jobs[key] = {
-      ...wf.jobs[key],
-      needs: [...(wf.jobs[key].needs || []), 'zipper'],
-    };
-    if (['release'].includes(key)) {
-      wf.jobs[key].steps.splice(5, 0, {
-        name: 'Upload coverage to Codecov',
-        uses: 'codecov/codecov-action@v4',
-        with: {
-          flags: 'cdk',
-          directory: 'coverage',
-        },
-      });
-    }
-  });
+// const upgradeJob = upgradeWF.getJob('upgrade').steps;
+//
+// Find the index of the upgrade step (npm packages)
+// const upgradeIndex = upgradeJob.findIndex(
+//   (step) => step.name === 'Upgrade dependencies',
+// );
+//
+// upgradeJob.splice(
+//   upgradeIndex + 1, // After upgrading the npm deps
+//   0,
+//   ...actions_SetupGo,
+//   ...actions_UpgradeGoDeps,
+//   ...actions_TestBuild,
+//   {
+//     name: 'Create new Snapshots',
+//     run: 'npx projen "integ:snapshot-all"',
+//   },
+// );
 
-  wf.addJob('gobuild', {
-    name: 'gobuild',
-    runsOn: 'ubuntu-latest',
-    container: {
-      image: 'golang:1.23-bullseye',
-    },
-    on: {
-      pull_request: null,
-      push: null,
-    },
-    permissions: {
-      contents: 'write',
-    },
-    steps: [
-      {
-        name: 'Temporary workaround Checkout Issue #760 ',
-        run: 'git config --global --add safe.directory /__w/cdk-sops-secrets/cdk-sops-secrets',
-      },
-      {
-        name: 'Checkout',
-        uses: 'actions/checkout@v4',
-        with: {
-          'fetch-depth': 0,
-        },
-      },
-      {
-        name: 'Fetch all tags',
-        run: 'git fetch --force --tags',
-      },
-      {
-        name: 'Test',
-        run: 'scripts/lambda-test.sh',
-      },
-      {
-        name: 'Upload coverage to Codecov',
-        uses: 'codecov/codecov-action@v4',
-        env: {
-          CODECOV_TOKEN: '${{ secrets.CODECOV_TOKEN }}',
-        },
-        with: {
-          files: './coverage/coverage.out',
-          flags: 'go-lambda',
-        },
-      },
-      {
-        name: 'Build',
-        run: 'scripts/lambda-build.sh',
-      },
-      {
-        name: 'Upload artifact',
-        uses: 'actions/upload-artifact@v4',
-        with: {
-          name: 'gobuild',
-          path: 'lambda/bootstrap',
-        },
-      },
-    ],
-  });
+const prJob = upgradeWF.getJob('pr').steps;
 
-  wf.addJob('zipper', {
-    name: 'zipper',
-    needs: 'gobuild',
-    runsOn: 'ubuntu-latest',
-    container: {
-      image: 'alpine:latest',
-    },
-    on: {
-      pull_request: null,
-      push: null,
-    },
-    permissions: {
-      contents: 'write',
-    },
-    steps: [
-      {
-        name: 'Prepare',
-        run: 'apk add zip git',
-      },
-      {
-        name: 'Temporary workaround',
-        run: 'git config --global --add safe.directory /__w/cdk-sops-secrets/cdk-sops-secrets',
-      },
-      {
-        name: 'Checkout',
-        uses: 'actions/checkout@v4',
-        with: {
-          'fetch-depth': 0,
-        },
-      },
-      {
-        name: 'Download gobuild artifacts',
-        uses: 'actions/download-artifact@v4',
-        with: {
-          name: 'gobuild',
-          path: 'lambda',
-        },
-      },
-      {
-        name: 'Zip',
-        run: 'scripts/lambda-zip.sh',
-      },
-      {
-        name: 'Upload artifact',
-        uses: 'actions/upload-artifact@v4',
-        with: {
-          name: 'zipper',
-          path: 'assets/cdk-sops-lambda.zip',
-        },
-      },
-    ],
-  });
+prJob.push({
+  name: 'Enable Pull Request Automerge',
+  run: 'gh pr merge ${{ steps.create-pr.outputs.pull-request-number }} --merge --auto --delete-branch',
+  env: {
+    GH_TOKEN: '${{ secrets.PROJEN_GITHUB_TOKEN }}',
+  },
 });
 
 project.synth();

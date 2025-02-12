@@ -6,7 +6,6 @@ on:
   workflow_dispatch: {}
 jobs:
   build:
-    needs: zipper
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -20,30 +19,25 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.ref }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
-      - name: Download zipper artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: zipper
-          path: assets
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: lts/*
       - name: Install dependencies
         run: yarn install --check-files
-      - name: "Update snapshots: PARAMETER"
-        run: yarn run projen integ:PARAMETER:snapshot
-      - name: "Update snapshots: PARAMETER_MULTI"
-        run: yarn run projen integ:PARAMETER_MULTI:snapshot
-      - name: "Update snapshots: SECRET"
-        run: yarn run projen integ:SECRET:snapshot
+      - name: Setup Go 1.23.5
+        uses: actions/setup-go@v5
+        with:
+          go-version: 1.23.5
+          cache-dependency-path: lambda/go.sum
+      - name: Display Go version
+        run: go version
+      - name: Test lambda code
+        run: scripts/lambda-test.sh
+      - name: Build lambda code and create zip
+        run: scripts/build.sh
       - name: build
         run: npx projen build
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v4
-        with:
-          flags: cdk
-          directory: coverage
       - name: Find mutations
         id: self_mutation
         run: |-
@@ -72,12 +66,8 @@ jobs:
           name: build-artifact
           path: dist
           overwrite: true
-    container:
-      image: jsii/superchain:1-buster-slim-node16
   self-mutation:
-    needs:
-      - build
-      - zipper
+    needs: build
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -89,11 +79,6 @@ jobs:
           token: ${{ secrets.PROJEN_GITHUB_TOKEN }}
           ref: ${{ github.event.pull_request.head.ref }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
-      - name: Download zipper artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: zipper
-          path: assets
       - name: Download patch
         uses: actions/download-artifact@v4
         with:
@@ -113,9 +98,7 @@ jobs:
           git commit -s -m "chore: self mutation"
           git push origin HEAD:$PULL_REQUEST_REF
   package-js:
-    needs:
-      - build
-      - zipper
+    needs: build
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -129,11 +112,6 @@ jobs:
         with:
           name: build-artifact
           path: dist
-      - name: Download zipper artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: zipper
-          path: assets
       - name: Restore build artifact permissions
         run: cd dist && setfacl --restore=permissions-backup.acl
         continue-on-error: true
@@ -154,9 +132,7 @@ jobs:
       - name: Collect js artifact
         run: mv .repo/dist dist
   package-java:
-    needs:
-      - build
-      - zipper
+    needs: build
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -174,11 +150,6 @@ jobs:
         with:
           name: build-artifact
           path: dist
-      - name: Download zipper artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: zipper
-          path: assets
       - name: Restore build artifact permissions
         run: cd dist && setfacl --restore=permissions-backup.acl
         continue-on-error: true
@@ -199,9 +170,7 @@ jobs:
       - name: Collect java artifact
         run: mv .repo/dist dist
   package-python:
-    needs:
-      - build
-      - zipper
+    needs: build
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -218,11 +187,6 @@ jobs:
         with:
           name: build-artifact
           path: dist
-      - name: Download zipper artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: zipper
-          path: assets
       - name: Restore build artifact permissions
         run: cd dist && setfacl --restore=permissions-backup.acl
         continue-on-error: true
@@ -243,9 +207,7 @@ jobs:
       - name: Collect python artifact
         run: mv .repo/dist dist
   package-dotnet:
-    needs:
-      - build
-      - zipper
+    needs: build
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -262,11 +224,6 @@ jobs:
         with:
           name: build-artifact
           path: dist
-      - name: Download zipper artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: zipper
-          path: assets
       - name: Restore build artifact permissions
         run: cd dist && setfacl --restore=permissions-backup.acl
         continue-on-error: true
@@ -286,64 +243,3 @@ jobs:
         run: cd .repo && npx projen package:dotnet
       - name: Collect dotnet artifact
         run: mv .repo/dist dist
-  gobuild:
-    name: gobuild
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - name: "Temporary workaround Checkout Issue #760 "
-        run: git config --global --add safe.directory /__w/cdk-sops-secrets/cdk-sops-secrets
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: Fetch all tags
-        run: git fetch --force --tags
-      - name: Test
-        run: scripts/lambda-test.sh
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v4
-        env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-        with:
-          files: ./coverage/coverage.out
-          flags: go-lambda
-      - name: Build
-        run: scripts/lambda-build.sh
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: gobuild
-          path: lambda/bootstrap
-    container:
-      image: golang:1.23-bullseye
-  zipper:
-    name: zipper
-    needs: gobuild
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - name: Prepare
-        run: apk add zip git
-      - name: Temporary workaround
-        run: git config --global --add safe.directory /__w/cdk-sops-secrets/cdk-sops-secrets
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: Download gobuild artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: gobuild
-          path: lambda
-      - name: Zip
-        run: scripts/lambda-zip.sh
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: zipper
-          path: assets/cdk-sops-lambda.zip
-    container:
-      image: alpine:latest
