@@ -145,7 +145,7 @@ const upgradeWF = project.github.workflows.find(
 // const upgradeIndex = upgradeJob.findIndex(
 //   (step) => step.name === 'Upgrade dependencies',
 // );
-// 
+//
 // upgradeJob.splice(
 //   upgradeIndex + 1, // After upgrading the npm deps
 //   0,
