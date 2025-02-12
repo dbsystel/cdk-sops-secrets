@@ -64,6 +64,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
     mutableBuild: true,
     preBuildSteps: [...actions_SetupGo, ...actions_TestBuild],
   },
+  releaseWorkflowSetupSteps: [...actions_SetupGo, ...actions_TestBuild],
   name: 'cdk-sops-secrets',
   repositoryUrl: 'https://github.com/dbsystel/cdk-sops-secrets.git',
   bundledDeps: ['yaml'],
