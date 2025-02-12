@@ -34,6 +34,17 @@ jobs:
           node-version: lts/*
       - name: Install dependencies
         run: yarn install --check-files --frozen-lockfile
+      - name: Setup Go 1.23.5
+        uses: actions/setup-go@v5
+        with:
+          go-version: 1.23.5
+          cache-dependency-path: lambda/go.sum
+      - name: Display Go version
+        run: go version
+      - name: Test lambda code
+        run: scripts/lambda-test.sh
+      - name: Build lambda code and create zip
+        run: scripts/build.sh
       - name: release
         run: npx projen release
       - name: Check if version has already been tagged
