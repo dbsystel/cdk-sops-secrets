@@ -162,7 +162,7 @@ const prJob = upgradeWF.getJob('pr').steps;
 
 prJob.push({
   name: 'Enable Pull Request Automerge',
-  run: 'gh pr merge ${{ steps.create-pr.outputs.pull-request-number }}" --merge --auto --delete-branch',
+  run: 'gh pr merge ${{ steps.create-pr.outputs.pull-request-number }} --merge --auto --delete-branch',
   env: {
     GH_TOKEN: '${{ secrets.PROJEN_GITHUB_TOKEN }}',
   },
