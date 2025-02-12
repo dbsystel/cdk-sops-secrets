@@ -58,9 +58,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
   npmignoreEnabled: true,
   autoApproveUpgrades: true,
   autoApproveOptions: {
-    allowedUsernames: [
-      'markussiebert',
-    ],
+    allowedUsernames: ['markussiebert'],
   },
   buildWorkflowOptions: {
     mutableBuild: true,
