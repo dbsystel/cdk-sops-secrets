@@ -40,7 +40,7 @@ export enum RawOutput {
 export interface SopsSecretProps extends SopsSyncOptions {
   /**
    * Should the secret parsed and transformed to json?
-   * @default - undefined - no raw output
+   * @default - undefined - STRING for binary secrets, else no raw output
    */
   readonly rawOutput?: RawOutput;
   /**
@@ -104,7 +104,10 @@ export class SopsSecret extends Construct implements ISecret {
       region: this.stack.region,
     };
 
-    let resourceType = ResourceType.SECRET;
+    let resourceType =
+      props.sopsFileFormat == 'binary'
+        ? ResourceType.SECRET_RAW
+        : ResourceType.SECRET;
     if (props.rawOutput === RawOutput.BINARY) {
       resourceType = ResourceType.SECRET_BINARY;
     }
