@@ -99,6 +99,10 @@ func FromCfnEvent(event cfn.Event) (*SopsSyncResourcePropertys, error) {
 	return &props, nil
 }
 
+func GenerateTempPhysicalResourceId() string {
+	return fmt.Sprintf("%s:%s:%s", "arn:custom:sopssync:", "temp", "temp")
+}
+
 func (p *SopsSyncResourcePropertys) GeneratePhysicalResourceId() string {
 	return fmt.Sprintf("%s:%s:%s", "arn:custom:sopssync:", p.ResourceType, p.Target)
 }

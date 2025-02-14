@@ -17,11 +17,11 @@ func HandleRequestWithClients(clients client.AwsClient, e cfn.Event) (physicalRe
 
 	// If it's a delete request, we don't have to do anything
 	if e.RequestType == cfn.RequestDelete {
-		return "", nil, nil
+		return event.GenerateTempPhysicalResourceId(), nil, nil
 	}
 	// We have to run this code only, if it is a CloudFormation Create or Update request
 	if e.RequestType != cfn.RequestCreate && e.RequestType != cfn.RequestUpdate {
-		return "", nil, fmt.Errorf("requestType '%s' not supported", e.RequestType)
+		return event.GenerateTempPhysicalResourceId(), nil, fmt.Errorf("requestType '%s' not supported", e.RequestType)
 	}
 
 	// Get the event input from the cloudformation event
@@ -33,19 +33,19 @@ func HandleRequestWithClients(clients client.AwsClient, e cfn.Event) (physicalRe
 	// Get the encrypted secret input provided by the user
 	secretEncrypted, secretEncryptedErr := props.GetEncryptedSopsSecret(clients)
 	if secretEncryptedErr != nil {
-		return "", nil, secretEncryptedErr
+		return props.GeneratePhysicalResourceId(), nil, secretEncryptedErr
 	}
 
 	// Decrypt the secret input with sops
 	secretDecrypted, secretDecryptedErr := secretEncrypted.Decrypt()
 	if secretDecryptedErr != nil {
-		return "", nil, secretDecryptedErr
+		return props.GeneratePhysicalResourceId(), nil, secretDecryptedErr
 	}
 
 	// Generate a data object by parsing the decrypted secret depending on the data input type
 	secretDecryptedData, secretDecryptedDataErr := secretDecrypted.ToData()
 	if secretDecryptedDataErr != nil {
-		return "", nil, secretDecryptedDataErr
+		return props.GeneratePhysicalResourceId(), nil, secretDecryptedDataErr
 	}
 
 	baseProps := BaseProps{
@@ -63,7 +63,7 @@ func HandleRequestWithClients(clients client.AwsClient, e cfn.Event) (physicalRe
 	case event.PARAMETER:
 		return handleParameter(baseProps)
 	default:
-		return "", nil, fmt.Errorf("unsupported resource type %s", props.ResourceType)
+		return props.GeneratePhysicalResourceId(), nil, fmt.Errorf("unsupported resource type %s", props.ResourceType)
 	}
 }
 
