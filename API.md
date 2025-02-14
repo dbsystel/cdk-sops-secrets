@@ -2376,7 +2376,7 @@ public readonly rawOutput: RawOutput;
 ```
 
 - *Type:* <a href="#cdk-sops-secrets.RawOutput">RawOutput</a>
-- *Default:* undefined - no raw output
+- *Default:* undefined - STRING for binary secrets, else no raw output
 
 Should the secret parsed and transformed to json?
 

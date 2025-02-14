@@ -104,7 +104,10 @@ export class SopsSecret extends Construct implements ISecret {
       region: this.stack.region,
     };
 
-    let resourceType = props.sopsFileFormat == "binary" ? ResourceType.SECRET_RAW : ResourceType.SECRET;
+    let resourceType =
+      props.sopsFileFormat == 'binary'
+        ? ResourceType.SECRET_RAW
+        : ResourceType.SECRET;
     if (props.rawOutput === RawOutput.BINARY) {
       resourceType = ResourceType.SECRET_BINARY;
     }
