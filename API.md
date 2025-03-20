@@ -3056,10 +3056,24 @@ const sopsSyncProviderProps: SopsSyncProviderProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
+| <code><a href="#cdk-sops-secrets.SopsSyncProviderProps.property.logRetention">logRetention</a></code> | <code>aws-cdk-lib.aws_logs.RetentionDays</code> | The duration how long logs of the Sops Sync Lambda will be saved in RetentionDays. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProviderProps.property.role">role</a></code> | <code>aws-cdk-lib.aws_iam.IRole</code> | The role that should be used for the custom resource provider. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProviderProps.property.securityGroups">securityGroups</a></code> | <code>aws-cdk-lib.aws_ec2.ISecurityGroup[]</code> | Only if `vpc` is supplied: The list of security groups to associate with the Lambda's network interfaces. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProviderProps.property.vpc">vpc</a></code> | <code>aws-cdk-lib.aws_ec2.IVpc</code> | VPC network to place Lambda network interfaces. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProviderProps.property.vpcSubnets">vpcSubnets</a></code> | <code>aws-cdk-lib.aws_ec2.SubnetSelection</code> | Where to place the network interfaces within the VPC. |
+
+---
+
+##### `logRetention`<sup>Optional</sup> <a name="logRetention" id="cdk-sops-secrets.SopsSyncProviderProps.property.logRetention"></a>
+
+```typescript
+public readonly logRetention: RetentionDays;
+```
+
+- *Type:* aws-cdk-lib.aws_logs.RetentionDays
+- *Default:* 90 Days
+
+The duration how long logs of the Sops Sync Lambda will be saved in RetentionDays.
 
 ---
 
