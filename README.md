@@ -219,6 +219,7 @@ const provider = new SopsSyncProvider(this, 'MySopsSyncProvider', {
   securityGroups: [       // securitygroups to your
     customSecurityGroup   // needs.
   ],
+  logRetention: RetentionDays.INFINITE,  // you can increase the default log retention
 });
 
 provider.addToRolePolicy( // You cann pass PolicyStatements
