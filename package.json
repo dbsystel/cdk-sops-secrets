@@ -157,7 +157,7 @@
     "outdir": "dist",
     "targets": {
       "java": {
-        "package": "de.db.systel.cdk-sops-secrets",
+        "package": "de.db.systel.cdksopssecrets",
         "maven": {
           "groupId": "de.db.systel",
           "artifactId": "cdk-sops-secrets"
