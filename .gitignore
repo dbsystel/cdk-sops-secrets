@@ -79,4 +79,5 @@ test/SECRET.integ.snapshot/**/tree.json
 *.iml
 .idea
 /assets
+!/.github/workflows/ort.yml
 !/.projenrc.js

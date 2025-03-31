@@ -166,4 +166,27 @@ prJob.push({
   },
 });
 
+project.github.addWorkflow('ort').addJob('ort', {
+  runsOn: 'ubuntu-latest',
+  steps: [
+    {
+      name: 'Use HTTPS instead of SSH for Git cloning',
+      run: 'git config --global url."https://".insteadOf git://',
+    },
+    {
+      name: 'Checkout project',
+      uses: 'actions/checkout@v3',
+    },
+    {
+      name: 'Run GitHub Action for ORT',
+      uses: 'oss-review-toolkit/ort-ci-github-action@v1'
+    }
+  ],
+  permissions: {
+    contents: 'read',
+    issues: 'write',
+    checks: 'write',
+  }
+});
+
 project.synth();
