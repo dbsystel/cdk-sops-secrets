@@ -18,6 +18,7 @@ import {
 } from 'aws-cdk-lib/aws-iam';
 import { IKey, Key } from 'aws-cdk-lib/aws-kms';
 import { Code, Runtime, SingletonFunction } from 'aws-cdk-lib/aws-lambda';
+import { RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { Asset } from 'aws-cdk-lib/aws-s3-assets';
 import { ISecret } from 'aws-cdk-lib/aws-secretsmanager';
 import { Construct } from 'constructs';
@@ -176,6 +177,12 @@ export interface SopsSyncProviderProps {
    * @default - a new role will be created
    */
   readonly role?: IRole;
+  /**
+   * The duration how long logs of the Sops Sync Lambda will be saved in RetentionDays.
+   *
+   * @default - 90 Days
+   */
+  readonly logRetention?: RetentionDays;
 }
 
 export class SopsSyncProvider extends SingletonFunction implements IGrantable {
@@ -203,6 +210,7 @@ export class SopsSyncProvider extends SingletonFunction implements IGrantable {
       vpc: props?.vpc,
       vpcSubnets: props?.vpcSubnets,
       securityGroups: props?.securityGroups,
+      logRetention: props?.logRetention ?? RetentionDays.THREE_MONTHS,
     });
     this.sopsAgeKeys = [];
   }
