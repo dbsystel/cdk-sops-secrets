@@ -3,6 +3,7 @@
 name: ort
 on:
   workflow_dispatch: {}
+  push: {}
 jobs:
   ort:
     runs-on: ubuntu-latest

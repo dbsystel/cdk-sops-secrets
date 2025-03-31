@@ -169,6 +169,7 @@ prJob.push({
 const ortWf = project.github.addWorkflow('ort')
 ortWf.on({
   workflow_dispatch: {},
+  push: {},
 })
 ortWf.addJob('ort', {
   runsOn: 'ubuntu-latest',
