@@ -184,7 +184,7 @@ ortWf.addJob('ort', {
     },
     {
       name: 'Copy config',
-      run: 'mkdir -p ~/.ort && cp .ort-config.yaml ~/.ort/config',
+      run: 'mkdir -p ~/.ort/config && cp .ort-config.yaml ~/.ort/config/config.yml',
     },
     {
       name: 'Run GitHub Action for ORT',
