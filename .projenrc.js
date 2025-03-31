@@ -166,7 +166,11 @@ prJob.push({
   },
 });
 
-project.github.addWorkflow('ort').addJob('ort', {
+const ortWf = project.github.addWorkflow('ort')
+ortWf.on({
+  workflow_dispatch: {},
+})
+ortWf.addJob('ort', {
   runsOn: 'ubuntu-latest',
   steps: [
     {
@@ -186,7 +190,7 @@ project.github.addWorkflow('ort').addJob('ort', {
     contents: 'read',
     issues: 'write',
     checks: 'write',
-  }
+  },
 });
 
 project.synth();
