@@ -1,0 +1,6 @@
+ort:
+  scanner:
+    storages:
+      clearlyDefined:
+        serverUrl: "https://api.clearlydefined.io"
+    storageReaders: ["clearlyDefined"]

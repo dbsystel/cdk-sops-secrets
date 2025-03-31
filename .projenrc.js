@@ -183,6 +183,10 @@ ortWf.addJob('ort', {
       uses: 'actions/checkout@v3',
     },
     {
+      name: 'Copy config',
+      run: 'mkdir -p ~/.ort && cp .ort-config.yaml ~/.ort/config',
+    },
+    {
       name: 'Run GitHub Action for ORT',
       uses: 'oss-review-toolkit/ort-ci-github-action@v1'
     }
