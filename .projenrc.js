@@ -92,7 +92,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
   //  githubTokenSecret: 'PROJEN_GITHUB_TOKEN',
   //},
   publishToMaven: {
-    javaPackage: 'de.db.systel.cdkSopsSecrets',
+    javaPackage: 'de.db.systel.cdksopssecrets',
     mavenGroupId: 'de.db.systel',
     mavenArtifactId: 'cdk-sops-secrets',
     mavenRepositoryUrl:
