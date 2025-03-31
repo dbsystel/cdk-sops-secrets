@@ -1,3 +1,5 @@
+import * as fs from 'fs';
+import * as path from 'path';
 import {
   Annotations,
   CustomResource,
@@ -20,8 +22,6 @@ import { RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { Asset } from 'aws-cdk-lib/aws-s3-assets';
 import { ISecret } from 'aws-cdk-lib/aws-secretsmanager';
 import { Construct } from 'constructs';
-import * as fs from 'fs';
-import * as path from 'path';
 import { SopsSyncResourcePropertys } from './LambdaInterface';
 
 export enum UploadType {
