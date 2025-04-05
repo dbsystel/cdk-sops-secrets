@@ -18,7 +18,7 @@ import {
 } from 'aws-cdk-lib/aws-iam';
 import { IKey, Key } from 'aws-cdk-lib/aws-kms';
 import { Code, Runtime, SingletonFunction } from 'aws-cdk-lib/aws-lambda';
-import { RetentionDays } from 'aws-cdk-lib/aws-logs';
+import { RetentionDays, ILogGroup } from 'aws-cdk-lib/aws-logs';
 import { Asset } from 'aws-cdk-lib/aws-s3-assets';
 import { ISecret } from 'aws-cdk-lib/aws-secretsmanager';
 import { Construct } from 'constructs';
@@ -178,11 +178,41 @@ export interface SopsSyncProviderProps {
    */
   readonly role?: IRole;
   /**
-   * The duration how long logs of the Sops Sync Lambda will be saved in RetentionDays.
+   * The number of days log events are kept in CloudWatch Logs. When updating
+   * this property, unsetting it doesn't remove the log retention policy. To
+   * remove the retention policy, set the value to `INFINITE`.
    *
-   * @default - 90 Days
+   * This is a legacy API and we strongly recommend you move away from it if you can.
+   * Instead create a fully customizable log group with `logs.LogGroup` and use the `logGroup` property
+   * to instruct the Lambda function to send logs to it.
+   * Migrating from `logRetention` to `logGroup` will cause the name of the log group to change.
+   * Users and code and referencing the name verbatim will have to adjust.
+   *
+   * In AWS CDK code, you can access the log group name directly from the LogGroup construct:
+   * ```ts
+   * import * as logs from 'aws-cdk-lib/aws-logs';
+   *
+   * declare const myLogGroup: logs.LogGroup;
+   * myLogGroup.logGroupName;
+   * ```
+   *
+   * @default logs.RetentionDays.INFINITE
    */
   readonly logRetention?: RetentionDays;
+  /**
+   * The log group the function sends logs to.
+   *
+   * By default, Lambda functions send logs to an automatically created default log group named /aws/lambda/\<function name\>.
+   * However you cannot change the properties of this auto-created log group using the AWS CDK, e.g. you cannot set a different log retention.
+   *
+   * Use the `logGroup` property to create a fully customizable LogGroup ahead of time, and instruct the Lambda function to send logs to it.
+   *
+   * Providing a user-controlled log group was rolled out to commercial regions on 2023-11-16.
+   * If you are deploying to another type of region, please check regional availability first.
+   *
+   * @default `/aws/lambda/${this.functionName}` - default log group created by Lambda
+   */
+  readonly logGroup?: ILogGroup;
 }
 
 export class SopsSyncProvider extends SingletonFunction implements IGrantable {
@@ -210,7 +240,8 @@ export class SopsSyncProvider extends SingletonFunction implements IGrantable {
       vpc: props?.vpc,
       vpcSubnets: props?.vpcSubnets,
       securityGroups: props?.securityGroups,
-      logRetention: props?.logRetention ?? RetentionDays.THREE_MONTHS,
+      logRetention: props?.logRetention,
+      logGroup: props?.logGroup,
     });
     this.sopsAgeKeys = [];
   }
