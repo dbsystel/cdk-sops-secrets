@@ -205,6 +205,8 @@ For most use cases, you don't need to create it on your own, as the other Constr
 But there are use cases, that require you to change the defaults of this Provider. If this is the case,
 you have to create the provider on your own and add it to the other constructs.
 
+Note that a SopsSyncProvider is a [SingletonLambda](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_lambda.SingletonFunction.html) that can only exist once.
+
 ```ts
 const provider = new SopsSyncProvider(this, 'MySopsSyncProvider', {
   role: customRole,       // you can pass a custom role
@@ -219,7 +221,7 @@ const provider = new SopsSyncProvider(this, 'MySopsSyncProvider', {
   securityGroups: [       // securitygroups to your
     customSecurityGroup   // needs.
   ],
-  logRetention: RetentionDays.INFINITE,  // you can increase the default log retention
+  logGroup: new LogGroup(this, 'MyLogGroup', {RetentionInDays: 90}),  // you can add a custom log group
 });
 
 provider.addToRolePolicy( // You cann pass PolicyStatements

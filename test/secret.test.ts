@@ -9,6 +9,7 @@ import {
 } from 'aws-cdk-lib/aws-iam';
 import { Key } from 'aws-cdk-lib/aws-kms';
 import { Function, InlineCode, Runtime } from 'aws-cdk-lib/aws-lambda';
+import { LogGroup, RetentionDays } from 'aws-cdk-lib/aws-logs';
 import {
   SopsSecret,
   SopsSyncProvider,
@@ -703,4 +704,42 @@ test('Large set of parameters to split in multiple policies', () => {
   });
 
   template.resourceCountIs('AWS::IAM::ManagedPolicy', 3);
+});
+
+test('Legacy logRetention', () => {
+  const app = new App();
+  const stack = new Stack(app, 'SecretIntegration');
+
+  new SopsSyncProvider(stack, 'Provider', {
+    logRetention: RetentionDays.THREE_MONTHS,
+  });
+  new SopsSecret(stack, 'SopsSecret', {
+    sopsFilePath: 'test-secrets/yaml/sopsfile.enc-kms.yaml',
+    uploadType: UploadType.ASSET,
+    rawOutput: RawOutput.STRING,
+  });
+  Template.fromStack(stack).hasResourceProperties('Custom::LogRetention', {
+    RetentionInDays: 90,
+  });
+});
+
+test('Custom LogGroup', () => {
+  const app = new App();
+  const stack = new Stack(app, 'SecretIntegration');
+
+  const logGroup = new LogGroup(stack, 'LogGroup', {
+    retention: RetentionDays.THREE_MONTHS,
+  });
+
+  new SopsSyncProvider(stack, 'Provider', {
+    logGroup: logGroup,
+  });
+  new SopsSecret(stack, 'SopsSecret', {
+    sopsFilePath: 'test-secrets/yaml/sopsfile.enc-kms.yaml',
+    uploadType: UploadType.ASSET,
+    rawOutput: RawOutput.STRING,
+  });
+  Template.fromStack(stack).hasResourceProperties('AWS::Logs::LogGroup', {
+    RetentionInDays: 90,
+  });
 });
