@@ -2,10 +2,10 @@ const { awscdk } = require('projen');
 
 const actions_SetupGo = [
   {
-    name: 'Setup Go 1.23.5',
+    name: 'Setup Go 1.24.2',
     uses: 'actions/setup-go@v5',
     with: {
-      'go-version': '1.23.5',
+      'go-version': '1.24.2',
       'cache-dependency-path': 'lambda/go.sum',
     },
   },
