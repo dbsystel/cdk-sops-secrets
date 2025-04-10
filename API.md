@@ -3056,11 +3056,33 @@ const sopsSyncProviderProps: SopsSyncProviderProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-sops-secrets.SopsSyncProviderProps.property.logRetention">logRetention</a></code> | <code>aws-cdk-lib.aws_logs.RetentionDays</code> | The duration how long logs of the Sops Sync Lambda will be saved in RetentionDays. |
+| <code><a href="#cdk-sops-secrets.SopsSyncProviderProps.property.logGroup">logGroup</a></code> | <code>aws-cdk-lib.aws_logs.ILogGroup</code> | The log group the function sends logs to. |
+| <code><a href="#cdk-sops-secrets.SopsSyncProviderProps.property.logRetention">logRetention</a></code> | <code>aws-cdk-lib.aws_logs.RetentionDays</code> | The number of days log events are kept in CloudWatch Logs. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProviderProps.property.role">role</a></code> | <code>aws-cdk-lib.aws_iam.IRole</code> | The role that should be used for the custom resource provider. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProviderProps.property.securityGroups">securityGroups</a></code> | <code>aws-cdk-lib.aws_ec2.ISecurityGroup[]</code> | Only if `vpc` is supplied: The list of security groups to associate with the Lambda's network interfaces. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProviderProps.property.vpc">vpc</a></code> | <code>aws-cdk-lib.aws_ec2.IVpc</code> | VPC network to place Lambda network interfaces. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProviderProps.property.vpcSubnets">vpcSubnets</a></code> | <code>aws-cdk-lib.aws_ec2.SubnetSelection</code> | Where to place the network interfaces within the VPC. |
+
+---
+
+##### `logGroup`<sup>Optional</sup> <a name="logGroup" id="cdk-sops-secrets.SopsSyncProviderProps.property.logGroup"></a>
+
+```typescript
+public readonly logGroup: ILogGroup;
+```
+
+- *Type:* aws-cdk-lib.aws_logs.ILogGroup
+- *Default:* `/aws/lambda/${this.functionName}` - default log group created by Lambda
+
+The log group the function sends logs to.
+
+By default, Lambda functions send logs to an automatically created default log group named /aws/lambda/\<function name\>.
+However you cannot change the properties of this auto-created log group using the AWS CDK, e.g. you cannot set a different log retention.
+
+Use the `logGroup` property to create a fully customizable LogGroup ahead of time, and instruct the Lambda function to send logs to it.
+
+Providing a user-controlled log group was rolled out to commercial regions on 2023-11-16.
+If you are deploying to another type of region, please check regional availability first.
 
 ---
 
@@ -3071,9 +3093,27 @@ public readonly logRetention: RetentionDays;
 ```
 
 - *Type:* aws-cdk-lib.aws_logs.RetentionDays
-- *Default:* 90 Days
+- *Default:* logs.RetentionDays.INFINITE
 
-The duration how long logs of the Sops Sync Lambda will be saved in RetentionDays.
+The number of days log events are kept in CloudWatch Logs.
+
+When updating
+this property, unsetting it doesn't remove the log retention policy. To
+remove the retention policy, set the value to `INFINITE`.
+
+This is a legacy API and we strongly recommend you move away from it if you can.
+Instead create a fully customizable log group with `logs.LogGroup` and use the `logGroup` property
+to instruct the Lambda function to send logs to it.
+Migrating from `logRetention` to `logGroup` will cause the name of the log group to change.
+Users and code and referencing the name verbatim will have to adjust.
+
+In AWS CDK code, you can access the log group name directly from the LogGroup construct:
+```ts
+import * as logs from 'aws-cdk-lib/aws-logs';
+
+declare const myLogGroup: logs.LogGroup;
+myLogGroup.logGroupName;
+```
 
 ---
 
