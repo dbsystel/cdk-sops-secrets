@@ -350,9 +350,9 @@
   integrity sha512-UJnjoFsmxfKUdNYdWgOB0mWUypuLvAfQPH1+pyvRJs6euowbFkFC6P13w1l8mJyi3vxYMxc9kld5jZEGRQs6bw==
 
 "@eslint-community/eslint-utils@^4.2.0", "@eslint-community/eslint-utils@^4.4.0":
-  version "4.5.1"
-  resolved "https://registry.yarnpkg.com/@eslint-community/eslint-utils/-/eslint-utils-4.5.1.tgz#b0fc7e06d0c94f801537fd4237edc2706d3b8e4c"
-  integrity sha512-soEIOALTfTK6EjmKMMoLugwaP0rzkad90iIWd1hMO9ARkSAyjfMfkRRhLvD5qH7vvM0Cg72pieUfR6yh6XxC4w==
+  version "4.6.0"
+  resolved "https://registry.yarnpkg.com/@eslint-community/eslint-utils/-/eslint-utils-4.6.0.tgz#bfe67b3d334a8579a35e48fe240dc0638d1bcd91"
+  integrity sha512-WhCn7Z7TauhBtmzhvKpoQs0Wwb/kBcy4CwpuI0/eEIr2Lx2auxmulAzLr91wVZJaz47iUZdkXOK7WlAfxGKCnA==
   dependencies:
     eslint-visitor-keys "^3.4.3"
 
@@ -892,9 +892,9 @@
   integrity sha512-hov8bUuiLiyFPGyFPE1lwWhmzYbirOXQNNo40+y3zow8aFVTeyn3VWL0VFFfdNddA8S4Vf0Tc062rzyNr7Paag==
 
 "@types/node@*":
-  version "22.14.0"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-22.14.0.tgz#d3bfa3936fef0dbacd79ea3eb17d521c628bb47e"
-  integrity sha512-Kmpl+z84ILoG+3T/zQFyAJsU6EPTmOCj8/2+83fSN6djd6I4o7uOuGIH6vq3PrjY5BGitSbFuMN18j3iknubbA==
+  version "22.14.1"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-22.14.1.tgz#53b54585cec81c21eee3697521e31312d6ca1e6f"
+  integrity sha512-u0HuPQwe/dHrItgHHpmw3N2fYCR6x4ivMNbPHRkBVP4CvN+kiRrKHWk3i8tXiO/joPwXLMYvF9TTF0eqgHIuOw==
   dependencies:
     undici-types "~6.21.0"
 
@@ -2060,9 +2060,9 @@ dunder-proto@^1.0.0, dunder-proto@^1.0.1:
     gopd "^1.2.0"
 
 electron-to-chromium@^1.5.73:
-  version "1.5.135"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.5.135.tgz#6d835020fa0c7f02f30d7608c2f3c0a764236699"
-  integrity sha512-8gXUdEmvb+WCaYUhA0Svr08uSeRjM2w3x5uHOc1QbaEVzJXB8rgm5eptieXzyKoVEtinLvW6MtTcurA65PeS1Q==
+  version "1.5.136"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.5.136.tgz#854b45e6a892137762cb026ed6ec77391fc5c07b"
+  integrity sha512-kL4+wUTD7RSA5FHx5YwWtjDnEEkIIikFgWHR4P6fqjw1PPLlqYkxeOb++wAauAssat0YClCy8Y3C5SxgSkjibQ==
 
 emittery@^0.8.1:
   version "0.8.1"
@@ -5443,17 +5443,17 @@ tinyglobby@^0.2.9:
     fdir "^6.4.3"
     picomatch "^4.0.2"
 
-tldts-core@^6.1.85:
-  version "6.1.85"
-  resolved "https://registry.yarnpkg.com/tldts-core/-/tldts-core-6.1.85.tgz#6f6b795468c0b5f7660a11c7306ff2766ceaea7e"
-  integrity sha512-DTjUVvxckL1fIoPSb3KE7ISNtkWSawZdpfxGxwiIrZoO6EbHVDXXUIlIuWympPaeS+BLGyggozX/HTMsRAdsoA==
+tldts-core@^6.1.86:
+  version "6.1.86"
+  resolved "https://registry.yarnpkg.com/tldts-core/-/tldts-core-6.1.86.tgz#a93e6ed9d505cb54c542ce43feb14c73913265d8"
+  integrity sha512-Je6p7pkk+KMzMv2XXKmAE3McmolOQFdxkKw0R8EYNr7sELW46JqnNeTX8ybPiQgvg1ymCoF8LXs5fzFaZvJPTA==
 
 tldts@^6.1.32:
-  version "6.1.85"
-  resolved "https://registry.yarnpkg.com/tldts/-/tldts-6.1.85.tgz#c7636ad5ec2f02591264360da51c6b584ef6f7bb"
-  integrity sha512-gBdZ1RjCSevRPFix/hpaUWeak2/RNUZB4/8frF1r5uYMHjFptkiT0JXIebWvgI/0ZHXvxaUDDJshiA0j6GdL3w==
+  version "6.1.86"
+  resolved "https://registry.yarnpkg.com/tldts/-/tldts-6.1.86.tgz#087e0555b31b9725ee48ca7e77edc56115cd82f7"
+  integrity sha512-WMi/OQ2axVTf/ykqCQgXiIct+mSQDFdH2fkwhPwgEwvJ1kSzZRiinb0zF2Xb8u4+OqPChmyI6MEu4EezNJz+FQ==
   dependencies:
-    tldts-core "^6.1.85"
+    tldts-core "^6.1.86"
 
 tmpl@1.0.5:
   version "1.0.5"
