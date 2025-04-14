@@ -221,7 +221,10 @@ const provider = new SopsSyncProvider(this, 'MySopsSyncProvider', {
   securityGroups: [       // securitygroups to your
     customSecurityGroup   // needs.
   ],
-  logGroup: new LogGroup(this, 'MyLogGroup', {RetentionInDays: 90}),  // you can add a custom log group
+  logGroup: new LogGroup(this, 'MyLogGroup', {  // you can add a custom log group
+    retention: RetentionDays.THREE_MONTHS,      // with a custom retention period
+    encryptionKey: new KmsKey(this, 'MyKmsKey') // and custom encryption
+  }),                                           //
 });
 
 provider.addToRolePolicy( // You cann pass PolicyStatements
