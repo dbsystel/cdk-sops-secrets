@@ -225,6 +225,7 @@ const provider = new SopsSyncProvider(this, 'MySopsSyncProvider', {
     retention: RetentionDays.THREE_MONTHS,      // with a custom retention period
     encryptionKey: new KmsKey(this, 'MyKmsKey') // and custom encryption
   }),                                           //
+  uuid: 'MySopsSyncProvider',  // Create a custom singleton by changing default uuid.
 });
 
 provider.addToRolePolicy( // You cann pass PolicyStatements
