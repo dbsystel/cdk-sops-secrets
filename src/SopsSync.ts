@@ -213,6 +213,14 @@ export interface SopsSyncProviderProps {
    * @default `/aws/lambda/${this.functionName}` - default log group created by Lambda
    */
   readonly logGroup?: ILogGroup;
+  /**
+   * A unique identifier to identify this provider
+   *
+   * Overwrite the default, if you need a dedicated provider.
+   *
+   * @default SopsSyncProvider
+   */
+  readonly uuid?: string;
 }
 
 export class SopsSyncProvider extends SingletonFunction implements IGrantable {
@@ -226,7 +234,7 @@ export class SopsSyncProvider extends SingletonFunction implements IGrantable {
       ),
       runtime: Runtime.PROVIDED_AL2,
       handler: 'bootstrap',
-      uuid: 'SopsSyncProvider',
+      uuid: props?.uuid ?? 'SopsSyncProvider',
       role: props?.role,
       timeout: Duration.seconds(60),
       environment: {
