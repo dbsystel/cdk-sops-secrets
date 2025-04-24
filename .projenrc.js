@@ -1,4 +1,5 @@
 const { awscdk } = require('projen');
+const { NodePackageManager } = require('projen/lib/javascript');
 
 const actions_SetupGo = [
   {
@@ -36,7 +37,7 @@ const actions_TestBuild = [
 const project = new awscdk.AwsCdkConstructLibrary({
   author: 'Markus Siebert',
   authorAddress: 'markus.siebert@deutschebahn.com',
-  cdkVersion: '2.177.0',
+  cdkVersion: '2.191.0',
   majorVersion: 2,
   stability: 'stable',
   homepage: 'https://constructs.dev/packages/cdk-sops-secrets',
@@ -60,6 +61,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
   autoApproveOptions: {
     allowedUsernames: ['markussiebert'],
   },
+  packageManager:  NodePackageManager.NPM,
   buildWorkflowOptions: {
     mutableBuild: true,
     preBuildSteps: [...actions_SetupGo, ...actions_TestBuild],
@@ -115,7 +117,7 @@ project.prettier.addIgnorePattern('/test/*snapshot');
 project.prettier.addIgnorePattern('API.md');
 project.prettier.addIgnorePattern('package.json');
 project.jest.addIgnorePattern('/lambda/');
-project.gitignore.addPatterns('*.iml', '.idea', '/assets');
+project.gitignore.addPatterns('*.iml', '.idea', '/assets', '**/.DS_Store');
 project.npmignore.addPatterns(
   '/lambda',
   '/dist-lambda',
