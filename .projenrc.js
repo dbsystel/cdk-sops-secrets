@@ -61,7 +61,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
   autoApproveOptions: {
     allowedUsernames: ['markussiebert'],
   },
-  packageManager:  NodePackageManager.NPM,
+  packageManager: NodePackageManager.NPM,
   buildWorkflowOptions: {
     mutableBuild: true,
     preBuildSteps: [...actions_SetupGo, ...actions_TestBuild],
