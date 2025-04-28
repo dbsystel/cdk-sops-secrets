@@ -1,7 +1,8 @@
 {
-  "version": "39.0.0",
+  "version": "41.0.0",
   "files": {
     "19d963f064ca3753f1326ca336913f1a235aa4099f57bb9ba2beebeec5d95bea": {
+      "displayName": "SingletonLambdaSopsSyncProvider/Code",
       "source": {
         "path": "asset.19d963f064ca3753f1326ca336913f1a235aa4099f57bb9ba2beebeec5d95bea.zip",
         "packaging": "file"
@@ -15,6 +16,7 @@
       }
     },
     "00891430ad6ba301c014ac0c19264a2625b34465268a393f40fdb015bc73fd00": {
+      "displayName": "PARAMETERMULTI Template",
       "source": {
         "path": "PARAMETERMULTI.template.json",
         "packaging": "file"
