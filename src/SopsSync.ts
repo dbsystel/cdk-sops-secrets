@@ -438,7 +438,7 @@ export namespace Permissions {
   }
 
   export function keysFromSopsContentAlias(ctx: Construct, c: string): IKey[] {
-    const regexAlias = /arn:aws:kms:[a-z0-9-]+:[\d]+:alias\/[a-z0-9-]+/g;
+    const regexAlias = /arn:aws:kms:[a-z0-9-]+:[\d]+:alias\/[a-z0-9-A-Z\/]+/g;
     const resultsAlias = c.match(regexAlias);
     if (resultsAlias !== null) {
       return resultsAlias.map((result, index) =>
