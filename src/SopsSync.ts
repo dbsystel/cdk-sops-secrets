@@ -213,12 +213,26 @@ export interface SopsSyncProviderProps {
    * @default `/aws/lambda/${this.functionName}` - default log group created by Lambda
    */
   readonly logGroup?: ILogGroup;
+  /**
+   * A unique identifier to identify this provider
+   *
+   * Overwrite the default, if you need a dedicated provider.
+   *
+   * @default SopsSyncProvider
+   */
+  readonly uuid?: string;
 }
 
 export class SopsSyncProvider extends SingletonFunction implements IGrantable {
   private sopsAgeKeys: SecretValue[];
 
   constructor(scope: Construct, id?: string, props?: SopsSyncProviderProps) {
+    if (id === undefined) {
+      Annotations.of(scope).addWarningV2(
+        'cdk-sops-secrets:omittingIdForSopsSyncProvider',
+        'Omitting id is deprecated. Please provide an id for the SopsSyncProvider. Default id will be removed in V3.',
+      );
+    }
     super(scope, id ?? 'SopsSyncProvider', {
       code: Code.fromAsset(
         scope.node.tryGetContext('sops_sync_provider_asset_path') ||
@@ -226,7 +240,7 @@ export class SopsSyncProvider extends SingletonFunction implements IGrantable {
       ),
       runtime: Runtime.PROVIDED_AL2,
       handler: 'bootstrap',
-      uuid: 'SopsSyncProvider',
+      uuid: props?.uuid ?? 'SopsSyncProvider',
       role: props?.role,
       timeout: Duration.seconds(60),
       environment: {
@@ -263,7 +277,8 @@ export class SopsSync extends Construct {
   constructor(scope: Construct, id: string, props: SopsSyncProps) {
     super(scope, id);
 
-    const provider = props.sopsProvider ?? new SopsSyncProvider(scope);
+    const provider =
+      props.sopsProvider ?? new SopsSyncProvider(scope, 'SopsSyncProvider');
 
     let uploadType = props.uploadType ?? UploadType.INLINE;
     let sopsFileFormat: 'json' | 'yaml' | 'dotenv' | 'binary' | undefined =
