@@ -92,9 +92,15 @@ export class SopsStringParameter extends Construct implements IStringParameter {
     });
   }
   grantRead(grantee: IGrantable): Grant {
+    if (this.encryptionKey) {
+      this.encryptionKey.grantDecrypt(grantee);
+    }
     return this.parameter.grantRead(grantee);
   }
   grantWrite(grantee: IGrantable): Grant {
+    if (this.encryptionKey) {
+      this.encryptionKey.grantEncrypt(grantee);
+    }
     return this.parameter.grantWrite(grantee);
   }
   applyRemovalPolicy(policy: RemovalPolicy): void {
