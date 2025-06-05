@@ -4,7 +4,7 @@ import {
   IGrantable,
   PolicyStatement,
 } from 'aws-cdk-lib/aws-iam';
-import { IKey } from 'aws-cdk-lib/aws-kms';
+import { IKey, ViaServicePrincipal } from 'aws-cdk-lib/aws-kms';
 import {
   ISecret,
   ISecretAttachmentTarget,
@@ -129,6 +129,15 @@ export class SopsSecret extends Construct implements ISecret {
   }
 
   public grantRead(grantee: IGrantable, versionStages?: string[]): Grant {
+    if (this.encryptionKey) {
+      // @see https://docs.aws.amazon.com/kms/latest/developerguide/services-secrets-manager.html
+      this.encryptionKey.grantDecrypt(
+        new ViaServicePrincipal(
+          `secretsmanager.${Stack.of(this).region}.amazonaws.com`,
+          grantee.grantPrincipal,
+        ),
+      );
+    }
     return this.secret.grantRead(grantee, versionStages);
   }
   public grantWrite(_grantee: IGrantable): Grant {
