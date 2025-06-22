@@ -23,8 +23,8 @@ dist
 tsconfig.tsbuildinfo
 /.eslintrc.json
 !.jsii
-test/PARAMETER_MULTI.integ.snapshot
 test/PARAMETER.integ.snapshot
+test/PARAMETER_MULTI.integ.snapshot
 test/.tmp
 test/SECRET.integ.snapshot
 /lambda
