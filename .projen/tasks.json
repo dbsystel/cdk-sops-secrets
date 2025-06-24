@@ -347,10 +347,10 @@
       "description": "update snapshot for all integration tests",
       "steps": [
         {
-          "spawn": "integ:PARAMETER_MULTI:snapshot"
+          "spawn": "integ:PARAMETER:snapshot"
         },
         {
-          "spawn": "integ:PARAMETER:snapshot"
+          "spawn": "integ:PARAMETER_MULTI:snapshot"
         },
         {
           "spawn": "integ:SECRET:snapshot"
@@ -479,10 +479,10 @@
           "spawn": "eslint"
         },
         {
-          "spawn": "integ:PARAMETER_MULTI:assert"
+          "spawn": "integ:PARAMETER:assert"
         },
         {
-          "spawn": "integ:PARAMETER:assert"
+          "spawn": "integ:PARAMETER_MULTI:assert"
         },
         {
           "spawn": "integ:SECRET:assert"
