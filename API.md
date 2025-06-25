@@ -3246,7 +3246,7 @@ Parse the secret as a binary.
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#cdk-sops-secrets.UploadType.INLINE">INLINE</a></code> | Pass the secret data inline (base64 encoded and compressed). |
-| <code><a href="#cdk-sops-secrets.UploadType.ASSET">ASSET</a></code> | Uplaod the secert data as asset. |
+| <code><a href="#cdk-sops-secrets.UploadType.ASSET">ASSET</a></code> | Uplaod the secret data as asset. |
 
 ---
 
@@ -3259,7 +3259,7 @@ Pass the secret data inline (base64 encoded and compressed).
 
 ##### `ASSET` <a name="ASSET" id="cdk-sops-secrets.UploadType.ASSET"></a>
 
-Uplaod the secert data as asset.
+Uplaod the secret data as asset.
 
 ---
 

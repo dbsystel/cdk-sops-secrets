@@ -30,7 +30,7 @@ export enum UploadType {
    */
   INLINE = 'INLINE',
   /**
-   * Uplaod the secert data as asset
+   * Uplaod the secret data as asset
    */
   ASSET = 'ASSET',
 }
