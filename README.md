@@ -83,7 +83,7 @@ Minimal Example:
 
 ```ts
 const secret = new SopsSecret(stack, 'MySopsSecret', {
-  secertName: 'mySecret', // name of the secret in AWS SecretsManager
+  secretName: 'mySecret', // name of the secret in AWS SecretsManager
   sopsFilePath: 'secrets/sopsfile-encrypted-secret.json', // filepath to the sops encrypted file
 });
 ```
