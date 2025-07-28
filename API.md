@@ -3060,6 +3060,7 @@ const sopsSyncProviderProps: SopsSyncProviderProps = { ... }
 | <code><a href="#cdk-sops-secrets.SopsSyncProviderProps.property.logRetention">logRetention</a></code> | <code>aws-cdk-lib.aws_logs.RetentionDays</code> | The number of days log events are kept in CloudWatch Logs. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProviderProps.property.role">role</a></code> | <code>aws-cdk-lib.aws_iam.IRole</code> | The role that should be used for the custom resource provider. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProviderProps.property.securityGroups">securityGroups</a></code> | <code>aws-cdk-lib.aws_ec2.ISecurityGroup[]</code> | Only if `vpc` is supplied: The list of security groups to associate with the Lambda's network interfaces. |
+| <code><a href="#cdk-sops-secrets.SopsSyncProviderProps.property.uuid">uuid</a></code> | <code>string</code> | A unique identifier to identify this provider. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProviderProps.property.vpc">vpc</a></code> | <code>aws-cdk-lib.aws_ec2.IVpc</code> | VPC network to place Lambda network interfaces. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProviderProps.property.vpcSubnets">vpcSubnets</a></code> | <code>aws-cdk-lib.aws_ec2.SubnetSelection</code> | Where to place the network interfaces within the VPC. |
 
@@ -3142,6 +3143,21 @@ public readonly securityGroups: ISecurityGroup[];
 - *Default:* A dedicated security group will be created for the lambda function.
 
 Only if `vpc` is supplied: The list of security groups to associate with the Lambda's network interfaces.
+
+---
+
+##### `uuid`<sup>Optional</sup> <a name="uuid" id="cdk-sops-secrets.SopsSyncProviderProps.property.uuid"></a>
+
+```typescript
+public readonly uuid: string;
+```
+
+- *Type:* string
+- *Default:* SopsSyncProvider
+
+A unique identifier to identify this provider.
+
+Overwrite the default, if you need a dedicated provider.
 
 ---
 
