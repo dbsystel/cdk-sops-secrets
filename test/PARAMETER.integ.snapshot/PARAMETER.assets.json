@@ -1,21 +1,21 @@
 {
   "version": "41.0.0",
   "files": {
-    "04b1033d03d86f1b5595ffe6c879c9668c1a4e4635823e32c3c5720f617f9ac4": {
+    "e13fe751e830c9d16359ae6c2bd570f9ebfd9b0fa8242494f03917a4d62bbf44": {
       "displayName": "SingletonLambdaSopsSyncProvider/Code",
       "source": {
-        "path": "asset.04b1033d03d86f1b5595ffe6c879c9668c1a4e4635823e32c3c5720f617f9ac4.zip",
+        "path": "asset.e13fe751e830c9d16359ae6c2bd570f9ebfd9b0fa8242494f03917a4d62bbf44.zip",
         "packaging": "file"
       },
       "destinations": {
         "current_account-current_region": {
           "bucketName": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}",
-          "objectKey": "04b1033d03d86f1b5595ffe6c879c9668c1a4e4635823e32c3c5720f617f9ac4.zip",
+          "objectKey": "e13fe751e830c9d16359ae6c2bd570f9ebfd9b0fa8242494f03917a4d62bbf44.zip",
           "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-file-publishing-role-${AWS::AccountId}-${AWS::Region}"
         }
       }
     },
-    "35908c5a63f66a9ea3134c60282ad84df7f8849aabdfefe858d3ab0ffd64c222": {
+    "ca4dd37a6f91d575fa77faa31b412052dda0e86ed4034ce0e5eed985567fdae3": {
       "displayName": "PARAMETER Template",
       "source": {
         "path": "PARAMETER.template.json",
@@ -24,7 +24,7 @@
       "destinations": {
         "current_account-current_region": {
           "bucketName": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}",
-          "objectKey": "35908c5a63f66a9ea3134c60282ad84df7f8849aabdfefe858d3ab0ffd64c222.json",
+          "objectKey": "ca4dd37a6f91d575fa77faa31b412052dda0e86ed4034ce0e5eed985567fdae3.json",
           "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-file-publishing-role-${AWS::AccountId}-${AWS::Region}"
         }
       }
