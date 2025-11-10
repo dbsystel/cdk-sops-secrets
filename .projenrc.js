@@ -61,6 +61,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
   autoApproveOptions: {
     allowedUsernames: ['markussiebert'],
   },
+  npmTrustedPublishing: true,
   packageManager: NodePackageManager.NPM,
   buildWorkflowOptions: {
     mutableBuild: true,
