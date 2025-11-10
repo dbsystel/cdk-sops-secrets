@@ -106,7 +106,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
     dotNetNamespace: 'Db.De.Systel',
     packageId: 'Db.De.Systel.CdkSopsSecrets',
     nugetServer: 'https://nuget.pkg.github.com/dbsystel/index.json',
-    trustedPublishing: true,
+    nugetApiKeySecret: 'PROJEN_GITHUB_TOKEN',
   },
   publishToPypi: {
     distName: 'cdk-sops-secrets',
