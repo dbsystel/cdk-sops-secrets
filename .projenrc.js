@@ -100,16 +100,18 @@ const project = new awscdk.AwsCdkConstructLibrary({
     mavenArtifactId: 'cdk-sops-secrets',
     mavenRepositoryUrl:
       'https://maven.pkg.github.com/dbsystel/cdk-sops-secrets',
+    trustedPublishing: true,
   },
   publishToNuget: {
     dotNetNamespace: 'Db.De.Systel',
     packageId: 'Db.De.Systel.CdkSopsSecrets',
     nugetServer: 'https://nuget.pkg.github.com/dbsystel/index.json',
-    nugetApiKeySecret: 'PROJEN_GITHUB_TOKEN',
+    trustedPublishing: true,
   },
   publishToPypi: {
     distName: 'cdk-sops-secrets',
     module: 'cdk_sops_secrets',
+    trustedPublishing: true,
   },
 });
 
