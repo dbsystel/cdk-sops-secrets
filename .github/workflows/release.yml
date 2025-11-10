@@ -232,7 +232,6 @@ jobs:
     permissions:
       contents: read
       packages: write
-      id-token: write
     if: needs.release.outputs.tag_exists != 'true' && needs.release.outputs.latest_commit == github.sha
     steps:
       - uses: actions/setup-node@v5
@@ -265,7 +264,6 @@ jobs:
         run: mv .repo/dist dist
       - name: Release
         env:
-          NUGET_TRUSTED_PUBLISHER: "true"
+          NUGET_API_KEY: ${{ secrets.GITHUB_TOKEN }}
           NUGET_SERVER: https://nuget.pkg.github.com/dbsystel/index.json
-          NUGET_USERNAME: ${{ secrets.NUGET_USERNAME }}
         run: npx -p publib@latest publib-nuget
