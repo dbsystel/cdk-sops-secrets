@@ -3,10 +3,10 @@ const { NodePackageManager } = require('projen/lib/javascript');
 
 const actions_SetupGo = [
   {
-    name: 'Setup Go 1.24.5',
+    name: 'Setup Go 1.25.4',
     uses: 'actions/setup-go@v5',
     with: {
-      'go-version': '1.24.5',
+      'go-version': '1.25.4',
       'cache-dependency-path': 'lambda/go.sum',
     },
   },
