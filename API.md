@@ -86,7 +86,7 @@ Any object.
 | --- | --- | --- |
 | <code><a href="#cdk-sops-secrets.MultiStringParameter.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
 | <code><a href="#cdk-sops-secrets.MultiStringParameter.property.encryptionKey">encryptionKey</a></code> | <code>aws-cdk-lib.aws_kms.IKey</code> | *No description.* |
-| <code><a href="#cdk-sops-secrets.MultiStringParameter.property.env">env</a></code> | <code>aws-cdk-lib.ResourceEnvironment</code> | *No description.* |
+| <code><a href="#cdk-sops-secrets.MultiStringParameter.property.env">env</a></code> | <code>aws-cdk-lib.interfaces.ResourceEnvironment</code> | *No description.* |
 | <code><a href="#cdk-sops-secrets.MultiStringParameter.property.keyPrefix">keyPrefix</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#cdk-sops-secrets.MultiStringParameter.property.keySeparator">keySeparator</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#cdk-sops-secrets.MultiStringParameter.property.stack">stack</a></code> | <code>aws-cdk-lib.Stack</code> | *No description.* |
@@ -122,7 +122,7 @@ public readonly encryptionKey: IKey;
 public readonly env: ResourceEnvironment;
 ```
 
-- *Type:* aws-cdk-lib.ResourceEnvironment
+- *Type:* aws-cdk-lib.interfaces.ResourceEnvironment
 
 ---
 
@@ -216,6 +216,7 @@ new SopsSecret(scope: Construct, id: string, props: SopsSecretProps)
 | <code><a href="#cdk-sops-secrets.SopsSecret.addToResourcePolicy">addToResourcePolicy</a></code> | Adds a statement to the IAM resource policy associated with this secret. |
 | <code><a href="#cdk-sops-secrets.SopsSecret.applyRemovalPolicy">applyRemovalPolicy</a></code> | Apply the given removal policy to this resource. |
 | <code><a href="#cdk-sops-secrets.SopsSecret.attach">attach</a></code> | Attach a target to this secret. |
+| <code><a href="#cdk-sops-secrets.SopsSecret.cfnDynamicReferenceKey">cfnDynamicReferenceKey</a></code> | Returns a key which can be used within an AWS CloudFormation dynamic reference to dynamically load this secret from AWS Secrets Manager. |
 | <code><a href="#cdk-sops-secrets.SopsSecret.currentVersionId">currentVersionId</a></code> | *No description.* |
 | <code><a href="#cdk-sops-secrets.SopsSecret.denyAccountRootDelete">denyAccountRootDelete</a></code> | Denies the `DeleteSecret` action to all principals within the current account. |
 | <code><a href="#cdk-sops-secrets.SopsSecret.grantRead">grantRead</a></code> | Grants reading the secret value to some role. |
@@ -309,16 +310,14 @@ Attach a target to this secret.
 ##### `cfnDynamicReferenceKey` <a name="cfnDynamicReferenceKey" id="cdk-sops-secrets.SopsSecret.cfnDynamicReferenceKey"></a>
 
 ```typescript
-public cfnDynamicReferenceKey(options?: SecretsManagerSecretOptions): ISecret
+public cfnDynamicReferenceKey(options?: SecretsManagerSecretOptions): string
 ```
 
 Returns a key which can be used within an AWS CloudFormation dynamic reference to dynamically load this secret from AWS Secrets Manager.
 
-See also: https://docs.aws.amazon.com/secretsmanager/latest/userguide/cfn-example_reference-secret.html
-
 ###### `options`<sup>Optional</sup> <a name="options" id="cdk-sops-secrets.SopsSecret.cfnDynamicReferenceKey.parameter.options"></a>
 
-- *Type:* aws-cdk-lib.aws_secretsmanager.SecretsManagerSecretOptions
+- *Type:* aws-cdk-lib.SecretsManagerSecretOptions
 
 ---
 
@@ -415,7 +414,7 @@ Any object.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#cdk-sops-secrets.SopsSecret.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#cdk-sops-secrets.SopsSecret.property.env">env</a></code> | <code>aws-cdk-lib.ResourceEnvironment</code> | The environment this resource belongs to. |
+| <code><a href="#cdk-sops-secrets.SopsSecret.property.env">env</a></code> | <code>aws-cdk-lib.interfaces.ResourceEnvironment</code> | The environment this resource belongs to. |
 | <code><a href="#cdk-sops-secrets.SopsSecret.property.secretArn">secretArn</a></code> | <code>string</code> | The ARN of the secret in AWS Secrets Manager. |
 | <code><a href="#cdk-sops-secrets.SopsSecret.property.secretName">secretName</a></code> | <code>string</code> | The name of the secret. |
 | <code><a href="#cdk-sops-secrets.SopsSecret.property.secretValue">secretValue</a></code> | <code>aws-cdk-lib.SecretValue</code> | Retrieve the value of the stored secret as a `SecretValue`. |
@@ -444,16 +443,17 @@ The tree node.
 public readonly env: ResourceEnvironment;
 ```
 
-- *Type:* aws-cdk-lib.ResourceEnvironment
+- *Type:* aws-cdk-lib.interfaces.ResourceEnvironment
 
 The environment this resource belongs to.
 
-For resources that are created and managed by the CDK
-(generally, those created by creating new class instances like Role, Bucket, etc.),
-this is always the same as the environment of the stack they belong to;
-however, for imported resources
-(those obtained from static methods like fromRoleArn, fromBucketName, etc.),
-that might be different than the stack they were imported into.
+For resources that are created and managed in a Stack (those created by
+creating new class instances like `new Role()`, `new Bucket()`, etc.), this
+is always the same as the environment of the stack they belong to.
+
+For referenced resources (those obtained from referencing methods like
+`Role.fromRoleArn()`, `Bucket.fromBucketName()`, etc.), they might be
+different than the stack they were imported into.
 
 ---
 
@@ -692,7 +692,7 @@ Any object.
 | --- | --- | --- |
 | <code><a href="#cdk-sops-secrets.SopsStringParameter.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
 | <code><a href="#cdk-sops-secrets.SopsStringParameter.property.encryptionKey">encryptionKey</a></code> | <code>aws-cdk-lib.aws_kms.IKey</code> | *No description.* |
-| <code><a href="#cdk-sops-secrets.SopsStringParameter.property.env">env</a></code> | <code>aws-cdk-lib.ResourceEnvironment</code> | The environment this resource belongs to. |
+| <code><a href="#cdk-sops-secrets.SopsStringParameter.property.env">env</a></code> | <code>aws-cdk-lib.interfaces.ResourceEnvironment</code> | The environment this resource belongs to. |
 | <code><a href="#cdk-sops-secrets.SopsStringParameter.property.parameterArn">parameterArn</a></code> | <code>string</code> | The ARN of the SSM Parameter resource. |
 | <code><a href="#cdk-sops-secrets.SopsStringParameter.property.parameterName">parameterName</a></code> | <code>string</code> | The name of the SSM Parameter resource. |
 | <code><a href="#cdk-sops-secrets.SopsStringParameter.property.parameterType">parameterType</a></code> | <code>string</code> | The type of the SSM Parameter resource. |
@@ -730,16 +730,17 @@ public readonly encryptionKey: IKey;
 public readonly env: ResourceEnvironment;
 ```
 
-- *Type:* aws-cdk-lib.ResourceEnvironment
+- *Type:* aws-cdk-lib.interfaces.ResourceEnvironment
 
 The environment this resource belongs to.
 
-For resources that are created and managed by the CDK
-(generally, those created by creating new class instances like Role, Bucket, etc.),
-this is always the same as the environment of the stack they belong to;
-however, for imported resources
-(those obtained from static methods like fromRoleArn, fromBucketName, etc.),
-that might be different than the stack they were imported into.
+For resources that are created and managed in a Stack (those created by
+creating new class instances like `new Role()`, `new Bucket()`, etc.), this
+is always the same as the environment of the stack they belong to.
+
+For referenced resources (those obtained from referencing methods like
+`Role.fromRoleArn()`, `Bucket.fromBucketName()`, etc.), they might be
+different than the stack they were imported into.
 
 ---
 
@@ -1502,12 +1503,13 @@ Check whether the given construct is a Resource.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#cdk-sops-secrets.SopsSyncProvider.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#cdk-sops-secrets.SopsSyncProvider.property.env">env</a></code> | <code>aws-cdk-lib.ResourceEnvironment</code> | The environment this resource belongs to. |
+| <code><a href="#cdk-sops-secrets.SopsSyncProvider.property.env">env</a></code> | <code>aws-cdk-lib.interfaces.ResourceEnvironment</code> | The environment this resource belongs to. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProvider.property.stack">stack</a></code> | <code>aws-cdk-lib.Stack</code> | The stack in which this resource is defined. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProvider.property.architecture">architecture</a></code> | <code>aws-cdk-lib.aws_lambda.Architecture</code> | The architecture of this Lambda Function. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProvider.property.connections">connections</a></code> | <code>aws-cdk-lib.aws_ec2.Connections</code> | Access the Connections object. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProvider.property.functionArn">functionArn</a></code> | <code>string</code> | The ARN fo the function. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProvider.property.functionName">functionName</a></code> | <code>string</code> | The name of the function. |
+| <code><a href="#cdk-sops-secrets.SopsSyncProvider.property.functionRef">functionRef</a></code> | <code>aws-cdk-lib.interfaces.aws_lambda.FunctionReference</code> | A reference to a Function resource. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProvider.property.grantPrincipal">grantPrincipal</a></code> | <code>aws-cdk-lib.aws_iam.IPrincipal</code> | The principal this Lambda Function is running as. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProvider.property.isBoundToVpc">isBoundToVpc</a></code> | <code>boolean</code> | Whether or not this Lambda function was bound to a VPC. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProvider.property.latestVersion">latestVersion</a></code> | <code>aws-cdk-lib.aws_lambda.IVersion</code> | The `$LATEST` version of this function. |
@@ -1539,16 +1541,17 @@ The tree node.
 public readonly env: ResourceEnvironment;
 ```
 
-- *Type:* aws-cdk-lib.ResourceEnvironment
+- *Type:* aws-cdk-lib.interfaces.ResourceEnvironment
 
 The environment this resource belongs to.
 
-For resources that are created and managed by the CDK
-(generally, those created by creating new class instances like Role, Bucket, etc.),
-this is always the same as the environment of the stack they belong to;
-however, for imported resources
-(those obtained from static methods like fromRoleArn, fromBucketName, etc.),
-that might be different than the stack they were imported into.
+For resources that are created and managed in a Stack (those created by
+creating new class instances like `new Role()`, `new Bucket()`, etc.), this
+is always the same as the environment of the stack they belong to.
+
+For referenced resources (those obtained from referencing methods like
+`Role.fromRoleArn()`, `Bucket.fromBucketName()`, etc.), they might be
+different than the stack they were imported into.
 
 ---
 
@@ -1611,6 +1614,18 @@ public readonly functionName: string;
 - *Type:* string
 
 The name of the function.
+
+---
+
+##### `functionRef`<sup>Required</sup> <a name="functionRef" id="cdk-sops-secrets.SopsSyncProvider.property.functionRef"></a>
+
+```typescript
+public readonly functionRef: FunctionReference;
+```
+
+- *Type:* aws-cdk-lib.interfaces.aws_lambda.FunctionReference
+
+A reference to a Function resource.
 
 ---
 
@@ -1757,6 +1772,25 @@ The runtime environment for the Lambda function.
 
 ---
 
+#### Constants <a name="Constants" id="Constants"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#cdk-sops-secrets.SopsSyncProvider.property.PROPERTY_INJECTION_ID">PROPERTY_INJECTION_ID</a></code> | <code>string</code> | Uniquely identifies this class. |
+
+---
+
+##### `PROPERTY_INJECTION_ID`<sup>Required</sup> <a name="PROPERTY_INJECTION_ID" id="cdk-sops-secrets.SopsSyncProvider.property.PROPERTY_INJECTION_ID"></a>
+
+```typescript
+public readonly PROPERTY_INJECTION_ID: string;
+```
+
+- *Type:* string
+
+Uniquely identifies this class.
+
+---
 
 ## Structs <a name="Structs" id="Structs"></a>
 
