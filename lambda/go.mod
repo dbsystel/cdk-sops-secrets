@@ -13,7 +13,7 @@ require (
 	github.com/getsops/sops/v3 v3.11.0
 	github.com/gkampitakis/go-snaps v0.5.15
 	github.com/invopop/jsonschema v0.13.0
-	github.com/kaptinlin/jsonschema v0.5.2
+	github.com/kaptinlin/jsonschema v0.6.0
 	github.com/stretchr/testify v1.11.1
 	gopkg.in/yaml.v3 v3.0.1
 )
@@ -97,6 +97,7 @@ require (
 	github.com/hashicorp/hcl v1.0.1-vault-7 // indirect
 	github.com/hashicorp/vault/api v1.22.0 // indirect
 	github.com/kaptinlin/go-i18n v0.2.0 // indirect
+	github.com/kaptinlin/jsonpointer v0.4.6 // indirect
 	github.com/kaptinlin/messageformat-go v0.4.6 // indirect
 	github.com/kr/pretty v0.3.1 // indirect
 	github.com/kr/text v0.2.0 // indirect
