@@ -306,6 +306,22 @@ Attach a target to this secret.
 
 ---
 
+##### `cfnDynamicReferenceKey` <a name="cfnDynamicReferenceKey" id="cdk-sops-secrets.SopsSecret.cfnDynamicReferenceKey"></a>
+
+```typescript
+public cfnDynamicReferenceKey(options?: SecretsManagerSecretOptions): ISecret
+```
+
+Returns a key which can be used within an AWS CloudFormation dynamic reference to dynamically load this secret from AWS Secrets Manager.
+
+See also: https://docs.aws.amazon.com/secretsmanager/latest/userguide/cfn-example_reference-secret.html
+
+###### `options`<sup>Optional</sup> <a name="options" id="cdk-sops-secrets.SopsSecret.cfnDynamicReferenceKey.parameter.options"></a>
+
+- *Type:* aws-cdk-lib.aws_secretsmanager.SecretsManagerSecretOptions
+
+---
+
 ##### `currentVersionId` <a name="currentVersionId" id="cdk-sops-secrets.SopsSecret.currentVersionId"></a>
 
 ```typescript

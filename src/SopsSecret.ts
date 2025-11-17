@@ -13,6 +13,7 @@ import {
   RotationScheduleOptions,
   Secret,
   SecretProps,
+  SecretsManagerSecretOptions,
 } from 'aws-cdk-lib/aws-secretsmanager';
 import {
   RemovalPolicy,
@@ -165,6 +166,9 @@ export class SopsSecret extends Construct implements ISecret {
   }
   public attach(target: ISecretAttachmentTarget): ISecret {
     return this.secret.attach(target);
+  }
+  public cfnDynamicReferenceKey(options?: SecretsManagerSecretOptions): string {
+    return this.secret.cfnDynamicReferenceKey(options);
   }
   public applyRemovalPolicy(policy: RemovalPolicy): void {
     return this.secret.applyRemovalPolicy(policy);
