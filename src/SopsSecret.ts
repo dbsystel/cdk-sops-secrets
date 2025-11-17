@@ -17,6 +17,7 @@ import {
 import {
   RemovalPolicy,
   ResourceEnvironment,
+  SecretsManagerSecretOptions,
   SecretValue,
   Stack,
 } from 'aws-cdk-lib/core';
@@ -165,6 +166,9 @@ export class SopsSecret extends Construct implements ISecret {
   }
   public attach(target: ISecretAttachmentTarget): ISecret {
     return this.secret.attach(target);
+  }
+  public cfnDynamicReferenceKey(options?: SecretsManagerSecretOptions): string {
+    return this.secret.cfnDynamicReferenceKey(options);
   }
   public applyRemovalPolicy(policy: RemovalPolicy): void {
     return this.secret.applyRemovalPolicy(policy);
