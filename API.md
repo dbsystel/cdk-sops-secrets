@@ -695,11 +695,11 @@ Any object.
 | <code><a href="#cdk-sops-secrets.SopsStringParameter.property.env">env</a></code> | <code>aws-cdk-lib.interfaces.ResourceEnvironment</code> | The environment this resource belongs to. |
 | <code><a href="#cdk-sops-secrets.SopsStringParameter.property.parameterArn">parameterArn</a></code> | <code>string</code> | The ARN of the SSM Parameter resource. |
 | <code><a href="#cdk-sops-secrets.SopsStringParameter.property.parameterName">parameterName</a></code> | <code>string</code> | The name of the SSM Parameter resource. |
+| <code><a href="#cdk-sops-secrets.SopsStringParameterProps.property.parameterRef">parameterRef</a></code> | <code>string</code> | A reference to a Parameter resource. |
 | <code><a href="#cdk-sops-secrets.SopsStringParameter.property.parameterType">parameterType</a></code> | <code>string</code> | The type of the SSM Parameter resource. |
 | <code><a href="#cdk-sops-secrets.SopsStringParameter.property.stack">stack</a></code> | <code>aws-cdk-lib.Stack</code> | The stack in which this resource is defined. |
 | <code><a href="#cdk-sops-secrets.SopsStringParameter.property.stringValue">stringValue</a></code> | <code>string</code> | The parameter value. |
 | <code><a href="#cdk-sops-secrets.SopsStringParameter.property.sync">sync</a></code> | <code><a href="#cdk-sops-secrets.SopsSync">SopsSync</a></code> | *No description.* |
-| <code><a href="#cdk-sops-secrets.SopsStringParameterProps.property.parameterRef">parameterRef</a></code> | <code>string</code> | A reference to a Parameter resource. |
 
 ---
 
@@ -766,6 +766,18 @@ public readonly parameterName: string;
 - *Type:* string
 
 The name of the SSM Parameter resource.
+
+---
+
+##### `parameterRef`<sup>Required</sup> <a name="parameterRef" id="cdk-sops-secrets.SopsStringParameter.property.parameterRef"></a>
+
+```typescript
+public readonly parameterRef: ParameterReference;
+```
+
+- *Type:* aws-cdk-lib.interfaces.aws_ssm.ParameterReference
+
+A reference to a Parameter resource.
 
 ---
 
