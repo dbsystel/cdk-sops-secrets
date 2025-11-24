@@ -2,6 +2,7 @@ import { Grant, IGrantable } from 'aws-cdk-lib/aws-iam';
 import { IKey } from 'aws-cdk-lib/aws-kms';
 import {
   IStringParameter,
+  ParameterReference,
   ParameterTier,
   StringParameter,
 } from 'aws-cdk-lib/aws-ssm';
@@ -56,6 +57,7 @@ export class SopsStringParameter extends Construct implements IStringParameter {
   readonly parameterName: string;
   readonly parameterType: string;
   readonly stringValue: string;
+  readonly parameterRef: ParameterReference;
 
   public constructor(
     scope: Construct,
@@ -82,6 +84,7 @@ export class SopsStringParameter extends Construct implements IStringParameter {
     this.parameterName = this.parameter.parameterName;
     this.parameterType = this.parameter.parameterType;
     this.stringValue = this.parameter.stringValue;
+    this.parameterRef = this.parameter.parameterRef;
 
     this.sync = new SopsSync(this, 'SopsSync', {
       encryptionKey: this.parameter.encryptionKey,
