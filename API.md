@@ -699,6 +699,7 @@ Any object.
 | <code><a href="#cdk-sops-secrets.SopsStringParameter.property.stack">stack</a></code> | <code>aws-cdk-lib.Stack</code> | The stack in which this resource is defined. |
 | <code><a href="#cdk-sops-secrets.SopsStringParameter.property.stringValue">stringValue</a></code> | <code>string</code> | The parameter value. |
 | <code><a href="#cdk-sops-secrets.SopsStringParameter.property.sync">sync</a></code> | <code><a href="#cdk-sops-secrets.SopsSync">SopsSync</a></code> | *No description.* |
+| <code><a href="#cdk-sops-secrets.SopsStringParameterProps.property.parameterRef">parameterRef</a></code> | <code>string</code> | A reference to a Parameter resource. |
 
 ---
 

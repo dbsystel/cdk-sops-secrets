@@ -37,7 +37,7 @@ const actions_TestBuild = [
 const project = new awscdk.AwsCdkConstructLibrary({
   author: 'Markus Siebert',
   authorAddress: 'markus.siebert@deutschebahn.com',
-  cdkVersion: '2.224.0',
+  cdkVersion: '2.227.0',
   majorVersion: 2,
   stability: 'stable',
   homepage: 'https://constructs.dev/packages/cdk-sops-secrets',
