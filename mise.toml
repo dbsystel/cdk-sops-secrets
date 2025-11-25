@@ -1,0 +1,351 @@
+# mise configuration for cdk-sops-secrets
+[env]
+CDK_DISABLE_CLI_TELEMETRY = "true"
+
+[tools]
+golang = "1.25.4"
+nodejs = "24.11.0"
+grype = "0.104.1"
+python = "3.12"
+dotnet = "6"
+# aqua repo not working on ubuntu right now
+"asdf:maven" = "3.9.11"
+
+
+[tasks.install]
+description = "Install npm dependencies + Go modules"
+depends = ["lambda:deps"]
+run = "npm install"
+
+[tasks."install:ci"]
+description = "Install npm dependencies (CI) + Go modules"
+depends = ["lambda:deps"]
+run = "npm ci"
+
+[tasks.clean]
+description = "Clean build artifacts (including lambda assets)"
+run = "rm -rf lib dist .jsii tsconfig.json coverage test-reports assets"
+
+[tasks."cdk:codegen:types"]
+description = "Generate TypeScript types from JSON schema"
+run = "npx json-schema-to-typescript lambda/internal/event/config-schema.json -o src/LambdaInterface.ts"
+
+[tasks.jsii]
+description = "Compile TypeScript with jsii"
+run = "npx jsii --silence-warnings=reserved-word"
+
+[tasks.jsii-docgen]
+description = "Generate API documentation"
+run = "npx jsii-docgen -o API.md"
+
+[tasks."cdk:test:jest"]
+description = "Run TypeScript tests with Jest"
+run = """
+if [ -n "$CI" ]; then
+  npx jest --passWithNoTests --coverageProvider=v8
+else
+  npx jest --passWithNoTests --updateSnapshot --coverageProvider=v8
+fi
+"""
+
+[tasks."test:watch"]
+description = "Run tests in watch mode"
+run = "npx jest --watch"
+
+[tasks."test:update"]
+description = "Update test snapshots"
+run = "npx jest --updateSnapshot"
+
+[tasks."lambda:deps"]
+description = "Prepare Go lambda dependencies (tidy & download)"
+run = '''
+BASEPATH=$(git rev-parse --show-toplevel)
+cd "$BASEPATH/lambda"
+go mod tidy
+go mod download
+'''
+
+[tasks."lambda:test"]
+description = "Run Go lambda tests"
+depends = ["lambda:deps"]
+run = '''
+BASEPATH=$(git rev-parse --show-toplevel)
+cd "$BASEPATH/lambda"
+mkdir -p "$BASEPATH/coverage"
+go test -race -coverprofile=../coverage/coverage.out -covermode=atomic -v
+'''
+
+
+[tasks."lambda:build"]
+description = "Build Go lambda binary and package zip"
+depends = ["lambda:deps"]
+run = '''
+echo "GOROOT: $GOROOT / GOPATH: $GOPATH"
+BASEPATH=$(git rev-parse --show-toplevel)
+cd "$BASEPATH/lambda"
+export GOOS=linux
+export GOARCH=amd64
+export GOPROXY=https://proxy.golang.org,direct
+export CGO_ENABLED=0
+go build -trimpath -buildvcs=false -tags lambda.norpc -o bootstrap -ldflags="-s -w -buildid="
+ls -la bootstrap
+sha1sum bootstrap
+touch -t 202002020000 bootstrap
+chmod 755 bootstrap
+ls -la bootstrap
+sha1sum bootstrap
+mkdir -p "$BASEPATH/assets"
+zip -X9om "$BASEPATH/assets/cdk-sops-lambda.zip" bootstrap
+sha1sum "$BASEPATH/assets/cdk-sops-lambda.zip"
+ls -la "$BASEPATH/assets/cdk-sops-lambda.zip"
+'''
+
+
+[tasks."lambda:test:update"]
+description = "Run Go lambda tests and update snapshots"
+depends = ["lambda:deps"]
+run = '''
+BASEPATH=$(git rev-parse --show-toplevel)
+cd "$BASEPATH/lambda"
+mkdir -p "$BASEPATH/coverage"
+UPDATE_SNAPS=true go test -race -coverprofile=../coverage/coverage.out -covermode=atomic -v
+'''
+
+[tasks."lambda:test:integration"]
+description = "Run Go lambda integration tests (explicit only)"
+depends = ["lambda:deps"]
+run = '''
+BASEPATH=$(git rev-parse --show-toplevel)
+cd "$BASEPATH/lambda"
+mkdir -p "$BASEPATH/coverage"
+go test -race -tags=integration -coverprofile=../coverage/coverage.out -covermode=atomic -v
+'''
+
+[tasks."cdk:eslint"]
+description = "Run ESLint"
+run = "npx eslint --ext .ts,.tsx src test"
+
+[tasks."cdk:eslint:fix"]
+description = "Fix ESLint issues"
+run = "npx eslint --ext .ts,.tsx --fix src test"
+
+[tasks."cdk:prettier:fix"]
+description = "Format code with Prettier"
+run = "npx prettier --write 'src/**/*.ts' 'test/**/*.ts'"
+
+[tasks."cdk:prettier:check"]
+description = "Check code formatting"
+run = "npx prettier --check 'src/**/*.ts' 'test/**/*.ts'"
+
+[tasks.build-common]
+description = "Build (lambda, compile, test, lint, verify, package)"
+run = """
+set -e
+
+mise run lambda:test
+mise run lambda:build
+mise run cdk:codegen:types
+mise run cdk:prettier:fix
+mise run cdk:eslint:fix
+mise run cdk:test:jest
+mise run cdk:test:integ:snapshot
+mise run jsii
+mise run jsii-docgen
+mise run verify
+"""
+
+[tasks.build]
+description = "Build (lambda, compile, test, lint, verify, package)"
+depends = ["build-common"]
+run = """
+set -e
+mise run jsii-pacmak:all
+"""
+
+[tasks."jsii-pacmak:js"]
+description = "Package for npm"
+run = "npx jsii-pacmak -v --target js"
+
+[tasks."jsii-pacmak:java"]
+description = "Package for Maven"
+run = "npx jsii-pacmak -v --target java"
+
+[tasks."jsii-pacmak:python"]
+description = "Package for PyPI"
+run = "npx jsii-pacmak -v --target python"
+
+[tasks."jsii-pacmak:dotnet"]
+description = "Package for NuGet"
+run = "npx jsii-pacmak -v --target dotnet"
+
+[tasks."jsii-pacmak:all"]
+description = "Package for all targets"
+depends = ["jsii-pacmak:js", "jsii-pacmak:java", "jsii-pacmak:python", "jsii-pacmak:dotnet"]
+
+# Integration test snapshot tasks
+
+[tasks."cdk:test:integ:snapshot:single"]
+description = "Generate snapshot for a single test (internal use)"
+run = """
+set -e
+if [ -z "$TEST" ]; then
+  echo "ERROR: TEST parameter is required"
+  exit 1
+fi
+mkdir -p test/__snapshots__
+temp_dir=$(mktemp -d)
+trap "rm -rf $temp_dir" EXIT
+
+npx cdk synth --app "npx ts-node test/$TEST.integ.ts" --output "$temp_dir" --quiet
+for template in "$temp_dir"/*.template.json; do
+  if [ -f "$template" ]; then
+    cp "$template" "test/__snapshots__/$TEST.integ.snapshot.json"
+    echo "Saved: test/__snapshots__/$TEST.integ.snapshot.json"
+  fi
+done
+"""
+
+[tasks."cdk:test:integ:snapshot"]
+description = "Generate CloudFormation template snapshots for all tests"
+run = """
+set -e
+echo "Generating snapshots for all integration tests..."
+for f in test/*.integ.ts; do
+  if [ -f "$f" ]; then
+    basename=$(basename "$f" .integ.ts)
+    echo "  - $basename"
+    TEST="$basename" mise run cdk:test:integ:snapshot:single
+  fi
+done
+echo "All snapshots saved to test/__snapshots__/"
+"""
+
+[tasks."verify"]
+description = "Verify no files changed during build (shows all diffs)"
+run = """
+set -e
+echo "Verifying no files changed during build..."
+
+# Check if any files changed
+if ! git diff --exit-code --quiet; then
+  echo ""
+  echo "ERROR: Files were modified during build"
+  echo "Showing all differences:"
+  git --no-pager diff --no-color
+  exit 1
+fi
+
+echo "All files verified - no changes detected"
+"""
+
+[tasks."cdk:test:integ:destroy:single"]
+description = "Destroy integration test resources for a single test (internal use)"
+run = """
+set -e
+if [ -z "$TEST" ]; then
+  echo "ERROR: TEST parameter is required"
+  exit 1
+fi
+echo "Destroying integration test $TEST"
+npx cdk destroy --app "npx ts-node test/$TEST.integ.ts" --all --force
+"""
+
+[tasks."cdk:test:integ:destroy"]
+description = "Destroy integration test resources (if deployed) for all tests"
+run = """
+set -e
+echo "Destroying all integration tests"
+for f in test/*.integ.ts; do
+  if [ -f "$f" ]; then
+    basename=$(basename "$f" .integ.ts)
+    echo "  - $basename"
+    TEST="$basename" mise run cdk:test:integ:destroy:single
+  fi
+done
+"""
+
+[tasks."cdk:test:integ:deploy:single"]
+description = "Deploy integration test for a single test (internal use)"
+run = """
+set -e
+if [ -z "$TEST" ]; then
+  echo "ERROR: TEST parameter is required"
+  exit 1
+fi
+
+mkdir -p test/__snapshots__
+temp_dir=$(mktemp -d)
+trap "rm -rf $temp_dir" EXIT
+
+echo "Deploying integration test $TEST"
+npx cdk deploy --app "npx ts-node test/$TEST.integ.ts" --output "$temp_dir" --all --require-approval never
+
+# Copy snapshot from deploy output
+for template in "$temp_dir"/*.template.json; do
+  if [ -f "$template" ]; then
+    cp "$template" "test/__snapshots__/$TEST.integ.snapshot.json"
+    echo "Saved snapshot: test/__snapshots__/$TEST.integ.snapshot.json"
+  fi
+done
+"""
+
+[tasks."cdk:test:integ:deploy"]
+description = "Deploy all integration tests to AWS"
+run = """
+set -e
+echo "Deploying all integration tests"
+for f in test/*.integ.ts; do
+  if [ -f "$f" ]; then
+    basename=$(basename "$f" .integ.ts)
+    echo "  - $basename"
+    TEST="$basename" mise run cdk:test:integ:deploy:single
+  fi
+done
+echo "All integration tests deployed successfully"
+"""
+
+
+
+[tasks.compat]
+description = "Check API compatibility"
+run = """
+npx jsii-diff npm:$(node -p "require('./package.json').name") -k --ignore-file .compatignore || \
+(echo "\nUNEXPECTED BREAKING CHANGES: add keys such as 'removed:constructs.Node.of' to .compatignore to skip.\n" && exit 1)
+"""
+
+[tasks."jsii:prepare-version"]
+description = "Update package.json version using commit-and-tag-version"
+run = """
+set -e
+
+# Get the current git tag to determine version type
+TAG=$(git describe --tags --exact-match 2>/dev/null || echo "")
+
+if [ -z "$TAG" ]; then
+  echo "ERROR: Not on a tagged commit. Cannot determine version."
+  exit 1
+fi
+
+# Remove 'v' prefix from tag to get version
+VERSION="${TAG#v}"
+
+echo "Preparing version: $VERSION (from tag: $TAG)"
+
+# Use commit-and-tag-version to bump version only (skip commit, changelog, tag)
+npx commit-and-tag-version --release-as "$VERSION" -c .versionrc-publish
+
+echo "Updated package.json version to: $VERSION"
+"""
+
+[tasks.release]
+description = "Build and prepare release"
+depends = ["build-common"]
+run = """
+mise run jsii:prepare-version
+mise run jsii
+mise run jsii-pacmak:all
+"""
+
+[tasks.watch]
+description = "Watch and recompile on changes"
+run = "tsc --watch"

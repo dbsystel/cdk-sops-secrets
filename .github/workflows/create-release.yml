@@ -1,0 +1,71 @@
+name: create-release
+
+on:
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    env:
+      CI: true
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+
+      - name: Install mise
+        uses: jdx/mise-action@v2
+        with:
+          experimental: true
+
+      - name: Install dependencies
+        run: mise run install:ci
+
+      - name: Set git identity
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Create version and tag
+        id: version
+        run: |
+          # Run commit-and-tag-version to bump version, update changelog, and create tag
+          npx commit-and-tag-version -c .versionrc-release
+
+          # Get the new version tag
+          NEW_TAG=$(git describe --tags --abbrev=0)
+          echo "new_tag=$NEW_TAG" >> $GITHUB_OUTPUT
+
+          # Extract changelog for this version
+          # This extracts content between the first two version headers
+          CHANGELOG_CONTENT=$(awk '/^## \[/{if(++count==2) exit; if(count==1) next} count==1' CHANGELOG.md)
+
+          # Save changelog to file for multiline handling
+          echo "$CHANGELOG_CONTENT" > /tmp/release_notes.md
+
+          echo "Prepared release $NEW_TAG"
+
+      - name: Push changes and tag
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Push the version bump commit and tag
+          git push --follow-tags origin main
+
+      - name: Create GitHub Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Create GitHub release using the changelog content
+          gh release create ${{ steps.version.outputs.new_tag }} \
+            --title "${{ steps.version.outputs.new_tag }}" \
+            --notes-file /tmp/release_notes.md

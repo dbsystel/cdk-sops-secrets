@@ -8,7 +8,7 @@ import { SopsCommonParameterProps } from './SopsStringParameter';
 import { ResourceType, SopsSync, SopsSyncOptions } from './SopsSync';
 
 interface JSONObject {
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 export interface MultiStringParameterProps extends SopsCommonParameterProps {
@@ -32,23 +32,27 @@ function flattenJSON(
   result: JSONObject = {},
   keySeparator = '',
 ): JSONObject {
-  for (let key in data) {
-    if (data.hasOwnProperty(key)) {
-      let newKey = parentKey ? `${parentKey}${keySeparator}${key}` : key;
-      if (Array.isArray(data[key])) {
-        data[key].forEach((item: JSONObject | null, index: any) => {
-          let arrayKey = `${newKey}[${index}]`;
-          if (typeof item === 'object' && item !== null) {
-            flattenJSON(item, arrayKey, result, keySeparator);
-          } else {
-            result[arrayKey] = item;
-          }
-        });
-      } else if (typeof data[key] === 'object' && data[key] !== null) {
-        flattenJSON(data[key], newKey, result, keySeparator);
-      } else {
-        result[newKey] = data[key];
-      }
+  for (const key of Object.keys(data)) {
+    const value = data[key];
+    const newKey = parentKey ? `${parentKey}${keySeparator}${key}` : key;
+
+    if (Array.isArray(value)) {
+      value.forEach((item, index) => {
+        const arrayKey = `${newKey}[${index}]`;
+        if (item !== null && typeof item === 'object' && !Array.isArray(item)) {
+          flattenJSON(item as JSONObject, arrayKey, result, keySeparator);
+        } else {
+          result[arrayKey] = item as unknown;
+        }
+      });
+    } else if (
+      value !== null &&
+      typeof value === 'object' &&
+      !Array.isArray(value)
+    ) {
+      flattenJSON(value as JSONObject, newKey, result, keySeparator);
+    } else {
+      result[newKey] = value;
     }
   }
   return result;

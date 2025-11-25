@@ -162,17 +162,17 @@ const multi = new MultiStringParameter(stack, 'MyMultiParameter', {
 This will create several AWS SSM ParameterStore Parameters:
 
 ```bash
-ParameterName       => Value
+ParameterName       Value
 
-/apiKey             => "sk-1234567890abcdef"
-/database/user      => "admin"
-/database/password  => "P@ssw0rd!"
-/database/host      => "db.example.com"
-/tokens/0/service   => "github"
-/tokens/0/token     => "ghp_abcd1234"
-/tokens/1/service   => "aws"
-/tokens/1/token     => "AKIAIOSFODNN7EXAMPLE"
-/someOtherKey       => "base64:VGhpcyBpcyBhIHNlY3JldCBrZXk="
+/apiKey             "sk-1234567890abcdef"
+/database/user      "admin"
+/database/password  "P@ssw0rd!"
+/database/host      "db.example.com"
+/tokens/0/service   "github"
+/tokens/0/token     "ghp_abcd1234"
+/tokens/1/service   "aws"
+/tokens/1/token     "AKIAIOSFODNN7EXAMPLE"
+/someOtherKey       "base64:VGhpcyBpcyBhIHNlY3JldCBrZXk="
 ```
 
 You can configure the naming schema via the properties `keySeperator` and `keyPrefix`:
@@ -187,11 +187,11 @@ const multi = new MultiStringParameter(stack, 'MyMultiParameter', {
 This would lead to Parameters
 
 ```bash
-ParameterName       => Value
+ParameterName                 Value
 
-mykeyprefix.apiKey             => "sk-1234567890abcdef"
-mykeyprefix.database-user      => "admin"
-mykeyprefix.tokens-0-service   => "github"
+mykeyprefix.apiKey            "sk-1234567890abcdef"
+mykeyprefix.database-user     "admin"
+mykeyprefix.tokens-0-service  "github"
 ...
 ```
 
@@ -327,25 +327,25 @@ It was required to change some user facing configuration properties. So minor ch
 
 - Removed property convertToJSON, flatten, stringifiedValues
 - Use property rawOutput instaed:
-  - `undefined / not set` => (default) convertToJSON and flatten and stringifiedValues = true
-  - `RawOutput.STRING` => convertToJSON and flatten and stringifiedValues = false
-  - `RawOutput.BINARY` => convertToJSON and flatten and stringifiedValues = false and Secret is binary
+  - `undefined / not set`: (default) convertToJSON and flatten and stringifiedValues = true
+  - `RawOutput.STRING`: convertToJSON and flatten and stringifiedValues = false
+  - `RawOutput.BINARY`: convertToJSON and flatten and stringifiedValues = false and Secret is binary
 
 ### Parameter
 
-- Removed property convertToJSON, flatten, stringifiedValues => all of them made no sense - now only raw output of decrypted secret
+- Removed property convertToJSON, flatten, stringifiedValues - all of them made no sense - now only raw output of decrypted secret
 
 ### MultiParameter
 
-- Removed property convertToJSON, flatten, stringifiedValues => most of this combinations made no sense
+- Removed property convertToJSON, flatten, stringifiedValues - most of this combinations made no sense
 - Allways convertToJson and flatten (as we have to parse it to create multiple parameters)
 - You are allowed to chose the flattenSeperator
 
 ## It does not work, what can I do?
 
-Even if this construct has some unit and integration tests performed, there can be bugs and issues. As everything is performed by a cloudformation custom resource provider, a good starting point is the log of the corresponding lambda function. It should be located in your AWS Account under Cloudwatch -> Log groups:
+Even if this construct has some unit and integration tests performed, there can be bugs and issues. As everything is performed by a cloudformation custom resource provider, a good starting point is the log of the corresponding lambda function. It should be located in your AWS Account under Cloudwatch - Log groups:
 
-`/aws/lambda/<YOUR-STACK-NAME>-SingletonLambdaSopsSyncProvider<SOMETHINGsomething1234>`
+`/aws/lambda/YOUR-STACK-NAME-SingletonLambdaSopsSyncProviderSOMETHINGsomething1234`
 
 ## I get errors with `dotenv` formatted files
 

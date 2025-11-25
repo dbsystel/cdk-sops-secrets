@@ -1,0 +1,6 @@
+{
+  "bump-files": [],
+  "skip": {
+    "commit": true
+  }
+}
