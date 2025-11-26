@@ -60,9 +60,6 @@ jobs:
       id-token: write
       contents: read
     steps:
-      - name: Install mise
-        uses: jdx/mise-action@v2
-
       - name: Download build artifacts
         uses: actions/download-artifact@v5
         with:
@@ -73,7 +70,13 @@ jobs:
         run: cd dist && setfacl --restore=permissions-backup.acl
         continue-on-error: true
 
-      - name: Publish
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24.x'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Release
         env:
           NPM_DIST_TAG: latest
           NPM_REGISTRY: registry.npmjs.org
@@ -118,9 +121,6 @@ jobs:
       contents: read
       id-token: write
     steps:
-      - name: Install mise
-        uses: jdx/mise-action@v2
-
       - name: Download build artifacts
         uses: actions/download-artifact@v5
         with:
@@ -131,7 +131,17 @@ jobs:
         run: cd dist && setfacl --restore=permissions-backup.acl
         continue-on-error: true
 
-      - name: Publish
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 'lts/*'
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Release
         env:
           PYPI_TRUSTED_PUBLISHER: 'true'
         run: npx -p publib@latest publib-pypi
