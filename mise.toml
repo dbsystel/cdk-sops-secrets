@@ -133,18 +133,22 @@ go test -race -tags=integration -coverprofile=../coverage/coverage.out -covermod
 
 [tasks."cdk:eslint"]
 description = "Run ESLint"
+depends = ["cdk:deps"]
 run = "npx eslint --ext .ts,.tsx src test"
 
 [tasks."cdk:eslint:fix"]
 description = "Fix ESLint issues"
+depends = ["cdk:deps"]
 run = "npx eslint --ext .ts,.tsx --fix src test"
 
 [tasks."cdk:prettier:fix"]
 description = "Format code with Prettier"
+depends = ["cdk:deps"]
 run = "npx prettier --write 'src/**/*.ts' 'test/**/*.ts'"
 
 [tasks."cdk:prettier:check"]
 description = "Check code formatting"
+depends = ["cdk:deps"]
 run = "npx prettier --check 'src/**/*.ts' 'test/**/*.ts'"
 
 [tasks.build]
