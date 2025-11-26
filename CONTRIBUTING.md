@@ -36,8 +36,6 @@ This approach ensures a consistent development environment across all contributo
 
 ```bash
 mise run install
-# or for CI environments:
-mise run install:ci
 ```
 
 ### Building

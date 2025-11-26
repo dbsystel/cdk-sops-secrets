@@ -14,32 +14,40 @@ dotnet = "6"
 
 [tasks.install]
 description = "Install npm dependencies + Go modules"
-depends = ["lambda:deps"]
-run = "npm install"
-
-[tasks."install:ci"]
-description = "Install npm dependencies (CI) + Go modules"
-depends = ["lambda:deps"]
-run = "npm ci"
+depends = ["lambda:deps", "cdk:deps"]
 
 [tasks.clean]
 description = "Clean build artifacts (including lambda assets)"
 run = "rm -rf lib dist .jsii tsconfig.json coverage test-reports assets"
 
+[tasks."cdk:deps"]
+description = "Prepare CDK dependencies"
+run = "npm ci"
+
 [tasks."cdk:codegen:types"]
 description = "Generate TypeScript types from JSON schema"
+depends = ["cdk:deps"]
+sources = ["lambda/internal/event/config-schema.json"]
+outputs = ["src/LambdaInterface.ts"]
 run = "npx json-schema-to-typescript lambda/internal/event/config-schema.json -o src/LambdaInterface.ts"
 
 [tasks.jsii]
 description = "Compile TypeScript with jsii"
+depends = ["cdk:codegen:types", "cdk:prettier:fix", "cdk:eslint:fix"]
+sources = ["src/**/*.ts", "tsconfig.json", "package.json"]
+outputs = ["lib/**/*", ".jsii"]
 run = "npx jsii --silence-warnings=reserved-word"
 
 [tasks.jsii-docgen]
 description = "Generate API documentation"
+depends = ["jsii"]
+sources = [".jsii"]
+outputs = ["API.md"]
 run = "npx jsii-docgen -o API.md"
 
 [tasks."cdk:test:jest"]
 description = "Run TypeScript tests with Jest"
+depends = ["cdk:deps", "lambda:build"]
 run = """
 if [ -n "$CI" ]; then
   npx jest --passWithNoTests --coverageProvider=v8
@@ -78,7 +86,9 @@ go test -race -coverprofile=../coverage/coverage.out -covermode=atomic -v
 
 [tasks."lambda:build"]
 description = "Build Go lambda binary and package zip"
-depends = ["lambda:deps"]
+depends = ["lambda:test"]
+sources = ["lambda/**/*.go", "lambda/go.mod", "lambda/go.sum"]
+outputs = ["assets/cdk-sops-lambda.zip"]
 run = '''
 echo "GOROOT: $GOROOT / GOPATH: $GOPATH"
 BASEPATH=$(git rev-parse --show-toplevel)
@@ -123,62 +133,68 @@ go test -race -tags=integration -coverprofile=../coverage/coverage.out -covermod
 
 [tasks."cdk:eslint"]
 description = "Run ESLint"
+depends = ["cdk:deps"]
 run = "npx eslint --ext .ts,.tsx src test"
 
 [tasks."cdk:eslint:fix"]
 description = "Fix ESLint issues"
+depends = ["cdk:deps"]
 run = "npx eslint --ext .ts,.tsx --fix src test"
 
 [tasks."cdk:prettier:fix"]
 description = "Format code with Prettier"
+depends = ["cdk:deps", "cdk:eslint:fix"]
 run = "npx prettier --write 'src/**/*.ts' 'test/**/*.ts'"
 
 [tasks."cdk:prettier:check"]
 description = "Check code formatting"
+depends = ["cdk:deps", "cdk:eslint"]
 run = "npx prettier --check 'src/**/*.ts' 'test/**/*.ts'"
 
 [tasks.build]
 description = "Build (lambda, compile, test, lint, verify, package)"
-run = """
-set -e
-
-mise run lambda:test
-mise run lambda:build
-mise run cdk:codegen:types
-mise run cdk:prettier:fix
-mise run cdk:eslint:fix
-mise run cdk:test:jest
-mise run cdk:test:integ:snapshot
-mise run jsii
-mise run jsii-docgen
-mise run verify
-mise run jsii-pacmak:all
-"""
+depends = [
+  "verify",
+  "jsii-pacmak:all"
+]
 
 [tasks."jsii-pacmak:js"]
 description = "Package for npm"
+depends = ["jsii"]
+sources = [".jsii", "lib/**/*"]
+outputs = ["dist/js/**/*"]
 run = "npx jsii-pacmak -v --target js"
 
 [tasks."jsii-pacmak:java"]
 description = "Package for Maven"
+depends = ["jsii"]
+sources = [".jsii", "lib/**/*"]
+outputs = ["dist/java/**/*"]
 run = "npx jsii-pacmak -v --target java"
 
 [tasks."jsii-pacmak:python"]
 description = "Package for PyPI"
+depends = ["jsii"]
+sources = [".jsii", "lib/**/*"]
+outputs = ["dist/python/**/*"]
 run = "npx jsii-pacmak -v --target python"
 
 [tasks."jsii-pacmak:dotnet"]
 description = "Package for NuGet"
+depends = ["jsii"]
+sources = [".jsii", "lib/**/*"]
+outputs = ["dist/dotnet/**/*"]
 run = "npx jsii-pacmak -v --target dotnet"
 
 [tasks."jsii-pacmak:all"]
-description = "Package for all targets"
+description = "Package for all targets (runs in parallel)"
 depends = ["jsii-pacmak:js", "jsii-pacmak:java", "jsii-pacmak:python", "jsii-pacmak:dotnet"]
 
 # Integration test snapshot tasks
 
 [tasks."cdk:test:integ:snapshot:single"]
 description = "Generate snapshot for a single test (internal use)"
+depends = ["lambda:build"]
 run = """
 set -e
 if [ -z "$TEST" ]; then
@@ -209,12 +225,14 @@ for f in test/*.integ.ts; do
     echo "  - $basename"
     TEST="$basename" mise run cdk:test:integ:snapshot:single
   fi
-done
+ done
 echo "All snapshots saved to test/__snapshots__/"
 """
 
+
 [tasks."verify"]
 description = "Verify no files changed during build (shows all diffs)"
+depends = ["cdk:test:integ:snapshot", "cdk:test:jest", "lambda:test"]
 run = """
 set -e
 echo "Verifying no files changed during build..."
@@ -259,6 +277,7 @@ done
 
 [tasks."cdk:test:integ:deploy:single"]
 description = "Deploy integration test for a single test (internal use)"
+depends = ["lambda:build"]
 run = """
 set -e
 if [ -z "$TEST" ]; then
