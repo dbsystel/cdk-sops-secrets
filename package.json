@@ -141,7 +141,7 @@
   ],
   "commit-and-tag-version": {
     "scripts": {
-      "precommit": "npm i --package-lock-only && git add package-lock.json"
+      "postbump": "git restore package-lock.json && npm i --package-lock-only"
     }
   }
 }
