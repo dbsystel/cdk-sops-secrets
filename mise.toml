@@ -216,7 +216,6 @@ done
 
 [tasks."cdk:test:integ:snapshot"]
 description = "Generate CloudFormation template snapshots for all tests"
-depends = ["lambda:build"]
 run = """
 set -e
 echo "Generating snapshots for all integration tests..."
@@ -226,9 +225,10 @@ for f in test/*.integ.ts; do
     echo "  - $basename"
     TEST="$basename" mise run cdk:test:integ:snapshot:single
   fi
-done
+ done
 echo "All snapshots saved to test/__snapshots__/"
 """
+
 
 [tasks."verify"]
 description = "Verify no files changed during build (shows all diffs)"
