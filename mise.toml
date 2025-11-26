@@ -47,7 +47,7 @@ run = "npx jsii-docgen -o API.md"
 
 [tasks."cdk:test:jest"]
 description = "Run TypeScript tests with Jest"
-depends = ["jsii", "lambda:build"]
+depends = ["cdk:deps", "lambda:build"]
 run = """
 if [ -n "$CI" ]; then
   npx jest --passWithNoTests --coverageProvider=v8
