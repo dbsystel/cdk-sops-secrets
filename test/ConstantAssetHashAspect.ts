@@ -22,12 +22,6 @@ export class ConstantAssetHashAspect implements cdk.IAspect {
             'Code.S3Key',
             `asset.${constantHash}.zip`,
           );
-
-          // Override the asset path metadata to prevent snapshot changes
-          cfnFunction.addMetadata(
-            'aws:asset:path',
-            `asset.${constantHash}.zip`,
-          );
         }
       }
     }

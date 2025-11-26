@@ -189,7 +189,7 @@ mkdir -p test/__snapshots__
 temp_dir=$(mktemp -d)
 trap "rm -rf $temp_dir" EXIT
 
-npx cdk synth --app "npx ts-node test/$TEST.integ.ts" --output "$temp_dir" --quiet
+npx cdk synth --app "npx ts-node test/$TEST.integ.ts" --output "$temp_dir" --quiet --version-reporting false --path-metadata false --asset-metadata false
 for template in "$temp_dir"/*.template.json; do
   if [ -f "$template" ]; then
     cp "$template" "test/__snapshots__/$TEST.integ.snapshot.json"
