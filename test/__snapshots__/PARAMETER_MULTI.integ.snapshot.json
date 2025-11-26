@@ -7,9 +7,6 @@
     "Tier": "Standard",
     "Type": "String",
     "Value": " "
-   },
-   "Metadata": {
-    "aws:cdk:path": "PARAMETERMULTI/Json/Resource--Json--apiKey/Resource"
    }
   },
   "JsonResourceJsondatabaseuserD88F8D25": {
@@ -19,9 +16,6 @@
     "Tier": "Standard",
     "Type": "String",
     "Value": " "
-   },
-   "Metadata": {
-    "aws:cdk:path": "PARAMETERMULTI/Json/Resource--Json--database--user/Resource"
    }
   },
   "JsonResourceJsondatabasepassword12EBC48E": {
@@ -31,9 +25,6 @@
     "Tier": "Standard",
     "Type": "String",
     "Value": " "
-   },
-   "Metadata": {
-    "aws:cdk:path": "PARAMETERMULTI/Json/Resource--Json--database--password/Resource"
    }
   },
   "JsonResourceJsondatabasehost37888D7D": {
@@ -43,9 +34,6 @@
     "Tier": "Standard",
     "Type": "String",
     "Value": " "
-   },
-   "Metadata": {
-    "aws:cdk:path": "PARAMETERMULTI/Json/Resource--Json--database--host/Resource"
    }
   },
   "JsonResourceJsontokens0service92C0D936": {
@@ -55,9 +43,6 @@
     "Tier": "Standard",
     "Type": "String",
     "Value": " "
-   },
-   "Metadata": {
-    "aws:cdk:path": "PARAMETERMULTI/Json/Resource--Json--tokens--0--service/Resource"
    }
   },
   "JsonResourceJsontokens0token105295EA": {
@@ -67,9 +52,6 @@
     "Tier": "Standard",
     "Type": "String",
     "Value": " "
-   },
-   "Metadata": {
-    "aws:cdk:path": "PARAMETERMULTI/Json/Resource--Json--tokens--0--token/Resource"
    }
   },
   "JsonResourceJsontokens1service387D7891": {
@@ -79,9 +61,6 @@
     "Tier": "Standard",
     "Type": "String",
     "Value": " "
-   },
-   "Metadata": {
-    "aws:cdk:path": "PARAMETERMULTI/Json/Resource--Json--tokens--1--service/Resource"
    }
   },
   "JsonResourceJsontokens1token4D4522D2": {
@@ -91,9 +70,6 @@
     "Tier": "Standard",
     "Type": "String",
     "Value": " "
-   },
-   "Metadata": {
-    "aws:cdk:path": "PARAMETERMULTI/Json/Resource--Json--tokens--1--token/Resource"
    }
   },
   "JsonResourceJsonsomeOtherKey8C556C1F": {
@@ -103,9 +79,6 @@
     "Tier": "Standard",
     "Type": "String",
     "Value": " "
-   },
-   "Metadata": {
-    "aws:cdk:path": "PARAMETERMULTI/Json/Resource--Json--someOtherKey/Resource"
    }
   },
   "JsonResourceJsonspecificSpecialCharacters340895B2": {
@@ -115,9 +88,6 @@
     "Tier": "Standard",
     "Type": "String",
     "Value": " "
-   },
-   "Metadata": {
-    "aws:cdk:path": "PARAMETERMULTI/Json/Resource--Json--specific--SpecialCharacters/Resource"
    }
   },
   "JsonResourceJsonspecificHTMLEncodingTest101B8C7B8": {
@@ -127,9 +97,6 @@
     "Tier": "Standard",
     "Type": "String",
     "Value": " "
-   },
-   "Metadata": {
-    "aws:cdk:path": "PARAMETERMULTI/Json/Resource--Json--specific--HTMLEncodingTest1/Resource"
    }
   },
   "JsonResourceJsonspecificHTMLEncodingTest2479B055F": {
@@ -139,9 +106,6 @@
     "Tier": "Standard",
     "Type": "String",
     "Value": " "
-   },
-   "Metadata": {
-    "aws:cdk:path": "PARAMETERMULTI/Json/Resource--Json--specific--HTMLEncodingTest2/Resource"
    }
   },
   "JsonResourceJsonspecificHTLMEncodingTest3773A92F2": {
@@ -151,9 +115,6 @@
     "Tier": "Standard",
     "Type": "String",
     "Value": " "
-   },
-   "Metadata": {
-    "aws:cdk:path": "PARAMETERMULTI/Json/Resource--Json--specific--HTLMEncodingTest3/Resource"
    }
   },
   "JsonResourceJsonspecificnullEFE6F24D": {
@@ -163,9 +124,6 @@
     "Tier": "Standard",
     "Type": "String",
     "Value": " "
-   },
-   "Metadata": {
-    "aws:cdk:path": "PARAMETERMULTI/Json/Resource--Json--specific--null/Resource"
    }
   },
   "JsonResourceJsonspecificbooleanDCCAF95E": {
@@ -175,9 +133,6 @@
     "Tier": "Standard",
     "Type": "String",
     "Value": " "
-   },
-   "Metadata": {
-    "aws:cdk:path": "PARAMETERMULTI/Json/Resource--Json--specific--boolean/Resource"
    }
   },
   "JsonResourceJsonspecificnumber120FA2919": {
@@ -187,9 +142,6 @@
     "Tier": "Standard",
     "Type": "String",
     "Value": " "
-   },
-   "Metadata": {
-    "aws:cdk:path": "PARAMETERMULTI/Json/Resource--Json--specific--number1/Resource"
    }
   },
   "JsonResourceJsonspecificnumber2B2EBD3ED": {
@@ -199,9 +151,6 @@
     "Tier": "Standard",
     "Type": "String",
     "Value": " "
-   },
-   "Metadata": {
-    "aws:cdk:path": "PARAMETERMULTI/Json/Resource--Json--specific--number2/Resource"
    }
   },
   "JsonSopsSyncSopsSecretParameterProviderManagedPolicyParameterAccess0B4B19A62": {
@@ -492,9 +441,6 @@
      ],
      "Version": "2012-10-17"
     }
-   },
-   "Metadata": {
-    "aws:cdk:path": "PARAMETERMULTI/Json/SopsSync/SopsSecretParameterProviderManagedPolicyParameterAccess0/Resource"
    }
   },
   "JsonSopsSync13335C85": {
@@ -517,10 +463,7 @@
     "Target": "/Json/"
    },
    "UpdateReplacePolicy": "Delete",
-   "DeletionPolicy": "Delete",
-   "Metadata": {
-    "aws:cdk:path": "PARAMETERMULTI/Json/SopsSync/Resource/Default"
-   }
+   "DeletionPolicy": "Delete"
   },
   "SingletonLambdaSopsSyncProviderServiceRoleC45BBD25": {
    "Type": "AWS::IAM::Role",
@@ -557,9 +500,6 @@
       "Ref": "YamlSopsSyncSopsSecretParameterProviderManagedPolicyParameterAccess0A22A1629"
      }
     ]
-   },
-   "Metadata": {
-    "aws:cdk:path": "PARAMETERMULTI/SingletonLambdaSopsSyncProvider/ServiceRole/Resource"
    }
   },
   "SingletonLambdaSopsSyncProviderServiceRoleDefaultPolicy45D64FF6": {
@@ -586,9 +526,6 @@
       "Ref": "SingletonLambdaSopsSyncProviderServiceRoleC45BBD25"
      }
     ]
-   },
-   "Metadata": {
-    "aws:cdk:path": "PARAMETERMULTI/SingletonLambdaSopsSyncProvider/ServiceRole/DefaultPolicy/Resource"
    }
   },
   "SingletonLambdaSopsSyncProviderAA18D140": {
@@ -618,13 +555,7 @@
    "DependsOn": [
     "SingletonLambdaSopsSyncProviderServiceRoleDefaultPolicy45D64FF6",
     "SingletonLambdaSopsSyncProviderServiceRoleC45BBD25"
-   ],
-   "Metadata": {
-    "aws:cdk:path": "PARAMETERMULTI/SingletonLambdaSopsSyncProvider/Resource",
-    "aws:asset:path": "asset.0000000000000000000000000000000000000000000000000000000015b4c85d.zip",
-    "aws:asset:is-bundled": false,
-    "aws:asset:property": "Code"
-   }
+   ]
   },
   "YamlResourceYamlapiKey6387C0EA": {
    "Type": "AWS::SSM::Parameter",
@@ -633,9 +564,6 @@
     "Tier": "Standard",
     "Type": "String",
     "Value": " "
-   },
-   "Metadata": {
-    "aws:cdk:path": "PARAMETERMULTI/Yaml/Resource--Yaml--apiKey/Resource"
    }
   },
   "YamlResourceYamldatabaseuser0BD59C5D": {
@@ -645,9 +573,6 @@
     "Tier": "Standard",
     "Type": "String",
     "Value": " "
-   },
-   "Metadata": {
-    "aws:cdk:path": "PARAMETERMULTI/Yaml/Resource--Yaml--database--user/Resource"
    }
   },
   "YamlResourceYamldatabasepassword99035603": {
@@ -657,9 +582,6 @@
     "Tier": "Standard",
     "Type": "String",
     "Value": " "
-   },
-   "Metadata": {
-    "aws:cdk:path": "PARAMETERMULTI/Yaml/Resource--Yaml--database--password/Resource"
    }
   },
   "YamlResourceYamldatabasehostB5A0FE91": {
@@ -669,9 +591,6 @@
     "Tier": "Standard",
     "Type": "String",
     "Value": " "
-   },
-   "Metadata": {
-    "aws:cdk:path": "PARAMETERMULTI/Yaml/Resource--Yaml--database--host/Resource"
    }
   },
   "YamlResourceYamltokens0service8AE519C3": {
@@ -681,9 +600,6 @@
     "Tier": "Standard",
     "Type": "String",
     "Value": " "
-   },
-   "Metadata": {
-    "aws:cdk:path": "PARAMETERMULTI/Yaml/Resource--Yaml--tokens--0--service/Resource"
    }
   },
   "YamlResourceYamltokens0token8810E18D": {
@@ -693,9 +609,6 @@
     "Tier": "Standard",
     "Type": "String",
     "Value": " "
-   },
-   "Metadata": {
-    "aws:cdk:path": "PARAMETERMULTI/Yaml/Resource--Yaml--tokens--0--token/Resource"
    }
   },
   "YamlResourceYamltokens1service870E3CC4": {
@@ -705,9 +618,6 @@
     "Tier": "Standard",
     "Type": "String",
     "Value": " "
-   },
-   "Metadata": {
-    "aws:cdk:path": "PARAMETERMULTI/Yaml/Resource--Yaml--tokens--1--service/Resource"
    }
   },
   "YamlResourceYamltokens1tokenAC2DFE7E": {
@@ -717,9 +627,6 @@
     "Tier": "Standard",
     "Type": "String",
     "Value": " "
-   },
-   "Metadata": {
-    "aws:cdk:path": "PARAMETERMULTI/Yaml/Resource--Yaml--tokens--1--token/Resource"
    }
   },
   "YamlResourceYamlsomeOtherKey98D03965": {
@@ -729,9 +636,6 @@
     "Tier": "Standard",
     "Type": "String",
     "Value": " "
-   },
-   "Metadata": {
-    "aws:cdk:path": "PARAMETERMULTI/Yaml/Resource--Yaml--someOtherKey/Resource"
    }
   },
   "YamlResourceYamlspecificSpecialCharacters5B206BEA": {
@@ -741,9 +645,6 @@
     "Tier": "Standard",
     "Type": "String",
     "Value": " "
-   },
-   "Metadata": {
-    "aws:cdk:path": "PARAMETERMULTI/Yaml/Resource--Yaml--specific--SpecialCharacters/Resource"
    }
   },
   "YamlResourceYamlspecificHTMLEncodingTest10D2233FA": {
@@ -753,9 +654,6 @@
     "Tier": "Standard",
     "Type": "String",
     "Value": " "
-   },
-   "Metadata": {
-    "aws:cdk:path": "PARAMETERMULTI/Yaml/Resource--Yaml--specific--HTMLEncodingTest1/Resource"
    }
   },
   "YamlResourceYamlspecificHTMLEncodingTest2761B8FA7": {
@@ -765,9 +663,6 @@
     "Tier": "Standard",
     "Type": "String",
     "Value": " "
-   },
-   "Metadata": {
-    "aws:cdk:path": "PARAMETERMULTI/Yaml/Resource--Yaml--specific--HTMLEncodingTest2/Resource"
    }
   },
   "YamlResourceYamlspecificHTLMEncodingTest32407BA78": {
@@ -777,9 +672,6 @@
     "Tier": "Standard",
     "Type": "String",
     "Value": " "
-   },
-   "Metadata": {
-    "aws:cdk:path": "PARAMETERMULTI/Yaml/Resource--Yaml--specific--HTLMEncodingTest3/Resource"
    }
   },
   "YamlResourceYamlspecificnull5A2012DC": {
@@ -789,9 +681,6 @@
     "Tier": "Standard",
     "Type": "String",
     "Value": " "
-   },
-   "Metadata": {
-    "aws:cdk:path": "PARAMETERMULTI/Yaml/Resource--Yaml--specific--null/Resource"
    }
   },
   "YamlResourceYamlspecificboolean377BB393": {
@@ -801,9 +690,6 @@
     "Tier": "Standard",
     "Type": "String",
     "Value": " "
-   },
-   "Metadata": {
-    "aws:cdk:path": "PARAMETERMULTI/Yaml/Resource--Yaml--specific--boolean/Resource"
    }
   },
   "YamlResourceYamlspecificnumber1E294648B": {
@@ -813,9 +699,6 @@
     "Tier": "Standard",
     "Type": "String",
     "Value": " "
-   },
-   "Metadata": {
-    "aws:cdk:path": "PARAMETERMULTI/Yaml/Resource--Yaml--specific--number1/Resource"
    }
   },
   "YamlResourceYamlspecificnumber28F676023": {
@@ -825,9 +708,6 @@
     "Tier": "Standard",
     "Type": "String",
     "Value": " "
-   },
-   "Metadata": {
-    "aws:cdk:path": "PARAMETERMULTI/Yaml/Resource--Yaml--specific--number2/Resource"
    }
   },
   "YamlSopsSyncSopsSecretParameterProviderManagedPolicyParameterAccess0A22A1629": {
@@ -1118,9 +998,6 @@
      ],
      "Version": "2012-10-17"
     }
-   },
-   "Metadata": {
-    "aws:cdk:path": "PARAMETERMULTI/Yaml/SopsSync/SopsSecretParameterProviderManagedPolicyParameterAccess0/Resource"
    }
   },
   "YamlSopsSync65050259": {
@@ -1143,286 +1020,7 @@
     "Target": "/Yaml/"
    },
    "UpdateReplacePolicy": "Delete",
-   "DeletionPolicy": "Delete",
-   "Metadata": {
-    "aws:cdk:path": "PARAMETERMULTI/Yaml/SopsSync/Resource/Default"
-   }
-  },
-  "CDKMetadata": {
-   "Type": "AWS::CDK::Metadata",
-   "Properties": {
-    "Analytics": "v2:deflate64:H4sIAAAAAAAA/1WP0WrDMAxFv6XvjtamhT2vgb0NSvIBRXVUo8aWwXJWSvC/D7csY0/36OiCUAtt+w7bDd61sePUeL7AMmS0k+lJ45wsGbzreVENdZFY3AkTBsqUTHeVdSiGMcDyhYKOxlP0bB+18F/00VO1z/wrvagYj+EyIiwDi/OUo3zOYjNHMSt011UWo/szqlJW+KhhdA/H2U6Uj6hUTDdrjmF9pN795Wd/yOhYXDESR4Kbvn23B9jtYLu5KXOTZskcCPpX/gAD0+aFLAEAAA=="
-   },
-   "Metadata": {
-    "aws:cdk:path": "PARAMETERMULTI/CDKMetadata/Default"
-   },
-   "Condition": "CDKMetadataAvailable"
-  }
- },
- "Conditions": {
-  "CDKMetadataAvailable": {
-   "Fn::Or": [
-    {
-     "Fn::Or": [
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "af-south-1"
-       ]
-      },
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "ap-east-1"
-       ]
-      },
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "ap-northeast-1"
-       ]
-      },
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "ap-northeast-2"
-       ]
-      },
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "ap-northeast-3"
-       ]
-      },
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "ap-south-1"
-       ]
-      },
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "ap-south-2"
-       ]
-      },
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "ap-southeast-1"
-       ]
-      },
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "ap-southeast-2"
-       ]
-      },
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "ap-southeast-3"
-       ]
-      }
-     ]
-    },
-    {
-     "Fn::Or": [
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "ap-southeast-4"
-       ]
-      },
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "ca-central-1"
-       ]
-      },
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "ca-west-1"
-       ]
-      },
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "cn-north-1"
-       ]
-      },
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "cn-northwest-1"
-       ]
-      },
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "eu-central-1"
-       ]
-      },
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "eu-central-2"
-       ]
-      },
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "eu-north-1"
-       ]
-      },
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "eu-south-1"
-       ]
-      },
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "eu-south-2"
-       ]
-      }
-     ]
-    },
-    {
-     "Fn::Or": [
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "eu-west-1"
-       ]
-      },
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "eu-west-2"
-       ]
-      },
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "eu-west-3"
-       ]
-      },
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "il-central-1"
-       ]
-      },
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "me-central-1"
-       ]
-      },
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "me-south-1"
-       ]
-      },
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "sa-east-1"
-       ]
-      },
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "us-east-1"
-       ]
-      },
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "us-east-2"
-       ]
-      },
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "us-west-1"
-       ]
-      }
-     ]
-    },
-    {
-     "Fn::Equals": [
-      {
-       "Ref": "AWS::Region"
-      },
-      "us-west-2"
-     ]
-    }
-   ]
+   "DeletionPolicy": "Delete"
   }
  },
  "Parameters": {
