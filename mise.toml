@@ -143,12 +143,12 @@ run = "npx eslint --ext .ts,.tsx --fix src test"
 
 [tasks."cdk:prettier:fix"]
 description = "Format code with Prettier"
-depends = ["cdk:deps"]
+depends = ["cdk:deps", "cdk:eslint"]
 run = "npx prettier --write 'src/**/*.ts' 'test/**/*.ts'"
 
 [tasks."cdk:prettier:check"]
 description = "Check code formatting"
-depends = ["cdk:deps"]
+depends = ["cdk:deps", "cdk:eslint"]
 run = "npx prettier --check 'src/**/*.ts' 'test/**/*.ts'"
 
 [tasks.build]
