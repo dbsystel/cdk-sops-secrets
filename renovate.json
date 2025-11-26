@@ -20,6 +20,7 @@
     }
   ],
   "postUpdateOptions": ["gomodTidy"],
+  "allowedPostUpgradeCommands": ["mise run jsii-docgen"],
   "postUpgradeTasks": {
     "commands": ["mise run jsii-docgen"],
     "fileFilters": ["package.json", "package-lock.json"],
