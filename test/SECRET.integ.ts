@@ -1,8 +1,12 @@
 import * as cdk from 'aws-cdk-lib';
+import { ConstantAssetHashAspect } from './ConstantAssetHashAspect';
 import { RawOutput, SopsSecret } from '../src/index';
 
 const app = new cdk.App();
 const stack = new cdk.Stack(app, 'SECRET');
+
+// Apply aspect for constant asset IDs
+cdk.Aspects.of(stack).add(new ConstantAssetHashAspect());
 
 interface TestCase {
   name: string;

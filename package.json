@@ -1,96 +1,18 @@
 {
   "name": "cdk-sops-secrets",
   "description": "CDK Constructs that syncs your sops secrets into AWS SecretsManager secrets.",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/dbsystel/cdk-sops-secrets.git"
-  },
-  "scripts": {
-    "build": "npx projen build",
-    "bump": "npx projen bump",
-    "clobber": "npx projen clobber",
-    "compat": "npx projen compat",
-    "compile": "npx projen compile",
-    "default": "npx projen default",
-    "docgen": "npx projen docgen",
-    "eject": "npx projen eject",
-    "eslint": "npx projen eslint",
-    "integ:PARAMETER_MULTI:assert": "npx projen integ:PARAMETER_MULTI:assert",
-    "integ:PARAMETER_MULTI:deploy": "npx projen integ:PARAMETER_MULTI:deploy",
-    "integ:PARAMETER_MULTI:destroy": "npx projen integ:PARAMETER_MULTI:destroy",
-    "integ:PARAMETER_MULTI:snapshot": "npx projen integ:PARAMETER_MULTI:snapshot",
-    "integ:PARAMETER_MULTI:watch": "npx projen integ:PARAMETER_MULTI:watch",
-    "integ:PARAMETER:assert": "npx projen integ:PARAMETER:assert",
-    "integ:PARAMETER:deploy": "npx projen integ:PARAMETER:deploy",
-    "integ:PARAMETER:destroy": "npx projen integ:PARAMETER:destroy",
-    "integ:PARAMETER:snapshot": "npx projen integ:PARAMETER:snapshot",
-    "integ:PARAMETER:watch": "npx projen integ:PARAMETER:watch",
-    "integ:SECRET:assert": "npx projen integ:SECRET:assert",
-    "integ:SECRET:deploy": "npx projen integ:SECRET:deploy",
-    "integ:SECRET:destroy": "npx projen integ:SECRET:destroy",
-    "integ:SECRET:snapshot": "npx projen integ:SECRET:snapshot",
-    "integ:SECRET:watch": "npx projen integ:SECRET:watch",
-    "integ:snapshot-all": "npx projen integ:snapshot-all",
-    "package": "npx projen package",
-    "package-all": "npx projen package-all",
-    "package:dotnet": "npx projen package:dotnet",
-    "package:java": "npx projen package:java",
-    "package:js": "npx projen package:js",
-    "package:python": "npx projen package:python",
-    "post-compile": "npx projen post-compile",
-    "post-upgrade": "npx projen post-upgrade",
-    "pre-compile": "npx projen pre-compile",
-    "release": "npx projen release",
-    "test": "npx projen test",
-    "test:watch": "npx projen test:watch",
-    "unbump": "npx projen unbump",
-    "upgrade": "npx projen upgrade",
-    "watch": "npx projen watch",
-    "projen": "npx projen"
-  },
+  "version": "2.4.5",
+  "license": "Apache-2.0",
   "author": {
     "name": "Markus Siebert",
     "email": "markus.siebert@deutschebahn.com",
     "organization": false
   },
-  "devDependencies": {
-    "@types/jest": "^27.5.2",
-    "@types/node": "^16.18.126",
-    "@typescript-eslint/eslint-plugin": "^8",
-    "@typescript-eslint/parser": "^8",
-    "aws-cdk": "^2",
-    "aws-cdk-lib": "2.227.0",
-    "commit-and-tag-version": "^12",
-    "constructs": "10.0.5",
-    "eslint": "^9",
-    "eslint-config-prettier": "^8.10.2",
-    "eslint-import-resolver-typescript": "^2.7.1",
-    "eslint-plugin-import": "^2.32.0",
-    "eslint-plugin-prettier": "^4.2.5",
-    "jest": "^27.5.1",
-    "jest-junit": "^16",
-    "jsii": "~5.8.0",
-    "jsii-diff": "^1.120.0",
-    "jsii-docgen": "^10.5.0",
-    "jsii-pacmak": "^1.120.0",
-    "jsii-rosetta": "~5.8.0",
-    "json-schema-to-typescript": "^15.0.4",
-    "prettier": "^2.8.8",
-    "projen": "^0.98.20",
-    "ts-jest": "^27.1.5",
-    "ts-node": "^10.9.2",
-    "typescript": "^4.9.5"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dbsystel/cdk-sops-secrets.git"
   },
-  "peerDependencies": {
-    "aws-cdk-lib": "^2.227.0",
-    "constructs": "^10.0.5"
-  },
-  "dependencies": {
-    "yaml": "^2.8.1"
-  },
-  "bundledDependencies": [
-    "yaml"
-  ],
+  "homepage": "https://constructs.dev/packages/cdk-sops-secrets",
   "keywords": [
     "cdk",
     "getsops/sops",
@@ -102,12 +24,47 @@
     "sops"
   ],
   "main": "lib/index.js",
-  "license": "Apache-2.0",
-  "homepage": "https://constructs.dev/packages/cdk-sops-secrets",
+  "types": "lib/index.d.ts",
+  "stability": "stable",
+  "peerDependencies": {
+    "aws-cdk-lib": "^2.227.0",
+    "constructs": "^10.0.5"
+  },
+  "dependencies": {
+    "yaml": "^2.8.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9",
+    "@types/jest": "^27.5.2",
+    "@types/node": "^16.18.126",
+    "@typescript-eslint/eslint-plugin": "^8",
+    "@typescript-eslint/parser": "^8",
+    "aws-cdk": "^2",
+    "aws-cdk-lib": "2.227.0",
+    "commit-and-tag-version": "^12.4.4",
+    "constructs": "10.0.5",
+    "eslint": "^9",
+    "eslint-config-prettier": "^8.10.2",
+    "eslint-import-resolver-typescript": "^2.7.1",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-prettier": "^4.2.5",
+    "jest": "^27.5.1",
+    "jest-junit": "^16",
+    "jsii": "5.9.14",
+    "jsii-diff": "1.120.0",
+    "jsii-docgen": "10.11.4",
+    "jsii-pacmak": "1.120.0",
+    "jsii-rosetta": "5.9.15",
+    "json-schema-to-typescript": "^15.0.4",
+    "prettier": "^2.8.8",
+    "ts-jest": "^27.1.5",
+    "ts-node": "^10.9.2",
+    "typescript": "^4.9.5",
+    "typescript-eslint": "^8"
+  },
   "publishConfig": {
     "access": "public"
   },
-  "version": "0.0.0",
   "jest": {
     "coverageProvider": "v8",
     "testMatch": [
@@ -151,8 +108,6 @@
       }
     }
   },
-  "types": "lib/index.d.ts",
-  "stability": "stable",
   "jsii": {
     "outdir": "dist",
     "targets": {
@@ -177,5 +132,16 @@
       "rootDir": "src"
     }
   },
-  "//": "~~ Generated by projen. To modify, edit .projenrc.js and run \"npx projen\"."
+  "scripts": {
+    "release:tag": "commit-and-tag-version"
+  },
+  "packageManager": "npm@11.6.1",
+  "bundleDependencies": [
+    "yaml"
+  ],
+  "commit-and-tag-version": {
+    "scripts": {
+      "precommit": "npm i --package-lock-only && git add package-lock.json"
+    }
+  }
 }
