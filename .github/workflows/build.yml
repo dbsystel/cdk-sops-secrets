@@ -23,8 +23,5 @@ jobs:
         with:
           experimental: true
 
-      - name: Install dependencies
-        run: mise run install:ci
-
       - name: Build (includes lambda test, lambda build, compile, test, integ verify)
         run: mise run build

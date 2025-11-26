@@ -35,8 +35,6 @@ jobs:
         with:
           experimental: true
 
-      - name: Install dependencies
-        run: mise run install:ci
 
       - name: Build / prepare dist
         run: mise run build

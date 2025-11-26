@@ -5,6 +5,7 @@ on:
 
 permissions:
   contents: write
+  actions: write
 
 jobs:
   release:
@@ -28,7 +29,7 @@ jobs:
           experimental: true
 
       - name: Install dependencies
-        run: mise run install:ci
+        run: mise run install
 
       - name: Set git identity
         run: |
@@ -69,3 +70,11 @@ jobs:
           gh release create ${{ steps.version.outputs.new_tag }} \
             --title "${{ steps.version.outputs.new_tag }}" \
             --notes-file /tmp/release_notes.md
+
+      - name: Trigger release workflow on tag
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Manually trigger the 'release' workflow on the new tag ref
+          # Using workflow_dispatch with ref to run on the tag
+          gh workflow run release.yml --ref ${{ steps.version.outputs.new_tag }}
