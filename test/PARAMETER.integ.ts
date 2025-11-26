@@ -1,9 +1,13 @@
 import * as cdk from 'aws-cdk-lib';
 import { Key } from 'aws-cdk-lib/aws-kms';
+import { ConstantAssetHashAspect } from './ConstantAssetHashAspect';
 import { SopsStringParameter } from '../src/index';
 
 const app = new cdk.App();
 const stack = new cdk.Stack(app, 'PARAMETER');
+
+// Apply aspect for constant asset IDs
+cdk.Aspects.of(stack).add(new ConstantAssetHashAspect());
 
 interface TestCase {
   name: string;

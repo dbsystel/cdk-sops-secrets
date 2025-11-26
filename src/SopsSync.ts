@@ -202,7 +202,7 @@ export interface SopsSyncProviderProps {
   /**
    * The log group the function sends logs to.
    *
-   * By default, Lambda functions send logs to an automatically created default log group named /aws/lambda/\<function name\>.
+   * By default, Lambda functions send logs to an automatically created default log group named /aws/lambda/{function-name}.
    * However you cannot change the properties of this auto-created log group using the AWS CDK, e.g. you cannot set a different log retention.
    *
    * Use the `logGroup` property to create a fully customizable LogGroup ahead of time, and instruct the Lambda function to send logs to it.
@@ -246,9 +246,9 @@ export class SopsSyncProvider extends SingletonFunction implements IGrantable {
       environment: {
         SOPS_AGE_KEY: Lazy.string({
           produce: () =>
-            (this.sopsAgeKeys.map((secret) => secret.toString()) ?? []).join(
-              '\n',
-            ),
+            (
+              this.sopsAgeKeys.map((secret) => secret.unsafeUnwrap()) ?? []
+            ).join('\n'),
         }),
       },
       vpc: props?.vpc,
@@ -455,7 +455,7 @@ export namespace Permissions {
   }
 
   export function keysFromSopsContentAlias(ctx: Construct, c: string): IKey[] {
-    const regexAlias = /arn:aws:kms:[a-z0-9-]+:[\d]+:alias\/[a-z0-9-A-Z\/]+/g;
+    const regexAlias = /arn:aws:kms:[a-z0-9-]+:[\d]+:alias\/[a-zA-Z0-9/-]+/g;
     const resultsAlias = c.match(regexAlias);
     if (resultsAlias !== null) {
       return resultsAlias.map((result, index) =>
@@ -510,7 +510,7 @@ export namespace Permissions {
     const limit = 5750;
 
     /**
-     * Content for "arn:aws:ssm:ap-southeast-3:<accountnumer>:parameter/
+     * Content for "arn:aws:ssm:ap-southeast-3:{account-number}:parameter/
      */
     const prefix = 55;
 
