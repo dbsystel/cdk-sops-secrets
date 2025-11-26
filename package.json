@@ -135,7 +135,6 @@
   "scripts": {
     "release:tag": "commit-and-tag-version"
   },
-  "packageManager": "npm@11.6.1",
   "bundleDependencies": [
     "yaml"
   ],
