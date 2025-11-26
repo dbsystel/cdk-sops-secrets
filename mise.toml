@@ -26,7 +26,7 @@ run = "npm ci"
 
 [tasks."cdk:codegen:types"]
 description = "Generate TypeScript types from JSON schema"
-depends = ["lambda:build"]
+depends = ["cdk:deps"]
 sources = ["lambda/internal/event/config-schema.json"]
 outputs = ["src/LambdaInterface.ts"]
 run = "npx json-schema-to-typescript lambda/internal/event/config-schema.json -o src/LambdaInterface.ts"
