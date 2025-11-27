@@ -44,4 +44,4 @@ jobs:
           RENOVATE_ALLOWED_POST_UPGRADE_COMMANDS: '["mise run jsii-docgen"]'
         run: |
           echo "Running Renovate with log-level=$LOG_LEVEL on ${{ github.repository }}"
-          npx renovate ${{ github.repository }} --log-level=$LOG_LEVEL
+          npx renovate ${{ github.repository }}
