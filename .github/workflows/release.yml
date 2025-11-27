@@ -6,6 +6,9 @@ on:
       - 'v*'
   workflow_dispatch: {}
 
+permissions:
+  contents: read
+
 concurrency:
   group: ${{ github.workflow }}
   cancel-in-progress: false
@@ -14,9 +17,7 @@ jobs:
   build_publish:
     runs-on: ubuntu-latest
     permissions:
-      contents: write
-      id-token: write
-      packages: write
+      contents: read
     env:
       CI: 'true'
     steps:
@@ -34,7 +35,6 @@ jobs:
         uses: jdx/mise-action@v3
         with:
           experimental: true
-
 
       - name: Build / prepare dist
         run: mise run build
