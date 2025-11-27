@@ -33,6 +33,5 @@
       "automerge": true
     }
   ],
-  "postUpdateOptions": ["gomodTidy"],
-  "labels": ["auto-approve"]
+  "postUpdateOptions": ["gomodTidy"]
 }
