@@ -1,7 +1,7 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:recommended"],
-  "enabledManagers": ["gomod", "npm", "mise"],
+  "enabledManagers": ["gomod", "npm", "mise", "github-actions"],
   "packageRules": [
     {
       "matchManagers": ["gomod"],
@@ -16,6 +16,11 @@
     {
       "matchManagers": ["mise"],
       "groupName": "mise-tools",
+      "automerge": true
+    },
+    {
+      "matchManagers": ["github-actions"],
+      "groupName": "github-actions",
       "automerge": true
     }
   ],
