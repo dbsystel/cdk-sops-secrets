@@ -1,26 +1,26 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`parameters 1 parameter - full snapshot 1`] = `
-Object {
-  "SopsSecretParameterProviderManagedPolicyParameterAccess03C7CE5D3": Object {
-    "Properties": Object {
+{
+  "SopsSecretParameterProviderManagedPolicyParameterAccess03C7CE5D3": {
+    "Properties": {
       "Description": "Policy to grant parameter provider permissions to put parameter",
       "Path": "/",
-      "PolicyDocument": Object {
-        "Statement": Array [
-          Object {
+      "PolicyDocument": {
+        "Statement": [
+          {
             "Action": "ssm:PutParameter",
             "Effect": "Allow",
-            "Resource": Object {
-              "Fn::Join": Array [
+            "Resource": {
+              "Fn::Join": [
                 "",
-                Array [
+                [
                   "arn:aws:ssm:",
-                  Object {
+                  {
                     "Ref": "AWS::Region",
                   },
                   ":",
-                  Object {
+                  {
                     "Ref": "AWS::AccountId",
                   },
                   ":parameter/parameter0",
@@ -31,7 +31,7 @@ Object {
         ],
         "Version": "2012-10-17",
       },
-      "Roles": Array [
+      "Roles": [
         "test-role",
       ],
     },
@@ -41,14 +41,14 @@ Object {
 `;
 
 exports[`parameters 100 parameter - snapshot count 1`] = `
-Array [
+[
   "SopsSecretParameterProviderManagedPolicyParameterAccess03C7CE5D3",
   "SopsSecretParameterProviderManagedPolicyParameterAccess1E27103A2",
 ]
 `;
 
 exports[`parameters 1000 parameter - snapshot count 1`] = `
-Array [
+[
   "SopsSecretParameterProviderManagedPolicyParameterAccess03C7CE5D3",
   "SopsSecretParameterProviderManagedPolicyParameterAccess1E27103A2",
   "SopsSecretParameterProviderManagedPolicyParameterAccess204C56AEE",

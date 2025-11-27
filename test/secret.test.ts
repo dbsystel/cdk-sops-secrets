@@ -75,7 +75,7 @@ test('Throw exception on non existent sops secret', () => {
       new SopsSecret(stack, 'SopsSecret', {
         sopsFilePath: 'test-secrets/does-not-exist.json',
       }),
-  ).toThrowError('File test-secrets/does-not-exist.json does not exist!');
+  ).toThrow('File test-secrets/does-not-exist.json does not exist!');
 });
 
 test('Age Key passed', () => {
@@ -224,7 +224,7 @@ test('Exception when derive format: notsupported', () => {
       new SopsSecret(stack, 'SopsSecret', {
         sopsFilePath: 'test-secrets/testsecret.notsupported',
       }),
-  ).toThrowError('You have to specify sopsFileFormat!');
+  ).toThrow('You have to specify sopsFileFormat!');
 });
 
 test('Set format: json', () => {
@@ -474,7 +474,7 @@ test('Methods of SopsSync not implemented', () => {
     sopsFilePath: 'test-secrets/json/sopsfile.enc-age.json',
   });
 
-  expect(() => secret.addRotationSchedule('something', {})).toThrowError(
+  expect(() => secret.addRotationSchedule('something', {})).toThrow(
     `Method addRotationSchedule('something', {}) not allowed as this secret is managed by SopsSync`,
   );
   expect(() =>
@@ -485,7 +485,7 @@ test('Methods of SopsSync not implemented', () => {
         'arn:aws:iam::123456789012:role/SecretAccess',
       ),
     ),
-  ).toThrowError(
+  ).toThrow(
     `Method grantWrite(...) not allowed as this secret is managed by SopsSync`,
   );
 });
@@ -500,7 +500,7 @@ test('Allowed options for SopsSync', () => {
         sopsS3Key: 'test',
         sopsS3Bucket: 'test',
       }),
-  ).toThrowError(
+  ).toThrow(
     'You can either specify sopsFilePath or sopsS3Bucket and sopsS3Key!',
   );
   expect(
@@ -508,7 +508,7 @@ test('Allowed options for SopsSync', () => {
       new SopsSecret(stack, 'SopsSecret2', {
         sopsS3Key: 'test',
       }),
-  ).toThrowError(
+  ).toThrow(
     'You can either specify sopsFilePath or sopsS3Bucket and sopsS3Key!',
   );
   expect(
@@ -516,7 +516,7 @@ test('Allowed options for SopsSync', () => {
       new SopsSecret(stack, 'SopsSecret3', {
         sopsS3Bucket: 'test',
       }),
-  ).toThrowError(
+  ).toThrow(
     'You can either specify sopsFilePath or sopsS3Bucket and sopsS3Key!',
   );
   expect(
@@ -525,7 +525,7 @@ test('Allowed options for SopsSync', () => {
         sopsS3Key: 'test',
         sopsS3Bucket: 'test',
       }),
-  ).toThrowError('You have to specify sopsFileFormat!');
+  ).toThrow('You have to specify sopsFileFormat!');
 });
 
 test('Multiple parameters from yaml file', () => {
