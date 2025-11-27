@@ -6,7 +6,7 @@ We release patches for the latest major.minor version.
 
 ## Reporting a Vulnerability
 
-Please report security issues via GitHub Security Advisories ("Report a vulnerability" in the repository Security tab or  e-mail the CODEOWNERS directly.
+Please report security issues via GitHub Security Advisories ("Report a vulnerability" in the repository Security tab) or e-mail the CODEOWNERS directly.
 DO NOT open an issue.
 
 ## Dependency Management
