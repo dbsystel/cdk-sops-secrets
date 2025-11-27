@@ -50,9 +50,9 @@ description = "Run TypeScript tests with Jest"
 depends = ["cdk:deps", "lambda:build"]
 run = """
 if [ -n "$CI" ]; then
-  npx jest --passWithNoTests --coverageProvider=v8
+  npx jest --passWithNoTests --coverageProvider=v8 --runInBand
 else
-  npx jest --passWithNoTests --updateSnapshot --coverageProvider=v8
+  npx jest --passWithNoTests --updateSnapshot --coverageProvider=v8 --runInBand --detectOpenHandles
 fi
 """
 
@@ -194,7 +194,6 @@ depends = ["jsii-pacmak:js", "jsii-pacmak:java", "jsii-pacmak:python", "jsii-pac
 
 [tasks."cdk:test:integ:snapshot:single"]
 description = "Generate snapshot for a single test (internal use)"
-depends = ["lambda:build"]
 run = """
 set -e
 if [ -z "$TEST" ]; then
@@ -216,6 +215,7 @@ done
 
 [tasks."cdk:test:integ:snapshot"]
 description = "Generate CloudFormation template snapshots for all tests"
+depends = ["lambda:build", "cdk:deps"]
 run = """
 set -e
 echo "Generating snapshots for all integration tests..."
