@@ -13,7 +13,11 @@
       "groupName": "npm-deps",
       "automerge": true,
       "postUpgradeTasks": {
-        "commands": ["mise run jsii-docgen"],
+        "commands": [
+          "npm ci",
+          "npx jsii --silence-warnings=reserved-word",
+          "npx jsii-docgen -o API.md"
+        ],
         "fileFilters": ["package.json", "package-lock.json", "API.md"],
         "executionMode": "update"
       }
