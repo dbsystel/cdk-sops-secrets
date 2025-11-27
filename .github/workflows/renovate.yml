@@ -37,12 +37,11 @@ jobs:
         with:
           experimental: true
 
-      - name: Self-hosted Renovate
-        uses: renovatebot/github-action@v40.3.2
-        with:
-          configurationFile: renovate.json
-          token: ${{ secrets.PROJEN_GITHUB_TOKEN }}
+      - name: Run Renovate (native CLI)
         env:
+          RENOVATE_TOKEN: ${{ secrets.PROJEN_GITHUB_TOKEN }}
           LOG_LEVEL: ${{ inputs.logLevel || 'info' }}
-          RENOVATE_REPOSITORIES: ${{ github.repository }}
           RENOVATE_ALLOWED_POST_UPGRADE_COMMANDS: '["mise run jsii-docgen"]'
+        run: |
+          echo "Running Renovate with log-level=$LOG_LEVEL on ${{ github.repository }}"
+          npx renovate ${{ github.repository }} --log-level=$LOG_LEVEL
