@@ -1,6 +1,6 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:base"],
+  "extends": ["config:recommended"],
   "enabledManagers": ["gomod", "npm", "mise"],
   "packageRules": [
     {
@@ -20,7 +20,6 @@
     }
   ],
   "postUpdateOptions": ["gomodTidy"],
-  "allowedPostUpgradeCommands": ["mise run jsii-docgen"],
   "postUpgradeTasks": {
     "commands": ["mise run jsii-docgen"],
     "fileFilters": ["package.json", "package-lock.json"],
