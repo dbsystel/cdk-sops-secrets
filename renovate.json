@@ -34,7 +34,5 @@
     }
   ],
   "postUpdateOptions": ["gomodTidy"],
-  "gitHubActions": {
-    "pinDigests": true
-  }
+  "pinDigests": true
 }
