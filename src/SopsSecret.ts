@@ -13,6 +13,7 @@ import {
   RotationScheduleOptions,
   Secret,
   SecretProps,
+  SecretReference,
 } from 'aws-cdk-lib/aws-secretsmanager';
 import {
   RemovalPolicy,
@@ -87,6 +88,7 @@ export class SopsSecret extends Construct implements ISecret {
   readonly secretArn: string;
   readonly secretFullArn?: string | undefined;
   readonly secretName: string;
+  readonly secretRef: SecretReference;
   readonly stack: Stack;
   readonly env: ResourceEnvironment;
 
@@ -99,6 +101,7 @@ export class SopsSecret extends Construct implements ISecret {
     this.encryptionKey = this.secret.encryptionKey;
     this.secretArn = this.secret.secretArn;
     this.secretName = this.secret.secretName;
+    this.secretRef = this.secret.secretRef;
     this.stack = Stack.of(scope);
     this.env = {
       account: this.stack.account,
