@@ -2,6 +2,11 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:recommended"],
   "enabledManagers": ["gomod", "npm", "mise", "github-actions"],
+  "allowedPostUpgradeCommands": [
+    "npm ci",
+    "npx jsii --silence-warnings=reserved-word",
+    "npx jsii-docgen -o API.md"
+  ],
   "packageRules": [
     {
       "matchManagers": ["gomod"],
