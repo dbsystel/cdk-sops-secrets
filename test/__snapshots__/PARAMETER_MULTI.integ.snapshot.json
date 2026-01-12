@@ -549,7 +549,7 @@
       "Arn"
      ]
     },
-    "Runtime": "provided.al2",
+    "Runtime": "provided.al2023",
     "Timeout": 60
    },
    "DependsOn": [
