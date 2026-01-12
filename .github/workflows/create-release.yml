@@ -18,6 +18,7 @@ jobs:
         uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
         with:
           fetch-depth: 0
+          fetch-tags: true
 
       - name: Setup Node
         uses: actions/setup-node@395ad3262231945c25e8478fd5baf05154b1d79f # v6
@@ -77,20 +78,3 @@ jobs:
             --body-file /tmp/pr_body.md \
             --base main \
             --head "$BRANCH_NAME"
-
-      - name: Create GitHub Release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          # Create GitHub release using the changelog content
-          gh release create ${{ steps.version.outputs.new_tag }} \
-            --title "${{ steps.version.outputs.new_tag }}" \
-            --notes-file /tmp/release_notes.md
-
-      - name: Trigger release workflow on tag
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          # Manually trigger the 'release' workflow on the new tag ref
-          # Using workflow_dispatch with ref to run on the tag
-          gh workflow run release.yml --ref ${{ steps.version.outputs.new_tag }}
