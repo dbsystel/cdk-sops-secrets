@@ -60,7 +60,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # Create and push release branch (without tag)
+          # Create and push release branch (local tag not pushed)
           BRANCH_NAME="release/${{ steps.version.outputs.new_tag }}"
           git checkout -b "$BRANCH_NAME"
           git push origin "$BRANCH_NAME"
