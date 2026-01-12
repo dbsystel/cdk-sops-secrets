@@ -63,6 +63,11 @@ jobs:
         run: |
           # Create and push release branch (local tag not pushed)
           BRANCH_NAME="release/${{ steps.version.outputs.new_tag }}"
+          
+          # Delete existing branch if it exists
+          git push origin --delete "$BRANCH_NAME" 2>/dev/null || true
+          git branch -D "$BRANCH_NAME" 2>/dev/null || true
+          
           git checkout -b "$BRANCH_NAME"
           git push origin "$BRANCH_NAME"
           
@@ -72,6 +77,9 @@ jobs:
           echo "This PR will create tag \`${{ steps.version.outputs.new_tag }}\` when merged." >> /tmp/pr_body.md
           echo "" >> /tmp/pr_body.md
           cat /tmp/release_notes.md >> /tmp/pr_body.md
+          
+          # Close existing PR if it exists, then create new one
+          gh pr close "release/${{ steps.version.outputs.new_tag }}" 2>/dev/null || true
           
           gh pr create \
             --title "Release ${{ steps.version.outputs.new_tag }}" \
