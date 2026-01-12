@@ -6,6 +6,7 @@ on:
 permissions:
   contents: write
   actions: write
+  pull-requests: write
 
 jobs:
   release:
@@ -55,12 +56,27 @@ jobs:
 
           echo "Prepared release $NEW_TAG"
 
-      - name: Push changes and tag
+      - name: Create release branch and PR
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # Push the version bump commit and tag
-          git push --follow-tags origin main
+          # Create and push release branch (without tag)
+          BRANCH_NAME="release/${{ steps.version.outputs.new_tag }}"
+          git checkout -b "$BRANCH_NAME"
+          git push origin "$BRANCH_NAME"
+          
+          # Create pull request with tag info in body
+          echo "## Release ${{ steps.version.outputs.new_tag }}" > /tmp/pr_body.md
+          echo "" >> /tmp/pr_body.md
+          echo "This PR will create tag \`${{ steps.version.outputs.new_tag }}\` when merged." >> /tmp/pr_body.md
+          echo "" >> /tmp/pr_body.md
+          cat /tmp/release_notes.md >> /tmp/pr_body.md
+          
+          gh pr create \
+            --title "Release ${{ steps.version.outputs.new_tag }}" \
+            --body-file /tmp/pr_body.md \
+            --base main \
+            --head "$BRANCH_NAME"
 
       - name: Create GitHub Release
         env:
