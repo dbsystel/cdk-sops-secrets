@@ -8,6 +8,7 @@ on:
 permissions:
   contents: write
   actions: write
+  pull-requests: read
 
 jobs:
   create-tag-and-release:
