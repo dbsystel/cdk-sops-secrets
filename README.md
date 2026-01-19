@@ -21,7 +21,7 @@ It enables secure storage of secrets in Git repositories while allowing seamless
 - Create single SSM Parameter
 - Create multiple SSM Parameter in a batch from a file
 - Use SOPS json, yaml or dotenv as input files, as well as binary data
-- No need for manual permission setups for the Custom Ressource due to automatic least-privilege generation for the SyncProvider
+- No need for manual permission setups for the Custom Resource due to automatic least-privilege generation for the SyncProvider
 
 # Table Of Contents
 
@@ -72,7 +72,7 @@ Let's assume we want to store the following secret information in AWS:
 }
 ```
 
-It doesn't matter if this data is in `json`, `yaml` or `dotenv` format, `cdk-sops-secret` can handle them all.
+It doesn't matter if this data is in `json`, `yaml` or `dotenv` format, `cdk-sops-secrets` can handle them all.
 Even binary data is supported with some limitations.
 
 ## SopsSecret — Sops to SecretsManager
@@ -95,7 +95,7 @@ For convenience, several transformations apply:
 - All values will be stored as strings
 
 This is done also because of limitations of CDK in conjunction with
-[dynamic references](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/dynamic-references-secretsmanager.html) and limitiations
+[dynamic references](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/dynamic-references-secretsmanager.html) and limitations
 of the `Key/Value` view of the AWS SecretsManager WebConsole. So the result, saved in the AWS SecretsManager will actually be:
 
 ```json
@@ -129,7 +129,7 @@ const secret = new SopsSecret(stack, 'MySopsSecret', {
 ```
 
 This will turn off the conversions and just place the decrypted content in the target secret. It's also possible to use
-`RawOutput.BINARY` than the AWS SecretsManager Secret will be populted with binary, instead of string data.
+`RawOutput.BINARY` then the AWS SecretsManager Secret will be populated with binary, instead of string data.
 
 ## SopsStringParameter — Sops to single SSM ParameterStore Parameter
 
@@ -175,12 +175,12 @@ ParameterName       Value
 /someOtherKey       "base64:VGhpcyBpcyBhIHNlY3JldCBrZXk="
 ```
 
-You can configure the naming schema via the properties `keySeperator` and `keyPrefix`:
+You can configure the naming schema via the properties `keySeparator` and `keyPrefix`:
 
 ```ts
 const multi = new MultiStringParameter(stack, 'MyMultiParameter', {
   keyPrefix: 'mykeyprefix.'  // All keys will start with this string, default '/'
-  keySeperator: '-'         // This seperator is used when converting to a flat structure, default '/'
+  keySeparator: '-'         // This separator is used when converting to a flat structure, default '/'
 })
 ```
 
@@ -198,7 +198,7 @@ mykeyprefix.tokens-0-service  "github"
 ## SopsSyncProvider
 
 The SOPS-Provider is the custom resource AWS Lambda Function, that is doing all the work. It downloads, decrypts
-and stores the secret content in your desired location. This Lambda Function needs several IAM permissions to do it's work.
+and stores the secret content in your desired location. This Lambda Function needs several IAM permissions to do its work.
 
 For most use cases, you don't need to create it on your own, as the other Constructs try to create this and derive the required IAM permissions from your input.
 
@@ -218,7 +218,7 @@ const provider = new SopsSyncProvider(this, 'MySopsSyncProvider', {
       customSubnet2,      // But if you want,
     ]                     // you can change this behaviour
   },                      // and set vpc, subnet and
-  securityGroups: [       // securitygroups to your
+  securityGroups: [       // security groups to your
     customSecurityGroup   // needs.
   ],
   logGroup: new LogGroup(this, 'MyLogGroup', {  // you can add a custom log group
@@ -228,7 +228,7 @@ const provider = new SopsSyncProvider(this, 'MySopsSyncProvider', {
   uuid: 'MySopsSyncProvider',  // Create a custom singleton by changing default uuid.
 });
 
-provider.addToRolePolicy( // You cann pass PolicyStatements
+provider.addToRolePolicy( // You can pass PolicyStatements
   new PolicyStatement({   // via the addToRolePolicy Method
     actions: ['...'],     //
     resources: ['...'],   //
@@ -265,8 +265,8 @@ const construct = new Sops...(this, 'My' {
 
   /**
    * the default behaviour of passing the sops file content to the provider is
-   * by embedding the base64 encoded content in the cloudformation template.
-   * Using CKD Assets is also supported. It might be required to switch to
+   * by embedding the base64 encoded content in the CloudFormation template.
+   * Using CDK Assets is also supported. It might be required to switch to
    * Assets, if your sops files are very large.
    */
   uploadType: UploadType.ASSET,       // default: UploadType.INLINE
@@ -326,7 +326,7 @@ It was required to change some user facing configuration properties. So minor ch
 ### SecretsManager
 
 - Removed property convertToJSON, flatten, stringifiedValues
-- Use property rawOutput instaed:
+- Use property rawOutput instead:
   - `undefined / not set`: (default) convertToJSON and flatten and stringifiedValues = true
   - `RawOutput.STRING`: convertToJSON and flatten and stringifiedValues = false
   - `RawOutput.BINARY`: convertToJSON and flatten and stringifiedValues = false and Secret is binary
@@ -338,12 +338,12 @@ It was required to change some user facing configuration properties. So minor ch
 ### MultiParameter
 
 - Removed property convertToJSON, flatten, stringifiedValues - most of this combinations made no sense
-- Allways convertToJson and flatten (as we have to parse it to create multiple parameters)
-- You are allowed to chose the flattenSeperator
+- Always convertToJson and flatten (as we have to parse it to create multiple parameters)
+- You are allowed to choose the flattenSeparator
 
 ## It does not work, what can I do?
 
-Even if this construct has some unit and integration tests performed, there can be bugs and issues. As everything is performed by a cloudformation custom resource provider, a good starting point is the log of the corresponding lambda function. It should be located in your AWS Account under Cloudwatch - Log groups:
+Even if this construct has some unit and integration tests performed, there can be bugs and issues. As everything is performed by a CloudFormation custom resource provider, a good starting point is the log of the corresponding lambda function. It should be located in your AWS Account under Cloudwatch - Log groups:
 
 `/aws/lambda/YOUR-STACK-NAME-SingletonLambdaSopsSyncProviderSOMETHINGsomething1234`
 
@@ -359,13 +359,13 @@ comments must be a single line, not after value assignments.
 
 ## Error: Error getting data key: 0 successful groups required, got 0
 
-This error message (and failed sync) is related to the getsops/sops issues [#948](https://github.com/getsops/sops/issues/948) and [#634](https://github.com/getsops/sops/issues/634). You must not create your secret with the `--aws-profile` flag. This profile will be written to your sops filed and is required in every runtime environment. You have to define the profile to use via the environment variable `AWS_PROFILE` instead, to avoid this.
+This error message (and failed sync) is related to the getsops/sops issues [#948](https://github.com/getsops/sops/issues/948) and [#634](https://github.com/getsops/sops/issues/634). You must not create your secret with the `--aws-profile` flag. This profile will be written to your sops file and is required in every runtime environment. You have to define the profile to use via the environment variable `AWS_PROFILE` instead, to avoid this.
 
 ## Error: Asset of sync lambda not found
 
 The lambda asset code is generated relative to the path of the index.ts in this package. With tools like nx this can lead to wrong results, so that the asset could not be found.
 
-You can override the asset path via the [cdk.json](https://docs.aws.amazon.com/cdk/v2/guide/get_context_var.html) or via the flag `-c`of the cdk cli.
+You can override the asset path via the [cdk.json](https://docs.aws.amazon.com/cdk/v2/guide/get_context_var.html) or via the flag `-c` of the CDK CLI.
 
 The context used for this override is `sops_sync_provider_asset_path`.
 
