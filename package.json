@@ -56,7 +56,7 @@
     "jsii-pacmak": "1.125.0",
     "jsii-rosetta": "5.9.27",
     "json-schema-to-typescript": "^15.0.4",
-    "prettier": "^3.0.0",
+    "prettier": "^3.8.1",
     "ts-jest": "^29.0.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.0.0",
