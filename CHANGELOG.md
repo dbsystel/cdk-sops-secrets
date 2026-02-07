@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.6.0](https://github.com/dbsystel/cdk-sops-secrets/compare/v2.5.0...v2.6.0) (2026-02-07)
+
+
+### Features
+
+* make create-release workflow rerunnable ([#1225](https://github.com/dbsystel/cdk-sops-secrets/issues/1225)) ([cdf59b4](https://github.com/dbsystel/cdk-sops-secrets/commit/cdf59b43013520aa7b8c6cd45ba4f5a564fbbf37)), closes [#1215](https://github.com/dbsystel/cdk-sops-secrets/issues/1215)
+
 ## [2.5.0](https://github.com/dbsystel/cdk-sops-secrets/compare/v2.4.7...v2.5.0) (2026-01-12)
 
 
