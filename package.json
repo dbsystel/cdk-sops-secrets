@@ -1,7 +1,7 @@
 {
   "name": "cdk-sops-secrets",
   "description": "CDK Constructs that syncs your sops secrets into AWS SecretsManager secrets.",
-  "version": "2.6.1",
+  "version": "2.6.2",
   "license": "Apache-2.0",
   "author": {
     "name": "Markus Siebert",
