@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.6.3](https://github.com/dbsystel/cdk-sops-secrets/compare/v2.6.2...v2.6.3) (2026-02-20)
+
 ## [2.6.2](https://github.com/dbsystel/cdk-sops-secrets/compare/v2.6.1...v2.6.2) (2026-02-16)
 
 ## [2.6.1](https://github.com/dbsystel/cdk-sops-secrets/compare/v2.6.0...v2.6.1) (2026-02-07)
