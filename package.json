@@ -34,7 +34,7 @@
     "yaml": "^2.8.1"
   },
   "devDependencies": {
-    "@eslint/js": "^9",
+    "@eslint/js": "^9.39.3",
     "@types/jest": "^30.0.0",
     "@types/node": "^24.10.13",
     "@typescript-eslint/eslint-plugin": "^8.56.0",
@@ -43,7 +43,7 @@
     "aws-cdk-lib": "2.239.0",
     "commit-and-tag-version": "^12.4.4",
     "constructs": "10.5.1",
-    "eslint": "^9",
+    "eslint": "^9.39.3",
     "eslint-config-prettier": "^10.0.0",
     "eslint-import-resolver-typescript": "^4.0.0",
     "eslint-plugin-import": "^2.32.0",
