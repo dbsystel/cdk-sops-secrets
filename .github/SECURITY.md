@@ -25,4 +25,4 @@ We use [Renovate](https://github.com/renovatebot/renovate) to automatically keep
 
 ## Public Disclosure
 
-We kindly request you avoid public disclosure until a fix is available. We will coordinate a [CVE](https://www.cve.org/) if appropriate and credit reporters in release notes (unless anonymity is requested).
+We kindly request you avoid public disclosure until a fix is available. We will coordinate a [CVE](https://www.cve.org/) if appropriate.
