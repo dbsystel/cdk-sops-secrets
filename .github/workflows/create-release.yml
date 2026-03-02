@@ -3,14 +3,14 @@ name: create-release
 on:
   workflow_dispatch: {}
 
-permissions:
-  contents: write
-  actions: write
-  pull-requests: write
+permissions: {}
 
 jobs:
   release:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
     env:
       CI: true
     steps:

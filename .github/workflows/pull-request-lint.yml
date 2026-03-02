@@ -11,6 +11,9 @@ on:
       - ready_for_review
       - edited
   merge_group: {}
+
+permissions: {}
+
 jobs:
   validate:
     name: Validate PR title
