@@ -1,0 +1,5 @@
+# CODEOWNERS
+# These owners will be requested for review when someone opens a pull request.
+# See MAINTAINERS.md for the full list of maintainers.
+
+* @dariozachow @henrysachs @lenderom @markussiebert @obirah
