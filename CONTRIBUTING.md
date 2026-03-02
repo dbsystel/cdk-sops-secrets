@@ -1,8 +1,10 @@
 # Contributing
 
-Thanks for your interest in our project. Contributions are welcome. Feel free to [open an issue](issues) with questions or reporting ideas and bugs, or [open pull requests](pulls) to contribute code.
+Thanks for your interest in our project. Contributions are welcome. Feel free to [open an issue](https://github.com/dbsystel/cdk-sops-secrets/issues/new) with questions or reporting ideas and bugs, or [open pull requests](https://github.com/dbsystel/cdk-sops-secrets/pulls) to contribute code.
 
 We are committed to fostering a welcoming, respectful, and harassment-free environment. Be kind!
+
+**Security Issues:** Please report security vulnerabilities via our [Security Policy](https://github.com/dbsystel/cdk-sops-secrets/blob/main/.github/SECURITY.md) instead of opening public issues.
 
 ## How to build/deploy local
 

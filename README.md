@@ -12,16 +12,79 @@
 
 # Introduction
 
-_Create secret values in AWS with infrastructure-as-code easily_
+## What Problem Does It Solve?
 
-This construct library offers CDK Constructs that facilitate syncing [SOPS-encrypted secrets](https://github.com/getsops/sops) to AWS Secrets Manager and SSM Parameter Store.
-It enables secure storage of secrets in Git repositories while allowing seamless synchronization and usage within AWS. Even large sets of SSM Parameters can be created quickly from a single file.
+Managing secrets in infrastructure-as-code is challenging: you need to keep secrets secure in version control while making them available to your AWS infrastructure. This library solves that problem by:
 
-- Create AWS Secrets Manager secrets
-- Create single SSM Parameter
-- Create multiple SSM Parameter in a batch from a file
-- Use SOPS json, yaml or dotenv as input files, as well as binary data
-- No need for manual permission setups for the Custom Resource due to automatic least-privilege generation for the SyncProvider
+- **Encrypting secrets at rest** using [SOPS](https://github.com/getsops/sops) before committing to Git
+- **Automatically syncing** encrypted secrets to AWS Secrets Manager and SSM Parameter Store during deployment
+- **Simplifying secret management** with easy-to-use CDK constructs that handle permissions automatically
+
+## Features
+
+- Create AWS Secrets Manager secrets from SOPS-encrypted files
+- Create a single SSM Parameter or multiple SSM Parameters from a single SOPS file
+- Support for JSON, YAML, dotenv, and binary formats
+- Automatic least-privilege IAM permission generation
+- No manual permission setup required
+
+## Getting Started
+
+### Installation
+
+**TypeScript/JavaScript:**
+```bash
+npm install cdk-sops-secrets
+```
+
+**Python:**
+```bash
+pip install cdk-sops-secrets
+```
+
+**Java, .NET, Go:** See [package repositories](https://constructs.dev/packages/cdk-sops-secrets)
+
+### Quick Example
+
+```typescript
+import { SopsSecret } from 'cdk-sops-secrets';
+
+const secret = new SopsSecret(this, 'MySecret', {
+  secretName: 'my-secret',
+  sopsFilePath: 'secrets/encrypted-secret.json',
+});
+```
+
+See [Available Constructs](#available-constructs) for detailed usage.
+
+## Contributing
+
+We welcome contributions! Here's how you can help:
+
+### Reporting Issues
+
+- **Bug reports:** [Open an issue](https://github.com/dbsystel/cdk-sops-secrets/issues/new) with details about the problem
+- **Feature requests:** [Open an issue](https://github.com/dbsystel/cdk-sops-secrets/issues/new) describing your use case
+- **Security vulnerabilities:** See our [Security Policy](https://github.com/dbsystel/cdk-sops-secrets/blob/main/.github/SECURITY.md)
+
+### Contributing Code
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Make your changes
+4. Run tests (`npm test`)
+5. Commit your changes (`git commit -m 'Add amazing feature'`)
+6. Push to your branch (`git push origin feature/amazing-feature`)
+7. [Open a Pull Request](https://github.com/dbsystel/cdk-sops-secrets/compare)
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
+
+### Getting Help
+
+- **Questions:** [Open a discussion](https://github.com/dbsystel/cdk-sops-secrets/discussions)
+- **Documentation:** See sections below and [API documentation](API.md)
+
+---
 
 # Table Of Contents
 
