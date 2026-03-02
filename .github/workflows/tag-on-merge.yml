@@ -5,14 +5,16 @@ on:
     types: [closed]
     branches: [main]
 
-permissions:
-  contents: write
-  actions: write
-  pull-requests: read
+permissions: {}
 
 jobs:
   create-tag-and-release:
     if: github.event.pull_request.merged == true && startsWith(github.event.pull_request.head.ref, 'release/')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      actions: write
+      pull-requests: read
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
