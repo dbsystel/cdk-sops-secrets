@@ -1,13 +1,12 @@
 <img src="https://github.com/dbsystel/cdk-sops-secrets/blob/main/img/banner-dl-small.png?raw=true">
 
 ![stability](https://img.shields.io/badge/Stability-stable-green)
-[![release](https://github.com/dbsystel/cdk-sops-secrets/actions/workflows/release.yml/badge.svg)](https://github.com/dbsystel/cdk-sops-secrets/actions/workflows/release.yml)
+[![build](https://github.com/dbsystel/cdk-sops-secrets/actions/workflows/build.yml/badge.svg)](https://github.com/dbsystel/cdk-sops-secrets/actions/workflows/build.yml)
 [![cdk-construct-hub](https://img.shields.io/badge/CDK-ConstructHub-blue)](https://constructs.dev/packages/cdk-sops-secrets)
 [![npm](https://img.shields.io/npm/v/cdk-sops-secrets.svg)](https://www.npmjs.com/package/cdk-sops-secrets)
 [![npm downloads](https://img.shields.io/npm/dw/cdk-sops-secrets)](https://www.npmjs.com/package/cdk-sops-secrets)
 [![pypi](https://img.shields.io/pypi/v/cdk-sops-secrets.svg)](https://pypi.org/project/cdk-sops-secrets)
 [![pypi downloads](https://img.shields.io/pypi/dw/cdk-sops-secrets)](https://pypi.org/project/cdk-sops-secrets)
-[![codecov](https://codecov.io/gh/dbsystel/cdk-sops-secrets/branch/main/graph/badge.svg?token=OT7P7HQHXB)](https://codecov.io/gh/dbsystel/cdk-sops-secrets)
 [![security-vulnerabilities](https://img.shields.io/github/issues-search/dbsystel/cdk-sops-secrets?color=%23ff0000&label=security-vulnerabilities&query=is%3Aissue%20is%3Aopen%20label%3A%22Mend%3A%20dependency%20security%20vulnerability%22)](https://github.com/dbsystel/cdk-sops-secrets/issues?q=is%3Aissue+is%3Aopen+label%3A%22security+vulnerability%22)
 
 # Introduction

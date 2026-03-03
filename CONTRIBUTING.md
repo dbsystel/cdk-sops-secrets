@@ -6,6 +6,19 @@ We are committed to fostering a welcoming, respectful, and harassment-free envir
 
 **Security Issues:** Please report security vulnerabilities via our [Security Policy](https://github.com/dbsystel/cdk-sops-secrets/blob/main/.github/SECURITY.md) instead of opening public issues.
 
+## Testing Policy
+
+All contributions that add or modify functionality must include appropriate tests. This ensures code quality and prevents regressions.
+
+**Test Requirements:**
+
+- **TypeScript/CDK changes:** Add or update unit tests using Jest
+- **Go Lambda changes:** Add or update unit tests using Go's testing package
+- **New features:** Include both unit tests and integration tests where applicable
+- **Bug fixes:** Add tests that verify the fix and prevent regression
+
+Tests must pass in CI before pull requests can be merged. See the testing section below for how to run tests locally.
+
 ## How to build/deploy local
 
 ### Prerequisites
