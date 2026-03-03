@@ -6,6 +6,17 @@ We are committed to fostering a welcoming, respectful, and harassment-free envir
 
 **Security Issues:** Please report security vulnerabilities via our [Security Policy](https://github.com/dbsystel/cdk-sops-secrets/blob/main/.github/SECURITY.md) instead of opening public issues.
 
+## Contributing Code
+
+1. Fork the repository
+2. Install [mise](https://mise.jdx.dev/) - it manages all project dependencies and tools
+3. Create a feature branch (`git checkout -b feature/amazing-feature`)
+4. Make your changes
+5. Run `mise run build` locally to ensure everything builds successfully
+6. Commit your changes (`git commit -m 'Add amazing feature'`)
+7. Push to your branch (`git push origin feature/amazing-feature`)
+8. [Open a Pull Request](https://github.com/dbsystel/cdk-sops-secrets/compare)
+
 ## Testing Policy
 
 All contributions that add or modify functionality must include appropriate tests. This ensures code quality and prevents regressions.
