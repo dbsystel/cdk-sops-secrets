@@ -2,11 +2,7 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:recommended"],
   "enabledManagers": ["gomod", "npm", "mise", "github-actions"],
-  "allowedPostUpgradeCommands": [
-    "^npm ci$",
-    "^npx jsii --silence-warnings=reserved-word$",
-    "^npx jsii-docgen -o API\\.md$"
-  ],
+
   "packageRules": [
     {
       "matchManagers": ["gomod"],
@@ -16,16 +12,7 @@
     {
       "matchManagers": ["npm"],
       "groupName": "npm-deps",
-      "automerge": true,
-      "postUpgradeTasks": {
-        "commands": [
-          "npm ci",
-          "npx jsii --silence-warnings=reserved-word",
-          "npx jsii-docgen -o API.md"
-        ],
-        "fileFilters": ["package.json", "package-lock.json", "API.md"],
-        "executionMode": "update"
-      }
+      "automerge": true
     },
     {
       "matchManagers": ["mise"],
