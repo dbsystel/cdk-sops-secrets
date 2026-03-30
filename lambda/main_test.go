@@ -4,6 +4,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"os"
 	"testing"
 	"time"
@@ -58,6 +59,11 @@ func (m *MockAwsClient) SecretsManagerPutSecretValue(sopsHash string, secretArn 
 func (m *MockAwsClient) SsmPutParameter(parameterName string, parameterContent *[]byte, keyId string) (*ssm.PutParameterOutput, error) {
 	m.putParameter[parameterName] = map[string]interface{}{"parameterContent": string(*parameterContent), "keyId": keyId}
 	return &ssm.PutParameterOutput{Version: 1}, nil
+}
+
+func (m *MockAwsClient) SsmGetParameter(parameterName string) (*string, error) {
+	// SOPS_AGE_KEY_PARAMS is not set in unit tests; this method should not be called
+	return nil, fmt.Errorf("SsmGetParameter not expected in unit tests")
 }
 
 func TestHandleRequestWithClients(t *testing.T) {

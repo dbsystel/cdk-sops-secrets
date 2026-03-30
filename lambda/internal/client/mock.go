@@ -25,6 +25,7 @@ type MockAwsClient struct {
 	GetObjectRet           *s3.GetObjectOutput
 	GetObjectAttributesRet *s3.GetObjectAttributesOutput
 	PutParameterRet        *ssm.PutParameterOutput
+	GetParameterRet        *ssm.GetParameterOutput
 	PutSecretValueRet      *secretsmanager.PutSecretValueOutput
 }
 
@@ -47,6 +48,13 @@ func (s *MockAwsClient) PutParameter(ctx context.Context, params *ssm.PutParamet
 		snaps.WithConfig(snaps.Filename(s.snapsFileName)).MatchSnapshot(s.t, params)
 	}
 	return s.PutParameterRet, s.ReturnError
+}
+
+func (s *MockAwsClient) GetParameter(ctx context.Context, params *ssm.GetParameterInput, optFns ...func(*ssm.Options)) (*ssm.GetParameterOutput, error) {
+	if s.ReturnError == nil {
+		snaps.WithConfig(snaps.Filename(s.snapsFileName)).MatchSnapshot(s.t, params)
+	}
+	return s.GetParameterRet, s.ReturnError
 }
 
 func (s *MockAwsClient) PutSecretValue(ctx context.Context, params *secretsmanager.PutSecretValueInput, optFns ...func(*secretsmanager.Options)) (*secretsmanager.PutSecretValueOutput, error) {
@@ -77,5 +85,9 @@ func (m *MockClient) SecretsManagerPutSecretValue(sopsHash string, secretArn str
 }
 
 func (m *MockClient) SsmPutParameter(parameterName string, parameterContent *[]byte, keyId string) (*ssm.PutParameterOutput, error) {
+	return nil, nil
+}
+
+func (m *MockClient) SsmGetParameter(parameterName string) (*string, error) {
 	return nil, nil
 }

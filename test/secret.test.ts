@@ -10,6 +10,7 @@ import {
 import { Key } from 'aws-cdk-lib/aws-kms';
 import { Function, InlineCode, Runtime } from 'aws-cdk-lib/aws-lambda';
 import { LogGroup, RetentionDays } from 'aws-cdk-lib/aws-logs';
+import { StringParameter } from 'aws-cdk-lib/aws-ssm';
 import {
   SopsSecret,
   SopsSyncProvider,
@@ -741,5 +742,176 @@ test('Custom LogGroup', () => {
   });
   Template.fromStack(stack).hasResourceProperties('AWS::Logs::LogGroup', {
     RetentionInDays: 90,
+  });
+});
+
+test('Age Key from SSM Parameter string', () => {
+  const app = new App();
+  const stack = new Stack(app, 'SecretIntegration');
+  const cmk = Key.fromKeyArn(
+    stack,
+    'SsmCmk',
+    'arn:aws:kms:us-east-1:111122223333:key/aaaabbbb-1234-5678-abcd-111122223333',
+  );
+
+  const provider = new SopsSyncProvider(stack, 'Provider');
+  provider.addAgeKeyFromSsmParameter('/sops/age/private-key', cmk);
+  new SopsSecret(stack, 'SopsSecret', {
+    sopsFilePath: 'test-secrets/yaml/sopsfile.enc-kms.yaml',
+    sopsProvider: provider,
+  });
+
+  const template = Template.fromStack(stack);
+
+  // SOPS_AGE_KEY_PARAMS env var must be set on the Lambda
+  template.hasResourceProperties('AWS::Lambda::Function', {
+    Environment: Match.objectLike({
+      Variables: Match.objectLike({
+        SOPS_AGE_KEY_PARAMS: '/sops/age/private-key',
+      }),
+    }),
+  });
+
+  // Lambda role must have ssm:GetParameter for the parameter
+  template.hasResource('AWS::IAM::Policy', {
+    Properties: Match.objectLike({
+      PolicyDocument: Match.objectLike({
+        Statement: Match.arrayWith([
+          Match.objectLike({
+            Action: 'ssm:GetParameter',
+            Effect: 'Allow',
+            Resource: {
+              'Fn::Join': [
+                '',
+                [
+                  'arn:aws:ssm:',
+                  { Ref: 'AWS::Region' },
+                  ':',
+                  { Ref: 'AWS::AccountId' },
+                  ':parameter/sops/age/private-key',
+                ],
+              ],
+            },
+          }),
+        ]),
+      }),
+    }),
+  });
+
+  // Lambda role must have kms:Decrypt for the encryption key
+  template.hasResource('AWS::IAM::Policy', {
+    Properties: Match.objectLike({
+      PolicyDocument: Match.objectLike({
+        Statement: Match.arrayWith([
+          Match.objectLike({
+            Action: 'kms:Decrypt',
+            Effect: 'Allow',
+            Resource:
+              'arn:aws:kms:us-east-1:111122223333:key/aaaabbbb-1234-5678-abcd-111122223333',
+          }),
+        ]),
+      }),
+    }),
+  });
+});
+
+test('Age Key from SSM IStringParameter reference', () => {
+  const app = new App();
+  const stack = new Stack(app, 'SecretIntegration');
+  const cmk = Key.fromKeyArn(
+    stack,
+    'SsmCmk',
+    'arn:aws:kms:us-east-1:111122223333:key/aaaabbbb-1234-5678-abcd-111122223333',
+  );
+
+  const provider = new SopsSyncProvider(stack, 'Provider');
+  const keyParam = StringParameter.fromStringParameterName(
+    stack,
+    'AgeKeyParam',
+    '/sops/age/private-key',
+  );
+  provider.addAgeKeyFromSsmParameter(keyParam, cmk);
+  new SopsSecret(stack, 'SopsSecret', {
+    sopsFilePath: 'test-secrets/yaml/sopsfile.enc-kms.yaml',
+    sopsProvider: provider,
+  });
+
+  Template.fromStack(stack).hasResourceProperties('AWS::Lambda::Function', {
+    Environment: Match.objectLike({
+      Variables: Match.objectLike({
+        SOPS_AGE_KEY_PARAMS: '/sops/age/private-key',
+      }),
+    }),
+  });
+});
+
+test('Age Key from SSM combined with static age key', () => {
+  const app = new App();
+  const stack = new Stack(app, 'SecretIntegration');
+  const cmk = Key.fromKeyArn(
+    stack,
+    'SsmCmk',
+    'arn:aws:kms:us-east-1:111122223333:key/aaaabbbb-1234-5678-abcd-111122223333',
+  );
+
+  const provider = new SopsSyncProvider(stack, 'Provider');
+  provider.addAgeKey(SecretValue.unsafePlainText('STATIC-KEY'));
+  provider.addAgeKeyFromSsmParameter('/sops/age/private-key', cmk);
+
+  new SopsSecret(stack, 'SopsSecret', {
+    sopsFilePath: 'test-secrets/yaml/sopsfile.enc-kms.yaml',
+    sopsProvider: provider,
+  });
+
+  // Both env vars must be set
+  Template.fromStack(stack).hasResourceProperties('AWS::Lambda::Function', {
+    Environment: Match.objectLike({
+      Variables: Match.objectLike({
+        SOPS_AGE_KEY: 'STATIC-KEY',
+        SOPS_AGE_KEY_PARAMS: '/sops/age/private-key',
+      }),
+    }),
+  });
+});
+
+test('Age Key from SSM Parameter without leading slash gets correct ARN', () => {
+  const app = new App();
+  const stack = new Stack(app, 'SecretIntegration');
+  const cmk = Key.fromKeyArn(
+    stack,
+    'SsmCmk',
+    'arn:aws:kms:us-east-1:111122223333:key/aaaabbbb-1234-5678-abcd-111122223333',
+  );
+
+  const provider = new SopsSyncProvider(stack, 'Provider');
+  provider.addAgeKeyFromSsmParameter('sops/age/private-key', cmk);
+  new SopsSecret(stack, 'SopsSecret', {
+    sopsFilePath: 'test-secrets/yaml/sopsfile.enc-kms.yaml',
+    sopsProvider: provider,
+  });
+
+  Template.fromStack(stack).hasResource('AWS::IAM::Policy', {
+    Properties: Match.objectLike({
+      PolicyDocument: Match.objectLike({
+        Statement: Match.arrayWith([
+          Match.objectLike({
+            Action: 'ssm:GetParameter',
+            Effect: 'Allow',
+            Resource: {
+              'Fn::Join': [
+                '',
+                [
+                  'arn:aws:ssm:',
+                  { Ref: 'AWS::Region' },
+                  ':',
+                  { Ref: 'AWS::AccountId' },
+                  ':parameter/sops/age/private-key',
+                ],
+              ],
+            },
+          }),
+        ]),
+      }),
+    }),
   });
 });

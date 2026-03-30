@@ -86,6 +86,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
   - [SopsStringParameter — Sops to single SSM ParameterStore Parameter](#sopsstringparameter--sops-to-single-ssm-parameterstore-parameter)
   - [MultiStringParameter — Sops to multiple SSM ParameterStore Parameters](#multistringparameter--sops-to-multiple-ssm-parameterstore-parameters)
   - [SopsSyncProvider](#sopssyncprovider)
+  - [Age Key from SSM Parameter Store](#age-key-from-ssm-parameter-store)
   - [Common configuration options for SopsSecret, SopsStringParameter and MultiStringParameter](#common-configuration-options-for-sopssecret-sopsstringparameter-and-multistringparameter)
 - [Considerations](#considerations)
   - [UploadType: INLINE / ASSET](#uploadtype-inline--asset)
@@ -297,6 +298,81 @@ const secret = new SopsSecret(this, 'MySecret', {
   sopsProvider: provider, // this property is available in all Constructs
   ...
 });
+```
+
+## Age Key from SSM Parameter Store
+
+By default, age private keys are passed to the sync Lambda via the `SOPS_AGE_KEY` environment variable, which means the key must be present at CDK synthesis time and is stored in plaintext in the Lambda configuration.
+
+`addAgeKeyFromSsmParameter` eliminates this exposure: the key stays in SSM Parameter Store and is fetched at deploy time by the Lambda itself, entirely in-memory during decryption.
+
+The SSM parameter **must** be a `SecureString` encrypted with a KMS customer-managed key (CMK). Storing an age private key without envelope encryption is considered insecure, so the KMS key is a required argument.
+
+### Basic usage
+
+```ts
+import { Key } from 'aws-cdk-lib/aws-kms';
+
+const cmk = Key.fromKeyArn(this, 'SsmCmk', 'arn:aws:kms:us-east-1:111122223333:key/…');
+
+const provider = new SopsSyncProvider(this, 'SopsProvider');
+provider.addAgeKeyFromSsmParameter('/sops/age/private-key', cmk);
+
+const secret = new SopsSecret(this, 'MySecret', {
+  sopsFilePath: 'secrets/encrypted.yaml',
+  sopsProvider: provider,
+});
+```
+
+The construct automatically grants the Lambda `ssm:GetParameter` on the parameter and `kms:Decrypt` on the CMK.
+
+### Using an `IStringParameter` reference
+
+Pass an `IStringParameter` object instead of a plain string if you already have a CDK parameter reference:
+
+```ts
+import { Key } from 'aws-cdk-lib/aws-kms';
+import { StringParameter } from 'aws-cdk-lib/aws-ssm';
+
+const cmk = Key.fromKeyArn(this, 'SsmCmk', 'arn:aws:kms:us-east-1:111122223333:key/…');
+const keyParam = StringParameter.fromStringParameterName(
+  this,
+  'AgeKeyParam',
+  '/sops/age/private-key',
+);
+
+const provider = new SopsSyncProvider(this, 'SopsProvider');
+provider.addAgeKeyFromSsmParameter(keyParam, cmk);
+```
+
+### Combining with a static age key
+
+Both methods can be used together. All keys — static and SSM-fetched — are merged and presented to sops during decryption:
+
+```ts
+import { Key } from 'aws-cdk-lib/aws-kms';
+
+const cmk = Key.fromKeyArn(this, 'SsmCmk', 'arn:aws:kms:us-east-1:111122223333:key/…');
+const provider = new SopsSyncProvider(this, 'SopsProvider');
+
+// Statically injected at synthesis time (legacy approach)
+provider.addAgeKey(SecretValue.ssmSecure('/sops/age/legacy-key'));
+
+// Fetched from SSM at deploy time (recommended)
+provider.addAgeKeyFromSsmParameter('/sops/age/current-key', cmk);
+```
+
+### Multiple keys
+
+Call `addAgeKeyFromSsmParameter` multiple times to register additional keys, which is useful for key rotation:
+
+```ts
+import { Key } from 'aws-cdk-lib/aws-kms';
+
+const cmk = Key.fromKeyArn(this, 'SsmCmk', 'arn:aws:kms:us-east-1:111122223333:key/…');
+const provider = new SopsSyncProvider(this, 'SopsProvider');
+provider.addAgeKeyFromSsmParameter('/sops/age/key-v1', cmk);
+provider.addAgeKeyFromSsmParameter('/sops/age/key-v2', cmk);
 ```
 
 ## Common configuration options for SopsSecret, SopsStringParameter and MultiStringParameter
