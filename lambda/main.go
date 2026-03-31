@@ -46,6 +46,9 @@ func loadAgeKeysFromSSM(clients client.AwsClient) error {
 		if err != nil {
 			return fmt.Errorf("failed to fetch age key from SSM parameter %s: %v", paramName, err)
 		}
+		if value == nil {
+			return fmt.Errorf("received nil value for SSM parameter %s", paramName)
+		}
 		ageKeys = append(ageKeys, *value)
 	}
 

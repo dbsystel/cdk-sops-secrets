@@ -89,5 +89,7 @@ func (m *MockClient) SsmPutParameter(parameterName string, parameterContent *[]b
 }
 
 func (m *MockClient) SsmGetParameter(parameterName string) (*string, error) {
-	return nil, nil
+	// Return a non-nil string pointer to avoid nil dereferences when err == nil.
+	empty := ""
+	return &empty, nil
 }
