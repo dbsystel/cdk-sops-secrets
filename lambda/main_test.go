@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"strings"
 	"testing"
 	"time"
 
@@ -22,11 +23,12 @@ type putSecretValueCalls map[string]interface{}
 type getObjectEtagCalls map[string]client.SopsS3File
 type getObjectCalls map[string]client.SopsS3File
 type MockAwsClient struct {
-	t              *testing.T
-	putParameter   putParameterCalls
-	putSecretValue putSecretValueCalls
-	getObjectEtag  getObjectEtagCalls
-	getObject      getObjectCalls
+	t                     *testing.T
+	putParameter          putParameterCalls
+	putSecretValue        putSecretValueCalls
+	getObjectEtag         getObjectEtagCalls
+	getObject             getObjectCalls
+	ssmGetParameterValues map[string]string
 }
 
 func (m *MockAwsClient) S3GetObject(file client.SopsS3File) ([]byte, error) {
@@ -62,8 +64,14 @@ func (m *MockAwsClient) SsmPutParameter(parameterName string, parameterContent *
 }
 
 func (m *MockAwsClient) SsmGetParameter(parameterName string) (*string, error) {
-	// SOPS_AGE_KEY_PARAMS is not set in unit tests; this method should not be called
-	return nil, fmt.Errorf("SsmGetParameter not expected in unit tests")
+	if m.ssmGetParameterValues == nil {
+		return nil, fmt.Errorf("SsmGetParameter not expected in unit tests")
+	}
+	v, ok := m.ssmGetParameterValues[parameterName]
+	if !ok {
+		return nil, fmt.Errorf("SsmGetParameter: unexpected parameter %q", parameterName)
+	}
+	return &v, nil
 }
 
 func TestHandleRequestWithClients(t *testing.T) {
@@ -125,4 +133,108 @@ func TestHandleRequestWithClients(t *testing.T) {
 			assert.NotNil(t, data)
 		})
 	}
+}
+
+func TestLoadAgeKeysFromSSM(t *testing.T) {
+	makeClients := func(params map[string]string) *MockAwsClient {
+		return &MockAwsClient{
+			t:                     t,
+			putParameter:          putParameterCalls{},
+			putSecretValue:        putSecretValueCalls{},
+			getObjectEtag:         getObjectEtagCalls{},
+			getObject:             getObjectCalls{},
+			ssmGetParameterValues: params,
+		}
+	}
+
+	t.Run("noop when SOPS_AGE_KEY_PARAMS is unset", func(t *testing.T) {
+		t.Setenv("SOPS_AGE_KEY_PARAMS", "")
+		t.Setenv("SOPS_AGE_KEY", "static-key")
+
+		err := loadAgeKeysFromSSM(makeClients(nil))
+		assert.NoError(t, err)
+		assert.Equal(t, "static-key", os.Getenv("SOPS_AGE_KEY"))
+	})
+
+	t.Run("single SSM parameter replaces SOPS_AGE_KEY when no static key", func(t *testing.T) {
+		t.Setenv("SOPS_AGE_KEY_PARAMS", "/my/age/key")
+		t.Setenv("SOPS_AGE_KEY", "")
+		staticAgeKey = ""
+
+		err := loadAgeKeysFromSSM(makeClients(map[string]string{
+			"/my/age/key": "AGE-SECRET-KEY-FROM-SSM",
+		}))
+		assert.NoError(t, err)
+		assert.Equal(t, "AGE-SECRET-KEY-FROM-SSM", os.Getenv("SOPS_AGE_KEY"))
+	})
+
+	t.Run("multiple SSM parameters are joined with newline", func(t *testing.T) {
+		t.Setenv("SOPS_AGE_KEY_PARAMS", "/key/one\n/key/two")
+		t.Setenv("SOPS_AGE_KEY", "")
+		staticAgeKey = ""
+
+		err := loadAgeKeysFromSSM(makeClients(map[string]string{
+			"/key/one": "AGE-KEY-ONE",
+			"/key/two": "AGE-KEY-TWO",
+		}))
+		assert.NoError(t, err)
+		got := os.Getenv("SOPS_AGE_KEY")
+		parts := strings.Split(got, "\n")
+		assert.Equal(t, []string{"AGE-KEY-ONE", "AGE-KEY-TWO"}, parts)
+	})
+
+	t.Run("static cold-start key is preserved and prepended", func(t *testing.T) {
+		const coldStartKey = "AGE-SECRET-KEY-COLDSTART"
+		staticAgeKey = coldStartKey
+		t.Setenv("SOPS_AGE_KEY_PARAMS", "/ssm/key")
+		t.Setenv("SOPS_AGE_KEY", coldStartKey)
+
+		err := loadAgeKeysFromSSM(makeClients(map[string]string{
+			"/ssm/key": "AGE-SECRET-KEY-FROM-SSM",
+		}))
+		assert.NoError(t, err)
+		got := os.Getenv("SOPS_AGE_KEY")
+		parts := strings.Split(got, "\n")
+		assert.Equal(t, []string{coldStartKey, "AGE-SECRET-KEY-FROM-SSM"}, parts)
+	})
+
+	t.Run("warm invocation does not accumulate SSM keys", func(t *testing.T) {
+		const coldStartKey = "AGE-SECRET-KEY-COLDSTART"
+		staticAgeKey = coldStartKey
+		t.Setenv("SOPS_AGE_KEY_PARAMS", "/ssm/key")
+
+		clients := makeClients(map[string]string{"/ssm/key": "AGE-SECRET-KEY-FROM-SSM"})
+
+		assert.NoError(t, loadAgeKeysFromSSM(clients))
+		first := os.Getenv("SOPS_AGE_KEY")
+
+		assert.NoError(t, loadAgeKeysFromSSM(clients))
+		second := os.Getenv("SOPS_AGE_KEY")
+
+		assert.Equal(t, first, second, "warm invocation must not duplicate keys")
+		parts := strings.Split(second, "\n")
+		assert.Equal(t, []string{coldStartKey, "AGE-SECRET-KEY-FROM-SSM"}, parts)
+	})
+
+	t.Run("blank lines in SOPS_AGE_KEY_PARAMS are skipped", func(t *testing.T) {
+		t.Setenv("SOPS_AGE_KEY_PARAMS", "\n/real/key\n\n")
+		t.Setenv("SOPS_AGE_KEY", "")
+		staticAgeKey = ""
+
+		err := loadAgeKeysFromSSM(makeClients(map[string]string{
+			"/real/key": "AGE-REAL-KEY",
+		}))
+		assert.NoError(t, err)
+		assert.Equal(t, "AGE-REAL-KEY", os.Getenv("SOPS_AGE_KEY"))
+	})
+
+	t.Run("SSM fetch error is propagated", func(t *testing.T) {
+		t.Setenv("SOPS_AGE_KEY_PARAMS", "/bad/param")
+		t.Setenv("SOPS_AGE_KEY", "")
+		staticAgeKey = ""
+
+		err := loadAgeKeysFromSSM(makeClients(map[string]string{}))
+		assert.Error(t, err)
+		assert.Contains(t, err.Error(), "/bad/param")
+	})
 }
