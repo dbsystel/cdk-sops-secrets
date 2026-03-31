@@ -2,6 +2,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import {
   Annotations,
+  ArnFormat,
   CustomResource,
   Duration,
   FileSystem,
@@ -295,7 +296,14 @@ export class SopsSyncProvider extends SingletonFunction implements IGrantable {
       typeof param === 'string' ? param : param.parameterName;
     this.sopsAgeKeyParams.push(parameterName);
 
-    const paramArn = `arn:aws:ssm:${Stack.of(this).region}:${Stack.of(this).account}:parameter${parameterName.startsWith('/') ? parameterName : '/' + parameterName}`;
+    const paramArn = Stack.of(this).formatArn({
+      service: 'ssm',
+      resource: 'parameter',
+      resourceName: parameterName.startsWith('/')
+        ? parameterName.slice(1)
+        : parameterName,
+      arnFormat: ArnFormat.SLASH_RESOURCE_NAME,
+    });
 
     this.addToRolePolicy(
       new PolicyStatement({
