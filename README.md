@@ -350,6 +350,7 @@ provider.addAgeKeyFromSsmParameter(keyParam, cmk);
 Both methods can be used together. All keys — static and SSM-fetched — are merged and presented to sops during decryption:
 
 ```ts
+import { SecretValue } from 'aws-cdk-lib';
 import { Key } from 'aws-cdk-lib/aws-kms';
 
 const cmk = Key.fromKeyArn(this, 'SsmCmk', 'arn:aws:kms:us-east-1:111122223333:key/…');
