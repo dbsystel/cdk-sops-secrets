@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.6.5](https://github.com/dbsystel/cdk-sops-secrets/compare/v2.6.4...v2.6.5) (2026-04-09)
+
+
+### Bug Fixes
+
+* move workflow permissions to job level ([1ea64e0](https://github.com/dbsystel/cdk-sops-secrets/commit/1ea64e00827ff1887f432cd89809c99fde9a66d3))
+* prevent script injection in tag-on-merge workflow ([85fb85d](https://github.com/dbsystel/cdk-sops-secrets/commit/85fb85de35b99f54e2fc8a95d3d4e6a178574345))
+* reduce pull-request-lint permissions to read-only ([8d53c56](https://github.com/dbsystel/cdk-sops-secrets/commit/8d53c5695257fdf7a3776ca8e40c4a44f8ecdd4f))
+* remove dangerous workflow patterns ([1f20363](https://github.com/dbsystel/cdk-sops-secrets/commit/1f20363020d66e0a2d5e534ffcbf960559a682d3))
+* remove unnecessary actions:write permission from create-release ([fd3401a](https://github.com/dbsystel/cdk-sops-secrets/commit/fd3401ae0ed1c36d925044fbabae3f69d94e47cf))
+
 ## [2.6.4](https://github.com/dbsystel/cdk-sops-secrets/compare/v2.6.3...v2.6.4) (2026-03-01)
 
 ## [2.6.3](https://github.com/dbsystel/cdk-sops-secrets/compare/v2.6.2...v2.6.3) (2026-02-20)
