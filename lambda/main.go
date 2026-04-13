@@ -68,12 +68,6 @@ func HandleRequestWithClients(clients client.AwsClient, e cfn.Event) (physicalRe
 		return event.GenerateTempPhysicalResourceId(), nil, fmt.Errorf("requestType '%s' not supported", e.RequestType)
 	}
 
-	// Fetch any age private keys stored in SSM Parameter Store and make them
-	// available to sops via SOPS_AGE_KEY before attempting decryption.
-	if err := loadAgeKeysFromSSM(clients); err != nil {
-		return event.GenerateTempPhysicalResourceId(), nil, err
-	}
-
 	// Get the event input from the cloudformation event
 	props, err := event.FromCfnEvent(e)
 	if err != nil {
@@ -84,6 +78,13 @@ func HandleRequestWithClients(clients client.AwsClient, e cfn.Event) (physicalRe
 	secretEncrypted, secretEncryptedErr := props.GetEncryptedSopsSecret(clients)
 	if secretEncryptedErr != nil {
 		return props.GeneratePhysicalResourceId(), nil, secretEncryptedErr
+	}
+
+	// Fetch SSM age keys only when the SOPS file actually uses age encryption.
+	if secretEncrypted.UsesAgeEncryption() {
+		if err := loadAgeKeysFromSSM(clients); err != nil {
+			return props.GeneratePhysicalResourceId(), nil, err
+		}
 	}
 
 	// Decrypt the secret input with sops

@@ -8,6 +8,7 @@ import (
 
 	"github.com/getsops/sops/v3/decrypt"
 	"github.com/markussiebert/cdk-sops-secrets/internal/data"
+	"gopkg.in/yaml.v3"
 )
 
 type Format string
@@ -40,6 +41,42 @@ func CreateEncryptedSopsSecret(content []byte, format Format, hash string) (*Enc
 		Format:  format,
 		Hash:    hash,
 	}, nil
+}
+
+func (e EncryptedSopsSecret) UsesAgeEncryption() bool {
+	logger := slog.With("Package", "sops", "Function", "UsesAgeEncryption")
+
+	switch e.Format {
+	case JSON, BINARY:
+		var meta struct {
+			SOPS struct {
+				Age []json.RawMessage `json:"age"`
+			} `json:"sops"`
+		}
+		if err := json.Unmarshal(e.Content, &meta); err != nil {
+			logger.Warn("could not parse SOPS JSON metadata, assuming age is present", "error", err)
+			return true
+		}
+		return len(meta.SOPS.Age) > 0
+
+	case YAML:
+		var meta struct {
+			SOPS struct {
+				Age []interface{} `yaml:"age"`
+			} `yaml:"sops"`
+		}
+		if err := yaml.Unmarshal(e.Content, &meta); err != nil {
+			logger.Warn("could not parse SOPS YAML metadata, assuming age is present", "error", err)
+			return true
+		}
+		return len(meta.SOPS.Age) > 0
+
+	case DOTENV:
+		return bytes.Contains(e.Content, []byte("sops_age__list_"))
+
+	default:
+		return false
+	}
 }
 
 type DecryptedSopsSecret struct {
