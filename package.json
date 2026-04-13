@@ -1,7 +1,7 @@
 {
   "name": "cdk-sops-secrets",
   "description": "CDK Constructs that syncs your sops secrets into AWS SecretsManager secrets.",
-  "version": "2.6.4",
+  "version": "2.6.5",
   "license": "Apache-2.0",
   "author": {
     "name": "Markus Siebert",
@@ -31,7 +31,7 @@
     "constructs": "^10.0.5"
   },
   "dependencies": {
-    "yaml": "^2.8.1"
+    "yaml": "^2.8.3"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.3",
@@ -40,7 +40,7 @@
     "@typescript-eslint/eslint-plugin": "^8.56.0",
     "@typescript-eslint/parser": "^8.56.0",
     "aws-cdk": "^2.1106.1",
-    "aws-cdk-lib": "2.246.0",
+    "aws-cdk-lib": "2.248.0",
     "commit-and-tag-version": "^12.4.4",
     "constructs": "10.6.0",
     "eslint": "^9.39.3",
@@ -50,11 +50,11 @@
     "eslint-plugin-prettier": "^5.0.0",
     "jest": "^30.0.0",
     "jest-junit": "^16",
-    "jsii": "5.9.35",
-    "jsii-diff": "1.127.0",
+    "jsii": "5.9.37",
+    "jsii-diff": "1.128.0",
     "jsii-docgen": "10.11.15",
-    "jsii-pacmak": "1.127.0",
-    "jsii-rosetta": "5.9.38",
+    "jsii-pacmak": "1.128.0",
+    "jsii-rosetta": "5.9.39",
     "json-schema-to-typescript": "^15.0.4",
     "prettier": "^3.8.1",
     "ts-jest": "^29.0.0",
