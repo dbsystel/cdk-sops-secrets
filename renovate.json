@@ -6,6 +6,13 @@
   "packageRules": [
     {
       "matchManagers": ["gomod"],
+      "matchDepTypes": ["indirect"],
+      "enabled": true,
+      "groupName": "go-deps",
+      "automerge": true
+    },
+    {
+      "matchManagers": ["gomod"],
       "groupName": "go-deps",
       "automerge": true
     },
