@@ -10,6 +10,12 @@
       "automerge": true
     },
     {
+      "matchManagers": ["gomod"],
+      "matchDepTypes": ["indirect"],
+      "matchUpdateTypes": ["major"],
+      "enabled": false
+    },
+    {
       "matchManagers": ["npm"],
       "groupName": "npm-deps",
       "automerge": true
@@ -25,6 +31,6 @@
       "automerge": true
     }
   ],
-  "postUpdateOptions": ["gomodTidy"],
+  "postUpdateOptions": ["gomodTidy", "gomodUpdateImportPaths"],
   "pinDigests": true
 }
