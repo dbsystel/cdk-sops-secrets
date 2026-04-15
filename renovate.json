@@ -6,8 +6,21 @@
   "packageRules": [
     {
       "matchManagers": ["gomod"],
+      "matchDepTypes": ["indirect"],
+      "enabled": true,
       "groupName": "go-deps",
       "automerge": true
+    },
+    {
+      "matchManagers": ["gomod"],
+      "groupName": "go-deps",
+      "automerge": true
+    },
+    {
+      "matchManagers": ["gomod"],
+      "matchDepTypes": ["indirect"],
+      "matchUpdateTypes": ["major"],
+      "enabled": false
     },
     {
       "matchManagers": ["npm"],
@@ -25,6 +38,6 @@
       "automerge": true
     }
   ],
-  "postUpdateOptions": ["gomodTidy"],
+  "postUpdateOptions": ["gomodTidy", "gomodUpdateImportPaths"],
   "pinDigests": true
 }
