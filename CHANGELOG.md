@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.6.6](https://github.com/dbsystel/cdk-sops-secrets/compare/v2.6.5...v2.6.6) (2026-04-16)
+
+
+### Bug Fixes
+
+* bump Go indirect deps for CVE fixes and enable Renovate indirect updates ([c058243](https://github.com/dbsystel/cdk-sops-secrets/commit/c0582437b7f3d6f81eec0f2fcc8c9ca465aca646)), closes [#1305](https://github.com/dbsystel/cdk-sops-secrets/issues/1305)
+* **renovate:** disable major updates for indirect Go deps ([c2ab489](https://github.com/dbsystel/cdk-sops-secrets/commit/c2ab4893d0b0d25afef55a7979eb7aa8bf0181ba))
+
 ## [2.6.5](https://github.com/dbsystel/cdk-sops-secrets/compare/v2.6.4...v2.6.5) (2026-04-09)
 
 
