@@ -784,7 +784,9 @@ test('Age Key from SSM Parameter string', () => {
               'Fn::Join': [
                 '',
                 [
-                  'arn:aws:ssm:',
+                  'arn:',
+                  { Ref: 'AWS::Partition' },
+                  ':ssm:',
                   { Ref: 'AWS::Region' },
                   ':',
                   { Ref: 'AWS::AccountId' },
@@ -901,7 +903,9 @@ test('Age Key from SSM Parameter without leading slash gets correct ARN', () => 
               'Fn::Join': [
                 '',
                 [
-                  'arn:aws:ssm:',
+                  'arn:',
+                  { Ref: 'AWS::Partition' },
+                  ':ssm:',
                   { Ref: 'AWS::Region' },
                   ':',
                   { Ref: 'AWS::AccountId' },
