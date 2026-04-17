@@ -1,0 +1,8 @@
+
+[TestSsmGetParameter - 1]
+&ssm.GetParameterInput{
+    Name:                  &"/test/age/key",
+    WithDecryption:        &bool(true),
+    noSmithyDocumentSerde: document.NoSerde{},
+}
+---

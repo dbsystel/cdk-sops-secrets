@@ -11,6 +11,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/aws/aws-sdk-go-v2/service/secretsmanager"
 	"github.com/aws/aws-sdk-go-v2/service/ssm"
+	ssmTypes "github.com/aws/aws-sdk-go-v2/service/ssm/types"
 	"github.com/aws/smithy-go/ptr"
 	"github.com/stretchr/testify/assert"
 )
@@ -227,6 +228,71 @@ func TestSsmPutParameter(t *testing.T) {
 			resp, err := client.SsmPutParameter("parameter", &content, "key")
 			assert.Equal(t, tt.mockClient.ReturnError, err)
 			assert.Equal(t, tt.mockClient.PutParameterRet, resp)
+		})
+	}
+}
+
+func TestSsmGetParameter(t *testing.T) {
+	tests := []struct {
+		name           string
+		mockClient     *MockAwsClient
+		expectedValue  *string
+		expectedErrMsg string
+	}{
+		{
+			name: "successful get parameter",
+			mockClient: &MockAwsClient{
+				t:             t,
+				snapsFileName: "ssm_get_parameter",
+				GetParameterRet: &ssm.GetParameterOutput{
+					Parameter: &ssmTypes.Parameter{
+						Value: aws.String("AGE-SECRET-KEY-1MOCK"),
+					},
+				},
+				ReturnError: nil,
+			},
+			expectedValue: aws.String("AGE-SECRET-KEY-1MOCK"),
+		},
+		{
+			name: "get parameter error",
+			mockClient: &MockAwsClient{
+				t:               t,
+				snapsFileName:   "ssm_get_parameter_error",
+				GetParameterRet: nil,
+				ReturnError:     fmt.Errorf("mock error"),
+			},
+			expectedErrMsg: "SSM get parameter error:\nmock error",
+		},
+		{
+			name: "nil parameter value",
+			mockClient: &MockAwsClient{
+				t:             t,
+				snapsFileName: "ssm_get_parameter_nil_value",
+				GetParameterRet: &ssm.GetParameterOutput{
+					Parameter: &ssmTypes.Parameter{
+						Value: nil,
+					},
+				},
+				ReturnError: nil,
+			},
+			expectedErrMsg: "SSM parameter value is nil",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			client := &Client{
+				ctx: context.Background(),
+				ssm: tt.mockClient,
+			}
+			value, err := client.SsmGetParameter("/test/age/key")
+			if tt.expectedErrMsg != "" {
+				assert.Error(t, err)
+				assert.Contains(t, err.Error(), tt.expectedErrMsg)
+			} else {
+				assert.NoError(t, err)
+				assert.Equal(t, tt.expectedValue, value)
+			}
 		})
 	}
 }
