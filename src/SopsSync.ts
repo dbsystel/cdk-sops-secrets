@@ -18,11 +18,11 @@ import {
   PolicyStatement,
 } from 'aws-cdk-lib/aws-iam';
 import { IKey, Key } from 'aws-cdk-lib/aws-kms';
-import { IStringParameter } from 'aws-cdk-lib/aws-ssm';
 import { Code, Runtime, SingletonFunction } from 'aws-cdk-lib/aws-lambda';
 import { RetentionDays, ILogGroup } from 'aws-cdk-lib/aws-logs';
 import { Asset } from 'aws-cdk-lib/aws-s3-assets';
 import { ISecret } from 'aws-cdk-lib/aws-secretsmanager';
+import { IStringParameter } from 'aws-cdk-lib/aws-ssm';
 import { Construct } from 'constructs';
 import { SopsSyncResourcePropertys } from './LambdaInterface';
 
