@@ -2,6 +2,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import {
   Annotations,
+  ArnFormat,
   CustomResource,
   Duration,
   FileSystem,
@@ -21,6 +22,7 @@ import { Code, Runtime, SingletonFunction } from 'aws-cdk-lib/aws-lambda';
 import { RetentionDays, ILogGroup } from 'aws-cdk-lib/aws-logs';
 import { Asset } from 'aws-cdk-lib/aws-s3-assets';
 import { ISecret } from 'aws-cdk-lib/aws-secretsmanager';
+import { IStringParameter } from 'aws-cdk-lib/aws-ssm';
 import { Construct } from 'constructs';
 import { SopsSyncResourcePropertys } from './LambdaInterface';
 
@@ -225,6 +227,7 @@ export interface SopsSyncProviderProps {
 
 export class SopsSyncProvider extends SingletonFunction implements IGrantable {
   private sopsAgeKeys: SecretValue[];
+  private sopsAgeKeyParams: string[];
 
   constructor(scope: Construct, id?: string, props?: SopsSyncProviderProps) {
     if (id === undefined) {
@@ -250,6 +253,9 @@ export class SopsSyncProvider extends SingletonFunction implements IGrantable {
               this.sopsAgeKeys.map((secret) => secret.unsafeUnwrap()) ?? []
             ).join('\n'),
         }),
+        SOPS_AGE_KEY_PARAMS: Lazy.string({
+          produce: () => this.sopsAgeKeyParams.join('\n'),
+        }),
       },
       vpc: props?.vpc,
       vpcSubnets: props?.vpcSubnets,
@@ -260,10 +266,53 @@ export class SopsSyncProvider extends SingletonFunction implements IGrantable {
       logGroup: props?.logGroup,
     });
     this.sopsAgeKeys = [];
+    this.sopsAgeKeyParams = [];
   }
 
   public addAgeKey(key: SecretValue) {
     this.sopsAgeKeys.push(key);
+  }
+
+  /**
+   * Configure the Lambda to fetch an age private key from an SSM Parameter
+   * Store SecureString at runtime, rather than injecting it as a plaintext
+   * environment variable at synthesis time.
+   *
+   * The KMS key used to encrypt the SecureString is required: storing an age
+   * private key without envelope encryption is considered insecure.
+   *
+   * The Lambda is automatically granted `ssm:GetParameter` on the parameter
+   * and `kms:Decrypt` on the encryption key.
+   *
+   * @param param          Parameter name string (e.g. '/sops/age/key') or an
+   *                       `IStringParameter` reference from `aws-cdk-lib/aws-ssm`.
+   * @param encryptionKey  KMS key used to encrypt the SecureString parameter.
+   */
+  public addAgeKeyFromSsmParameter(
+    param: string | IStringParameter,
+    encryptionKey: IKey,
+  ): void {
+    const parameterName =
+      typeof param === 'string' ? param : param.parameterName;
+    this.sopsAgeKeyParams.push(parameterName);
+
+    const paramArn = Stack.of(this).formatArn({
+      service: 'ssm',
+      resource: 'parameter',
+      resourceName: parameterName.startsWith('/')
+        ? parameterName.slice(1)
+        : parameterName,
+      arnFormat: ArnFormat.SLASH_RESOURCE_NAME,
+    });
+
+    this.addToRolePolicy(
+      new PolicyStatement({
+        actions: ['ssm:GetParameter'],
+        resources: [paramArn],
+      }),
+    );
+
+    encryptionKey.grantDecrypt(this);
   }
 }
 

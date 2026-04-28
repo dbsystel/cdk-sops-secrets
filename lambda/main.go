@@ -4,12 +4,56 @@ import (
 	"context"
 	"fmt"
 	"log/slog"
+	"os"
+	"strings"
 
 	"github.com/aws/aws-lambda-go/cfn"
 	runtime "github.com/aws/aws-lambda-go/lambda"
 	"github.com/markussiebert/cdk-sops-secrets/internal/client"
 	"github.com/markussiebert/cdk-sops-secrets/internal/event"
 )
+
+// staticAgeKey captures the value of SOPS_AGE_KEY at Lambda cold-start so that
+// loadAgeKeysFromSSM can always rebuild the combined key list correctly across
+// warm invocations without duplicating the static portion.
+var staticAgeKey = os.Getenv("SOPS_AGE_KEY")
+
+// loadAgeKeysFromSSM reads parameter names from SOPS_AGE_KEY_PARAMS (newline-
+// separated), fetches each SecureString from SSM Parameter Store with decryption,
+// and sets SOPS_AGE_KEY to the combined value of any static key already present
+// at cold-start plus all SSM-fetched keys.  The function is a no-op when
+// SOPS_AGE_KEY_PARAMS is unset or empty.
+func loadAgeKeysFromSSM(clients client.AwsClient) error {
+	logger := slog.With("Package", "main", "Function", "loadAgeKeysFromSSM")
+
+	paramList := os.Getenv("SOPS_AGE_KEY_PARAMS")
+	if paramList == "" {
+		return nil
+	}
+
+	var ageKeys []string
+	if staticAgeKey != "" {
+		ageKeys = append(ageKeys, staticAgeKey)
+	}
+
+	for _, paramName := range strings.Split(paramList, "\n") {
+		paramName = strings.TrimSpace(paramName)
+		if paramName == "" {
+			continue
+		}
+		logger.Info("Fetching age key from SSM Parameter Store", "Parameter", paramName)
+		value, err := clients.SsmGetParameter(paramName)
+		if err != nil {
+			return fmt.Errorf("failed to fetch age key from SSM parameter %s: %v", paramName, err)
+		}
+		if value == nil {
+			return fmt.Errorf("received nil value for SSM parameter %s", paramName)
+		}
+		ageKeys = append(ageKeys, *value)
+	}
+
+	return os.Setenv("SOPS_AGE_KEY", strings.Join(ageKeys, "\n"))
+}
 
 func HandleRequestWithClients(clients client.AwsClient, e cfn.Event) (physicalResourceID string, data map[string]interface{}, err error) {
 	logger := slog.With("Package", "main", "Function", "HandleRequestWithClients")
@@ -34,6 +78,13 @@ func HandleRequestWithClients(clients client.AwsClient, e cfn.Event) (physicalRe
 	secretEncrypted, secretEncryptedErr := props.GetEncryptedSopsSecret(clients)
 	if secretEncryptedErr != nil {
 		return props.GeneratePhysicalResourceId(), nil, secretEncryptedErr
+	}
+
+	// Fetch SSM age keys only when the SOPS file actually uses age encryption.
+	if secretEncrypted.UsesAgeEncryption() {
+		if err := loadAgeKeysFromSSM(clients); err != nil {
+			return props.GeneratePhysicalResourceId(), nil, err
+		}
 	}
 
 	// Decrypt the secret input with sops

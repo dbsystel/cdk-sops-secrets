@@ -28,6 +28,7 @@ type SecretsManagerClient interface {
 
 type SsmClient interface {
 	PutParameter(ctx context.Context, params *ssm.PutParameterInput, optFns ...func(*ssm.Options)) (*ssm.PutParameterOutput, error)
+	GetParameter(ctx context.Context, params *ssm.GetParameterInput, optFns ...func(*ssm.Options)) (*ssm.GetParameterOutput, error)
 }
 
 type AwsClient interface {
@@ -35,6 +36,7 @@ type AwsClient interface {
 	S3GetObjectETAG(file SopsS3File) (*string, error)
 	SecretsManagerPutSecretValue(sopsHash string, secretArn string, secretContent *[]byte, binary *bool) (data *secretsmanager.PutSecretValueOutput, err error)
 	SsmPutParameter(parameterName string, parameterContent *[]byte, keyId string) (response *ssm.PutParameterOutput, err error)
+	SsmGetParameter(parameterName string) (*string, error)
 }
 
 type Client struct {
@@ -133,4 +135,21 @@ func (c *Client) SsmPutParameter(parameterName string, parameterContent *[]byte,
 		KeyId:     &keyId,
 	}
 	return c.ssm.PutParameter(c.ctx, input)
+}
+
+func (c *Client) SsmGetParameter(parameterName string) (*string, error) {
+	logger := slog.With("Package", "client", "Function", "SsmGetParameter")
+	logger.Info("Fetching parameter", "Name", parameterName)
+
+	resp, err := c.ssm.GetParameter(c.ctx, &ssm.GetParameterInput{
+		Name:           &parameterName,
+		WithDecryption: aws.Bool(true),
+	})
+	if err != nil {
+		return nil, fmt.Errorf("SSM get parameter error:\n%v", err)
+	}
+	if resp.Parameter == nil || resp.Parameter.Value == nil {
+		return nil, fmt.Errorf("SSM parameter value is nil for parameter: %s", parameterName)
+	}
+	return resp.Parameter.Value, nil
 }

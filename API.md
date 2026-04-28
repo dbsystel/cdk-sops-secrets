@@ -43,6 +43,7 @@ new MultiStringParameter(scope: Construct, id: string, props: MultiStringParamet
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#cdk-sops-secrets.MultiStringParameter.toString">toString</a></code> | Returns a string representation of this construct. |
+| <code><a href="#cdk-sops-secrets.MultiStringParameter.with">with</a></code> | Applies one or more mixins to this construct. |
 
 ---
 
@@ -53,6 +54,27 @@ public toString(): string
 ```
 
 Returns a string representation of this construct.
+
+##### `with` <a name="with" id="cdk-sops-secrets.MultiStringParameter.with"></a>
+
+```typescript
+public with(mixins: ...IMixin[]): IConstruct
+```
+
+Applies one or more mixins to this construct.
+
+Mixins are applied in order. The list of constructs is captured at the
+start of the call, so constructs added by a mixin will not be visited.
+Use multiple `with()` calls if subsequent mixins should apply to added
+constructs.
+
+###### `mixins`<sup>Required</sup> <a name="mixins" id="cdk-sops-secrets.MultiStringParameter.with.parameter.mixins"></a>
+
+- *Type:* ...constructs.IMixin[]
+
+The mixins to apply.
+
+---
 
 #### Static Functions <a name="Static Functions" id="Static Functions"></a>
 
@@ -226,6 +248,7 @@ new SopsSecret(scope: Construct, id: string, props: SopsSecretProps)
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#cdk-sops-secrets.SopsSecret.toString">toString</a></code> | Returns a string representation of this construct. |
+| <code><a href="#cdk-sops-secrets.SopsSecret.with">with</a></code> | Applies one or more mixins to this construct. |
 | <code><a href="#cdk-sops-secrets.SopsSecret.addRotationSchedule">addRotationSchedule</a></code> | Adds a rotation schedule to the secret. |
 | <code><a href="#cdk-sops-secrets.SopsSecret.addToResourcePolicy">addToResourcePolicy</a></code> | Adds a statement to the IAM resource policy associated with this secret. |
 | <code><a href="#cdk-sops-secrets.SopsSecret.applyRemovalPolicy">applyRemovalPolicy</a></code> | Apply the given removal policy to this resource. |
@@ -246,6 +269,27 @@ public toString(): string
 ```
 
 Returns a string representation of this construct.
+
+##### `with` <a name="with" id="cdk-sops-secrets.SopsSecret.with"></a>
+
+```typescript
+public with(mixins: ...IMixin[]): IConstruct
+```
+
+Applies one or more mixins to this construct.
+
+Mixins are applied in order. The list of constructs is captured at the
+start of the call, so constructs added by a mixin will not be visited.
+Use multiple `with()` calls if subsequent mixins should apply to added
+constructs.
+
+###### `mixins`<sup>Required</sup> <a name="mixins" id="cdk-sops-secrets.SopsSecret.with.parameter.mixins"></a>
+
+- *Type:* ...constructs.IMixin[]
+
+The mixins to apply.
+
+---
 
 ##### `addRotationSchedule` <a name="addRotationSchedule" id="cdk-sops-secrets.SopsSecret.addRotationSchedule"></a>
 
@@ -637,6 +681,7 @@ new SopsStringParameter(scope: Construct, id: string, props: SopsStringParameter
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#cdk-sops-secrets.SopsStringParameter.toString">toString</a></code> | Returns a string representation of this construct. |
+| <code><a href="#cdk-sops-secrets.SopsStringParameter.with">with</a></code> | Applies one or more mixins to this construct. |
 | <code><a href="#cdk-sops-secrets.SopsStringParameter.applyRemovalPolicy">applyRemovalPolicy</a></code> | Apply the given removal policy to this resource. |
 | <code><a href="#cdk-sops-secrets.SopsStringParameter.grantRead">grantRead</a></code> | Grants read (DescribeParameter, GetParameters, GetParameter, GetParameterHistory) permissions on the SSM Parameter. |
 | <code><a href="#cdk-sops-secrets.SopsStringParameter.grantWrite">grantWrite</a></code> | Grants write (PutParameter) permissions on the SSM Parameter. |
@@ -650,6 +695,27 @@ public toString(): string
 ```
 
 Returns a string representation of this construct.
+
+##### `with` <a name="with" id="cdk-sops-secrets.SopsStringParameter.with"></a>
+
+```typescript
+public with(mixins: ...IMixin[]): IConstruct
+```
+
+Applies one or more mixins to this construct.
+
+Mixins are applied in order. The list of constructs is captured at the
+start of the call, so constructs added by a mixin will not be visited.
+Use multiple `with()` calls if subsequent mixins should apply to added
+constructs.
+
+###### `mixins`<sup>Required</sup> <a name="mixins" id="cdk-sops-secrets.SopsStringParameter.with.parameter.mixins"></a>
+
+- *Type:* ...constructs.IMixin[]
+
+The mixins to apply.
+
+---
 
 ##### `applyRemovalPolicy` <a name="applyRemovalPolicy" id="cdk-sops-secrets.SopsStringParameter.applyRemovalPolicy"></a>
 
@@ -928,6 +994,7 @@ new SopsSync(scope: Construct, id: string, props: SopsSyncProps)
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#cdk-sops-secrets.SopsSync.toString">toString</a></code> | Returns a string representation of this construct. |
+| <code><a href="#cdk-sops-secrets.SopsSync.with">with</a></code> | Applies one or more mixins to this construct. |
 
 ---
 
@@ -938,6 +1005,27 @@ public toString(): string
 ```
 
 Returns a string representation of this construct.
+
+##### `with` <a name="with" id="cdk-sops-secrets.SopsSync.with"></a>
+
+```typescript
+public with(mixins: ...IMixin[]): IConstruct
+```
+
+Applies one or more mixins to this construct.
+
+Mixins are applied in order. The list of constructs is captured at the
+start of the call, so constructs added by a mixin will not be visited.
+Use multiple `with()` calls if subsequent mixins should apply to added
+constructs.
+
+###### `mixins`<sup>Required</sup> <a name="mixins" id="cdk-sops-secrets.SopsSync.with.parameter.mixins"></a>
+
+- *Type:* ...constructs.IMixin[]
+
+The mixins to apply.
+
+---
 
 #### Static Functions <a name="Static Functions" id="Static Functions"></a>
 
@@ -1056,6 +1144,7 @@ new SopsSyncProvider(scope: Construct, id?: string, props?: SopsSyncProviderProp
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#cdk-sops-secrets.SopsSyncProvider.toString">toString</a></code> | Returns a string representation of this construct. |
+| <code><a href="#cdk-sops-secrets.SopsSyncProvider.with">with</a></code> | Applies one or more mixins to this construct. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProvider.applyRemovalPolicy">applyRemovalPolicy</a></code> | Apply the given removal policy to this resource. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProvider.addEventSource">addEventSource</a></code> | Adds an event source to this function. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProvider.addEventSourceMapping">addEventSourceMapping</a></code> | Adds an event source that maps to this AWS Lambda function. |
@@ -1080,6 +1169,7 @@ new SopsSyncProvider(scope: Construct, id?: string, props?: SopsSyncProviderProp
 | <code><a href="#cdk-sops-secrets.SopsSyncProvider.addMetadata">addMetadata</a></code> | Use this method to write to the construct tree. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProvider.dependOn">dependOn</a></code> | The SingletonFunction construct cannot be added as a dependency of another construct using node.addDependency(). Use this method instead to declare this as a dependency of another construct. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProvider.addAgeKey">addAgeKey</a></code> | *No description.* |
+| <code><a href="#cdk-sops-secrets.SopsSyncProvider.addAgeKeyFromSsmParameter">addAgeKeyFromSsmParameter</a></code> | Configure the Lambda to fetch an age private key from an SSM Parameter Store SecureString at runtime, rather than injecting it as a plaintext environment variable at synthesis time. |
 
 ---
 
@@ -1090,6 +1180,25 @@ public toString(): string
 ```
 
 Returns a string representation of this construct.
+
+##### `with` <a name="with" id="cdk-sops-secrets.SopsSyncProvider.with"></a>
+
+```typescript
+public with(mixins: ...IMixin[]): IConstruct
+```
+
+Applies one or more mixins to this construct.
+
+Mixins are applied in order. The list of constructs is captured at the
+start of the call, so constructs added by a mixin will not be visited.
+Use multiple `with()` calls if subsequent mixins should apply to added
+constructs.
+
+###### `mixins`<sup>Required</sup> <a name="mixins" id="cdk-sops-secrets.SopsSyncProvider.with.parameter.mixins"></a>
+
+- *Type:* ...constructs.IMixin[]
+
+---
 
 ##### `applyRemovalPolicy` <a name="applyRemovalPolicy" id="cdk-sops-secrets.SopsSyncProvider.applyRemovalPolicy"></a>
 
@@ -1250,6 +1359,8 @@ public grantInvoke(grantee: IGrantable): Grant
 
 Grant the given identity permissions to invoke this Lambda.
 
+[disable-awslint:no-grants]
+
 ###### `grantee`<sup>Required</sup> <a name="grantee" id="cdk-sops-secrets.SopsSyncProvider.grantInvoke.parameter.grantee"></a>
 
 - *Type:* aws-cdk-lib.aws_iam.IGrantable
@@ -1263,6 +1374,8 @@ public grantInvokeCompositePrincipal(compositePrincipal: CompositePrincipal): Gr
 ```
 
 Grant multiple principals the ability to invoke this Lambda via CompositePrincipal.
+
+[disable-awslint:no-grants]
 
 ###### `compositePrincipal`<sup>Required</sup> <a name="compositePrincipal" id="cdk-sops-secrets.SopsSyncProvider.grantInvokeCompositePrincipal.parameter.compositePrincipal"></a>
 
@@ -1278,6 +1391,8 @@ public grantInvokeLatestVersion(grantee: IGrantable): Grant
 
 Grant the given identity permissions to invoke the $LATEST version or unqualified version of this Lambda.
 
+[disable-awslint:no-grants]
+
 ###### `grantee`<sup>Required</sup> <a name="grantee" id="cdk-sops-secrets.SopsSyncProvider.grantInvokeLatestVersion.parameter.grantee"></a>
 
 - *Type:* aws-cdk-lib.aws_iam.IGrantable
@@ -1292,6 +1407,8 @@ public grantInvokeUrl(grantee: IGrantable): Grant
 
 Grant the given identity permissions to invoke this Lambda Function URL.
 
+[disable-awslint:no-grants]
+
 ###### `grantee`<sup>Required</sup> <a name="grantee" id="cdk-sops-secrets.SopsSyncProvider.grantInvokeUrl.parameter.grantee"></a>
 
 - *Type:* aws-cdk-lib.aws_iam.IGrantable
@@ -1305,6 +1422,8 @@ public grantInvokeVersion(grantee: IGrantable, version: IVersion): Grant
 ```
 
 Grant the given identity permissions to invoke the given version of this Lambda.
+
+[disable-awslint:no-grants]
 
 ###### `grantee`<sup>Required</sup> <a name="grantee" id="cdk-sops-secrets.SopsSyncProvider.grantInvokeVersion.parameter.grantee"></a>
 
@@ -1517,6 +1636,36 @@ public addAgeKey(key: SecretValue): void
 ###### `key`<sup>Required</sup> <a name="key" id="cdk-sops-secrets.SopsSyncProvider.addAgeKey.parameter.key"></a>
 
 - *Type:* aws-cdk-lib.SecretValue
+
+---
+
+##### `addAgeKeyFromSsmParameter` <a name="addAgeKeyFromSsmParameter" id="cdk-sops-secrets.SopsSyncProvider.addAgeKeyFromSsmParameter"></a>
+
+```typescript
+public addAgeKeyFromSsmParameter(param: string | IStringParameter, encryptionKey: IKey): void
+```
+
+Configure the Lambda to fetch an age private key from an SSM Parameter Store SecureString at runtime, rather than injecting it as a plaintext environment variable at synthesis time.
+
+The KMS key used to encrypt the SecureString is required: storing an age
+private key without envelope encryption is considered insecure.
+
+The Lambda is automatically granted `ssm:GetParameter` on the parameter
+and `kms:Decrypt` on the encryption key.
+
+###### `param`<sup>Required</sup> <a name="param" id="cdk-sops-secrets.SopsSyncProvider.addAgeKeyFromSsmParameter.parameter.param"></a>
+
+- *Type:* string | aws-cdk-lib.aws_ssm.IStringParameter
+
+Parameter name string (e.g. '/sops/age/key') or an `IStringParameter` reference from `aws-cdk-lib/aws-ssm`.
+
+---
+
+###### `encryptionKey`<sup>Required</sup> <a name="encryptionKey" id="cdk-sops-secrets.SopsSyncProvider.addAgeKeyFromSsmParameter.parameter.encryptionKey"></a>
+
+- *Type:* aws-cdk-lib.aws_kms.IKey
+
+KMS key used to encrypt the SecureString parameter.
 
 ---
 
