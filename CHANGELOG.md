@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.6.7](https://github.com/dbsystel/cdk-sops-secrets/compare/v2.6.6...v2.6.7) (2026-05-05)
+
+
+### Bug Fixes
+
+* introduce SOPS key as ssm parameter ([#1291](https://github.com/dbsystel/cdk-sops-secrets/issues/1291)) ([d18e6e2](https://github.com/dbsystel/cdk-sops-secrets/commit/d18e6e222c5b1fedece04be42d334fa420da4510))
+
 ## [2.6.6](https://github.com/dbsystel/cdk-sops-secrets/compare/v2.6.5...v2.6.6) (2026-04-16)
 
 
