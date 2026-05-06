@@ -1,0 +1,4 @@
+creation_rules:
+    - path_regex: testsecret.sops.yaml
+      unencrypted_suffix: _expiration
+      age: age1djllw2pzuprrqc0en5m8vc8k5ge3tm0f6g7cj0c0glfzp44vdc4ql8ngvu

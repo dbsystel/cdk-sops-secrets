@@ -1,6 +1,6 @@
 import * as cdk from 'aws-cdk-lib';
 import { ConstantAssetHashAspect } from './ConstantAssetHashAspect';
-import { RawOutput, SopsSecret } from '../src/index';
+import { RawOutput, SopsSecret, SopsSecretProps } from '../src/index';
 
 const app = new cdk.App();
 const stack = new cdk.Stack(app, 'SECRET');
@@ -11,7 +11,7 @@ cdk.Aspects.of(stack).add(new ConstantAssetHashAspect());
 interface TestCase {
   name: string;
   sopsFilePath: string;
-  additionalProperties: Record<string, any>;
+  additionalProperties: SopsSecretProps;
 }
 
 const tc = [
@@ -30,7 +30,11 @@ const tc = [
   {
     name: 'Yaml2Json',
     sopsFilePath: 'test-secrets/testsecret.sops.yaml',
-    additionalProperties: {},
+    additionalProperties: {
+      expiration: {
+        daysBeforeExpiration: 9,
+      },
+    },
   },
   {
     name: 'Yaml2RawString',
