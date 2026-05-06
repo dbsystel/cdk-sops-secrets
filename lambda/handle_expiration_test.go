@@ -132,7 +132,8 @@ func TestScanExpirationKeys_DefaultSuffix(t *testing.T) {
 		"gitlab_token_expiration": "2099-12-31",
 		"other_key":               "value",
 	}
-	result := scanExpirationKeys(secretMap, "_expiration")
+	result, err := scanExpirationKeys(secretMap, "_expiration")
+	require.NoError(t, err)
 	require.Len(t, result, 1)
 	assert.Contains(t, result, "gitlab_token")
 }
@@ -144,19 +145,22 @@ func TestScanExpirationKeys_CustomSuffix(t *testing.T) {
 		"api_key_exp":   "2099-06-01",
 		"other_key_exp": "2099-07-01",
 	}
-	result := scanExpirationKeys(secretMap, "_exp")
+	result, err := scanExpirationKeys(secretMap, "_exp")
+	require.NoError(t, err)
 	assert.Len(t, result, 2)
 }
 
-func TestScanExpirationKeys_InvalidDateSkipped(t *testing.T) {
+func TestScanExpirationKeys_InvalidDateReturnsError(t *testing.T) {
 	t.Parallel()
 	secretMap := map[string]string{
 		"token_expiration": "not-a-date",
 		"key_expiration":   "2099-01-01",
 	}
-	result := scanExpirationKeys(secretMap, "_expiration")
-	assert.Len(t, result, 1)
-	assert.Contains(t, result, "key")
+	result, err := scanExpirationKeys(secretMap, "_expiration")
+	require.Error(t, err)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "token_expiration")
+	assert.Contains(t, err.Error(), "not-a-date")
 }
 
 func TestScanExpirationKeys_NoMatches(t *testing.T) {
@@ -165,7 +169,8 @@ func TestScanExpirationKeys_NoMatches(t *testing.T) {
 		"foo": "bar",
 		"baz": "qux",
 	}
-	result := scanExpirationKeys(secretMap, "_expiration")
+	result, err := scanExpirationKeys(secretMap, "_expiration")
+	require.NoError(t, err)
 	assert.Empty(t, result)
 }
 
@@ -254,6 +259,29 @@ func TestHandleExpirationUpsert_DefaultSuffixAndDays(t *testing.T) {
 	require.NoError(t, err)
 	require.Len(t, mockClient.upsertCalls, 1)
 	assert.Equal(t, "api_key", mockClient.upsertCalls[0].name)
+}
+
+func TestHandleExpirationUpsert_InvalidDateReturnsError(t *testing.T) {
+	t.Parallel()
+	mockClient := &mockExpirationClient{}
+
+	props := &event.SopsSyncResourceProperties{
+		Expiration: &event.Expiration{
+			TopicArn:          "arn:aws:sns:eu-central-1:123456789:my-topic",
+			SchedulerRoleArn:  "arn:aws:iam::123456789:role/my-role",
+			ScheduleGroupName: "my-group",
+		},
+	}
+
+	secretMap := map[string]string{
+		"api_key_expiration": "not-a-date",
+	}
+
+	err := handleExpirationUpsert(props, mockClient, secretMap, "arn:aws:secretsmanager:eu-central-1:123456789:secret:my-secret")
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "api_key_expiration")
+	assert.Contains(t, err.Error(), "not-a-date")
+	assert.Empty(t, mockClient.upsertCalls)
 }
 
 // ---- handleExpirationDelete tests ----

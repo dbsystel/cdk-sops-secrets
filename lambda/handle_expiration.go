@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log/slog"
 	"regexp"
+	"sort"
 	"strings"
 	"time"
 
@@ -53,22 +54,33 @@ func parseExpirationDate(value string) (time.Time, error) {
 
 // scanExpirationKeys scans the flattened secret map for keys that end with the
 // given suffix and returns a map of base key → expiration time.
-func scanExpirationKeys(secretMap map[string]string, suffix string) map[string]time.Time {
+func scanExpirationKeys(secretMap map[string]string, suffix string) (map[string]time.Time, error) {
 	result := make(map[string]time.Time)
-	for key, value := range secretMap {
+
+	keys := make([]string, 0, len(secretMap))
+	for key := range secretMap {
+		keys = append(keys, key)
+	}
+	sort.Strings(keys)
+
+	for _, key := range keys {
+		value := secretMap[key]
 		if !strings.HasSuffix(key, suffix) {
 			continue
 		}
 		baseKey := strings.TrimSuffix(key, suffix)
 		t, err := parseExpirationDate(value)
 		if err != nil {
-			slog.Warn("Skipping unparseable expiration date",
-				"key", key, "value", value, "error", err)
-			continue
+			return nil, fmt.Errorf(
+				"failed to parse expiration date for key %s with value %q: %w",
+				key,
+				value,
+				err,
+			)
 		}
 		result[baseKey] = t
 	}
-	return result
+	return result, nil
 }
 
 // handleExpirationUpsert creates or updates EventBridge Scheduler schedules for
@@ -92,7 +104,10 @@ func handleExpirationUpsert(
 		days = *exp.DaysBeforeExpiration
 	}
 
-	expirations := scanExpirationKeys(secretMap, suffix)
+	expirations, err := scanExpirationKeys(secretMap, suffix)
+	if err != nil {
+		return err
+	}
 	if len(expirations) == 0 {
 		logger.Info("No expiration keys found in secret", "Suffix", suffix)
 		return nil
