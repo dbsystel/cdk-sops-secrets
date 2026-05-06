@@ -934,7 +934,8 @@ test('Expiration disabled by default - no scheduler/SNS resources', () => {
   const template = Template.fromStack(stack);
   template.resourceCountIs('AWS::SNS::Topic', 0);
   template.resourceCountIs('AWS::Scheduler::ScheduleGroup', 0);
-  template.resourceCountIs('AWS::IAM::Role', 0);
+  // The singleton SopsSync provider Lambda still needs its execution role.
+  template.resourceCountIs('AWS::IAM::Role', 1);
 });
 
 test('Expiration enabled - auto-creates SNS topic, scheduler role, and schedule group', () => {
@@ -1021,7 +1022,10 @@ test('Expiration enabled - Lambda role gets scheduler and iam:PassRole permissio
     PolicyDocument: Match.objectLike({
       Statement: Match.arrayWith([
         Match.objectLike({
-          Action: Match.arrayWith(['scheduler:CreateSchedule', 'scheduler:UpdateSchedule']),
+          Action: Match.arrayWith([
+            'scheduler:CreateSchedule',
+            'scheduler:UpdateSchedule',
+          ]),
           Effect: 'Allow',
         }),
       ]),

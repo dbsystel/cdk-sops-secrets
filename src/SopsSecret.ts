@@ -3,9 +3,11 @@ import {
   Grant,
   IGrantable,
   PolicyStatement,
+  Role,
+  ServicePrincipal,
 } from 'aws-cdk-lib/aws-iam';
-import { Role, ServicePrincipal } from 'aws-cdk-lib/aws-iam';
 import { IKey, ViaServicePrincipal } from 'aws-cdk-lib/aws-kms';
+import { CfnScheduleGroup } from 'aws-cdk-lib/aws-scheduler';
 import {
   ISecret,
   ISecretAttachmentTarget,
@@ -16,7 +18,6 @@ import {
   SecretProps,
   SecretReference,
 } from 'aws-cdk-lib/aws-secretsmanager';
-import { CfnScheduleGroup } from 'aws-cdk-lib/aws-scheduler';
 import { ITopic, Topic } from 'aws-cdk-lib/aws-sns';
 import {
   Names,
@@ -27,7 +28,12 @@ import {
   Stack,
 } from 'aws-cdk-lib/core';
 import { Construct } from 'constructs';
-import { ResourceType, SopsSync, SopsSyncOptions } from './SopsSync';
+import {
+  ResourceType,
+  SopsSync,
+  SopsSyncOptions,
+  SopsExpirationConfig,
+} from './SopsSync';
 
 export enum RawOutput {
   /**
@@ -173,7 +179,7 @@ export class SopsSecret extends Construct implements ISecret {
       resourceType = ResourceType.SECRET_RAW;
     }
 
-    let expirationConfig: import('./SopsSync').SopsExpirationConfig | undefined;
+    let expirationConfig: SopsExpirationConfig | undefined;
     if (props.expiration !== undefined) {
       const topic =
         props.expiration.notificationTopic ??
@@ -207,12 +213,12 @@ export class SopsSecret extends Construct implements ISecret {
     }
 
     this.sync = new SopsSync(this, 'SopsSync', {
+      ...(props as SopsSyncOptions),
       target: this.secret.secretArn,
       resourceType,
       flattenSeparator: '.',
       secret: this.secret,
       expiration: expirationConfig,
-      ...(props as SopsSyncOptions),
     });
   }
 
