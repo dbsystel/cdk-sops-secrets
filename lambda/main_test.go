@@ -74,6 +74,18 @@ func (m *MockAwsClient) SsmGetParameter(parameterName string) (*string, error) {
 	return &v, nil
 }
 
+func (m *MockAwsClient) SchedulerCreateOrUpdateSchedule(name string, groupName string, scheduleExpression string, topicArn string, roleArn string, message string) error {
+	return nil
+}
+
+func (m *MockAwsClient) SchedulerDeleteSchedule(name string, groupName string) error {
+	return nil
+}
+
+func (m *MockAwsClient) SchedulerListSchedules(groupName string) ([]string, error) {
+	return nil, nil
+}
+
 func TestHandleRequestWithClients(t *testing.T) {
 	t.Logf("Running at: %s", time.Now().String()) // Forces re-run
 	os.Setenv("AWS_REGION", "eu-central-1")

@@ -10,6 +10,7 @@ import {
 import { Key } from 'aws-cdk-lib/aws-kms';
 import { Function, InlineCode, Runtime } from 'aws-cdk-lib/aws-lambda';
 import { LogGroup, RetentionDays } from 'aws-cdk-lib/aws-logs';
+import { Topic } from 'aws-cdk-lib/aws-sns';
 import { StringParameter } from 'aws-cdk-lib/aws-ssm';
 import {
   SopsSecret,
@@ -916,6 +917,128 @@ test('Age Key from SSM Parameter without leading slash gets correct ARN', () => 
           }),
         ]),
       }),
+    }),
+  });
+});
+
+// ---- Expiration tests ----
+
+test('Expiration disabled by default - no scheduler/SNS resources', () => {
+  const app = new App();
+  const stack = new Stack(app, 'SecretIntegration');
+
+  new SopsSecret(stack, 'SopsSecret', {
+    sopsFilePath: 'test-secrets/yaml/sopsfile.enc-kms.yaml',
+  });
+
+  const template = Template.fromStack(stack);
+  template.resourceCountIs('AWS::SNS::Topic', 0);
+  template.resourceCountIs('AWS::Scheduler::ScheduleGroup', 0);
+  template.resourceCountIs('AWS::IAM::Role', 0);
+});
+
+test('Expiration enabled - auto-creates SNS topic, scheduler role, and schedule group', () => {
+  const app = new App();
+  const stack = new Stack(app, 'SecretIntegration');
+
+  new SopsSecret(stack, 'SopsSecret', {
+    sopsFilePath: 'test-secrets/yaml/sopsfile.enc-kms.yaml',
+    expiration: {},
+  });
+
+  const template = Template.fromStack(stack);
+  template.resourceCountIs('AWS::SNS::Topic', 1);
+  template.resourceCountIs('AWS::Scheduler::ScheduleGroup', 1);
+  // Scheduler execution role + SopsSync provider role
+  template.hasResourceProperties('AWS::IAM::Role', {
+    AssumeRolePolicyDocument: Match.objectLike({
+      Statement: Match.arrayWith([
+        Match.objectLike({
+          Action: 'sts:AssumeRole',
+          Principal: { Service: 'scheduler.amazonaws.com' },
+        }),
+      ]),
+    }),
+  });
+});
+
+test('Expiration enabled - uses provided SNS topic instead of auto-creating', () => {
+  const app = new App();
+  const stack = new Stack(app, 'SecretIntegration');
+
+  const existingTopic = new Topic(stack, 'MyTopic');
+
+  const secret = new SopsSecret(stack, 'SopsSecret', {
+    sopsFilePath: 'test-secrets/yaml/sopsfile.enc-kms.yaml',
+    expiration: {
+      notificationTopic: existingTopic,
+    },
+  });
+
+  // The expirationNotificationTopic property should point to the provided topic
+  expect(secret.expirationNotificationTopic).toBe(existingTopic);
+
+  const template = Template.fromStack(stack);
+  // Only 1 topic: the one we created manually (not auto-created)
+  template.resourceCountIs('AWS::SNS::Topic', 1);
+});
+
+test('Expiration enabled - CustomResource gets Expiration config', () => {
+  const app = new App();
+  const stack = new Stack(app, 'SecretIntegration');
+
+  new SopsSecret(stack, 'SopsSecret', {
+    sopsFilePath: 'test-secrets/yaml/sopsfile.enc-kms.yaml',
+    expiration: {
+      expirationSuffix: '_exp',
+      daysBeforeExpiration: 30,
+    },
+  });
+
+  Template.fromStack(stack).hasResource('Custom::SopsSync', {
+    Properties: Match.objectLike({
+      Expiration: Match.objectLike({
+        TopicArn: Match.anyValue(),
+        SchedulerRoleArn: Match.anyValue(),
+        ScheduleGroupName: Match.anyValue(),
+        ExpirationSuffix: '_exp',
+        DaysBeforeExpiration: 30,
+      }),
+    }),
+  });
+});
+
+test('Expiration enabled - Lambda role gets scheduler and iam:PassRole permissions', () => {
+  const app = new App();
+  const stack = new Stack(app, 'SecretIntegration');
+
+  new SopsSecret(stack, 'SopsSecret', {
+    sopsFilePath: 'test-secrets/yaml/sopsfile.enc-kms.yaml',
+    expiration: {},
+  });
+
+  Template.fromStack(stack).hasResourceProperties('AWS::IAM::Policy', {
+    PolicyDocument: Match.objectLike({
+      Statement: Match.arrayWith([
+        Match.objectLike({
+          Action: Match.arrayWith(['scheduler:CreateSchedule', 'scheduler:UpdateSchedule']),
+          Effect: 'Allow',
+        }),
+      ]),
+    }),
+  });
+
+  Template.fromStack(stack).hasResourceProperties('AWS::IAM::Policy', {
+    PolicyDocument: Match.objectLike({
+      Statement: Match.arrayWith([
+        Match.objectLike({
+          Action: 'iam:PassRole',
+          Effect: 'Allow',
+          Condition: Match.objectLike({
+            StringEquals: { 'iam:PassedToService': 'scheduler.amazonaws.com' },
+          }),
+        }),
+      ]),
     }),
   });
 });

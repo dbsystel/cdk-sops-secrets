@@ -71,6 +71,24 @@ func handleSecret(props BaseProps) (physicalResourceID string, data map[string]i
 
 	logger.Info("Secret data updated", "ARN", *putSecretValueResp.ARN)
 
+	// Handle expiration schedule upsert for flat JSON secrets when expiration is configured.
+	if props.properties.Expiration != nil && props.properties.ResourceType == event.SECRET {
+		stringMapBytes, smErr := props.secretDecryptedData.ToStringMap()
+		if smErr != nil {
+			logger.Warn("Could not extract string map for expiration scan", "Error", smErr)
+		} else {
+			// Convert map[string][]byte to map[string]string
+			stringMap := make(map[string]string, len(stringMapBytes))
+			for k, v := range stringMapBytes {
+				stringMap[k] = string(v)
+			}
+			if expErr := handleExpirationUpsert(props.properties, props.clients, stringMap, *putSecretValueResp.ARN); expErr != nil {
+				logger.Error("Failed to upsert expiration schedules", "Error", expErr)
+				return *putSecretValueResp.ARN, nil, expErr
+			}
+		}
+	}
+
 	return *putSecretValueResp.ARN, map[string]interface{}{
 		"ARN":           *putSecretValueResp.ARN,
 		"Name":          *putSecretValueResp.Name,

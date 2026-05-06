@@ -12,6 +12,8 @@ import (
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 	s3Types "github.com/aws/aws-sdk-go-v2/service/s3/types"
+	"github.com/aws/aws-sdk-go-v2/service/scheduler"
+	schedulerTypes "github.com/aws/aws-sdk-go-v2/service/scheduler/types"
 	"github.com/aws/aws-sdk-go-v2/service/secretsmanager"
 	"github.com/aws/aws-sdk-go-v2/service/ssm"
 	ssmTypes "github.com/aws/aws-sdk-go-v2/service/ssm/types"
@@ -31,12 +33,23 @@ type SsmClient interface {
 	GetParameter(ctx context.Context, params *ssm.GetParameterInput, optFns ...func(*ssm.Options)) (*ssm.GetParameterOutput, error)
 }
 
+type SchedulerClient interface {
+	CreateSchedule(ctx context.Context, params *scheduler.CreateScheduleInput, optFns ...func(*scheduler.Options)) (*scheduler.CreateScheduleOutput, error)
+	UpdateSchedule(ctx context.Context, params *scheduler.UpdateScheduleInput, optFns ...func(*scheduler.Options)) (*scheduler.UpdateScheduleOutput, error)
+	DeleteSchedule(ctx context.Context, params *scheduler.DeleteScheduleInput, optFns ...func(*scheduler.Options)) (*scheduler.DeleteScheduleOutput, error)
+	GetSchedule(ctx context.Context, params *scheduler.GetScheduleInput, optFns ...func(*scheduler.Options)) (*scheduler.GetScheduleOutput, error)
+	ListSchedules(ctx context.Context, params *scheduler.ListSchedulesInput, optFns ...func(*scheduler.Options)) (*scheduler.ListSchedulesOutput, error)
+}
+
 type AwsClient interface {
 	S3GetObject(file SopsS3File) (data []byte, err error)
 	S3GetObjectETAG(file SopsS3File) (*string, error)
 	SecretsManagerPutSecretValue(sopsHash string, secretArn string, secretContent *[]byte, binary *bool) (data *secretsmanager.PutSecretValueOutput, err error)
 	SsmPutParameter(parameterName string, parameterContent *[]byte, keyId string) (response *ssm.PutParameterOutput, err error)
 	SsmGetParameter(parameterName string) (*string, error)
+	SchedulerCreateOrUpdateSchedule(name string, groupName string, scheduleExpression string, topicArn string, roleArn string, message string) error
+	SchedulerDeleteSchedule(name string, groupName string) error
+	SchedulerListSchedules(groupName string) ([]string, error)
 }
 
 type Client struct {
@@ -44,6 +57,7 @@ type Client struct {
 	s3             S3Client
 	secretsManager SecretsManagerClient
 	ssm            SsmClient
+	scheduler      SchedulerClient
 }
 
 func CreateAwsClients(context context.Context) AwsClient {
@@ -58,6 +72,7 @@ func CreateAwsClients(context context.Context) AwsClient {
 		s3:             s3.NewFromConfig(cfg),
 		secretsManager: secretsmanager.NewFromConfig(cfg),
 		ssm:            ssm.NewFromConfig(cfg),
+		scheduler:      scheduler.NewFromConfig(cfg),
 	}
 }
 
@@ -152,4 +167,93 @@ func (c *Client) SsmGetParameter(parameterName string) (*string, error) {
 		return nil, fmt.Errorf("SSM parameter value is nil for parameter: %s", parameterName)
 	}
 	return resp.Parameter.Value, nil
+}
+
+// SchedulerCreateOrUpdateSchedule creates or updates an EventBridge Scheduler
+// one-time schedule that publishes a message to an SNS topic.
+func (c *Client) SchedulerCreateOrUpdateSchedule(name string, groupName string, scheduleExpression string, topicArn string, roleArn string, message string) error {
+	logger := slog.With("Package", "client", "Function", "SchedulerCreateOrUpdateSchedule")
+	logger.Info("Upserting schedule", "Name", name, "Group", groupName, "Expression", scheduleExpression)
+
+	target := schedulerTypes.Target{
+		Arn:     aws.String(topicArn),
+		RoleArn: aws.String(roleArn),
+		Input:   aws.String(message),
+	}
+	flexibleWindow := schedulerTypes.FlexibleTimeWindow{
+		Mode: schedulerTypes.FlexibleTimeWindowModeOff,
+	}
+
+	// Try update first; if not found, create.
+	_, err := c.scheduler.UpdateSchedule(c.ctx, &scheduler.UpdateScheduleInput{
+		Name:               aws.String(name),
+		GroupName:          aws.String(groupName),
+		ScheduleExpression: aws.String(scheduleExpression),
+		Target:             &target,
+		FlexibleTimeWindow: &flexibleWindow,
+	})
+	if err == nil {
+		logger.Info("Schedule updated", "Name", name)
+		return nil
+	}
+
+	// Create if not found.
+	_, createErr := c.scheduler.CreateSchedule(c.ctx, &scheduler.CreateScheduleInput{
+		Name:               aws.String(name),
+		GroupName:          aws.String(groupName),
+		ScheduleExpression: aws.String(scheduleExpression),
+		Target:             &target,
+		FlexibleTimeWindow: &flexibleWindow,
+		// Delete the schedule after it fires to avoid accumulation of expired schedules.
+		ActionAfterCompletion: schedulerTypes.ActionAfterCompletionDelete,
+	})
+	if createErr != nil {
+		return fmt.Errorf("failed to create schedule %s: %v (update error: %v)", name, createErr, err)
+	}
+	logger.Info("Schedule created", "Name", name)
+	return nil
+}
+
+// SchedulerDeleteSchedule deletes a single named schedule from the group.
+// Returns nil if the schedule does not exist.
+func (c *Client) SchedulerDeleteSchedule(name string, groupName string) error {
+	logger := slog.With("Package", "client", "Function", "SchedulerDeleteSchedule")
+	logger.Info("Deleting schedule", "Name", name, "Group", groupName)
+
+	_, err := c.scheduler.DeleteSchedule(c.ctx, &scheduler.DeleteScheduleInput{
+		Name:      aws.String(name),
+		GroupName: aws.String(groupName),
+	})
+	if err != nil {
+		return fmt.Errorf("failed to delete schedule %s: %v", name, err)
+	}
+	return nil
+}
+
+// SchedulerListSchedules returns the names of all schedules in the given group.
+func (c *Client) SchedulerListSchedules(groupName string) ([]string, error) {
+	logger := slog.With("Package", "client", "Function", "SchedulerListSchedules")
+	logger.Info("Listing schedules", "Group", groupName)
+
+	var names []string
+	var nextToken *string
+	for {
+		resp, err := c.scheduler.ListSchedules(c.ctx, &scheduler.ListSchedulesInput{
+			GroupName: aws.String(groupName),
+			NextToken: nextToken,
+		})
+		if err != nil {
+			return nil, fmt.Errorf("failed to list schedules for group %s: %v", groupName, err)
+		}
+		for _, s := range resp.Schedules {
+			if s.Name != nil {
+				names = append(names, *s.Name)
+			}
+		}
+		if resp.NextToken == nil {
+			break
+		}
+		nextToken = resp.NextToken
+	}
+	return names, nil
 }

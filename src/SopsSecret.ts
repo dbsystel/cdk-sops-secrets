@@ -4,6 +4,7 @@ import {
   IGrantable,
   PolicyStatement,
 } from 'aws-cdk-lib/aws-iam';
+import { Role, ServicePrincipal } from 'aws-cdk-lib/aws-iam';
 import { IKey, ViaServicePrincipal } from 'aws-cdk-lib/aws-kms';
 import {
   ISecret,
@@ -15,7 +16,10 @@ import {
   SecretProps,
   SecretReference,
 } from 'aws-cdk-lib/aws-secretsmanager';
+import { CfnScheduleGroup } from 'aws-cdk-lib/aws-scheduler';
+import { ITopic, Topic } from 'aws-cdk-lib/aws-sns';
 import {
+  Names,
   RemovalPolicy,
   ResourceEnvironment,
   SecretsManagerSecretOptions,
@@ -34,6 +38,40 @@ export enum RawOutput {
    * Parse the secret as a binary
    */
   BINARY = 'BINARY',
+}
+
+/**
+ * Options for expiration notifications on secret keys.
+ * When set, the Lambda syncer will look for keys in the secret that end with
+ * the configured suffix (e.g. `gitlab_token_expiration`) and create
+ * EventBridge Scheduler one-time schedules that publish to SNS before each
+ * expiration date.
+ */
+export interface ExpirationOptions {
+  /**
+   * An existing SNS topic to publish expiration notifications to.
+   * If not provided, a new SNS topic will be created automatically.
+   *
+   * @default - A new SNS topic is created
+   */
+  readonly notificationTopic?: ITopic;
+
+  /**
+   * The suffix used to identify expiration date keys in the secret.
+   * For example, a suffix of `_expiration` will match any key like
+   * `gitlab_token_expiration` and treat its value as the expiration date
+   * for `gitlab_token`.
+   *
+   * @default '_expiration'
+   */
+  readonly expirationSuffix?: string;
+
+  /**
+   * Number of days before the expiration date to send the SNS notification.
+   *
+   * @default 14
+   */
+  readonly daysBeforeExpiration?: number;
 }
 
 /**
@@ -76,6 +114,16 @@ export interface SopsSecretProps extends SopsSyncOptions {
    * @default - Secret is not replicated
    */
   readonly replicaRegions?: ReplicaRegion[];
+  /**
+   * Configure expiration notifications for secret keys.
+   * When set, the Lambda syncer will detect keys ending with the expiration
+   * suffix (e.g. `gitlab_token_expiration`) and create EventBridge Scheduler
+   * one-time schedules to publish SNS notifications before each expiration.
+   * Disabled by default.
+   *
+   * @default - Expiration notifications are disabled
+   */
+  readonly expiration?: ExpirationOptions;
 }
 
 /**
@@ -91,6 +139,12 @@ export class SopsSecret extends Construct implements ISecret {
   readonly secretRef: SecretReference;
   readonly stack: Stack;
   readonly env: ResourceEnvironment;
+
+  /**
+   * The SNS topic that receives expiration notifications.
+   * Only set when `expiration` options are provided.
+   */
+  readonly expirationNotificationTopic?: ITopic;
 
   readonly sync: SopsSync;
   public constructor(scope: Construct, id: string, props: SopsSecretProps) {
@@ -119,11 +173,45 @@ export class SopsSecret extends Construct implements ISecret {
       resourceType = ResourceType.SECRET_RAW;
     }
 
+    let expirationConfig: import('./SopsSync').SopsExpirationConfig | undefined;
+    if (props.expiration !== undefined) {
+      const topic =
+        props.expiration.notificationTopic ??
+        new Topic(this, 'ExpirationNotificationTopic');
+      this.expirationNotificationTopic = topic;
+
+      const schedulerRole = new Role(this, 'ExpirationSchedulerRole', {
+        assumedBy: new ServicePrincipal('scheduler.amazonaws.com'),
+        description:
+          'Role assumed by EventBridge Scheduler to publish expiration notifications',
+      });
+      topic.grantPublish(schedulerRole);
+
+      // Generate a deterministic, AWS-safe schedule group name from the construct path.
+      // Schedule group names allow [a-zA-Z0-9_-], max 64 characters.
+      const scheduleGroupName = Names.uniqueId(this)
+        .replace(/[^a-zA-Z0-9_-]/g, '-')
+        .substring(0, 64);
+
+      new CfnScheduleGroup(this, 'ExpirationScheduleGroup', {
+        name: scheduleGroupName,
+      });
+
+      expirationConfig = {
+        topicArn: topic.topicArn,
+        schedulerRoleArn: schedulerRole.roleArn,
+        scheduleGroupName,
+        expirationSuffix: props.expiration.expirationSuffix,
+        daysBeforeExpiration: props.expiration.daysBeforeExpiration,
+      };
+    }
+
     this.sync = new SopsSync(this, 'SopsSync', {
       target: this.secret.secretArn,
       resourceType,
       flattenSeparator: '.',
       secret: this.secret,
+      expiration: expirationConfig,
       ...(props as SopsSyncOptions),
     });
   }

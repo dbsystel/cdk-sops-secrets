@@ -93,3 +93,15 @@ func (m *MockClient) SsmGetParameter(parameterName string) (*string, error) {
 	empty := ""
 	return &empty, nil
 }
+
+func (m *MockClient) SchedulerCreateOrUpdateSchedule(name string, groupName string, scheduleExpression string, topicArn string, roleArn string, message string) error {
+	return nil
+}
+
+func (m *MockClient) SchedulerDeleteSchedule(name string, groupName string) error {
+	return nil
+}
+
+func (m *MockClient) SchedulerListSchedules(groupName string) ([]string, error) {
+	return nil, nil
+}
