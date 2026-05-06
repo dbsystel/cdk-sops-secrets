@@ -1022,6 +1022,38 @@ test('Expiration enabled - synthesizes schedules from unencrypted expiration key
   expect(JSON.stringify(nestedSchedule?.Target)).toContain('2099-05-18');
 });
 
+test('Expiration enabled - respects custom daysBeforeExpiration', () => {
+  const app = new App();
+  const stack = new Stack(app, 'SecretIntegration');
+
+  new SopsSecret(stack, 'SopsSecret', {
+    sopsFilePath: 'test-secrets/yaml/sopsfile.expiration.enc-kms.yaml',
+    expiration: {
+      daysBeforeExpiration: 30,
+    },
+  });
+
+  const schedules = Object.values(
+    Template.fromStack(stack).findResources('AWS::Scheduler::Schedule'),
+  ).map((resource) => resource.Properties as Record<string, unknown>);
+
+  const gitlabSchedule = schedules.find(
+    (resource) => resource.Name === 'gitlab_token',
+  );
+  expect(gitlabSchedule).toBeDefined();
+  expect(gitlabSchedule?.ScheduleExpression).toBe('at(2099-12-01T00:00:00)');
+  expect(JSON.stringify(gitlabSchedule?.Target)).toContain('2099-12-01');
+  expect(JSON.stringify(gitlabSchedule?.Target)).toContain('30');
+
+  const nestedSchedule = schedules.find(
+    (resource) => resource.Name === 'nested-api_key',
+  );
+  expect(nestedSchedule).toBeDefined();
+  expect(nestedSchedule?.ScheduleExpression).toBe('at(2099-05-02T12:00:00)');
+  expect(JSON.stringify(nestedSchedule?.Target)).toContain('2099-05-02');
+  expect(JSON.stringify(nestedSchedule?.Target)).toContain('30');
+});
+
 test('Expiration enabled - CustomResource no longer gets Expiration config', () => {
   const app = new App();
   const stack = new Stack(app, 'SecretIntegration');
