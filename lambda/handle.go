@@ -12,7 +12,7 @@ import (
 )
 
 type BaseProps struct {
-	properties          *event.SopsSyncResourcePropertys
+	properties          *event.SopsSyncResourceProperties
 	clients             client.AwsClient
 	secretDecryptedData *data.Data
 }

@@ -74,7 +74,7 @@ func scanExpirationKeys(secretMap map[string]string, suffix string) map[string]t
 // handleExpirationUpsert creates or updates EventBridge Scheduler schedules for
 // all expiration keys found in the decrypted secret.
 func handleExpirationUpsert(
-	props *event.SopsSyncResourcePropertys,
+	props *event.SopsSyncResourceProperties,
 	clients client.AwsClient,
 	secretMap map[string]string,
 	secretArn string,
@@ -149,7 +149,7 @@ func handleExpirationUpsert(
 // handleExpirationDelete removes all expiration schedules for a secret by
 // listing and deleting every schedule in the group.
 func handleExpirationDelete(
-	props *event.SopsSyncResourcePropertys,
+	props *event.SopsSyncResourceProperties,
 	clients client.AwsClient,
 ) error {
 	logger := slog.With("Package", "main", "Function", "handleExpirationDelete")

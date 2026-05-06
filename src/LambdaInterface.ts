@@ -5,7 +5,7 @@
  * and run json-schema-to-typescript to regenerate this file.
  */
 
-export interface SopsSyncResourcePropertys {
+export interface SopsSyncResourceProperties {
   ResourceType: "SECRET" | "SECRET_RAW" | "SECRET_BINARY" | "PARAMETER_MULTI" | "PARAMETER";
   Format: "json" | "yaml" | "dotenv" | "binary";
   Target: string;

@@ -177,7 +177,7 @@ func TestHandleExpirationUpsert_CreatesSchedules(t *testing.T) {
 
 	suffix := "_expiration"
 	days := 14
-	props := &event.SopsSyncResourcePropertys{
+	props := &event.SopsSyncResourceProperties{
 		Expiration: &event.Expiration{
 			TopicArn:             "arn:aws:sns:eu-central-1:123456789:my-topic",
 			SchedulerRoleArn:     "arn:aws:iam::123456789:role/my-role",
@@ -211,7 +211,7 @@ func TestHandleExpirationUpsert_SkipsPastDates(t *testing.T) {
 
 	suffix := "_expiration"
 	days := 14
-	props := &event.SopsSyncResourcePropertys{
+	props := &event.SopsSyncResourceProperties{
 		Expiration: &event.Expiration{
 			TopicArn:             "arn:aws:sns:eu-central-1:123456789:my-topic",
 			SchedulerRoleArn:     "arn:aws:iam::123456789:role/my-role",
@@ -237,7 +237,7 @@ func TestHandleExpirationUpsert_DefaultSuffixAndDays(t *testing.T) {
 	mockClient := &mockExpirationClient{}
 
 	// nil suffix and days → use defaults
-	props := &event.SopsSyncResourcePropertys{
+	props := &event.SopsSyncResourceProperties{
 		Expiration: &event.Expiration{
 			TopicArn:          "arn:aws:sns:eu-central-1:123456789:my-topic",
 			SchedulerRoleArn:  "arn:aws:iam::123456789:role/my-role",
@@ -264,7 +264,7 @@ func TestHandleExpirationDelete_DeletesAllSchedules(t *testing.T) {
 		listResult: []string{"sched-a", "sched-b"},
 	}
 
-	props := &event.SopsSyncResourcePropertys{
+	props := &event.SopsSyncResourceProperties{
 		Expiration: &event.Expiration{
 			TopicArn:          "arn:aws:sns:eu-central-1:123456789:my-topic",
 			SchedulerRoleArn:  "arn:aws:iam::123456789:role/my-role",
@@ -283,7 +283,7 @@ func TestHandleExpirationDelete_NoSchedules(t *testing.T) {
 		listResult: []string{},
 	}
 
-	props := &event.SopsSyncResourcePropertys{
+	props := &event.SopsSyncResourceProperties{
 		Expiration: &event.Expiration{
 			TopicArn:          "arn:aws:sns:eu-central-1:123456789:my-topic",
 			SchedulerRoleArn:  "arn:aws:iam::123456789:role/my-role",

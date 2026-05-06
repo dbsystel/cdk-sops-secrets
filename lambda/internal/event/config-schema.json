@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft-07/schema#",
-  "$id": "SopsSyncResourcePropertys",
+  "$id": "SopsSyncResourceProperties",
   "$defs": {
     "Expiration": {
       "properties": {
@@ -22,11 +22,7 @@
       },
       "additionalProperties": false,
       "type": "object",
-      "required": [
-        "TopicArn",
-        "SchedulerRoleArn",
-        "ScheduleGroupName"
-      ]
+      "required": ["TopicArn", "SchedulerRoleArn", "ScheduleGroupName"]
     },
     "SopsInline": {
       "properties": {
@@ -39,10 +35,7 @@
       },
       "additionalProperties": false,
       "type": "object",
-      "required": [
-        "Content",
-        "Hash"
-      ]
+      "required": ["Content", "Hash"]
     },
     "SopsS3File": {
       "properties": {
@@ -55,10 +48,7 @@
       },
       "additionalProperties": false,
       "type": "object",
-      "required": [
-        "Bucket",
-        "Key"
-      ]
+      "required": ["Bucket", "Key"]
     }
   },
   "properties": {
@@ -74,12 +64,7 @@
     },
     "Format": {
       "type": "string",
-      "enum": [
-        "json",
-        "yaml",
-        "dotenv",
-        "binary"
-      ]
+      "enum": ["json", "yaml", "dotenv", "binary"]
     },
     "Target": {
       "type": "string"
@@ -105,9 +90,5 @@
   },
   "additionalProperties": false,
   "type": "object",
-  "required": [
-    "ResourceType",
-    "Format",
-    "Target"
-  ]
+  "required": ["ResourceType", "Format", "Target"]
 }

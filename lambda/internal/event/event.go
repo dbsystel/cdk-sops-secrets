@@ -64,7 +64,7 @@ const (
 	PARAMETER ResourceType = "PARAMETER"
 )
 
-type SopsSyncResourcePropertys struct {
+type SopsSyncResourceProperties struct {
 	ResourceType     ResourceType `json:"ResourceType" jsonschema:"enum=SECRET,enum=SECRET_RAW,enum=SECRET_BINARY,enum=PARAMETER_MULTI,enum=PARAMETER"`
 	Format           sops.Format  `json:"Format" jsonschema:"enum=json,enum=yaml,enum=dotenv,enum=binary"`
 	Target           string       `json:"Target"`
@@ -78,7 +78,7 @@ type SopsSyncResourcePropertys struct {
 	Expiration   *Expiration `json:"Expiration,omitempty"`
 }
 
-func FromCfnEvent(event cfn.Event) (*SopsSyncResourcePropertys, error) {
+func FromCfnEvent(event cfn.Event) (*SopsSyncResourceProperties, error) {
 	logger := slog.With("Package", "event", "Function", "FromCfnEvent")
 	compiler := jsonSchemaValidate.NewCompiler()
 	schema, err := compiler.Compile(configSchema)
@@ -95,7 +95,7 @@ func FromCfnEvent(event cfn.Event) (*SopsSyncResourcePropertys, error) {
 		return nil, fmt.Errorf("invalid resource properties (more details in log):\n%v", event.ResourceProperties)
 	}
 
-	var props SopsSyncResourcePropertys
+	var props SopsSyncResourceProperties
 	data, err := json.Marshal(event.ResourceProperties)
 	if err != nil {
 		return nil, fmt.Errorf("failed to marshal resource properties: %v", err)
@@ -113,11 +113,11 @@ func GenerateTempPhysicalResourceId() string {
 	return fmt.Sprintf("%s:%s:%s", "arn:custom:sopssync:", "temp", "temp")
 }
 
-func (p *SopsSyncResourcePropertys) GeneratePhysicalResourceId() string {
+func (p *SopsSyncResourceProperties) GeneratePhysicalResourceId() string {
 	return fmt.Sprintf("%s:%s:%s", "arn:custom:sopssync:", p.ResourceType, p.Target)
 }
 
-func (p *SopsSyncResourcePropertys) sopsInlineToSopsEncryptedSecret() (*sops.EncryptedSopsSecret, error) {
+func (p *SopsSyncResourceProperties) sopsInlineToSopsEncryptedSecret() (*sops.EncryptedSopsSecret, error) {
 	// Read the encrypted secret content from inline
 	content, contentErr := base64.StdEncoding.DecodeString(p.SopsInline.Content)
 	if contentErr != nil {
@@ -127,7 +127,7 @@ func (p *SopsSyncResourcePropertys) sopsInlineToSopsEncryptedSecret() (*sops.Enc
 	return sops.CreateEncryptedSopsSecret(content, p.Format, p.SopsInline.Hash)
 }
 
-func (p *SopsSyncResourcePropertys) sopsS3FileToSopsEncryptedSecret(clients client.AwsClient) (*sops.EncryptedSopsSecret, error) {
+func (p *SopsSyncResourceProperties) sopsS3FileToSopsEncryptedSecret(clients client.AwsClient) (*sops.EncryptedSopsSecret, error) {
 	// Read the encrypted secret content from S3
 	s3File := client.SopsS3File{
 		Bucket: p.SopsS3File.Bucket,
@@ -148,7 +148,7 @@ func (p *SopsSyncResourcePropertys) sopsS3FileToSopsEncryptedSecret(clients clie
 	return sops.CreateEncryptedSopsSecret(s3Content, p.Format, *s3Etag)
 }
 
-func (p *SopsSyncResourcePropertys) GetEncryptedSopsSecret(client client.AwsClient) (*sops.EncryptedSopsSecret, error) {
+func (p *SopsSyncResourceProperties) GetEncryptedSopsSecret(client client.AwsClient) (*sops.EncryptedSopsSecret, error) {
 	// Find out from where to get the secret content
 	if !p.SopsInline.IsEmpty() && !p.SopsS3File.IsEmpty() {
 		return nil, fmt.Errorf("both inline and S3 secret content found")
@@ -162,9 +162,9 @@ func (p *SopsSyncResourcePropertys) GetEncryptedSopsSecret(client client.AwsClie
 	return nil, fmt.Errorf("no secret content found")
 }
 
-// generates a JSON schema for the SopsSyncResourcePropertys struct
+// generates a JSON schema for the SopsSyncResourceProperties struct
 func GenerateSchema() {
-	schema := jsonSchemaGen.Reflect(&SopsSyncResourcePropertys{})
+	schema := jsonSchemaGen.Reflect(&SopsSyncResourceProperties{})
 
 	parts := strings.Split(schema.Ref, "/")
 	resourceName := parts[len(parts)-1]
@@ -174,7 +174,7 @@ func GenerateSchema() {
 	schema.Required = schema.Definitions[resourceName].Required
 	delete(schema.Definitions, resourceName)
 	schema.Ref = ""
-	schema.ID = "SopsSyncResourcePropertys"
+	schema.ID = "SopsSyncResourceProperties"
 	schemaJSON, err := schema.MarshalJSON()
 	if err != nil {
 		log.Fatalf("Error marshaling JSON schema: %v", err)

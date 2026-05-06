@@ -24,7 +24,7 @@ import { Asset } from 'aws-cdk-lib/aws-s3-assets';
 import { ISecret } from 'aws-cdk-lib/aws-secretsmanager';
 import { IStringParameter } from 'aws-cdk-lib/aws-ssm';
 import { Construct } from 'constructs';
-import { SopsSyncResourcePropertys } from './LambdaInterface';
+import { SopsSyncResourceProperties } from './LambdaInterface';
 
 /**
  * Internal configuration passed from SopsSecret to SopsSync for expiration scheduling.
@@ -521,7 +521,7 @@ export class SopsSync extends Construct {
               },
             }
           : {}),
-      } satisfies SopsSyncResourcePropertys,
+      } satisfies SopsSyncResourceProperties,
     });
     this.versionId = cr.getAttString('VersionId');
   }
