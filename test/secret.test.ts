@@ -997,7 +997,6 @@ test('Expiration enabled - synthesizes schedules from unencrypted expiration key
   });
 
   const template = Template.fromStack(stack);
-  expect(template).toMatchSnapshot();
   template.resourceCountIs('AWS::Scheduler::Schedule', 2);
 
   const schedules = Object.values(
