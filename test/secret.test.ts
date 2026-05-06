@@ -934,6 +934,7 @@ test('Expiration disabled by default - no scheduler/SNS resources', () => {
   const template = Template.fromStack(stack);
   template.resourceCountIs('AWS::SNS::Topic', 0);
   template.resourceCountIs('AWS::Scheduler::ScheduleGroup', 0);
+  template.resourceCountIs('AWS::Scheduler::Schedule', 0);
   // The singleton SopsSync provider Lambda still needs its execution role.
   template.resourceCountIs('AWS::IAM::Role', 1);
 });
@@ -950,6 +951,7 @@ test('Expiration enabled - auto-creates SNS topic, scheduler role, and schedule 
   const template = Template.fromStack(stack);
   template.resourceCountIs('AWS::SNS::Topic', 1);
   template.resourceCountIs('AWS::Scheduler::ScheduleGroup', 1);
+  template.resourceCountIs('AWS::Scheduler::Schedule', 0);
   // Scheduler execution role + SopsSync provider role
   template.hasResourceProperties('AWS::IAM::Role', {
     AssumeRolePolicyDocument: Match.objectLike({
@@ -982,34 +984,45 @@ test('Expiration enabled - uses provided SNS topic instead of auto-creating', ()
   const template = Template.fromStack(stack);
   // Only 1 topic: the one we created manually (not auto-created)
   template.resourceCountIs('AWS::SNS::Topic', 1);
+  template.resourceCountIs('AWS::Scheduler::Schedule', 0);
 });
 
-test('Expiration enabled - CustomResource gets Expiration config', () => {
+test('Expiration enabled - synthesizes schedules from unencrypted expiration keys', () => {
   const app = new App();
   const stack = new Stack(app, 'SecretIntegration');
 
   new SopsSecret(stack, 'SopsSecret', {
-    sopsFilePath: 'test-secrets/yaml/sopsfile.enc-kms.yaml',
-    expiration: {
-      expirationSuffix: '_exp',
-      daysBeforeExpiration: 30,
-    },
+    sopsFilePath: 'test-secrets/yaml/sopsfile.expiration.enc-kms.yaml',
+    expiration: {},
   });
 
-  Template.fromStack(stack).hasResource('Custom::SopsSync', {
-    Properties: Match.objectLike({
-      Expiration: Match.objectLike({
-        TopicArn: Match.anyValue(),
-        SchedulerRoleArn: Match.anyValue(),
-        ScheduleGroupName: Match.anyValue(),
-        ExpirationSuffix: '_exp',
-        DaysBeforeExpiration: 30,
-      }),
-    }),
-  });
+  const template = Template.fromStack(stack);
+  template.resourceCountIs('AWS::Scheduler::Schedule', 2);
+
+  const schedules = Object.values(
+    template.findResources('AWS::Scheduler::Schedule'),
+  ).map((resource) => resource.Properties as Record<string, unknown>);
+
+  const gitlabSchedule = schedules.find(
+    (resource) => resource.Name === 'gitlab_token',
+  );
+  expect(gitlabSchedule).toBeDefined();
+  expect(gitlabSchedule?.ScheduleExpression).toBe('at(2099-12-17T00:00:00)');
+  expect(JSON.stringify(gitlabSchedule?.Target)).toContain('gitlab_token');
+  expect(JSON.stringify(gitlabSchedule?.Target)).toContain('2099-12-31');
+  expect(JSON.stringify(gitlabSchedule?.Target)).toContain('2099-12-17');
+
+  const nestedSchedule = schedules.find(
+    (resource) => resource.Name === 'nested-api_key',
+  );
+  expect(nestedSchedule).toBeDefined();
+  expect(nestedSchedule?.ScheduleExpression).toBe('at(2099-05-18T12:00:00)');
+  expect(JSON.stringify(nestedSchedule?.Target)).toContain('nested.api_key');
+  expect(JSON.stringify(nestedSchedule?.Target)).toContain('2099-06-01');
+  expect(JSON.stringify(nestedSchedule?.Target)).toContain('2099-05-18');
 });
 
-test('Expiration enabled - Lambda role gets scheduler and iam:PassRole permissions', () => {
+test('Expiration enabled - CustomResource no longer gets Expiration config', () => {
   const app = new App();
   const stack = new Stack(app, 'SecretIntegration');
 
@@ -1018,31 +1031,55 @@ test('Expiration enabled - Lambda role gets scheduler and iam:PassRole permissio
     expiration: {},
   });
 
-  Template.fromStack(stack).hasResourceProperties('AWS::IAM::Policy', {
-    PolicyDocument: Match.objectLike({
-      Statement: Match.arrayWith([
-        Match.objectLike({
-          Action: Match.arrayWith([
-            'scheduler:CreateSchedule',
-            'scheduler:UpdateSchedule',
-          ]),
-          Effect: 'Allow',
-        }),
-      ]),
-    }),
+  const resources = Template.fromStack(stack).findResources('Custom::SopsSync');
+  const properties = Object.values(resources)[0].Properties as Record<
+    string,
+    unknown
+  >;
+  expect(properties).not.toHaveProperty('Expiration');
+});
+
+test('Expiration enabled - Lambda role no longer gets scheduler permissions', () => {
+  const app = new App();
+  const stack = new Stack(app, 'SecretIntegration');
+
+  new SopsSecret(stack, 'SopsSecret', {
+    sopsFilePath: 'test-secrets/yaml/sopsfile.expiration.enc-kms.yaml',
+    expiration: {},
   });
 
-  Template.fromStack(stack).hasResourceProperties('AWS::IAM::Policy', {
-    PolicyDocument: Match.objectLike({
-      Statement: Match.arrayWith([
-        Match.objectLike({
-          Action: 'iam:PassRole',
-          Effect: 'Allow',
-          Condition: Match.objectLike({
-            StringEquals: { 'iam:PassedToService': 'scheduler.amazonaws.com' },
-          }),
-        }),
-      ]),
-    }),
-  });
+  const policies = Template.fromStack(stack).findResources('AWS::IAM::Policy');
+  expect(JSON.stringify(policies)).not.toContain('scheduler:CreateSchedule');
+  expect(JSON.stringify(policies)).not.toContain('iam:PassRole');
+});
+
+test('Expiration enabled - invalid expiration date throws during synthesis setup', () => {
+  const app = new App();
+  const stack = new Stack(app, 'SecretIntegration');
+
+  expect(
+    () =>
+      new SopsSecret(stack, 'SopsSecret', {
+        sopsFilePath:
+          'test-secrets/yaml/sopsfile.invalid-expiration.enc-kms.yaml',
+        expiration: {},
+      }),
+  ).toThrow('unsupported date format: "not-a-date"');
+});
+
+test('Expiration enabled - s3 source is rejected', () => {
+  const app = new App();
+  const stack = new Stack(app, 'SecretIntegration');
+
+  expect(
+    () =>
+      new SopsSecret(stack, 'SopsSecret', {
+        sopsS3Bucket: 'bucket',
+        sopsS3Key: 'secret.yaml',
+        sopsFileFormat: 'yaml',
+        expiration: {},
+      }),
+  ).toThrow(
+    'Expiration scheduling requires a local sopsFilePath and does not support sopsS3Bucket/sopsS3Key.',
+  );
 });

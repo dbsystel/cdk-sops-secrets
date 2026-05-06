@@ -14,7 +14,6 @@ export interface SopsSyncResourceProperties {
   SopsInline?: SopsInline;
   FlattenSeparator?: string;
   ServiceToken?: string;
-  Expiration?: ExpirationConfig;
 }
 export interface SopsS3File {
   Bucket: string;
@@ -23,11 +22,4 @@ export interface SopsS3File {
 export interface SopsInline {
   Content: string;
   Hash: string;
-}
-export interface ExpirationConfig {
-  TopicArn: string;
-  SchedulerRoleArn: string;
-  ScheduleGroupName: string;
-  ExpirationSuffix?: string;
-  DaysBeforeExpiration?: number;
 }

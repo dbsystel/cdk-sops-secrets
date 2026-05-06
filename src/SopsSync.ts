@@ -26,34 +26,6 @@ import { IStringParameter } from 'aws-cdk-lib/aws-ssm';
 import { Construct } from 'constructs';
 import { SopsSyncResourceProperties } from './LambdaInterface';
 
-/**
- * Internal configuration passed from SopsSecret to SopsSync for expiration scheduling.
- */
-export interface SopsExpirationConfig {
-  /**
-   * The ARN of the SNS topic to publish expiration notifications to.
-   */
-  readonly topicArn: string;
-  /**
-   * The ARN of the IAM role that EventBridge Scheduler uses to publish to SNS.
-   */
-  readonly schedulerRoleArn: string;
-  /**
-   * The name of the EventBridge Scheduler schedule group for this secret.
-   */
-  readonly scheduleGroupName: string;
-  /**
-   * Suffix that identifies expiration date keys in the secret.
-   * @default '_expiration'
-   */
-  readonly expirationSuffix?: string;
-  /**
-   * Number of days before expiration to send the notification.
-   * @default 14
-   */
-  readonly daysBeforeExpiration?: number;
-}
-
 export enum UploadType {
   /**
    * Pass the secret data inline (base64 encoded and compressed)
@@ -175,13 +147,6 @@ export interface SopsSyncProps extends SopsSyncOptions {
 
   readonly secret?: ISecret;
   readonly parameterNames?: string[];
-  /**
-   * Expiration notification configuration. When set, the Lambda will scan the
-   * decrypted secret for keys ending with the expiration suffix and create
-   * EventBridge Scheduler schedules to publish notifications to SNS before expiration.
-   * @default - No expiration notifications
-   */
-  readonly expiration?: SopsExpirationConfig;
 }
 
 /**
@@ -467,7 +432,6 @@ export class SopsSync extends Construct {
         Permissions.encryptionKey(props.encryptionKey, provider.role);
         Permissions.secret(props.secret, provider.role);
         Permissions.parameters(this, props.parameterNames, provider.role);
-        Permissions.expiration(this, props.expiration, provider.role);
       } else {
         Annotations.of(this).addWarning(
           [
@@ -510,17 +474,6 @@ export class SopsSync extends Construct {
         EncryptionKey: props.encryptionKey?.keyId,
         ResourceType: props.resourceType,
         Target: props.target,
-        ...(props.expiration !== undefined
-          ? {
-              Expiration: {
-                TopicArn: props.expiration.topicArn,
-                SchedulerRoleArn: props.expiration.schedulerRoleArn,
-                ScheduleGroupName: props.expiration.scheduleGroupName,
-                ExpirationSuffix: props.expiration.expirationSuffix,
-                DaysBeforeExpiration: props.expiration.daysBeforeExpiration,
-              },
-            }
-          : {}),
       } satisfies SopsSyncResourceProperties,
     });
     this.versionId = cr.getAttString('VersionId');
@@ -697,57 +650,5 @@ export namespace Permissions {
         );
       }
     }
-  }
-
-  /**
-   * Grants the Lambda provider role the permissions needed to manage EventBridge
-   * Scheduler schedules for expiration notifications.
-   */
-  export function expiration(
-    ctx: Construct,
-    config: SopsExpirationConfig | undefined,
-    role: IRole,
-  ) {
-    if (config === undefined) {
-      return;
-    }
-
-    const stack = Stack.of(ctx);
-
-    role.addToPrincipalPolicy(
-      new PolicyStatement({
-        actions: [
-          'scheduler:CreateSchedule',
-          'scheduler:UpdateSchedule',
-          'scheduler:DeleteSchedule',
-          'scheduler:GetSchedule',
-          'scheduler:ListSchedules',
-        ],
-        resources: [
-          stack.formatArn({
-            service: 'scheduler',
-            resource: 'schedule',
-            resourceName: `${config.scheduleGroupName}/*`,
-            arnFormat: ArnFormat.SLASH_RESOURCE_NAME,
-          }),
-          stack.formatArn({
-            service: 'scheduler',
-            resource: 'schedule-group',
-            resourceName: config.scheduleGroupName,
-            arnFormat: ArnFormat.SLASH_RESOURCE_NAME,
-          }),
-        ],
-      }),
-    );
-
-    role.addToPrincipalPolicy(
-      new PolicyStatement({
-        actions: ['iam:PassRole'],
-        resources: [config.schedulerRoleArn],
-        conditions: {
-          StringEquals: { 'iam:PassedToService': 'scheduler.amazonaws.com' },
-        },
-      }),
-    );
   }
 }

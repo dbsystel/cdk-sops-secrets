@@ -186,6 +186,21 @@ const secret = new SopsSecret(stack, 'MySopsSecret', {
 This will turn off the conversions and just place the decrypted content in the target secret. It's also possible to use
 `RawOutput.BINARY` then the AWS SecretsManager Secret will be populated with binary, instead of string data.
 
+### Expiration notifications
+
+`SopsSecret` can also synthesize one-time EventBridge Scheduler schedules for unencrypted expiration keys in a local SOPS file:
+
+```ts
+new SopsSecret(stack, 'MySopsSecret', {
+  sopsFilePath: 'secrets/sopsfile-encrypted-secret.yaml',
+  expiration: {},
+});
+```
+
+With the default settings, keys ending in `_expiration` are read directly by CDK from the local `sopsFilePath`, and matching schedules publish to SNS 14 days before the configured date. This requires those expiration fields to remain unencrypted in the source file, for example via SOPS `unencrypted_regex`.
+
+`expiration` is only supported with local structured files (`json`, `yaml`, `dotenv`) and does not support `sopsS3Bucket` / `sopsS3Key`.
+
 ## SopsStringParameter — Sops to single SSM ParameterStore Parameter
 
 If you want to sync the whole content of a sops encrypted file to an encrypted AWS SSM ParameterStore Parameter, you can use the SopsStringParameter Construct.

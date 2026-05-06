@@ -1,0 +1,21 @@
+gitlab_token: ENC[AES256_GCM,data:sswbRHccIuisbGyO+mG/EWb+1JctqNUorOzQUaMRn3HkAyWtreNuZyhYYlkvcg==,iv:XpHilhyCRXa8clGiEckpquCqSZGWA80H0eDUmR80xhE=,tag:WsuxI4lUHwJEas76ODQxUA==,type:str]
+gitlab_token_expiration: 2099-12-31
+nested:
+  api_key: ENC[AES256_GCM,data:/4OtiH3nooTVZuzC+g==,iv:R6qrNY7GAxcIwR42bvE2774uf+IfQ9pv9UA78LmitU0=,tag:jFogVsycufSXRvBKXLVA9g==,type:str]
+  api_key_expiration: 2099-06-01T12:00:00Z
+expired_key_expiration: 2000-01-01
+sops:
+  kms:
+    - arn: arn:aws:kms:aws-region-1:123456789011:key/00000000-1234-4321-abcd-1234abcd12ab
+      created_at: "2022-04-03T17:34:45Z"
+      enc: AQICAHiSgZoLP6fDrUBYYPU2oJOB/3qFAR5mEYuZY2DQqzYrBgGAPS+SiO5yb/bXbUdoUPeZAAAAfjB8BgkqhkiG9w0BBwagbzBtAgEAMGgGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMXZPpPU3GibIONK6VAgEQgDu154YpnYoe2f8YFuWeBpGXfDdaud5oMDfquwqY2UWG8clnZV9355z+V7cqCi+4PEBoaveMLLcLYsLOAA==
+      aws_profile: ""
+  gcp_kms: []
+  azure_kv: []
+  hc_vault: []
+  age: []
+  lastmodified: "2022-04-03T17:34:56Z"
+  mac: ENC[AES256_GCM,data:qDi/CaAGfXbcCxPXxHRVnDiP3ayLhL5+Ordv+rCyF/M0iBlO6PEBez4mW+0JE4F8E8a3lMJORhaEGTmRtGyzPXm62DoNLpVepqj8fdBNgzxDQdbTX2yfPoSltSmyCp7lpnbUjGwSHVHsGK8+1EEoocTn81efP0hytRSocYEKONY=,iv:8vZ417Nhp6BO2kE5Ic4HRkzKjS79enrfVJlsYeq59Fo=,tag:mpE+Oto+HPLd2tsWuteuSA==,type:str]
+  pgp: []
+  unencrypted_regex: .*_expiration$
+  version: 3.7.2

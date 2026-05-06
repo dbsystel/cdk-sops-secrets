@@ -40,15 +40,6 @@ func (s *SopsInline) IsEmpty() bool {
 	return s == nil || (s.Content == "" && s.Hash == "")
 }
 
-// Expiration holds the configuration for expiration schedule management.
-type Expiration struct {
-	TopicArn             string  `json:"TopicArn"`
-	SchedulerRoleArn     string  `json:"SchedulerRoleArn"`
-	ScheduleGroupName    string  `json:"ScheduleGroupName"`
-	ExpirationSuffix     *string `json:"ExpirationSuffix,omitempty"`
-	DaysBeforeExpiration *int    `json:"DaysBeforeExpiration,omitempty"`
-}
-
 type ResourceType string
 
 const (
@@ -74,8 +65,7 @@ type SopsSyncResourceProperties struct {
 	FlattenSeparator *string      `json:"FlattenSeparator,omitempty"`
 	// ServiceToken is the ARN of the service token that was passed to the custom resource
 	// Populated by the CloudFormation
-	ServiceToken *string     `json:"ServiceToken,omitempty"`
-	Expiration   *Expiration `json:"Expiration,omitempty"`
+	ServiceToken *string `json:"ServiceToken,omitempty"`
 }
 
 func FromCfnEvent(event cfn.Event) (*SopsSyncResourceProperties, error) {

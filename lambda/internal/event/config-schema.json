@@ -2,28 +2,6 @@
   "$schema": "https://json-schema.org/draft-07/schema#",
   "$id": "SopsSyncResourceProperties",
   "$defs": {
-    "Expiration": {
-      "properties": {
-        "TopicArn": {
-          "type": "string"
-        },
-        "SchedulerRoleArn": {
-          "type": "string"
-        },
-        "ScheduleGroupName": {
-          "type": "string"
-        },
-        "ExpirationSuffix": {
-          "type": "string"
-        },
-        "DaysBeforeExpiration": {
-          "type": "integer"
-        }
-      },
-      "additionalProperties": false,
-      "type": "object",
-      "required": ["TopicArn", "SchedulerRoleArn", "ScheduleGroupName"]
-    },
     "SopsInline": {
       "properties": {
         "Content": {
@@ -83,9 +61,6 @@
     },
     "ServiceToken": {
       "type": "string"
-    },
-    "Expiration": {
-      "$ref": "#/$defs/Expiration"
     }
   },
   "additionalProperties": false,

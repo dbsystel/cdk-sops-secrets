@@ -59,17 +59,10 @@ func HandleRequestWithClients(clients client.AwsClient, e cfn.Event) (physicalRe
 	logger := slog.With("Package", "main", "Function", "HandleRequestWithClients")
 	logger.Debug("Incoming Event", "Event", e)
 
-	// If it's a delete request, clean up any expiration schedules and return.
+	// We have to run this code only, if it is a CloudFormation Create or Update request
 	if e.RequestType == cfn.RequestDelete {
-		props, parseErr := event.FromCfnEvent(e)
-		if parseErr == nil && props.Expiration != nil {
-			if cleanupErr := handleExpirationDelete(props, clients); cleanupErr != nil {
-				logger.Error("Failed to clean up expiration schedules on delete", "Error", cleanupErr)
-			}
-		}
 		return event.GenerateTempPhysicalResourceId(), nil, nil
 	}
-	// We have to run this code only, if it is a CloudFormation Create or Update request
 	if e.RequestType != cfn.RequestCreate && e.RequestType != cfn.RequestUpdate {
 		return event.GenerateTempPhysicalResourceId(), nil, fmt.Errorf("requestType '%s' not supported", e.RequestType)
 	}

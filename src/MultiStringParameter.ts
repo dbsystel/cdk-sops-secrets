@@ -1,15 +1,13 @@
-import * as fs from 'fs';
 import { IKey } from 'aws-cdk-lib/aws-kms';
 import { ParameterTier, StringParameter } from 'aws-cdk-lib/aws-ssm';
 import { ResourceEnvironment, Stack } from 'aws-cdk-lib/core';
 import { Construct } from 'constructs';
-import * as YAML from 'yaml';
 import { SopsCommonParameterProps } from './SopsStringParameter';
 import { ResourceType, SopsSync, SopsSyncOptions } from './SopsSync';
-
-interface JSONObject {
-  [key: string]: unknown;
-}
+import {
+  flattenStructuredFile,
+  inferStructuredFileFormat,
+} from './structuredData';
 
 export interface MultiStringParameterProps extends SopsCommonParameterProps {
   /**
@@ -24,38 +22,6 @@ export interface MultiStringParameterProps extends SopsCommonParameterProps {
    * @default - '/'
    */
   readonly keyPrefix?: string;
-}
-
-function flattenJSON(
-  data: JSONObject,
-  parentKey: string = '',
-  result: JSONObject = {},
-  keySeparator = '',
-): JSONObject {
-  for (const key of Object.keys(data)) {
-    const value = data[key];
-    const newKey = parentKey ? `${parentKey}${keySeparator}${key}` : key;
-
-    if (Array.isArray(value)) {
-      value.forEach((item, index) => {
-        const arrayKey = `${newKey}[${index}]`;
-        if (item !== null && typeof item === 'object' && !Array.isArray(item)) {
-          flattenJSON(item as JSONObject, arrayKey, result, keySeparator);
-        } else {
-          result[arrayKey] = item as unknown;
-        }
-      });
-    } else if (
-      value !== null &&
-      typeof value === 'object' &&
-      !Array.isArray(value)
-    ) {
-      flattenJSON(value as JSONObject, newKey, result, keySeparator);
-    } else {
-      result[newKey] = value;
-    }
-  }
-  return result;
 }
 
 export class MultiStringParameter extends Construct {
@@ -130,28 +96,15 @@ export class MultiStringParameter extends Construct {
   }
 
   private parseFile(sopsFilePath: string, keySeparator: string): string[] {
-    const _sopsFileFormat = sopsFilePath.split('.').pop();
-    switch (_sopsFileFormat) {
-      case 'json': {
-        return Object.keys(
-          flattenJSON(
-            JSON.parse(fs.readFileSync(sopsFilePath, 'utf-8')),
-            '',
-            undefined,
-            keySeparator,
-          ),
-        );
-      }
-      case 'yaml': {
-        const content = fs.readFileSync(sopsFilePath, 'utf-8');
-        const data = YAML.parse(content) as JSONObject;
-        return Object.keys(flattenJSON(data, '', undefined, keySeparator));
-      }
-      default: {
-        throw new Error(
-          `Unsupported sopsFileFormat for multiple parameters: ${_sopsFileFormat}`,
-        );
-      }
+    const fileFormat = inferStructuredFileFormat(sopsFilePath);
+    if (fileFormat === undefined) {
+      throw new Error(
+        `Unsupported sopsFileFormat for multiple parameters: ${sopsFilePath.split('.').pop()}`,
+      );
     }
+
+    return Object.keys(
+      flattenStructuredFile(sopsFilePath, keySeparator, fileFormat),
+    );
   }
 }
