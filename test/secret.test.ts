@@ -949,6 +949,7 @@ test('Expiration enabled - auto-creates SNS topic, scheduler role, and schedule 
   });
 
   const template = Template.fromStack(stack);
+  expect(template).toMatchSnapshot();
   template.resourceCountIs('AWS::SNS::Topic', 1);
   template.resourceCountIs('AWS::Scheduler::ScheduleGroup', 1);
   template.resourceCountIs('AWS::Scheduler::Schedule', 0);
