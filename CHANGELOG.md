@@ -6,30 +6,33 @@ All notable changes to this project will be documented in this file. See [commit
 
 ### Features
 
-- add secret expiration tracking ([eb6c9b7](https://github.com/dbsystel/cdk-sops-secrets/commit/eb6c9b76875b0bfbe3e0b95d92f41a6b697fd0c0))
+* add secret expiration tracking ([eb6c9b7](https://github.com/dbsystel/cdk-sops-secrets/commit/eb6c9b76875b0bfbe3e0b95d92f41a6b697fd0c0))
 
 ## [2.6.7](https://github.com/dbsystel/cdk-sops-secrets/compare/v2.6.6...v2.6.7) (2026-05-05)
 
+
 ### Bug Fixes
 
-- introduce SOPS key as ssm parameter ([#1291](https://github.com/dbsystel/cdk-sops-secrets/issues/1291)) ([d18e6e2](https://github.com/dbsystel/cdk-sops-secrets/commit/d18e6e222c5b1fedece04be42d334fa420da4510))
+* introduce SOPS key as ssm parameter ([#1291](https://github.com/dbsystel/cdk-sops-secrets/issues/1291)) ([d18e6e2](https://github.com/dbsystel/cdk-sops-secrets/commit/d18e6e222c5b1fedece04be42d334fa420da4510))
 
 ## [2.6.6](https://github.com/dbsystel/cdk-sops-secrets/compare/v2.6.5...v2.6.6) (2026-04-16)
 
+
 ### Bug Fixes
 
-- bump Go indirect deps for CVE fixes and enable Renovate indirect updates ([c058243](https://github.com/dbsystel/cdk-sops-secrets/commit/c0582437b7f3d6f81eec0f2fcc8c9ca465aca646)), closes [#1305](https://github.com/dbsystel/cdk-sops-secrets/issues/1305)
-- **renovate:** disable major updates for indirect Go deps ([c2ab489](https://github.com/dbsystel/cdk-sops-secrets/commit/c2ab4893d0b0d25afef55a7979eb7aa8bf0181ba))
+* bump Go indirect deps for CVE fixes and enable Renovate indirect updates ([c058243](https://github.com/dbsystel/cdk-sops-secrets/commit/c0582437b7f3d6f81eec0f2fcc8c9ca465aca646)), closes [#1305](https://github.com/dbsystel/cdk-sops-secrets/issues/1305)
+* **renovate:** disable major updates for indirect Go deps ([c2ab489](https://github.com/dbsystel/cdk-sops-secrets/commit/c2ab4893d0b0d25afef55a7979eb7aa8bf0181ba))
 
 ## [2.6.5](https://github.com/dbsystel/cdk-sops-secrets/compare/v2.6.4...v2.6.5) (2026-04-09)
 
+
 ### Bug Fixes
 
-- move workflow permissions to job level ([1ea64e0](https://github.com/dbsystel/cdk-sops-secrets/commit/1ea64e00827ff1887f432cd89809c99fde9a66d3))
-- prevent script injection in tag-on-merge workflow ([85fb85d](https://github.com/dbsystel/cdk-sops-secrets/commit/85fb85de35b99f54e2fc8a95d3d4e6a178574345))
-- reduce pull-request-lint permissions to read-only ([8d53c56](https://github.com/dbsystel/cdk-sops-secrets/commit/8d53c5695257fdf7a3776ca8e40c4a44f8ecdd4f))
-- remove dangerous workflow patterns ([1f20363](https://github.com/dbsystel/cdk-sops-secrets/commit/1f20363020d66e0a2d5e534ffcbf960559a682d3))
-- remove unnecessary actions:write permission from create-release ([fd3401a](https://github.com/dbsystel/cdk-sops-secrets/commit/fd3401ae0ed1c36d925044fbabae3f69d94e47cf))
+* move workflow permissions to job level ([1ea64e0](https://github.com/dbsystel/cdk-sops-secrets/commit/1ea64e00827ff1887f432cd89809c99fde9a66d3))
+* prevent script injection in tag-on-merge workflow ([85fb85d](https://github.com/dbsystel/cdk-sops-secrets/commit/85fb85de35b99f54e2fc8a95d3d4e6a178574345))
+* reduce pull-request-lint permissions to read-only ([8d53c56](https://github.com/dbsystel/cdk-sops-secrets/commit/8d53c5695257fdf7a3776ca8e40c4a44f8ecdd4f))
+* remove dangerous workflow patterns ([1f20363](https://github.com/dbsystel/cdk-sops-secrets/commit/1f20363020d66e0a2d5e534ffcbf960559a682d3))
+* remove unnecessary actions:write permission from create-release ([fd3401a](https://github.com/dbsystel/cdk-sops-secrets/commit/fd3401ae0ed1c36d925044fbabae3f69d94e47cf))
 
 ## [2.6.4](https://github.com/dbsystel/cdk-sops-secrets/compare/v2.6.3...v2.6.4) (2026-03-01)
 
@@ -41,34 +44,38 @@ All notable changes to this project will be documented in this file. See [commit
 
 ## [2.6.0](https://github.com/dbsystel/cdk-sops-secrets/compare/v2.5.0...v2.6.0) (2026-02-07)
 
+
 ### Features
 
-- make create-release workflow rerunnable ([#1225](https://github.com/dbsystel/cdk-sops-secrets/issues/1225)) ([cdf59b4](https://github.com/dbsystel/cdk-sops-secrets/commit/cdf59b43013520aa7b8c6cd45ba4f5a564fbbf37)), closes [#1215](https://github.com/dbsystel/cdk-sops-secrets/issues/1215)
+* make create-release workflow rerunnable ([#1225](https://github.com/dbsystel/cdk-sops-secrets/issues/1225)) ([cdf59b4](https://github.com/dbsystel/cdk-sops-secrets/commit/cdf59b43013520aa7b8c6cd45ba4f5a564fbbf37)), closes [#1215](https://github.com/dbsystel/cdk-sops-secrets/issues/1215)
 
 ## [2.5.0](https://github.com/dbsystel/cdk-sops-secrets/compare/v2.4.7...v2.5.0) (2026-01-12)
 
+
 ### Features
 
-- Lambda runtime upgrade to AL2023 ([#1223](https://github.com/dbsystel/cdk-sops-secrets/issues/1223)) ([9d61d95](https://github.com/dbsystel/cdk-sops-secrets/commit/9d61d95554078578951419fda5296dbd00e9c76a)), closes [#1215](https://github.com/dbsystel/cdk-sops-secrets/issues/1215)
-- **renovate:** enable github-actions manager for workflow updates ([68e9211](https://github.com/dbsystel/cdk-sops-secrets/commit/68e9211d3f65af4494b585c4f89d73c74017148a))
+* Lambda runtime upgrade to AL2023 ([#1223](https://github.com/dbsystel/cdk-sops-secrets/issues/1223)) ([9d61d95](https://github.com/dbsystel/cdk-sops-secrets/commit/9d61d95554078578951419fda5296dbd00e9c76a)), closes [#1215](https://github.com/dbsystel/cdk-sops-secrets/issues/1215)
+* **renovate:** enable github-actions manager for workflow updates ([68e9211](https://github.com/dbsystel/cdk-sops-secrets/commit/68e9211d3f65af4494b585c4f89d73c74017148a))
+
 
 ### Bug Fixes
 
-- correct renovate.json configuration - replace invalid gitHubActions with pinDigests ([#1198](https://github.com/dbsystel/cdk-sops-secrets/issues/1198)) ([538080b](https://github.com/dbsystel/cdk-sops-secrets/commit/538080bc0a28de55ea94effcebf02f20b1239b07))
-- **deps:** update go-deps ([#1184](https://github.com/dbsystel/cdk-sops-secrets/issues/1184)) ([00bbb76](https://github.com/dbsystel/cdk-sops-secrets/commit/00bbb76ebd8ff1577b93a29574e5b0d4adffb0b3))
-- remove premature GitHub release creation from create-release workflow ([#1220](https://github.com/dbsystel/cdk-sops-secrets/issues/1220)) ([cd9d6c6](https://github.com/dbsystel/cdk-sops-secrets/commit/cd9d6c6c24022942497ada1109b5f0bddb1efa74))
-- **renovate:** migrate to config:recommended and move allowedPostUpgradeCommands to workflow ([ec10e40](https://github.com/dbsystel/cdk-sops-secrets/commit/ec10e40a9a4624c4c83297ab46ad7a9031ceca94))
-- **renovate:** scope postUpgradeTasks to npm manager only ([9ee43b9](https://github.com/dbsystel/cdk-sops-secrets/commit/9ee43b9fddd9679dd9cb806afb6a3ba8b719966d))
-- **renovate:** unknown option error ([4e5c9ae](https://github.com/dbsystel/cdk-sops-secrets/commit/4e5c9ae3ff8c4441578764dd6105e6957fbf35f0))
-- **renovate:** use renovate without docker ([697c90e](https://github.com/dbsystel/cdk-sops-secrets/commit/697c90ea6df0da720e0b7a69222dc3bd23a9b486))
-- **test:** fix breaking changes introduces by jest upgrade ([#1193](https://github.com/dbsystel/cdk-sops-secrets/issues/1193)) ([e168ed5](https://github.com/dbsystel/cdk-sops-secrets/commit/e168ed5705f0939ba14dcf01ea02dac841fc6711))
-- update release workflow to respect branch protection ([#1218](https://github.com/dbsystel/cdk-sops-secrets/issues/1218)) ([1b956ad](https://github.com/dbsystel/cdk-sops-secrets/commit/1b956ad588df03d79f76b8ca8bde6536baa1c1bc))
+* correct renovate.json configuration - replace invalid gitHubActions with pinDigests ([#1198](https://github.com/dbsystel/cdk-sops-secrets/issues/1198)) ([538080b](https://github.com/dbsystel/cdk-sops-secrets/commit/538080bc0a28de55ea94effcebf02f20b1239b07))
+* **deps:** update go-deps ([#1184](https://github.com/dbsystel/cdk-sops-secrets/issues/1184)) ([00bbb76](https://github.com/dbsystel/cdk-sops-secrets/commit/00bbb76ebd8ff1577b93a29574e5b0d4adffb0b3))
+* remove premature GitHub release creation from create-release workflow ([#1220](https://github.com/dbsystel/cdk-sops-secrets/issues/1220)) ([cd9d6c6](https://github.com/dbsystel/cdk-sops-secrets/commit/cd9d6c6c24022942497ada1109b5f0bddb1efa74))
+* **renovate:** migrate to config:recommended and move allowedPostUpgradeCommands to workflow ([ec10e40](https://github.com/dbsystel/cdk-sops-secrets/commit/ec10e40a9a4624c4c83297ab46ad7a9031ceca94))
+* **renovate:** scope postUpgradeTasks to npm manager only ([9ee43b9](https://github.com/dbsystel/cdk-sops-secrets/commit/9ee43b9fddd9679dd9cb806afb6a3ba8b719966d))
+* **renovate:** unknown option error ([4e5c9ae](https://github.com/dbsystel/cdk-sops-secrets/commit/4e5c9ae3ff8c4441578764dd6105e6957fbf35f0))
+* **renovate:** use renovate without docker ([697c90e](https://github.com/dbsystel/cdk-sops-secrets/commit/697c90ea6df0da720e0b7a69222dc3bd23a9b486))
+* **test:** fix breaking changes introduces by jest upgrade ([#1193](https://github.com/dbsystel/cdk-sops-secrets/issues/1193)) ([e168ed5](https://github.com/dbsystel/cdk-sops-secrets/commit/e168ed5705f0939ba14dcf01ea02dac841fc6711))
+* update release workflow to respect branch protection ([#1218](https://github.com/dbsystel/cdk-sops-secrets/issues/1218)) ([1b956ad](https://github.com/dbsystel/cdk-sops-secrets/commit/1b956ad588df03d79f76b8ca8bde6536baa1c1bc))
 
 ## [2.4.7](https://github.com/dbsystel/cdk-sops-secrets/compare/v2.4.6...v2.4.7) (2025-11-26)
 
 ## [2.4.6](https://github.com/dbsystel/cdk-sops-secrets/compare/v2.4.5...v2.4.6) (2025-11-26)
 
+
 ### Bug Fixes
 
-- **package-lock.json:** update packages ([f93b485](https://github.com/dbsystel/cdk-sops-secrets/commit/f93b485123f4ae6814a6ac6aadb0e3c4a4cc1957))
-- **SopsStringParameter:** add parameterRef to match IStringParameter ([ea04275](https://github.com/dbsystel/cdk-sops-secrets/commit/ea04275a6ef082b7548fc484a213e85641d6c8e5))
+* **package-lock.json:** update packages ([f93b485](https://github.com/dbsystel/cdk-sops-secrets/commit/f93b485123f4ae6814a6ac6aadb0e3c4a4cc1957))
+* **SopsStringParameter:** add parameterRef to match IStringParameter ([ea04275](https://github.com/dbsystel/cdk-sops-secrets/commit/ea04275a6ef082b7548fc484a213e85641d6c8e5))
