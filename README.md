@@ -193,11 +193,13 @@ This will turn off the conversions and just place the decrypted content in the t
 ```ts
 new SopsSecret(stack, 'MySopsSecret', {
   sopsFilePath: 'secrets/sopsfile-encrypted-secret.yaml',
-  expiration: {},
+  expiration: {
+    enabled: true,
+  },
 });
 ```
 
-With the default settings, keys ending in `_expiration` are read directly by CDK from the local `sopsFilePath`, and matching schedules publish to SNS 14 days before the configured date. This requires those expiration fields to remain unencrypted in the source file, for example via SOPS `unencrypted_regex`.
+Expiration notifications are disabled by default. Once enabled, keys ending in `_expiration` are read directly by CDK from the local `sopsFilePath`, and matching schedules publish to SNS 14 days before the configured date. This requires those expiration fields to remain unencrypted in the source file, for example via SOPS `unencrypted_regex`.
 
 `expiration` is only supported with local structured files (`json`, `yaml`, `dotenv`) and does not support `sopsS3Bucket` / `sopsS3Key`.
 

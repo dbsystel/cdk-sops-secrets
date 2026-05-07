@@ -32,6 +32,7 @@ const tc = [
     sopsFilePath: 'test-secrets/testsecret.sops.yaml',
     additionalProperties: {
       expiration: {
+        enabled: true,
         daysBeforeExpiration: 9,
       },
     },

@@ -48,12 +48,19 @@ export enum RawOutput {
 
 /**
  * Options for expiration notifications on secret keys.
- * When set, CDK reads unencrypted keys ending with the configured suffix
+ * When enabled, CDK reads unencrypted keys ending with the configured suffix
  * (e.g. `gitlab_token_expiration`) from the local `sopsFilePath` and
  * synthesizes one-time EventBridge Scheduler schedules that publish to SNS
  * before each expiration date.
  */
 export interface ExpirationOptions {
+  /**
+   * Enable expiration notifications.
+   *
+   * @default false
+   */
+  readonly enabled?: boolean;
+
   /**
    * An existing SNS topic to publish expiration notifications to.
    * If not provided, a new SNS topic will be created automatically.
@@ -122,10 +129,9 @@ export interface SopsSecretProps extends SopsSyncOptions {
   readonly replicaRegions?: ReplicaRegion[];
   /**
    * Configure expiration notifications for secret keys.
-   * When set, CDK reads unencrypted expiration keys from the local `sopsFilePath`
-   * and synthesizes one-time EventBridge Scheduler schedules that publish to SNS
-   * before each expiration.
-   * Disabled by default.
+   * When `enabled: true`, CDK reads unencrypted expiration keys from the local
+   * `sopsFilePath` and synthesizes one-time EventBridge Scheduler schedules
+   * that publish to SNS before each expiration.
    *
    * @default - Expiration notifications are disabled
    */
@@ -200,6 +206,10 @@ function toIsoDateString(value: Date): string {
   return value.toISOString().slice(0, 10);
 }
 
+function truncateDescription(value: string): string {
+  return value.length > 512 ? value.slice(0, 512) : value;
+}
+
 function toScheduleExpression(value: Date): string {
   return `at(${value.toISOString().slice(0, 19)})`;
 }
@@ -220,7 +230,7 @@ export class SopsSecret extends Construct implements ISecret {
 
   /**
    * The SNS topic that receives expiration notifications.
-   * Only set when `expiration` options are provided.
+   * Only set when expiration notifications are enabled.
    */
   readonly expirationNotificationTopic?: ITopic;
 
@@ -251,7 +261,11 @@ export class SopsSecret extends Construct implements ISecret {
       resourceType = ResourceType.SECRET_RAW;
     }
 
-    if (props.expiration !== undefined) {
+    const expiration = props.expiration;
+
+    if (expiration?.enabled ?? false) {
+      const enabledExpiration = expiration!;
+
       if (props.sopsFilePath === undefined) {
         throw new Error(
           'Expiration scheduling requires a local sopsFilePath and does not support sopsS3Bucket/sopsS3Key.',
@@ -271,7 +285,7 @@ export class SopsSecret extends Construct implements ISecret {
       }
 
       const topic =
-        props.expiration.notificationTopic ??
+        enabledExpiration.notificationTopic ??
         new Topic(this, 'ExpirationNotificationTopic');
       this.expirationNotificationTopic = topic;
 
@@ -300,7 +314,7 @@ export class SopsSecret extends Construct implements ISecret {
         this.addExpirationSchedules(
           props.sopsFilePath,
           fileFormat,
-          props.expiration,
+          enabledExpiration,
           topic,
           schedulerRole,
           scheduleGroup,
@@ -331,11 +345,40 @@ export class SopsSecret extends Construct implements ISecret {
       flattenStructuredFileToStringMap(sopsFilePath, '.', fileFormat),
       expiration,
     );
+    const daysBeforeExpiration =
+      expiration.daysBeforeExpiration ?? DEFAULT_DAYS_BEFORE_EXPIRATION;
 
     schedules.forEach((entry, index) => {
+      const scheduleName = sanitizeScheduleName(entry.baseKey);
+      const summary = `Secret key "${entry.baseKey}" expires on ${toIsoDateString(
+        entry.expiresAt,
+      )}.`;
+      const message = [
+        'SOPS secret expiration notification',
+        '',
+        summary,
+        '',
+        `Stack: ${this.stack.stackName}`,
+        `Region: ${this.stack.region}`,
+        `Account: ${this.stack.account}`,
+        `Secret name: ${this.secret.secretName}`,
+        `Secret ARN: ${this.secret.secretArn}`,
+        `Key name: ${entry.baseKey}`,
+        `Expiration date: ${toIsoDateString(entry.expiresAt)}`,
+        `Expiration time: ${entry.expiresAt.toISOString()}`,
+        `Notification date: ${toIsoDateString(entry.notifyAt)}`,
+        `Notification time: ${entry.notifyAt.toISOString()}`,
+        `Days before expiration: ${daysBeforeExpiration}`,
+        `Schedule name: ${scheduleName}`,
+        `Schedule group: ${scheduleGroupName}`,
+      ].join('\n');
+
       const schedule = new CfnSchedule(this, `ExpirationSchedule${index}`, {
+        description: truncateDescription(
+          `Notify about expiration of SOPS secret key "${entry.baseKey}" ${daysBeforeExpiration} days before expiration.`,
+        ),
         groupName: scheduleGroupName,
-        name: sanitizeScheduleName(entry.baseKey),
+        name: scheduleName,
         scheduleExpression: toScheduleExpression(entry.notifyAt),
         flexibleTimeWindow: {
           mode: 'OFF',
@@ -344,12 +387,22 @@ export class SopsSecret extends Construct implements ISecret {
           arn: topic.topicArn,
           roleArn: schedulerRole.roleArn,
           input: Stack.of(this).toJsonString({
+            messageType: 'SOPS_SECRET_EXPIRATION_NOTIFICATION',
+            summary,
+            message,
+            stackName: this.stack.stackName,
+            region: this.stack.region,
+            account: this.stack.account,
+            secretName: this.secret.secretName,
             secretArn: this.secret.secretArn,
             keyName: entry.baseKey,
             expirationDate: toIsoDateString(entry.expiresAt),
+            expirationDateTime: entry.expiresAt.toISOString(),
             notificationDate: toIsoDateString(entry.notifyAt),
-            daysBeforeExpiration:
-              expiration.daysBeforeExpiration ?? DEFAULT_DAYS_BEFORE_EXPIRATION,
+            notificationDateTime: entry.notifyAt.toISOString(),
+            daysBeforeExpiration,
+            scheduleName,
+            scheduleGroupName,
           }),
         },
       });

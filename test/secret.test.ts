@@ -939,13 +939,32 @@ test('Expiration disabled by default - no scheduler/SNS resources', () => {
   template.resourceCountIs('AWS::IAM::Role', 1);
 });
 
+test('Expiration disabled by default - config without enabled does not create scheduler/SNS resources', () => {
+  const app = new App();
+  const stack = new Stack(app, 'SecretIntegration');
+
+  new SopsSecret(stack, 'SopsSecret', {
+    sopsFilePath: 'test-secrets/yaml/sopsfile.expiration.enc-kms.yaml',
+    expiration: {
+      daysBeforeExpiration: 30,
+    },
+  });
+
+  const template = Template.fromStack(stack);
+  template.resourceCountIs('AWS::SNS::Topic', 0);
+  template.resourceCountIs('AWS::Scheduler::ScheduleGroup', 0);
+  template.resourceCountIs('AWS::Scheduler::Schedule', 0);
+});
+
 test('Expiration enabled - auto-creates SNS topic, scheduler role, and schedule group', () => {
   const app = new App();
   const stack = new Stack(app, 'SecretIntegration');
 
   new SopsSecret(stack, 'SopsSecret', {
     sopsFilePath: 'test-secrets/yaml/sopsfile.enc-kms.yaml',
-    expiration: {},
+    expiration: {
+      enabled: true,
+    },
   });
 
   const template = Template.fromStack(stack);
@@ -974,6 +993,7 @@ test('Expiration enabled - uses provided SNS topic instead of auto-creating', ()
   const secret = new SopsSecret(stack, 'SopsSecret', {
     sopsFilePath: 'test-secrets/yaml/sopsfile.enc-kms.yaml',
     expiration: {
+      enabled: true,
       notificationTopic: existingTopic,
     },
   });
@@ -993,7 +1013,9 @@ test('Expiration enabled - synthesizes schedules from unencrypted expiration key
 
   new SopsSecret(stack, 'SopsSecret', {
     sopsFilePath: 'test-secrets/yaml/sopsfile.expiration.enc-kms.yaml',
-    expiration: {},
+    expiration: {
+      enabled: true,
+    },
   });
 
   const template = Template.fromStack(stack);
@@ -1007,19 +1029,40 @@ test('Expiration enabled - synthesizes schedules from unencrypted expiration key
     (resource) => resource.Name === 'gitlab_token',
   );
   expect(gitlabSchedule).toBeDefined();
+  expect(gitlabSchedule?.Description).toContain(
+    'Notify about expiration of SOPS secret key "gitlab_token"',
+  );
   expect(gitlabSchedule?.ScheduleExpression).toBe('at(2099-12-17T00:00:00)');
+  expect(JSON.stringify(gitlabSchedule?.Target)).toContain(
+    'SOPS_SECRET_EXPIRATION_NOTIFICATION',
+  );
+  expect(JSON.stringify(gitlabSchedule?.Target)).toContain(
+    'SOPS secret expiration notification',
+  );
+  expect(JSON.stringify(gitlabSchedule?.Target)).toContain('stackName');
+  expect(JSON.stringify(gitlabSchedule?.Target)).toContain('secretName');
   expect(JSON.stringify(gitlabSchedule?.Target)).toContain('gitlab_token');
   expect(JSON.stringify(gitlabSchedule?.Target)).toContain('2099-12-31');
   expect(JSON.stringify(gitlabSchedule?.Target)).toContain('2099-12-17');
+  expect(JSON.stringify(gitlabSchedule?.Target)).toContain(
+    '2099-12-31T00:00:00.000Z',
+  );
+  expect(JSON.stringify(gitlabSchedule?.Target)).toContain('scheduleGroupName');
 
   const nestedSchedule = schedules.find(
     (resource) => resource.Name === 'nested-api_key',
   );
   expect(nestedSchedule).toBeDefined();
+  expect(nestedSchedule?.Description).toContain(
+    'Notify about expiration of SOPS secret key "nested.api_key"',
+  );
   expect(nestedSchedule?.ScheduleExpression).toBe('at(2099-05-18T12:00:00)');
   expect(JSON.stringify(nestedSchedule?.Target)).toContain('nested.api_key');
   expect(JSON.stringify(nestedSchedule?.Target)).toContain('2099-06-01');
   expect(JSON.stringify(nestedSchedule?.Target)).toContain('2099-05-18');
+  expect(JSON.stringify(nestedSchedule?.Target)).toContain(
+    '2099-06-01T12:00:00.000Z',
+  );
 });
 
 test('Expiration enabled - respects custom daysBeforeExpiration', () => {
@@ -1029,6 +1072,7 @@ test('Expiration enabled - respects custom daysBeforeExpiration', () => {
   new SopsSecret(stack, 'SopsSecret', {
     sopsFilePath: 'test-secrets/yaml/sopsfile.expiration.enc-kms.yaml',
     expiration: {
+      enabled: true,
       daysBeforeExpiration: 30,
     },
   });
@@ -1041,9 +1085,13 @@ test('Expiration enabled - respects custom daysBeforeExpiration', () => {
     (resource) => resource.Name === 'gitlab_token',
   );
   expect(gitlabSchedule).toBeDefined();
+  expect(gitlabSchedule?.Description).toContain('30 days before expiration');
   expect(gitlabSchedule?.ScheduleExpression).toBe('at(2099-12-01T00:00:00)');
   expect(JSON.stringify(gitlabSchedule?.Target)).toContain('2099-12-01');
   expect(JSON.stringify(gitlabSchedule?.Target)).toContain('30');
+  expect(JSON.stringify(gitlabSchedule?.Target)).toContain(
+    '2099-12-01T00:00:00.000Z',
+  );
 
   const nestedSchedule = schedules.find(
     (resource) => resource.Name === 'nested-api_key',
@@ -1060,7 +1108,9 @@ test('Expiration enabled - CustomResource no longer gets Expiration config', () 
 
   new SopsSecret(stack, 'SopsSecret', {
     sopsFilePath: 'test-secrets/yaml/sopsfile.enc-kms.yaml',
-    expiration: {},
+    expiration: {
+      enabled: true,
+    },
   });
 
   const resources = Template.fromStack(stack).findResources('Custom::SopsSync');
@@ -1077,7 +1127,9 @@ test('Expiration enabled - Lambda role no longer gets scheduler permissions', ()
 
   new SopsSecret(stack, 'SopsSecret', {
     sopsFilePath: 'test-secrets/yaml/sopsfile.expiration.enc-kms.yaml',
-    expiration: {},
+    expiration: {
+      enabled: true,
+    },
   });
 
   const policies = Template.fromStack(stack).findResources('AWS::IAM::Policy');
@@ -1094,7 +1146,9 @@ test('Expiration enabled - invalid expiration date throws during synthesis setup
       new SopsSecret(stack, 'SopsSecret', {
         sopsFilePath:
           'test-secrets/yaml/sopsfile.invalid-expiration.enc-kms.yaml',
-        expiration: {},
+        expiration: {
+          enabled: true,
+        },
       }),
   ).toThrow('unsupported date format: "not-a-date"');
 });
@@ -1109,7 +1163,9 @@ test('Expiration enabled - s3 source is rejected', () => {
         sopsS3Bucket: 'bucket',
         sopsS3Key: 'secret.yaml',
         sopsFileFormat: 'yaml',
-        expiration: {},
+        expiration: {
+          enabled: true,
+        },
       }),
   ).toThrow(
     'Expiration scheduling requires a local sopsFilePath and does not support sopsS3Bucket/sopsS3Key.',

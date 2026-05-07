@@ -494,6 +494,7 @@ Any object.
 | <code><a href="#cdk-sops-secrets.SopsSecret.property.stack">stack</a></code> | <code>aws-cdk-lib.Stack</code> | The stack in which this resource is defined. |
 | <code><a href="#cdk-sops-secrets.SopsSecret.property.sync">sync</a></code> | <code><a href="#cdk-sops-secrets.SopsSync">SopsSync</a></code> | *No description.* |
 | <code><a href="#cdk-sops-secrets.SopsSecret.property.encryptionKey">encryptionKey</a></code> | <code>aws-cdk-lib.aws_kms.IKey</code> | The customer-managed encryption key that is used to encrypt this secret, if any. |
+| <code><a href="#cdk-sops-secrets.SopsSecret.property.expirationNotificationTopic">expirationNotificationTopic</a></code> | <code>aws-cdk-lib.aws_sns.ITopic</code> | The SNS topic that receives expiration notifications. |
 | <code><a href="#cdk-sops-secrets.SopsSecret.property.secretFullArn">secretFullArn</a></code> | <code>string</code> | The full ARN of the secret in AWS Secrets Manager, which is the ARN including the Secrets Manager-supplied 6-character suffix. |
 
 ---
@@ -618,6 +619,20 @@ The customer-managed encryption key that is used to encrypt this secret, if any.
 
 When not specified, the default
 KMS key for the account and region is being used.
+
+---
+
+##### `expirationNotificationTopic`<sup>Optional</sup> <a name="expirationNotificationTopic" id="cdk-sops-secrets.SopsSecret.property.expirationNotificationTopic"></a>
+
+```typescript
+public readonly expirationNotificationTopic: ITopic;
+```
+
+- *Type:* aws-cdk-lib.aws_sns.ITopic
+
+The SNS topic that receives expiration notifications.
+
+Only set when expiration notifications are enabled.
 
 ---
 
@@ -2052,6 +2067,92 @@ Uniquely identifies this class.
 
 ## Structs <a name="Structs" id="Structs"></a>
 
+### ExpirationOptions <a name="ExpirationOptions" id="cdk-sops-secrets.ExpirationOptions"></a>
+
+Options for expiration notifications on secret keys.
+
+When enabled, CDK reads unencrypted keys ending with the configured suffix
+(e.g. `gitlab_token_expiration`) from the local `sopsFilePath` and
+synthesizes one-time EventBridge Scheduler schedules that publish to SNS
+before each expiration date.
+
+#### Initializer <a name="Initializer" id="cdk-sops-secrets.ExpirationOptions.Initializer"></a>
+
+```typescript
+import { ExpirationOptions } from 'cdk-sops-secrets'
+
+const expirationOptions: ExpirationOptions = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#cdk-sops-secrets.ExpirationOptions.property.daysBeforeExpiration">daysBeforeExpiration</a></code> | <code>number</code> | Number of days before the expiration date to send the SNS notification. |
+| <code><a href="#cdk-sops-secrets.ExpirationOptions.property.enabled">enabled</a></code> | <code>boolean</code> | Enable expiration notifications. |
+| <code><a href="#cdk-sops-secrets.ExpirationOptions.property.expirationSuffix">expirationSuffix</a></code> | <code>string</code> | The suffix used to identify expiration date keys in the secret. |
+| <code><a href="#cdk-sops-secrets.ExpirationOptions.property.notificationTopic">notificationTopic</a></code> | <code>aws-cdk-lib.aws_sns.ITopic</code> | An existing SNS topic to publish expiration notifications to. |
+
+---
+
+##### `daysBeforeExpiration`<sup>Optional</sup> <a name="daysBeforeExpiration" id="cdk-sops-secrets.ExpirationOptions.property.daysBeforeExpiration"></a>
+
+```typescript
+public readonly daysBeforeExpiration: number;
+```
+
+- *Type:* number
+- *Default:* 14
+
+Number of days before the expiration date to send the SNS notification.
+
+---
+
+##### `enabled`<sup>Optional</sup> <a name="enabled" id="cdk-sops-secrets.ExpirationOptions.property.enabled"></a>
+
+```typescript
+public readonly enabled: boolean;
+```
+
+- *Type:* boolean
+- *Default:* false
+
+Enable expiration notifications.
+
+---
+
+##### `expirationSuffix`<sup>Optional</sup> <a name="expirationSuffix" id="cdk-sops-secrets.ExpirationOptions.property.expirationSuffix"></a>
+
+```typescript
+public readonly expirationSuffix: string;
+```
+
+- *Type:* string
+- *Default:* '_expiration'
+
+The suffix used to identify expiration date keys in the secret.
+
+For example, a suffix of `_expiration` will match any key like
+`gitlab_token_expiration` and treat its value as the expiration date
+for `gitlab_token`.
+
+---
+
+##### `notificationTopic`<sup>Optional</sup> <a name="notificationTopic" id="cdk-sops-secrets.ExpirationOptions.property.notificationTopic"></a>
+
+```typescript
+public readonly notificationTopic: ITopic;
+```
+
+- *Type:* aws-cdk-lib.aws_sns.ITopic
+- *Default:* A new SNS topic is created
+
+An existing SNS topic to publish expiration notifications to.
+
+If not provided, a new SNS topic will be created automatically.
+
+---
+
 ### MultiStringParameterProps <a name="MultiStringParameterProps" id="cdk-sops-secrets.MultiStringParameterProps"></a>
 
 #### Initializer <a name="Initializer" id="cdk-sops-secrets.MultiStringParameterProps.Initializer"></a>
@@ -2512,6 +2613,7 @@ const sopsSecretProps: SopsSecretProps = { ... }
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.uploadType">uploadType</a></code> | <code><a href="#cdk-sops-secrets.UploadType">UploadType</a></code> | How should the secret be passed to the CustomResource? |
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.description">description</a></code> | <code>string</code> | An optional, human-friendly description of the secret. |
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.encryptionKey">encryptionKey</a></code> | <code>aws-cdk-lib.aws_kms.IKey</code> | The customer-managed encryption key to use for encrypting the secret value. |
+| <code><a href="#cdk-sops-secrets.SopsSecretProps.property.expiration">expiration</a></code> | <code><a href="#cdk-sops-secrets.ExpirationOptions">ExpirationOptions</a></code> | Configure expiration notifications for secret keys. |
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.rawOutput">rawOutput</a></code> | <code><a href="#cdk-sops-secrets.RawOutput">RawOutput</a></code> | Should the secret parsed and transformed to json? |
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.removalPolicy">removalPolicy</a></code> | <code>aws-cdk-lib.RemovalPolicy</code> | Policy to apply when the secret is removed from this stack. |
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.replicaRegions">replicaRegions</a></code> | <code>aws-cdk-lib.aws_secretsmanager.ReplicaRegion[]</code> | A list of regions where to replicate this secret. |
@@ -2674,6 +2776,23 @@ public readonly encryptionKey: IKey;
 - *Default:* A default KMS key for the account and region is used.
 
 The customer-managed encryption key to use for encrypting the secret value.
+
+---
+
+##### `expiration`<sup>Optional</sup> <a name="expiration" id="cdk-sops-secrets.SopsSecretProps.property.expiration"></a>
+
+```typescript
+public readonly expiration: ExpirationOptions;
+```
+
+- *Type:* <a href="#cdk-sops-secrets.ExpirationOptions">ExpirationOptions</a>
+- *Default:* Expiration notifications are disabled
+
+Configure expiration notifications for secret keys.
+
+When `enabled: true`, CDK reads unencrypted expiration keys from the local
+`sopsFilePath` and synthesizes one-time EventBridge Scheduler schedules
+that publish to SNS before each expiration.
 
 ---
 
