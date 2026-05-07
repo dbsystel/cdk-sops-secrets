@@ -1,4 +1,4 @@
 
 [TestFromCfnEvent - 1]
-(*event.SopsSyncResourcePropertys)(nil)
+(*event.SopsSyncResourceProperties)(nil)
 ---

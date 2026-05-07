@@ -11,6 +11,10 @@ main.putParameterCalls{
         "keyId":            "arn:aws:kms:eu-central-1:505755377845:key/58b75958-883a-440c-842c-85af5d33a5bb",
         "parameterContent": "sk-1234567890abcdef",
     },
+    "/42-PARAMETER_MULTI-yaml/apiKey_expiration": map[string]interface {}{
+        "keyId":            "arn:aws:kms:eu-central-1:505755377845:key/58b75958-883a-440c-842c-85af5d33a5bb",
+        "parameterContent": "2029-12-31T23:59:59Z",
+    },
     "/42-PARAMETER_MULTI-yaml/database/host": map[string]interface {}{
         "keyId":            "arn:aws:kms:eu-central-1:505755377845:key/58b75958-883a-440c-842c-85af5d33a5bb",
         "parameterContent": "db.example.com",

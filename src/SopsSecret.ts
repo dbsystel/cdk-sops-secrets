@@ -3,8 +3,11 @@ import {
   Grant,
   IGrantable,
   PolicyStatement,
+  Role,
+  ServicePrincipal,
 } from 'aws-cdk-lib/aws-iam';
 import { IKey, ViaServicePrincipal } from 'aws-cdk-lib/aws-kms';
+import { CfnSchedule, CfnScheduleGroup } from 'aws-cdk-lib/aws-scheduler';
 import {
   ISecret,
   ISecretAttachmentTarget,
@@ -15,7 +18,9 @@ import {
   SecretProps,
   SecretReference,
 } from 'aws-cdk-lib/aws-secretsmanager';
+import { ITopic, ITopicSubscription, Topic } from 'aws-cdk-lib/aws-sns';
 import {
+  Names,
   RemovalPolicy,
   ResourceEnvironment,
   SecretsManagerSecretOptions,
@@ -24,6 +29,11 @@ import {
 } from 'aws-cdk-lib/core';
 import { Construct } from 'constructs';
 import { ResourceType, SopsSync, SopsSyncOptions } from './SopsSync';
+import {
+  flattenStructuredFileToStringMap,
+  inferStructuredFileFormat,
+  StructuredFileFormat,
+} from './structuredData';
 
 export enum RawOutput {
   /**
@@ -34,6 +44,55 @@ export enum RawOutput {
    * Parse the secret as a binary
    */
   BINARY = 'BINARY',
+}
+
+/**
+ * Options for expiration notifications on secret keys.
+ * When enabled, CDK reads unencrypted keys ending with the configured suffix
+ * (e.g. `gitlab_token_expiration`) from the local `sopsFilePath` and
+ * synthesizes one-time EventBridge Scheduler schedules that publish to SNS
+ * before each expiration date.
+ */
+export interface ExpirationOptions {
+  /**
+   * Enable expiration notifications.
+   *
+   * @default false
+   */
+  readonly enabled?: boolean;
+
+  /**
+   * An existing SNS topic to publish expiration notifications to.
+   * If not provided, a new SNS topic will be created automatically.
+   *
+   * @default - A new SNS topic is created
+   */
+  readonly notificationTopic?: ITopic;
+
+  /**
+   * A subscriber to attach to the expiration notification topic.
+   * Works for both an auto-created topic and a provided `notificationTopic`.
+   *
+   * @default - No subscriber is added
+   */
+  readonly subscriber?: ITopicSubscription;
+
+  /**
+   * The suffix used to identify expiration date keys in the secret.
+   * For example, a suffix of `_expiration` will match any key like
+   * `gitlab_token_expiration` and treat its value as the expiration date
+   * for `gitlab_token`.
+   *
+   * @default '_expiration'
+   */
+  readonly expirationSuffix?: string;
+
+  /**
+   * Number of days before the expiration date to send the SNS notification.
+   *
+   * @default 14
+   */
+  readonly daysBeforeExpiration?: number;
 }
 
 /**
@@ -76,6 +135,120 @@ export interface SopsSecretProps extends SopsSyncOptions {
    * @default - Secret is not replicated
    */
   readonly replicaRegions?: ReplicaRegion[];
+  /**
+   * Configure expiration notifications for secret keys.
+   * When `enabled: true`, CDK reads unencrypted expiration keys from the local
+   * `sopsFilePath` and synthesizes one-time EventBridge Scheduler schedules
+   * that publish to SNS before each expiration.
+   *
+   * @default - Expiration notifications are disabled
+   */
+  readonly expirationNotification?: ExpirationOptions;
+}
+
+const DEFAULT_EXPIRATION_SUFFIX = '_expiration';
+const DEFAULT_DAYS_BEFORE_EXPIRATION = 14;
+
+interface ExpirationScheduleEntry {
+  readonly baseKey: string;
+  readonly expiresAt: Date;
+  readonly notifyAt: Date;
+}
+
+function sanitizeScheduleComponent(name: string): string {
+  return name.replace(/[^a-zA-Z0-9_-]/g, '-');
+}
+
+function sanitizeScheduleName(secretName: string, keyName: string): string {
+  const sanitizedSecretName = sanitizeScheduleComponent(secretName);
+  const sanitizedKeyName = sanitizeScheduleComponent(keyName);
+
+  if (sanitizedSecretName.length === 0) {
+    return sanitizedKeyName.slice(0, 64);
+  }
+  if (sanitizedKeyName.length === 0) {
+    return sanitizedSecretName.slice(0, 64);
+  }
+
+  const combinedName = `${sanitizedSecretName}-${sanitizedKeyName}`;
+  if (combinedName.length <= 64) {
+    return combinedName;
+  }
+
+  const maxKeyLength = Math.min(sanitizedKeyName.length, 31);
+  const truncatedKeyName = sanitizedKeyName.slice(0, maxKeyLength);
+  const maxSecretLength = 64 - truncatedKeyName.length - 1;
+  return `${sanitizedSecretName.slice(0, maxSecretLength)}-${truncatedKeyName}`;
+}
+
+function scheduleGroupResourceId(): string {
+  return 'SopsSecretExpirationScheduleGroup';
+}
+
+function scheduleGroupNameForStack(stack: Stack): string {
+  return sanitizeScheduleComponent(Names.uniqueId(stack)).slice(0, 64);
+}
+
+function parseExpirationDate(value: string): Date {
+  const trimmed = value.trim();
+
+  if (/^\d{4}-\d{2}-\d{2}$/.test(trimmed)) {
+    const parsed = new Date(`${trimmed}T00:00:00.000Z`);
+    if (!Number.isNaN(parsed.getTime())) {
+      return parsed;
+    }
+  }
+
+  const parsed = new Date(trimmed);
+  if (Number.isNaN(parsed.getTime())) {
+    throw new Error(`unsupported date format: "${value}"`);
+  }
+  return parsed;
+}
+
+function resolveExpirationSchedules(
+  sourceData: Record<string, string>,
+  expiration: ExpirationOptions,
+): ExpirationScheduleEntry[] {
+  const suffix = expiration.expirationSuffix ?? DEFAULT_EXPIRATION_SUFFIX;
+  const daysBeforeExpiration =
+    expiration.daysBeforeExpiration ?? DEFAULT_DAYS_BEFORE_EXPIRATION;
+  const schedules: ExpirationScheduleEntry[] = [];
+  const now = Date.now();
+
+  for (const key of Object.keys(sourceData).sort()) {
+    if (!key.endsWith(suffix)) {
+      continue;
+    }
+
+    const expiresAt = parseExpirationDate(sourceData[key]);
+    const notifyAt = new Date(expiresAt.getTime());
+    notifyAt.setUTCDate(notifyAt.getUTCDate() - daysBeforeExpiration);
+
+    if (notifyAt.getTime() < now) {
+      continue;
+    }
+
+    schedules.push({
+      baseKey: key.slice(0, -suffix.length),
+      expiresAt,
+      notifyAt,
+    });
+  }
+
+  return schedules;
+}
+
+function toIsoDateString(value: Date): string {
+  return value.toISOString().slice(0, 10);
+}
+
+function truncateDescription(value: string): string {
+  return value.length > 512 ? value.slice(0, 512) : value;
+}
+
+function toScheduleExpression(value: Date): string {
+  return `at(${value.toISOString().slice(0, 19)})`;
 }
 
 /**
@@ -91,6 +264,12 @@ export class SopsSecret extends Construct implements ISecret {
   readonly secretRef: SecretReference;
   readonly stack: Stack;
   readonly env: ResourceEnvironment;
+
+  /**
+   * The SNS topic that receives expiration notifications.
+   * Only set when expiration notifications are enabled.
+   */
+  readonly expirationNotificationTopic?: ITopic;
 
   readonly sync: SopsSync;
   public constructor(scope: Construct, id: string, props: SopsSecretProps) {
@@ -119,12 +298,136 @@ export class SopsSecret extends Construct implements ISecret {
       resourceType = ResourceType.SECRET_RAW;
     }
 
+    const expiration = props.expirationNotification;
+
+    if (expiration?.enabled ?? false) {
+      const enabledExpiration = expiration!;
+
+      if (props.sopsFilePath === undefined) {
+        throw new Error(
+          'Expiration scheduling requires a local sopsFilePath and does not support sopsS3Bucket/sopsS3Key.',
+        );
+      }
+      if (props.rawOutput !== undefined) {
+        throw new Error(
+          'Expiration scheduling does not support rawOutput. Remove rawOutput to use expirationNotification.',
+        );
+      }
+
+      const fileFormat =
+        props.sopsFileFormat === 'json' ||
+        props.sopsFileFormat === 'yaml' ||
+        props.sopsFileFormat === 'dotenv'
+          ? props.sopsFileFormat
+          : inferStructuredFileFormat(props.sopsFilePath);
+      if (fileFormat === undefined) {
+        throw new Error(
+          'Expiration scheduling requires a structured local file in json, yaml, or dotenv format.',
+        );
+      }
+
+      const topic =
+        enabledExpiration.notificationTopic ??
+        new Topic(this, 'ExpirationNotificationTopic');
+      this.expirationNotificationTopic = topic;
+      if (enabledExpiration.subscriber !== undefined) {
+        topic.addSubscription(enabledExpiration.subscriber);
+      }
+
+      const schedulerRole = new Role(this, 'ExpirationSchedulerRole', {
+        assumedBy: new ServicePrincipal('scheduler.amazonaws.com'),
+        description:
+          'Role assumed by EventBridge Scheduler to publish expiration notifications',
+      });
+      topic.grantPublish(schedulerRole);
+
+      const scheduleGroupName = scheduleGroupNameForStack(this.stack);
+      const existingScheduleGroup = this.stack.node.tryFindChild(
+        scheduleGroupResourceId(),
+      ) as CfnScheduleGroup | undefined;
+      const scheduleGroup =
+        existingScheduleGroup ??
+        new CfnScheduleGroup(this.stack, scheduleGroupResourceId(), {
+          name: scheduleGroupName,
+        });
+
+      this.addExpirationSchedules(
+        props.sopsFilePath,
+        fileFormat,
+        enabledExpiration,
+        props.secretName ?? Names.uniqueId(this),
+        topic,
+        schedulerRole,
+        scheduleGroup,
+        scheduleGroupName,
+      );
+    }
+
     this.sync = new SopsSync(this, 'SopsSync', {
       target: this.secret.secretArn,
       resourceType,
       flattenSeparator: '.',
       secret: this.secret,
       ...(props as SopsSyncOptions),
+    });
+  }
+
+  private addExpirationSchedules(
+    sopsFilePath: string,
+    fileFormat: StructuredFileFormat,
+    expiration: ExpirationOptions,
+    scheduleSecretName: string,
+    topic: ITopic,
+    schedulerRole: Role,
+    scheduleGroup: CfnScheduleGroup,
+    scheduleGroupName: string,
+  ): void {
+    const schedules = resolveExpirationSchedules(
+      flattenStructuredFileToStringMap(sopsFilePath, '.', fileFormat),
+      expiration,
+    );
+    const daysBeforeExpiration =
+      expiration.daysBeforeExpiration ?? DEFAULT_DAYS_BEFORE_EXPIRATION;
+
+    schedules.forEach((entry, index) => {
+      const scheduleName = sanitizeScheduleName(
+        scheduleSecretName,
+        entry.baseKey,
+      );
+      const summary = `Secret key "${entry.baseKey}" in ${scheduleSecretName} expires on ${toIsoDateString(
+        entry.expiresAt,
+      )}.`;
+      const message = [
+        'SOPS secret expiration notification',
+        '',
+        summary,
+        '',
+        `Stack: ${this.stack.stackName}`,
+        `Region: ${this.stack.region}`,
+        `Account: ${this.stack.account}`,
+        `Secret name: ${scheduleSecretName}`,
+        `Secret ARN: ${this.secret.secretArn}`,
+        `Key name: ${entry.baseKey}`,
+        `Expiration time: ${entry.expiresAt.toISOString()}`,
+      ].join('\n');
+
+      const schedule = new CfnSchedule(this, `ExpirationSchedule${index}`, {
+        description: truncateDescription(
+          `Notify about expiration of SOPS secret key "${entry.baseKey}" ${daysBeforeExpiration} days before expiration.`,
+        ),
+        groupName: scheduleGroupName,
+        name: scheduleName,
+        scheduleExpression: toScheduleExpression(entry.notifyAt),
+        flexibleTimeWindow: {
+          mode: 'OFF',
+        },
+        target: {
+          arn: topic.topicArn,
+          roleArn: schedulerRole.roleArn,
+          input: message,
+        },
+      });
+      schedule.addDependency(scheduleGroup);
     });
   }
 
