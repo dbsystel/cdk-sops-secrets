@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.7.0](https://github.com/dbsystel/cdk-sops-secrets/compare/v2.6.7...v2.7.0) (2026-05-07)
+
+### Features
+
+* add secret expiration tracking ([eb6c9b7](https://github.com/dbsystel/cdk-sops-secrets/commit/eb6c9b76875b0bfbe3e0b95d92f41a6b697fd0c0))
+
 ## [2.6.7](https://github.com/dbsystel/cdk-sops-secrets/compare/v2.6.6...v2.6.7) (2026-05-05)
 
 
