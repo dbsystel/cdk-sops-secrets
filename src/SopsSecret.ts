@@ -26,6 +26,7 @@ import {
   SecretsManagerSecretOptions,
   SecretValue,
   Stack,
+  Token,
 } from 'aws-cdk-lib/core';
 import { Construct } from 'constructs';
 import { ResourceType, SopsSync, SopsSyncOptions } from './SopsSync';
@@ -155,9 +156,45 @@ interface ExpirationScheduleEntry {
   readonly notifyAt: Date;
 }
 
-function sanitizeScheduleName(name: string): string {
-  const sanitized = name.replace(/[^a-zA-Z0-9_-]/g, '-');
-  return sanitized.length > 64 ? sanitized.slice(0, 64) : sanitized;
+function sanitizeScheduleComponent(name: string): string {
+  return name.replace(/[^a-zA-Z0-9_-]/g, '-');
+}
+
+function sanitizeScheduleName(secretName: string, keyName: string): string {
+  const sanitizedSecretName = sanitizeScheduleComponent(secretName);
+  const sanitizedKeyName = sanitizeScheduleComponent(keyName);
+
+  if (sanitizedSecretName.length === 0) {
+    return sanitizedKeyName.slice(0, 64);
+  }
+  if (sanitizedKeyName.length === 0) {
+    return sanitizedSecretName.slice(0, 64);
+  }
+
+  const combinedName = `${sanitizedSecretName}-${sanitizedKeyName}`;
+  if (combinedName.length <= 64) {
+    return combinedName;
+  }
+
+  const maxKeyLength = Math.min(sanitizedKeyName.length, 31);
+  const truncatedKeyName = sanitizedKeyName.slice(0, maxKeyLength);
+  const maxSecretLength = 64 - truncatedKeyName.length - 1;
+  return `${sanitizedSecretName.slice(0, maxSecretLength)}-${truncatedKeyName}`;
+}
+
+function resolveScheduleSecretName(
+  secretName: string,
+  fallback: string,
+): string {
+  return Token.isUnresolved(secretName) ? fallback : secretName;
+}
+
+function scheduleGroupResourceId(): string {
+  return 'SopsSecretExpirationScheduleGroup';
+}
+
+function scheduleGroupNameForStack(stack: Stack): string {
+  return sanitizeScheduleComponent(Names.uniqueId(stack)).slice(0, 64);
 }
 
 function parseExpirationDate(value: string): Date {
@@ -307,25 +344,25 @@ export class SopsSecret extends Construct implements ISecret {
       });
       topic.grantPublish(schedulerRole);
 
-      // Generate a deterministic, AWS-safe schedule group name from the construct path.
-      // Schedule group names allow [a-zA-Z0-9_-], max 64 characters.
-      const scheduleGroupName = Names.uniqueId(this)
-        .replace(/[^a-zA-Z0-9_-]/g, '-')
-        .substring(0, 64);
-
-      const scheduleGroup = new CfnScheduleGroup(
-        this,
-        'ExpirationScheduleGroup',
-        {
+      const scheduleGroupName = scheduleGroupNameForStack(this.stack);
+      const existingScheduleGroup = this.stack.node.tryFindChild(
+        scheduleGroupResourceId(),
+      ) as CfnScheduleGroup | undefined;
+      const scheduleGroup =
+        existingScheduleGroup ??
+        new CfnScheduleGroup(this.stack, scheduleGroupResourceId(), {
           name: scheduleGroupName,
-        },
-      );
+        });
 
       if (resourceType === ResourceType.SECRET) {
         this.addExpirationSchedules(
           props.sopsFilePath,
           fileFormat,
           enabledExpiration,
+          resolveScheduleSecretName(
+            this.secret.secretName,
+            Names.uniqueId(this),
+          ),
           topic,
           schedulerRole,
           scheduleGroup,
@@ -347,6 +384,7 @@ export class SopsSecret extends Construct implements ISecret {
     sopsFilePath: string,
     fileFormat: StructuredFileFormat,
     expiration: ExpirationOptions,
+    scheduleSecretName: string,
     topic: ITopic,
     schedulerRole: Role,
     scheduleGroup: CfnScheduleGroup,
@@ -360,7 +398,10 @@ export class SopsSecret extends Construct implements ISecret {
       expiration.daysBeforeExpiration ?? DEFAULT_DAYS_BEFORE_EXPIRATION;
 
     schedules.forEach((entry, index) => {
-      const scheduleName = sanitizeScheduleName(entry.baseKey);
+      const scheduleName = sanitizeScheduleName(
+        scheduleSecretName,
+        entry.baseKey,
+      );
       const summary = `Secret key "${entry.baseKey}" expires on ${toIsoDateString(
         entry.expiresAt,
       )}.`;

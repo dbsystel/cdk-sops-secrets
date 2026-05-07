@@ -985,6 +985,45 @@ test('Expiration enabled - auto-creates SNS topic, scheduler role, and schedule 
   });
 });
 
+test('Expiration enabled - reuses one schedule group per stack', () => {
+  const app = new App();
+  const stack = new Stack(app, 'SecretIntegration');
+
+  new SopsSecret(stack, 'FirstSecret', {
+    secretName: 'first-secret',
+    sopsFilePath: 'test-secrets/yaml/sopsfile.expiration.enc-kms.yaml',
+    expiration: {
+      enabled: true,
+    },
+  });
+
+  new SopsSecret(stack, 'SecondSecret', {
+    secretName: 'second-secret',
+    sopsFilePath: 'test-secrets/yaml/sopsfile.expiration.enc-kms.yaml',
+    expiration: {
+      enabled: true,
+    },
+  });
+
+  const template = Template.fromStack(stack);
+  template.resourceCountIs('AWS::Scheduler::ScheduleGroup', 1);
+  template.resourceCountIs('AWS::Scheduler::Schedule', 4);
+
+  const schedules = Object.values(
+    template.findResources('AWS::Scheduler::Schedule'),
+  ).map((resource) => resource.Properties as Record<string, unknown>);
+
+  expect(new Set(schedules.map((resource) => resource.GroupName)).size).toBe(1);
+  expect(
+    schedules.some((resource) => resource.Name === 'first-secret-gitlab_token'),
+  ).toBe(true);
+  expect(
+    schedules.some(
+      (resource) => resource.Name === 'second-secret-gitlab_token',
+    ),
+  ).toBe(true);
+});
+
 test('Expiration enabled - adds subscriber to auto-created SNS topic', () => {
   const app = new App();
   const stack = new Stack(app, 'SecretIntegration');
@@ -1058,6 +1097,7 @@ test('Expiration enabled - synthesizes schedules from unencrypted expiration key
   const stack = new Stack(app, 'SecretIntegration');
 
   new SopsSecret(stack, 'SopsSecret', {
+    secretName: 'my-secret',
     sopsFilePath: 'test-secrets/yaml/sopsfile.expiration.enc-kms.yaml',
     expiration: {
       enabled: true,
@@ -1072,7 +1112,7 @@ test('Expiration enabled - synthesizes schedules from unencrypted expiration key
   ).map((resource) => resource.Properties as Record<string, unknown>);
 
   const gitlabSchedule = schedules.find(
-    (resource) => resource.Name === 'gitlab_token',
+    (resource) => resource.Name === 'my-secret-gitlab_token',
   );
   expect(gitlabSchedule).toBeDefined();
   expect(gitlabSchedule?.Description).toContain(
@@ -1096,7 +1136,7 @@ test('Expiration enabled - synthesizes schedules from unencrypted expiration key
   expect(JSON.stringify(gitlabSchedule?.Target)).toContain('scheduleGroupName');
 
   const nestedSchedule = schedules.find(
-    (resource) => resource.Name === 'nested-api_key',
+    (resource) => resource.Name === 'my-secret-nested-api_key',
   );
   expect(nestedSchedule).toBeDefined();
   expect(nestedSchedule?.Description).toContain(
@@ -1116,6 +1156,7 @@ test('Expiration enabled - respects custom daysBeforeExpiration', () => {
   const stack = new Stack(app, 'SecretIntegration');
 
   new SopsSecret(stack, 'SopsSecret', {
+    secretName: 'my-secret',
     sopsFilePath: 'test-secrets/yaml/sopsfile.expiration.enc-kms.yaml',
     expiration: {
       enabled: true,
@@ -1128,7 +1169,7 @@ test('Expiration enabled - respects custom daysBeforeExpiration', () => {
   ).map((resource) => resource.Properties as Record<string, unknown>);
 
   const gitlabSchedule = schedules.find(
-    (resource) => resource.Name === 'gitlab_token',
+    (resource) => resource.Name === 'my-secret-gitlab_token',
   );
   expect(gitlabSchedule).toBeDefined();
   expect(gitlabSchedule?.Description).toContain('30 days before expiration');
@@ -1140,7 +1181,7 @@ test('Expiration enabled - respects custom daysBeforeExpiration', () => {
   );
 
   const nestedSchedule = schedules.find(
-    (resource) => resource.Name === 'nested-api_key',
+    (resource) => resource.Name === 'my-secret-nested-api_key',
   );
   expect(nestedSchedule).toBeDefined();
   expect(nestedSchedule?.ScheduleExpression).toBe('at(2099-05-02T12:00:00)');
