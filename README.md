@@ -191,15 +191,20 @@ This will turn off the conversions and just place the decrypted content in the t
 `SopsSecret` can also synthesize one-time EventBridge Scheduler schedules for unencrypted expiration keys in a local SOPS file:
 
 ```ts
+import * as subscriptions from 'aws-cdk-lib/aws-sns-subscriptions';
+
 new SopsSecret(stack, 'MySopsSecret', {
   sopsFilePath: 'secrets/sopsfile-encrypted-secret.yaml',
   expiration: {
     enabled: true,
+    subscriber: new subscriptions.EmailSubscription('ops@example.com'),
   },
 });
 ```
 
 Expiration notifications are disabled by default. Once enabled, keys ending in `_expiration` are read directly by CDK from the local `sopsFilePath`, and matching schedules publish to SNS 14 days before the configured date. This requires those expiration fields to remain unencrypted in the source file, for example via SOPS `unencrypted_regex`.
+
+You can optionally attach a `subscriber` to the created or provided SNS topic, for example an `EmailSubscription`, `UrlSubscription`, `LambdaSubscription`, or `SqsSubscription`.
 
 `expiration` is only supported with local structured files (`json`, `yaml`, `dotenv`) and does not support `sopsS3Bucket` / `sopsS3Key`.
 

@@ -2092,6 +2092,7 @@ const expirationOptions: ExpirationOptions = { ... }
 | <code><a href="#cdk-sops-secrets.ExpirationOptions.property.enabled">enabled</a></code> | <code>boolean</code> | Enable expiration notifications. |
 | <code><a href="#cdk-sops-secrets.ExpirationOptions.property.expirationSuffix">expirationSuffix</a></code> | <code>string</code> | The suffix used to identify expiration date keys in the secret. |
 | <code><a href="#cdk-sops-secrets.ExpirationOptions.property.notificationTopic">notificationTopic</a></code> | <code>aws-cdk-lib.aws_sns.ITopic</code> | An existing SNS topic to publish expiration notifications to. |
+| <code><a href="#cdk-sops-secrets.ExpirationOptions.property.subscriber">subscriber</a></code> | <code>aws-cdk-lib.aws_sns.ITopicSubscription</code> | A subscriber to attach to the expiration notification topic. |
 
 ---
 
@@ -2150,6 +2151,21 @@ public readonly notificationTopic: ITopic;
 An existing SNS topic to publish expiration notifications to.
 
 If not provided, a new SNS topic will be created automatically.
+
+---
+
+##### `subscriber`<sup>Optional</sup> <a name="subscriber" id="cdk-sops-secrets.ExpirationOptions.property.subscriber"></a>
+
+```typescript
+public readonly subscriber: ITopicSubscription;
+```
+
+- *Type:* aws-cdk-lib.aws_sns.ITopicSubscription
+- *Default:* No subscriber is added
+
+A subscriber to attach to the expiration notification topic.
+
+Works for both an auto-created topic and a provided `notificationTopic`.
 
 ---
 

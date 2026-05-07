@@ -1,6 +1,7 @@
 import * as cdk from 'aws-cdk-lib';
 import { ConstantAssetHashAspect } from './ConstantAssetHashAspect';
 import { RawOutput, SopsSecret, SopsSecretProps } from '../src/index';
+import { EmailSubscription } from 'aws-cdk-lib/aws-sns-subscriptions';
 
 const app = new cdk.App();
 const stack = new cdk.Stack(app, 'SECRET');
@@ -34,6 +35,7 @@ const tc = [
       expiration: {
         enabled: true,
         daysBeforeExpiration: 9,
+        subscriber: new EmailSubscription('test@example.com'),
       },
     },
   },

@@ -18,7 +18,7 @@ import {
   SecretProps,
   SecretReference,
 } from 'aws-cdk-lib/aws-secretsmanager';
-import { ITopic, Topic } from 'aws-cdk-lib/aws-sns';
+import { ITopic, ITopicSubscription, Topic } from 'aws-cdk-lib/aws-sns';
 import {
   Names,
   RemovalPolicy,
@@ -68,6 +68,14 @@ export interface ExpirationOptions {
    * @default - A new SNS topic is created
    */
   readonly notificationTopic?: ITopic;
+
+  /**
+   * A subscriber to attach to the expiration notification topic.
+   * Works for both an auto-created topic and a provided `notificationTopic`.
+   *
+   * @default - No subscriber is added
+   */
+  readonly subscriber?: ITopicSubscription;
 
   /**
    * The suffix used to identify expiration date keys in the secret.
@@ -288,6 +296,9 @@ export class SopsSecret extends Construct implements ISecret {
         enabledExpiration.notificationTopic ??
         new Topic(this, 'ExpirationNotificationTopic');
       this.expirationNotificationTopic = topic;
+      if (enabledExpiration.subscriber !== undefined) {
+        topic.addSubscription(enabledExpiration.subscriber);
+      }
 
       const schedulerRole = new Role(this, 'ExpirationSchedulerRole', {
         assumedBy: new ServicePrincipal('scheduler.amazonaws.com'),

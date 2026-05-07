@@ -11,6 +11,7 @@ import { Key } from 'aws-cdk-lib/aws-kms';
 import { Function, InlineCode, Runtime } from 'aws-cdk-lib/aws-lambda';
 import { LogGroup, RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { Topic } from 'aws-cdk-lib/aws-sns';
+import { EmailSubscription } from 'aws-cdk-lib/aws-sns-subscriptions';
 import { StringParameter } from 'aws-cdk-lib/aws-ssm';
 import {
   SopsSecret,
@@ -984,6 +985,27 @@ test('Expiration enabled - auto-creates SNS topic, scheduler role, and schedule 
   });
 });
 
+test('Expiration enabled - adds subscriber to auto-created SNS topic', () => {
+  const app = new App();
+  const stack = new Stack(app, 'SecretIntegration');
+
+  new SopsSecret(stack, 'SopsSecret', {
+    sopsFilePath: 'test-secrets/yaml/sopsfile.enc-kms.yaml',
+    expiration: {
+      enabled: true,
+      subscriber: new EmailSubscription('alerts@example.com'),
+    },
+  });
+
+  const template = Template.fromStack(stack);
+  template.resourceCountIs('AWS::SNS::Topic', 1);
+  template.resourceCountIs('AWS::SNS::Subscription', 1);
+  template.hasResourceProperties('AWS::SNS::Subscription', {
+    Protocol: 'email',
+    Endpoint: 'alerts@example.com',
+  });
+});
+
 test('Expiration enabled - uses provided SNS topic instead of auto-creating', () => {
   const app = new App();
   const stack = new Stack(app, 'SecretIntegration');
@@ -1005,6 +1027,30 @@ test('Expiration enabled - uses provided SNS topic instead of auto-creating', ()
   // Only 1 topic: the one we created manually (not auto-created)
   template.resourceCountIs('AWS::SNS::Topic', 1);
   template.resourceCountIs('AWS::Scheduler::Schedule', 0);
+});
+
+test('Expiration enabled - adds subscriber to provided SNS topic', () => {
+  const app = new App();
+  const stack = new Stack(app, 'SecretIntegration');
+
+  const existingTopic = new Topic(stack, 'MyTopic');
+
+  new SopsSecret(stack, 'SopsSecret', {
+    sopsFilePath: 'test-secrets/yaml/sopsfile.enc-kms.yaml',
+    expiration: {
+      enabled: true,
+      notificationTopic: existingTopic,
+      subscriber: new EmailSubscription('alerts@example.com'),
+    },
+  });
+
+  const template = Template.fromStack(stack);
+  template.resourceCountIs('AWS::SNS::Topic', 1);
+  template.resourceCountIs('AWS::SNS::Subscription', 1);
+  template.hasResourceProperties('AWS::SNS::Subscription', {
+    Protocol: 'email',
+    Endpoint: 'alerts@example.com',
+  });
 });
 
 test('Expiration enabled - synthesizes schedules from unencrypted expiration keys', () => {
