@@ -308,6 +308,11 @@ export class SopsSecret extends Construct implements ISecret {
           'Expiration scheduling requires a local sopsFilePath and does not support sopsS3Bucket/sopsS3Key.',
         );
       }
+      if (props.rawOutput !== undefined) {
+        throw new Error(
+          'Expiration scheduling does not support rawOutput. Remove rawOutput to use expirationNotification.',
+        );
+      }
 
       const fileFormat =
         props.sopsFileFormat === 'json' ||
@@ -346,26 +351,24 @@ export class SopsSecret extends Construct implements ISecret {
           name: scheduleGroupName,
         });
 
-      if (resourceType === ResourceType.SECRET) {
-        this.addExpirationSchedules(
-          props.sopsFilePath,
-          fileFormat,
-          enabledExpiration,
-          props.secretName ?? Names.uniqueId(this),
-          topic,
-          schedulerRole,
-          scheduleGroup,
-          scheduleGroupName,
-        );
-      }
+      this.addExpirationSchedules(
+        props.sopsFilePath,
+        fileFormat,
+        enabledExpiration,
+        props.secretName ?? Names.uniqueId(this),
+        topic,
+        schedulerRole,
+        scheduleGroup,
+        scheduleGroupName,
+      );
     }
 
     this.sync = new SopsSync(this, 'SopsSync', {
-      ...(props as SopsSyncOptions),
       target: this.secret.secretArn,
       resourceType,
       flattenSeparator: '.',
       secret: this.secret,
+      ...(props as SopsSyncOptions),
     });
   }
 

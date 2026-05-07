@@ -215,7 +215,7 @@ creation_rules:
 
 You can optionally attach a `subscriber` to the created or provided SNS topic, for example an `EmailSubscription`, `UrlSubscription`, `LambdaSubscription`, or `SqsSubscription`.
 
-`expirationNotification` is only supported with local structured files (`json`, `yaml`, `dotenv`) and does not support `sopsS3Bucket` / `sopsS3Key`.
+`expirationNotification` is only supported with local structured files (`json`, `yaml`, `dotenv`), does not support `sopsS3Bucket` / `sopsS3Key`, and cannot be combined with `rawOutput`.
 
 ## SopsStringParameter — Sops to single SSM ParameterStore Parameter
 

@@ -1264,3 +1264,39 @@ test('Expiration enabled - s3 source is rejected', () => {
     'Expiration scheduling requires a local sopsFilePath and does not support sopsS3Bucket/sopsS3Key.',
   );
 });
+
+test('Expiration enabled - raw string output is rejected', () => {
+  const app = new App();
+  const stack = new Stack(app, 'SecretIntegration');
+
+  expect(
+    () =>
+      new SopsSecret(stack, 'SopsSecret', {
+        sopsFilePath: 'test-secrets/yaml/sopsfile.expiration.enc-kms.yaml',
+        rawOutput: RawOutput.STRING,
+        expirationNotification: {
+          enabled: true,
+        },
+      }),
+  ).toThrow(
+    'Expiration scheduling does not support rawOutput. Remove rawOutput to use expirationNotification.',
+  );
+});
+
+test('Expiration enabled - raw binary output is rejected', () => {
+  const app = new App();
+  const stack = new Stack(app, 'SecretIntegration');
+
+  expect(
+    () =>
+      new SopsSecret(stack, 'SopsSecret', {
+        sopsFilePath: 'test-secrets/yaml/sopsfile.expiration.enc-kms.yaml',
+        rawOutput: RawOutput.BINARY,
+        expirationNotification: {
+          enabled: true,
+        },
+      }),
+  ).toThrow(
+    'Expiration scheduling does not support rawOutput. Remove rawOutput to use expirationNotification.',
+  );
+});
