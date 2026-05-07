@@ -2,6 +2,31 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.7.0](https://github.com/dbsystel/cdk-sops-secrets/compare/v2.6.7...v2.7.0) (2026-05-07)
+
+
+### Features
+
+* add automatic subscription creation if provided ([4c9706d](https://github.com/dbsystel/cdk-sops-secrets/commit/4c9706d78d8d98a9ae1edb820da30a8a97ba0a8d))
+* add enable flag and improve message description ([937fe42](https://github.com/dbsystel/cdk-sops-secrets/commit/937fe42e7bd836014a243904996e22f8a98af236))
+* add secret expiration tracking ([eb6c9b7](https://github.com/dbsystel/cdk-sops-secrets/commit/eb6c9b76875b0bfbe3e0b95d92f41a6b697fd0c0))
+* move schedulers into cdk code instead of running it in the lambda ([24d6958](https://github.com/dbsystel/cdk-sops-secrets/commit/24d69584014edc5db11258b58682bc18417f188e))
+* update property and message content ([aedcf4d](https://github.com/dbsystel/cdk-sops-secrets/commit/aedcf4d28c467a57734e48f76ef82ee1a07ee64a))
+* use single schedule group ([efdf975](https://github.com/dbsystel/cdk-sops-secrets/commit/efdf97514f944ead35f5c3fc974ddf2176ff5db2))
+
+
+### Bug Fixes
+
+* apply suggestions from comments ([6aa9f19](https://github.com/dbsystel/cdk-sops-secrets/commit/6aa9f19d857c7e582ebfa77f7c269dcbb2afd0d8))
+* handle invalid expiration dates ([adbac12](https://github.com/dbsystel/cdk-sops-secrets/commit/adbac12924313fcf2987412f70c826a79ebe56d2))
+* tests ([e0775e1](https://github.com/dbsystel/cdk-sops-secrets/commit/e0775e1aaf8ccf8ded5a82a391cd5e61024fa673))
+* **typo:** rename properties ([ff635ad](https://github.com/dbsystel/cdk-sops-secrets/commit/ff635ad3661156e95b5e59a286b12fef3d63ebd7))
+* update snap ([92a62d4](https://github.com/dbsystel/cdk-sops-secrets/commit/92a62d4ca87572211c592f73c8fd114e7229fe6e))
+* update snaps ([58f0a29](https://github.com/dbsystel/cdk-sops-secrets/commit/58f0a2919974ae1f1342aa620337fd76f330e121))
+* update snaps ([8c9cc27](https://github.com/dbsystel/cdk-sops-secrets/commit/8c9cc27a196e9797ae0d2737ed8eb0eb5a90e666))
+* update test snapshots for integration and normal tests ([4cd1c62](https://github.com/dbsystel/cdk-sops-secrets/commit/4cd1c6262b97bf1f694c4b98278fa72825a48de1))
+* use ci ([0066ce1](https://github.com/dbsystel/cdk-sops-secrets/commit/0066ce1d9a0045c87eb53bea07afcd89abb3bcf1))
+
 ## [2.6.7](https://github.com/dbsystel/cdk-sops-secrets/compare/v2.6.6...v2.6.7) (2026-05-05)
 
 
