@@ -22,7 +22,7 @@ run = "rm -rf lib dist .jsii tsconfig.json coverage test-reports assets"
 
 [tasks."cdk:deps"]
 description = "Prepare CDK dependencies"
-run = "npm ci"
+run = "npm i"
 
 [tasks."cdk:codegen:types"]
 description = "Generate TypeScript types from JSON schema"

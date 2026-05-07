@@ -32,7 +32,7 @@ const tc = [
     name: 'Yaml2Json',
     sopsFilePath: 'test-secrets/testsecret.sops.yaml',
     additionalProperties: {
-      expiration: {
+      expirationNotification: {
         enabled: true,
         daysBeforeExpiration: 9,
         subscriber: new EmailSubscription('test@example.com'),

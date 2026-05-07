@@ -946,7 +946,7 @@ test('Expiration disabled by default - config without enabled does not create sc
 
   new SopsSecret(stack, 'SopsSecret', {
     sopsFilePath: 'test-secrets/yaml/sopsfile.expiration.enc-kms.yaml',
-    expiration: {
+    expirationNotification: {
       daysBeforeExpiration: 30,
     },
   });
@@ -963,7 +963,7 @@ test('Expiration enabled - auto-creates SNS topic, scheduler role, and schedule 
 
   new SopsSecret(stack, 'SopsSecret', {
     sopsFilePath: 'test-secrets/yaml/sopsfile.enc-kms.yaml',
-    expiration: {
+    expirationNotification: {
       enabled: true,
     },
   });
@@ -992,7 +992,7 @@ test('Expiration enabled - reuses one schedule group per stack', () => {
   new SopsSecret(stack, 'FirstSecret', {
     secretName: 'first-secret',
     sopsFilePath: 'test-secrets/yaml/sopsfile.expiration.enc-kms.yaml',
-    expiration: {
+    expirationNotification: {
       enabled: true,
     },
   });
@@ -1000,7 +1000,7 @@ test('Expiration enabled - reuses one schedule group per stack', () => {
   new SopsSecret(stack, 'SecondSecret', {
     secretName: 'second-secret',
     sopsFilePath: 'test-secrets/yaml/sopsfile.expiration.enc-kms.yaml',
-    expiration: {
+    expirationNotification: {
       enabled: true,
     },
   });
@@ -1030,7 +1030,7 @@ test('Expiration enabled - adds subscriber to auto-created SNS topic', () => {
 
   new SopsSecret(stack, 'SopsSecret', {
     sopsFilePath: 'test-secrets/yaml/sopsfile.enc-kms.yaml',
-    expiration: {
+    expirationNotification: {
       enabled: true,
       subscriber: new EmailSubscription('alerts@example.com'),
     },
@@ -1053,7 +1053,7 @@ test('Expiration enabled - uses provided SNS topic instead of auto-creating', ()
 
   const secret = new SopsSecret(stack, 'SopsSecret', {
     sopsFilePath: 'test-secrets/yaml/sopsfile.enc-kms.yaml',
-    expiration: {
+    expirationNotification: {
       enabled: true,
       notificationTopic: existingTopic,
     },
@@ -1076,7 +1076,7 @@ test('Expiration enabled - adds subscriber to provided SNS topic', () => {
 
   new SopsSecret(stack, 'SopsSecret', {
     sopsFilePath: 'test-secrets/yaml/sopsfile.enc-kms.yaml',
-    expiration: {
+    expirationNotification: {
       enabled: true,
       notificationTopic: existingTopic,
       subscriber: new EmailSubscription('alerts@example.com'),
@@ -1099,7 +1099,7 @@ test('Expiration enabled - synthesizes schedules from unencrypted expiration key
   new SopsSecret(stack, 'SopsSecret', {
     secretName: 'my-secret',
     sopsFilePath: 'test-secrets/yaml/sopsfile.expiration.enc-kms.yaml',
-    expiration: {
+    expirationNotification: {
       enabled: true,
     },
   });
@@ -1120,20 +1120,19 @@ test('Expiration enabled - synthesizes schedules from unencrypted expiration key
   );
   expect(gitlabSchedule?.ScheduleExpression).toBe('at(2099-12-17T00:00:00)');
   expect(JSON.stringify(gitlabSchedule?.Target)).toContain(
-    'SOPS_SECRET_EXPIRATION_NOTIFICATION',
-  );
-  expect(JSON.stringify(gitlabSchedule?.Target)).toContain(
     'SOPS secret expiration notification',
   );
-  expect(JSON.stringify(gitlabSchedule?.Target)).toContain('stackName');
-  expect(JSON.stringify(gitlabSchedule?.Target)).toContain('secretName');
+  expect(JSON.stringify(gitlabSchedule?.Target)).toContain(
+    'Secret key \\"gitlab_token\\" in my-secret expires on 2099-12-31.',
+  );
+  expect(JSON.stringify(gitlabSchedule?.Target)).toContain(
+    'Secret name: my-secret',
+  );
   expect(JSON.stringify(gitlabSchedule?.Target)).toContain('gitlab_token');
   expect(JSON.stringify(gitlabSchedule?.Target)).toContain('2099-12-31');
-  expect(JSON.stringify(gitlabSchedule?.Target)).toContain('2099-12-17');
   expect(JSON.stringify(gitlabSchedule?.Target)).toContain(
-    '2099-12-31T00:00:00.000Z',
+    'Expiration time: 2099-12-31T00:00:00.000Z',
   );
-  expect(JSON.stringify(gitlabSchedule?.Target)).toContain('scheduleGroupName');
 
   const nestedSchedule = schedules.find(
     (resource) => resource.Name === 'my-secret-nested-api_key',
@@ -1143,9 +1142,11 @@ test('Expiration enabled - synthesizes schedules from unencrypted expiration key
     'Notify about expiration of SOPS secret key "nested.api_key"',
   );
   expect(nestedSchedule?.ScheduleExpression).toBe('at(2099-05-18T12:00:00)');
+  expect(JSON.stringify(nestedSchedule?.Target)).toContain(
+    'Secret key \\"nested.api_key\\" in my-secret expires on 2099-06-01.',
+  );
   expect(JSON.stringify(nestedSchedule?.Target)).toContain('nested.api_key');
   expect(JSON.stringify(nestedSchedule?.Target)).toContain('2099-06-01');
-  expect(JSON.stringify(nestedSchedule?.Target)).toContain('2099-05-18');
   expect(JSON.stringify(nestedSchedule?.Target)).toContain(
     '2099-06-01T12:00:00.000Z',
   );
@@ -1158,7 +1159,7 @@ test('Expiration enabled - respects custom daysBeforeExpiration', () => {
   new SopsSecret(stack, 'SopsSecret', {
     secretName: 'my-secret',
     sopsFilePath: 'test-secrets/yaml/sopsfile.expiration.enc-kms.yaml',
-    expiration: {
+    expirationNotification: {
       enabled: true,
       daysBeforeExpiration: 30,
     },
@@ -1174,10 +1175,11 @@ test('Expiration enabled - respects custom daysBeforeExpiration', () => {
   expect(gitlabSchedule).toBeDefined();
   expect(gitlabSchedule?.Description).toContain('30 days before expiration');
   expect(gitlabSchedule?.ScheduleExpression).toBe('at(2099-12-01T00:00:00)');
-  expect(JSON.stringify(gitlabSchedule?.Target)).toContain('2099-12-01');
-  expect(JSON.stringify(gitlabSchedule?.Target)).toContain('30');
   expect(JSON.stringify(gitlabSchedule?.Target)).toContain(
-    '2099-12-01T00:00:00.000Z',
+    'Secret key \\"gitlab_token\\" in my-secret expires on 2099-12-31.',
+  );
+  expect(JSON.stringify(gitlabSchedule?.Target)).toContain(
+    'Expiration time: 2099-12-31T00:00:00.000Z',
   );
 
   const nestedSchedule = schedules.find(
@@ -1185,8 +1187,12 @@ test('Expiration enabled - respects custom daysBeforeExpiration', () => {
   );
   expect(nestedSchedule).toBeDefined();
   expect(nestedSchedule?.ScheduleExpression).toBe('at(2099-05-02T12:00:00)');
-  expect(JSON.stringify(nestedSchedule?.Target)).toContain('2099-05-02');
-  expect(JSON.stringify(nestedSchedule?.Target)).toContain('30');
+  expect(JSON.stringify(nestedSchedule?.Target)).toContain(
+    'Secret key \\"nested.api_key\\" in my-secret expires on 2099-06-01.',
+  );
+  expect(JSON.stringify(nestedSchedule?.Target)).toContain(
+    '2099-06-01T12:00:00.000Z',
+  );
 });
 
 test('Expiration enabled - CustomResource no longer gets Expiration config', () => {
@@ -1195,7 +1201,7 @@ test('Expiration enabled - CustomResource no longer gets Expiration config', () 
 
   new SopsSecret(stack, 'SopsSecret', {
     sopsFilePath: 'test-secrets/yaml/sopsfile.enc-kms.yaml',
-    expiration: {
+    expirationNotification: {
       enabled: true,
     },
   });
@@ -1214,7 +1220,7 @@ test('Expiration enabled - Lambda role no longer gets scheduler permissions', ()
 
   new SopsSecret(stack, 'SopsSecret', {
     sopsFilePath: 'test-secrets/yaml/sopsfile.expiration.enc-kms.yaml',
-    expiration: {
+    expirationNotification: {
       enabled: true,
     },
   });
@@ -1233,7 +1239,7 @@ test('Expiration enabled - invalid expiration date throws during synthesis setup
       new SopsSecret(stack, 'SopsSecret', {
         sopsFilePath:
           'test-secrets/yaml/sopsfile.invalid-expiration.enc-kms.yaml',
-        expiration: {
+        expirationNotification: {
           enabled: true,
         },
       }),
@@ -1250,7 +1256,7 @@ test('Expiration enabled - s3 source is rejected', () => {
         sopsS3Bucket: 'bucket',
         sopsS3Key: 'secret.yaml',
         sopsFileFormat: 'yaml',
-        expiration: {
+        expirationNotification: {
           enabled: true,
         },
       }),

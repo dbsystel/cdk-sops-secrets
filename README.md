@@ -195,7 +195,7 @@ import * as subscriptions from 'aws-cdk-lib/aws-sns-subscriptions';
 
 new SopsSecret(stack, 'MySopsSecret', {
   sopsFilePath: 'secrets/sopsfile-encrypted-secret.yaml',
-  expiration: {
+  expirationNotification: {
     enabled: true,
     subscriber: new subscriptions.EmailSubscription('ops@example.com'),
   },
@@ -204,9 +204,18 @@ new SopsSecret(stack, 'MySopsSecret', {
 
 Expiration notifications are disabled by default. Once enabled, keys ending in `_expiration` are read directly by CDK from the local `sopsFilePath`, and matching schedules publish to SNS 14 days before the configured date. This requires those expiration fields to remain unencrypted in the source file, for example via SOPS `unencrypted_regex`.
 
+Example `.sops.yaml` configuration:
+
+```yaml
+creation_rules:
+  - path_regex: secrets/.*\.sops\.yaml
+    unencrypted_suffix: _expiration
+    age: age1yourrecipientpublickey
+```
+
 You can optionally attach a `subscriber` to the created or provided SNS topic, for example an `EmailSubscription`, `UrlSubscription`, `LambdaSubscription`, or `SqsSubscription`.
 
-`expiration` is only supported with local structured files (`json`, `yaml`, `dotenv`) and does not support `sopsS3Bucket` / `sopsS3Key`.
+`expirationNotification` is only supported with local structured files (`json`, `yaml`, `dotenv`) and does not support `sopsS3Bucket` / `sopsS3Key`.
 
 ## SopsStringParameter — Sops to single SSM ParameterStore Parameter
 

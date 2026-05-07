@@ -26,7 +26,6 @@ import {
   SecretsManagerSecretOptions,
   SecretValue,
   Stack,
-  Token,
 } from 'aws-cdk-lib/core';
 import { Construct } from 'constructs';
 import { ResourceType, SopsSync, SopsSyncOptions } from './SopsSync';
@@ -144,7 +143,7 @@ export interface SopsSecretProps extends SopsSyncOptions {
    *
    * @default - Expiration notifications are disabled
    */
-  readonly expiration?: ExpirationOptions;
+  readonly expirationNotification?: ExpirationOptions;
 }
 
 const DEFAULT_EXPIRATION_SUFFIX = '_expiration';
@@ -180,13 +179,6 @@ function sanitizeScheduleName(secretName: string, keyName: string): string {
   const truncatedKeyName = sanitizedKeyName.slice(0, maxKeyLength);
   const maxSecretLength = 64 - truncatedKeyName.length - 1;
   return `${sanitizedSecretName.slice(0, maxSecretLength)}-${truncatedKeyName}`;
-}
-
-function resolveScheduleSecretName(
-  secretName: string,
-  fallback: string,
-): string {
-  return Token.isUnresolved(secretName) ? fallback : secretName;
 }
 
 function scheduleGroupResourceId(): string {
@@ -306,7 +298,7 @@ export class SopsSecret extends Construct implements ISecret {
       resourceType = ResourceType.SECRET_RAW;
     }
 
-    const expiration = props.expiration;
+    const expiration = props.expirationNotification;
 
     if (expiration?.enabled ?? false) {
       const enabledExpiration = expiration!;
@@ -359,10 +351,7 @@ export class SopsSecret extends Construct implements ISecret {
           props.sopsFilePath,
           fileFormat,
           enabledExpiration,
-          resolveScheduleSecretName(
-            this.secret.secretName,
-            Names.uniqueId(this),
-          ),
+          props.secretName ?? Names.uniqueId(this),
           topic,
           schedulerRole,
           scheduleGroup,
@@ -402,7 +391,7 @@ export class SopsSecret extends Construct implements ISecret {
         scheduleSecretName,
         entry.baseKey,
       );
-      const summary = `Secret key "${entry.baseKey}" expires on ${toIsoDateString(
+      const summary = `Secret key "${entry.baseKey}" in ${scheduleSecretName} expires on ${toIsoDateString(
         entry.expiresAt,
       )}.`;
       const message = [
@@ -413,16 +402,10 @@ export class SopsSecret extends Construct implements ISecret {
         `Stack: ${this.stack.stackName}`,
         `Region: ${this.stack.region}`,
         `Account: ${this.stack.account}`,
-        `Secret name: ${this.secret.secretName}`,
+        `Secret name: ${scheduleSecretName}`,
         `Secret ARN: ${this.secret.secretArn}`,
         `Key name: ${entry.baseKey}`,
-        `Expiration date: ${toIsoDateString(entry.expiresAt)}`,
         `Expiration time: ${entry.expiresAt.toISOString()}`,
-        `Notification date: ${toIsoDateString(entry.notifyAt)}`,
-        `Notification time: ${entry.notifyAt.toISOString()}`,
-        `Days before expiration: ${daysBeforeExpiration}`,
-        `Schedule name: ${scheduleName}`,
-        `Schedule group: ${scheduleGroupName}`,
       ].join('\n');
 
       const schedule = new CfnSchedule(this, `ExpirationSchedule${index}`, {
@@ -438,24 +421,7 @@ export class SopsSecret extends Construct implements ISecret {
         target: {
           arn: topic.topicArn,
           roleArn: schedulerRole.roleArn,
-          input: Stack.of(this).toJsonString({
-            messageType: 'SOPS_SECRET_EXPIRATION_NOTIFICATION',
-            summary,
-            message,
-            stackName: this.stack.stackName,
-            region: this.stack.region,
-            account: this.stack.account,
-            secretName: this.secret.secretName,
-            secretArn: this.secret.secretArn,
-            keyName: entry.baseKey,
-            expirationDate: toIsoDateString(entry.expiresAt),
-            expirationDateTime: entry.expiresAt.toISOString(),
-            notificationDate: toIsoDateString(entry.notifyAt),
-            notificationDateTime: entry.notifyAt.toISOString(),
-            daysBeforeExpiration,
-            scheduleName,
-            scheduleGroupName,
-          }),
+          input: message,
         },
       });
       schedule.addDependency(scheduleGroup);

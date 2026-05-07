@@ -2629,7 +2629,7 @@ const sopsSecretProps: SopsSecretProps = { ... }
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.uploadType">uploadType</a></code> | <code><a href="#cdk-sops-secrets.UploadType">UploadType</a></code> | How should the secret be passed to the CustomResource? |
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.description">description</a></code> | <code>string</code> | An optional, human-friendly description of the secret. |
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.encryptionKey">encryptionKey</a></code> | <code>aws-cdk-lib.aws_kms.IKey</code> | The customer-managed encryption key to use for encrypting the secret value. |
-| <code><a href="#cdk-sops-secrets.SopsSecretProps.property.expiration">expiration</a></code> | <code><a href="#cdk-sops-secrets.ExpirationOptions">ExpirationOptions</a></code> | Configure expiration notifications for secret keys. |
+| <code><a href="#cdk-sops-secrets.SopsSecretProps.property.expirationNotification">expirationNotification</a></code> | <code><a href="#cdk-sops-secrets.ExpirationOptions">ExpirationOptions</a></code> | Configure expiration notifications for secret keys. |
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.rawOutput">rawOutput</a></code> | <code><a href="#cdk-sops-secrets.RawOutput">RawOutput</a></code> | Should the secret parsed and transformed to json? |
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.removalPolicy">removalPolicy</a></code> | <code>aws-cdk-lib.RemovalPolicy</code> | Policy to apply when the secret is removed from this stack. |
 | <code><a href="#cdk-sops-secrets.SopsSecretProps.property.replicaRegions">replicaRegions</a></code> | <code>aws-cdk-lib.aws_secretsmanager.ReplicaRegion[]</code> | A list of regions where to replicate this secret. |
@@ -2795,10 +2795,10 @@ The customer-managed encryption key to use for encrypting the secret value.
 
 ---
 
-##### `expiration`<sup>Optional</sup> <a name="expiration" id="cdk-sops-secrets.SopsSecretProps.property.expiration"></a>
+##### `expirationNotification`<sup>Optional</sup> <a name="expirationNotification" id="cdk-sops-secrets.SopsSecretProps.property.expirationNotification"></a>
 
 ```typescript
-public readonly expiration: ExpirationOptions;
+public readonly expirationNotification: ExpirationOptions;
 ```
 
 - *Type:* <a href="#cdk-sops-secrets.ExpirationOptions">ExpirationOptions</a>
