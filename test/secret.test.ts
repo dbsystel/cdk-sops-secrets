@@ -1047,8 +1047,7 @@ test('Expiration enabled - schedule names never start with dash', () => {
   expect(
     schedules.some(
       (resource) =>
-        resource.Name ===
-        'test-hello-world-my-password',
+        resource.Name === 'test-hello-world-my-password-gitlab_token',
     ),
   ).toBe(true);
 });
