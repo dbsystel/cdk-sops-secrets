@@ -1024,6 +1024,35 @@ test('Expiration enabled - reuses one schedule group per stack', () => {
   ).toBe(true);
 });
 
+test('Expiration enabled - schedule names never start with dash', () => {
+  const app = new App();
+  const stack = new Stack(app, 'SecretIntegration');
+
+  new SopsSecret(stack, 'SopsSecret', {
+    secretName: '/test/hello-world/my-password',
+    sopsFilePath: 'test-secrets/yaml/sopsfile.expiration.enc-kms.yaml',
+    expirationNotification: {
+      enabled: true,
+    },
+  });
+
+  const schedules = Object.values(
+    Template.fromStack(stack).findResources('AWS::Scheduler::Schedule'),
+  ).map((resource) => resource.Properties as Record<string, unknown>);
+
+  expect(schedules.length).toBeGreaterThan(0);
+  schedules.forEach((resource) => {
+    expect(resource.Name).not.toMatch(/^-+/);
+  });
+  expect(
+    schedules.some(
+      (resource) =>
+        resource.Name ===
+        'test-hello-world-my-password',
+    ),
+  ).toBe(true);
+});
+
 test('Expiration enabled - adds subscriber to auto-created SNS topic', () => {
   const app = new App();
   const stack = new Stack(app, 'SecretIntegration');
