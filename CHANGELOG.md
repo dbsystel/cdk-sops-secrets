@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.7.1](https://github.com/dbsystel/cdk-sops-secrets/compare/v2.7.0...v2.7.1) (2026-05-08)
+
+
+### Bug Fixes
+
+* assertion name ([ca35532](https://github.com/dbsystel/cdk-sops-secrets/commit/ca35532c1279fb4704e65c7745e7afeb4899e3a6))
+* dont let the schedule name start with a slash ([1778a28](https://github.com/dbsystel/cdk-sops-secrets/commit/1778a28151c35a1089dd7fee1281cb9d3e22d48f))
+
 ## [2.7.0](https://github.com/dbsystel/cdk-sops-secrets/compare/v2.6.7...v2.7.0) (2026-05-07)
 
 ### Features
