@@ -2,6 +2,7 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:recommended"],
   "rebaseWhen": "behind-base-branch",
+  "minimumReleaseAge": "1 day",
   "enabledManagers": ["gomod", "npm", "mise", "github-actions"],
 
   "packageRules": [
