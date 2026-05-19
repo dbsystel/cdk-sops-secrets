@@ -17,6 +17,8 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+      id-token: write
+      attestations: write
     env:
       CI: 'true'
     steps:
@@ -48,6 +50,11 @@ jobs:
           name: build-artifact
           path: dist
           overwrite: true
+
+      - name: Attest build provenance
+        uses: actions/attest-build-provenance@96b4a1ef7235a096b17240c259729fdd70c83d45 # v2
+        with:
+          subject-path: 'dist/**/*.tgz,dist/**/*.jar,dist/**/*.whl,dist/**/*.nupkg,dist/**/*.zip'
 
   publish_npm:
     name: Publish to npm
