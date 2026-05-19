@@ -26,6 +26,7 @@ jobs:
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
         with:
           fetch-depth: 0
+          persist-credentials: false
 
       - name: Set git identity
         run: |
@@ -36,6 +37,7 @@ jobs:
         uses: jdx/mise-action@5228313ee0372e111a38da051671ca30fc5a96db # v3
         with:
           experimental: true
+          cache: false
 
       - name: Build / prepare dist
         run: mise run build
@@ -60,13 +62,14 @@ jobs:
         if: github.event_name == 'release'
         env:
           GH_TOKEN: ${{ github.token }}
+          TAG_NAME: ${{ github.event.release.tag_name }}
         run: |
           ARTIFACT="$(find dist -name '*.tgz' | head -1)"
           gh attestation download "$ARTIFACT" --repo "$GITHUB_REPOSITORY" || true
           JSONL=$(find . -maxdepth 1 -name "sha256*.jsonl" | head -1)
           if [ -n "$JSONL" ]; then
             mv "$JSONL" provenance.intoto.jsonl
-            gh release upload "${{ github.event.release.tag_name }}" provenance.intoto.jsonl --clobber
+            gh release upload "$TAG_NAME" provenance.intoto.jsonl --clobber
           fi
 
   publish_npm:
@@ -92,6 +95,7 @@ jobs:
         with:
           node-version: '24.x'
           registry-url: 'https://registry.npmjs.org'
+          package-manager-cache: false
 
       - name: Release
         env:
@@ -111,6 +115,8 @@ jobs:
     steps:
       - name: Install mise
         uses: jdx/mise-action@5228313ee0372e111a38da051671ca30fc5a96db # v3
+        with:
+          cache: false
 
       - name: Download build artifacts
         uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6
@@ -152,6 +158,7 @@ jobs:
         uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
         with:
           node-version: 'lts/*'
+          package-manager-cache: false
 
       - name: Setup Python
         uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6
@@ -173,6 +180,8 @@ jobs:
     steps:
       - name: Install mise
         uses: jdx/mise-action@5228313ee0372e111a38da051671ca30fc5a96db # v3
+        with:
+          cache: false
 
       - name: Download build artifacts
         uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6

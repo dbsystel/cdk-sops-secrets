@@ -7,7 +7,7 @@ permissions: {}
 
 jobs:
   update:
-    if: github.event.pull_request.user.login == 'renovate[bot]' || github.actor == 'renovate[bot]'
+    if: github.event.pull_request.user.login == 'renovate[bot]'
     runs-on: ubuntu-latest
     permissions:
       contents: write
