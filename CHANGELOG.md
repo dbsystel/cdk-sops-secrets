@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.7.3](https://github.com/dbsystel/cdk-sops-secrets/compare/v2.7.2...v2.7.3) (2026-05-19)
+
+
+### Bug Fixes
+
+* build badge shows main branch only ([7647a31](https://github.com/dbsystel/cdk-sops-secrets/commit/7647a31512cbea711ed5691066ea02a4a9cb6bcd))
+* correct gh attestation download usage ([870573b](https://github.com/dbsystel/cdk-sops-secrets/commit/870573bd53047aeac7f5ee56c354342e9808a47c))
+
+
+### Miscellaneous Chores
+
+* add top-level permissions to update-jsii-artifacts workflow ([74a2a89](https://github.com/dbsystel/cdk-sops-secrets/commit/74a2a89ff718c7a2fe999c6e85d6ec3c5866743d))
+* add top-level permissions to update-jsii-artifacts workflow ([69bdb3c](https://github.com/dbsystel/cdk-sops-secrets/commit/69bdb3cc66e6ac37ad1801aca5b903e6aa1b0769))
+
 ## [2.7.2](https://github.com/dbsystel/cdk-sops-secrets/compare/v2.7.1...v2.7.2) (2026-05-19)
 
 
