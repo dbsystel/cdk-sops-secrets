@@ -47,9 +47,9 @@ export class MultiStringParameter extends Construct {
     const keys = this.parseFile(props.sopsFilePath!, this.keySeparator)
       .filter((key) => !key.startsWith('sops'))
       .map((value) => {
-        // Ass we flatten array to [number] path notations, we have to fix this for parameter store
-        let fixedKey = value.replace('[', this.keySeparator);
-        fixedKey = fixedKey.replace(']', this.keySeparator);
+        // As we flatten array to [number] path notations, we have to fix this for parameter store
+        let fixedKey = value.replace(/\[/g, this.keySeparator);
+        fixedKey = fixedKey.replace(/\]/g, this.keySeparator);
         if (fixedKey.endsWith(this.keySeparator)) {
           fixedKey = fixedKey.slice(0, -1);
         }
