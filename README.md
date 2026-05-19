@@ -8,6 +8,7 @@
 [![pypi](https://img.shields.io/pypi/v/cdk-sops-secrets.svg)](https://pypi.org/project/cdk-sops-secrets)
 [![pypi downloads](https://img.shields.io/pypi/dw/cdk-sops-secrets)](https://pypi.org/project/cdk-sops-secrets)
 [![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/dbsystel/cdk-sops-secrets/badge)](https://scorecard.dev/viewer/?uri=github.com/dbsystel/cdk-sops-secrets)
+[![OpenSSF Best Practices](https://www.bestpractices.dev/projects/12072/badge)](https://www.bestpractices.dev/projects/12072)
 
 # Introduction
 
