@@ -2,6 +2,41 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.7.2](https://github.com/dbsystel/cdk-sops-secrets/compare/v2.7.1...v2.7.2) (2026-05-19)
+
+
+### Documentation
+
+* add OpenSSF Scorecard badge to README ([f2651ef](https://github.com/dbsystel/cdk-sops-secrets/commit/f2651ef72f3a6976be778f99aea58b27deafd170))
+
+
+### Miscellaneous Chores
+
+* add build provenance attestation to release workflow ([ea5cb78](https://github.com/dbsystel/cdk-sops-secrets/commit/ea5cb7841d8cb0c47118cf23e3d2a648b281aa20))
+* add OpenSSF Scorecard badge to README ([98fd265](https://github.com/dbsystel/cdk-sops-secrets/commit/98fd265e17c5bd550a4befa27e462bc3dc2d25f1))
+* attach SLSA provenance to GitHub Release assets ([e7f527c](https://github.com/dbsystel/cdk-sops-secrets/commit/e7f527c1c047f39c692fa5598fa79453367fe6ed))
+* **ci:** switch release process to release-please with GitHub App ([aae40e2](https://github.com/dbsystel/cdk-sops-secrets/commit/aae40e2a40565545f210db0777fef3bf57016e88))
+* **deps:** update actions/attest-build-provenance digest to e8998f9 ([#1336](https://github.com/dbsystel/cdk-sops-secrets/issues/1336)) ([cc119d4](https://github.com/dbsystel/cdk-sops-secrets/commit/cc119d4019fce4a81afec77dff273567fa68e783))
+* **deps:** update github-actions ([#1328](https://github.com/dbsystel/cdk-sops-secrets/issues/1328)) ([aed7c7c](https://github.com/dbsystel/cdk-sops-secrets/commit/aed7c7cb39a10995745675a48f0076dd0cbabf8a))
+* **deps:** update npm-deps ([#1320](https://github.com/dbsystel/cdk-sops-secrets/issues/1320)) ([e3f518a](https://github.com/dbsystel/cdk-sops-secrets/commit/e3f518af8677889e1be623070d75a9e54cb9b5b9))
+* **deps:** update npm-deps ([#1321](https://github.com/dbsystel/cdk-sops-secrets/issues/1321)) ([d2f0b51](https://github.com/dbsystel/cdk-sops-secrets/commit/d2f0b51dc9e1aa2ea6555c74476941fb5f805f66))
+* **deps:** upgrade go depdendencies ([6a64b3b](https://github.com/dbsystel/cdk-sops-secrets/commit/6a64b3b07e79d651c53467423f23170334138895))
+* **deps:** upgrade go dependencies ([1828b7c](https://github.com/dbsystel/cdk-sops-secrets/commit/1828b7c57d751f97264071ea63a8e23458ce8be7))
+* enable rebase-behind-base-branch in renovate config ([ef36f79](https://github.com/dbsystel/cdk-sops-secrets/commit/ef36f797f97ff670f0edc3bc9b426b46f15c1746))
+* enable rebase-behind-base-branch in renovate config ([911af85](https://github.com/dbsystel/cdk-sops-secrets/commit/911af85a5ee3ad315ec4a3cd9c4d7fd6ffa7db6e))
+* make chore commits visible in release-please ([8ff8aa7](https://github.com/dbsystel/cdk-sops-secrets/commit/8ff8aa7ccb5f31f955ede86fee4b2009b2854011))
+* make chore commits visible in release-please ([1f59e23](https://github.com/dbsystel/cdk-sops-secrets/commit/1f59e23b6029a941241afd50e7a4f53fc7d95f5d))
+* pin golang to 1.26.2 in mise.toml ([0f5bff4](https://github.com/dbsystel/cdk-sops-secrets/commit/0f5bff49f1539cebb4bb193bb67cc7a1cdddf96c))
+* pin golang to 1.26.3 in mise.toml ([c1bba89](https://github.com/dbsystel/cdk-sops-secrets/commit/c1bba89f61f1d283f4cfa1b317ddefc961333197))
+* scope release-please permissions to job level ([b43ce11](https://github.com/dbsystel/cdk-sops-secrets/commit/b43ce1198b4bae4a53630329a0e1544af14fd324))
+* scope release-please permissions to job level ([f5df6a7](https://github.com/dbsystel/cdk-sops-secrets/commit/f5df6a715af69ca46ceb7dd7698bcdec53978617))
+* set minimun release age ([6292af2](https://github.com/dbsystel/cdk-sops-secrets/commit/6292af28ea022a03362f1dcfbdbf99e0a1f20fd0))
+* set minimun release age ([8d7b716](https://github.com/dbsystel/cdk-sops-secrets/commit/8d7b7161f050dd6801459ea4f6c2cff8edb156f7))
+* sync min-release-age to 1 day (renovate + npmrc) ([73dc285](https://github.com/dbsystel/cdk-sops-secrets/commit/73dc285cdf8841790111c38fbf8d6da472d08578))
+* sync min-release-age to 1 days (renovate + npmrc) ([4e9976b](https://github.com/dbsystel/cdk-sops-secrets/commit/4e9976b17709b9126589e2b4297a9260d954d230))
+* update node to 24.14.0, pin npm to 11.12.1 ([1d071da](https://github.com/dbsystel/cdk-sops-secrets/commit/1d071dadf3b459bac3ecf412df9a10b5ab0501a5))
+* update node to 24.14.0, pin npm to 11.14.1 ([22b7407](https://github.com/dbsystel/cdk-sops-secrets/commit/22b7407bfe3f83a1114dcaf9cd042a832f2001ea))
+
 ## [2.7.1](https://github.com/dbsystel/cdk-sops-secrets/compare/v2.7.0...v2.7.1) (2026-05-08)
 
 
