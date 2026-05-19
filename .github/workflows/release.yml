@@ -61,10 +61,11 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh attestation download --repo "$GITHUB_REPOSITORY" --digest-algorithm sha256 \
-            --format json --output provenance.intoto.jsonl \
-            "$(find dist -name '*.tgz' | head -1)" || true
-          if [ -f provenance.intoto.jsonl ]; then
+          ARTIFACT="$(find dist -name '*.tgz' | head -1)"
+          gh attestation download "$ARTIFACT" --repo "$GITHUB_REPOSITORY" || true
+          JSONL=$(find . -maxdepth 1 -name "sha256*.jsonl" | head -1)
+          if [ -n "$JSONL" ]; then
+            mv "$JSONL" provenance.intoto.jsonl
             gh release upload "${{ github.event.release.tag_name }}" provenance.intoto.jsonl --clobber
           fi
 
