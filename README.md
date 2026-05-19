@@ -8,6 +8,7 @@
 [![pypi](https://img.shields.io/pypi/v/cdk-sops-secrets.svg)](https://pypi.org/project/cdk-sops-secrets)
 [![pypi downloads](https://img.shields.io/pypi/dw/cdk-sops-secrets)](https://pypi.org/project/cdk-sops-secrets)
 [![security-vulnerabilities](https://img.shields.io/github/issues-search/dbsystel/cdk-sops-secrets?color=%23ff0000&label=security-vulnerabilities&query=is%3Aissue%20is%3Aopen%20label%3A%22Mend%3A%20dependency%20security%20vulnerability%22)](https://github.com/dbsystel/cdk-sops-secrets/issues?q=is%3Aissue+is%3Aopen+label%3A%22security+vulnerability%22)
+[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/dbsystel/cdk-sops-secrets/badge)](https://scorecard.dev/viewer/?uri=github.com/dbsystel/cdk-sops-secrets)
 
 # Introduction
 
