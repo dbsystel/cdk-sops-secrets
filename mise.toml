@@ -4,7 +4,8 @@ CDK_DISABLE_CLI_TELEMETRY = "true"
 
 [tools]
 golang = "1.26.3"
-nodejs = "24.11.1"
+nodejs = "24.14.0"
+npm = "11.14.1"
 grype = "0.104.1"
 python = "3.14.0"
 dotnet = "6"
