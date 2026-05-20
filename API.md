@@ -2088,7 +2088,7 @@ const expirationOptions: ExpirationOptions = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-sops-secrets.ExpirationOptions.property.daysBeforeExpiration">daysBeforeExpiration</a></code> | <code>number</code> | Number of days before the expiration date to send the SNS notification. |
+| <code><a href="#cdk-sops-secrets.ExpirationOptions.property.daysBeforeExpiration">daysBeforeExpiration</a></code> | <code>number \| number[]</code> | Number of days before the expiration date to send the SNS notification, or multiple reminder offsets to synthesize one schedule per value. |
 | <code><a href="#cdk-sops-secrets.ExpirationOptions.property.enabled">enabled</a></code> | <code>boolean</code> | Enable expiration notifications. |
 | <code><a href="#cdk-sops-secrets.ExpirationOptions.property.expirationSuffix">expirationSuffix</a></code> | <code>string</code> | The suffix used to identify expiration date keys in the secret. |
 | <code><a href="#cdk-sops-secrets.ExpirationOptions.property.notificationTopic">notificationTopic</a></code> | <code>aws-cdk-lib.aws_sns.ITopic</code> | An existing SNS topic to publish expiration notifications to. |
@@ -2099,13 +2099,13 @@ const expirationOptions: ExpirationOptions = { ... }
 ##### `daysBeforeExpiration`<sup>Optional</sup> <a name="daysBeforeExpiration" id="cdk-sops-secrets.ExpirationOptions.property.daysBeforeExpiration"></a>
 
 ```typescript
-public readonly daysBeforeExpiration: number;
+public readonly daysBeforeExpiration: number | number[];
 ```
 
-- *Type:* number
+- *Type:* number | number[]
 - *Default:* 14
 
-Number of days before the expiration date to send the SNS notification.
+Number of days before the expiration date to send the SNS notification, or multiple reminder offsets to synthesize one schedule per value.
 
 ---
 
