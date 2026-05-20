@@ -16,7 +16,7 @@ jobs:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
         with:
           ref: ${{ github.head_ref }}
-          token: ${{ secrets.GITHUB_TOKEN }}
+          persist-credentials: false
       
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
@@ -28,10 +28,13 @@ jobs:
           npx jsii --silence-warnings=reserved-word
           npx jsii-docgen -o API.md
       
-      - name: Commit changes
+      - name: Commit and push changes
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          git remote set-url origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}.git"
           git add -A
           if ! git diff --staged --quiet; then
             git commit -m "chore: update JSII artifacts"
