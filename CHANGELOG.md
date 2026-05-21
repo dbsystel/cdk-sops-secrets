@@ -2,6 +2,37 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.8.0](https://github.com/dbsystel/cdk-sops-secrets/compare/v2.7.3...v2.8.0) (2026-05-21)
+
+
+### Features
+
+* allow multiple expiration days for multiple reminders ([da1cd65](https://github.com/dbsystel/cdk-sops-secrets/commit/da1cd65176c87ab66a3e61bcc57d114778df427a))
+* allow multiple expiration days for multiple reminders ([2333fd5](https://github.com/dbsystel/cdk-sops-secrets/commit/2333fd56949f664ac53637ec3f1e16a70491f048))
+
+
+### Bug Fixes
+
+* **ci:** address zizmor security findings ([d2fa814](https://github.com/dbsystel/cdk-sops-secrets/commit/d2fa8144439cecb8ced1648811f61e949b023647))
+* **ci:** address zizmor security findings in GitHub Actions workflows ([0bb6b41](https://github.com/dbsystel/cdk-sops-secrets/commit/0bb6b41127e83b1c8f7d6085fd38ebd1d74c9f00))
+* **ci:** refactor update-jsii-artifacts to avoid credential persistence ([743931f](https://github.com/dbsystel/cdk-sops-secrets/commit/743931f341cde383da561b6ca3358947732521d8))
+* **ci:** resolve artipacked finding in update-jsii-artifacts ([54800f6](https://github.com/dbsystel/cdk-sops-secrets/commit/54800f65564c45023c7c6293608cfd16a8b8dc3e))
+* replace first-occurrence-only string replace with global regex ([c2d04f6](https://github.com/dbsystel/cdk-sops-secrets/commit/c2d04f64d9d7ff4c7e47dea0c0aebe001332850f))
+* resolve CodeQL incomplete string escaping alerts ([1286a55](https://github.com/dbsystel/cdk-sops-secrets/commit/1286a55f16f43e9ba32e4613799a53083911d277))
+
+
+### Documentation
+
+* add OpenSSF Best Practices badge to README ([f47dfbf](https://github.com/dbsystel/cdk-sops-secrets/commit/f47dfbffe7e06a065f21c86c8ce74eb8db037f61))
+
+
+### Miscellaneous Chores
+
+* configure squash merge and group deps by update type ([#1350](https://github.com/dbsystel/cdk-sops-secrets/issues/1350)) ([7bbf3d4](https://github.com/dbsystel/cdk-sops-secrets/commit/7bbf3d4b9f42c99eacbcfaac2ea9d182e134e3ce))
+* **deps:** update github-actions (major) ([#1347](https://github.com/dbsystel/cdk-sops-secrets/issues/1347)) ([f7fb38f](https://github.com/dbsystel/cdk-sops-secrets/commit/f7fb38f3bd4c91247be3146170da3df39a8b812e))
+* **deps:** update go-deps ([#1346](https://github.com/dbsystel/cdk-sops-secrets/issues/1346)) ([f09ae6b](https://github.com/dbsystel/cdk-sops-secrets/commit/f09ae6b16315b62a72fc11c8f22ebe74ca9a450b))
+* **deps:** update npm-deps ([#1334](https://github.com/dbsystel/cdk-sops-secrets/issues/1334)) ([68ca156](https://github.com/dbsystel/cdk-sops-secrets/commit/68ca1569f9b2f381968eeb23a5c5116117b07b71))
+
 ## [2.7.3](https://github.com/dbsystel/cdk-sops-secrets/compare/v2.7.2...v2.7.3) (2026-05-19)
 
 
