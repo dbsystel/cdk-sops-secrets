@@ -1,0 +1,31 @@
+name: validate-renovate-config
+
+on:
+  pull_request:
+    paths:
+      - "renovate.json"
+  push:
+    branches:
+      - main
+    paths:
+      - "renovate.json"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+        with:
+          persist-credentials: false
+
+      - name: Install mise
+        uses: jdx/mise-action@1648a7812b9aeae629881980618f079932869151 # v4
+        with:
+          experimental: true
+
+      - name: Validate Renovate config
+        run: mise run renovate:validate
