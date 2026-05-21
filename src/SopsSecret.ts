@@ -1,3 +1,4 @@
+import { createHash } from 'crypto';
 import {
   AddToResourcePolicyResult,
   Grant,
@@ -88,11 +89,12 @@ export interface ExpirationOptions {
   readonly expirationSuffix?: string;
 
   /**
-   * Number of days before the expiration date to send the SNS notification.
+   * Number of days before the expiration date to send the SNS notification,
+   * or multiple reminder offsets to synthesize one schedule per value.
    *
    * @default 14
    */
-  readonly daysBeforeExpiration?: number;
+  readonly daysBeforeExpiration?: number | number[];
 }
 
 /**
@@ -153,32 +155,100 @@ interface ExpirationScheduleEntry {
   readonly baseKey: string;
   readonly expiresAt: Date;
   readonly notifyAt: Date;
+  readonly daysBeforeExpiration: number;
+  readonly includeReminderOffsetInIdentity: boolean;
 }
 
 function sanitizeScheduleComponent(name: string): string {
   return name.replace(/[^a-zA-Z0-9_-]/g, '-').replace(/^-+|-+$/g, '');
 }
 
-function sanitizeScheduleName(secretName: string, keyName: string): string {
+function normalizeDaysBeforeExpiration(
+  daysBeforeExpiration?: number | number[],
+): number[] {
+  const configuredDays = Array.isArray(daysBeforeExpiration)
+    ? daysBeforeExpiration
+    : [daysBeforeExpiration ?? DEFAULT_DAYS_BEFORE_EXPIRATION];
+
+  if (configuredDays.length === 0) {
+    throw new Error(
+      'daysBeforeExpiration must contain at least one non-negative integer.',
+    );
+  }
+
+  const uniqueDays = Array.from(new Set(configuredDays));
+  uniqueDays.forEach((value) => {
+    if (!Number.isInteger(value) || value < 0) {
+      throw new Error(
+        `daysBeforeExpiration must contain only non-negative integers, got "${value}".`,
+      );
+    }
+  });
+
+  return uniqueDays.sort((left, right) => left - right);
+}
+
+function scheduleOffsetSuffix(
+  daysBeforeExpiration: number,
+  includeReminderOffsetInIdentity: boolean,
+): string {
+  return includeReminderOffsetInIdentity ? `-${daysBeforeExpiration}d` : '';
+}
+
+function formatDaysBeforeExpiration(daysBeforeExpiration: number): string {
+  return `${daysBeforeExpiration} day${daysBeforeExpiration === 1 ? '' : 's'}`;
+}
+
+function sanitizeScheduleName(
+  secretName: string,
+  keyName: string,
+  daysBeforeExpiration: number,
+  includeReminderOffsetInIdentity: boolean,
+): string {
+  const offsetSuffix = scheduleOffsetSuffix(
+    daysBeforeExpiration,
+    includeReminderOffsetInIdentity,
+  );
+  const nameHash = createHash('sha1')
+    .update(`${secretName}\0${keyName}\0${offsetSuffix}`)
+    .digest('hex')
+    .slice(0, 10);
   const sanitizedSecretName = sanitizeScheduleComponent(secretName);
   const sanitizedKeyName = sanitizeScheduleComponent(keyName);
+  const readableName = [
+    sanitizedSecretName,
+    sanitizedKeyName,
+    offsetSuffix.slice(1),
+  ]
+    .filter((component) => component.length > 0)
+    .join('-');
+  const maxReadableLength = 64 - nameHash.length - 1;
+  const truncatedReadableName = readableName
+    .slice(0, maxReadableLength)
+    .replace(/-+$/g, '');
+  const scheduleName =
+    truncatedReadableName.length > 0 ? truncatedReadableName : 'schedule';
+  return `${scheduleName}-${nameHash}`;
+}
 
-  if (sanitizedSecretName.length === 0) {
-    return sanitizedKeyName.slice(0, 64);
-  }
-  if (sanitizedKeyName.length === 0) {
-    return sanitizedSecretName.slice(0, 64);
-  }
-
-  const combinedName = `${sanitizedSecretName}-${sanitizedKeyName}`;
-  if (combinedName.length <= 64) {
-    return combinedName;
-  }
-
-  const maxKeyLength = Math.min(sanitizedKeyName.length, 31);
-  const truncatedKeyName = sanitizedKeyName.slice(0, maxKeyLength);
-  const maxSecretLength = 64 - truncatedKeyName.length - 1;
-  return `${sanitizedSecretName.slice(0, maxSecretLength)}-${truncatedKeyName}`;
+function scheduleResourceId(
+  keyName: string,
+  daysBeforeExpiration: number,
+  includeReminderOffsetInIdentity: boolean,
+): string {
+  const offsetSuffix = scheduleOffsetSuffix(
+    daysBeforeExpiration,
+    includeReminderOffsetInIdentity,
+  );
+  const resourceHash = createHash('sha1')
+    .update(`${keyName}\0${offsetSuffix}`)
+    .digest('hex')
+    .slice(0, 10);
+  const readableKeyName = `${sanitizeScheduleComponent(keyName)}${offsetSuffix}`
+    .slice(0, 48)
+    .replace(/-+$/g, '');
+  const suffix = readableKeyName.length > 0 ? readableKeyName : 'Key';
+  return `ExpirationSchedule${suffix}${resourceHash}`;
 }
 
 function scheduleGroupResourceId(): string {
@@ -211,10 +281,12 @@ function resolveExpirationSchedules(
   expiration: ExpirationOptions,
 ): ExpirationScheduleEntry[] {
   const suffix = expiration.expirationSuffix ?? DEFAULT_EXPIRATION_SUFFIX;
-  const daysBeforeExpiration =
-    expiration.daysBeforeExpiration ?? DEFAULT_DAYS_BEFORE_EXPIRATION;
+  const daysBeforeExpirationValues = normalizeDaysBeforeExpiration(
+    expiration.daysBeforeExpiration,
+  );
   const schedules: ExpirationScheduleEntry[] = [];
   const now = Date.now();
+  const includeReminderOffsetInIdentity = daysBeforeExpirationValues.length > 1;
 
   for (const key of Object.keys(sourceData).sort()) {
     if (!key.endsWith(suffix)) {
@@ -222,17 +294,23 @@ function resolveExpirationSchedules(
     }
 
     const expiresAt = parseExpirationDate(sourceData[key]);
-    const notifyAt = new Date(expiresAt.getTime());
-    notifyAt.setUTCDate(notifyAt.getUTCDate() - daysBeforeExpiration);
+    const baseKey = key.slice(0, -suffix.length);
 
-    if (notifyAt.getTime() < now) {
-      continue;
-    }
+    daysBeforeExpirationValues.forEach((daysBeforeExpiration) => {
+      const notifyAt = new Date(expiresAt.getTime());
+      notifyAt.setUTCDate(notifyAt.getUTCDate() - daysBeforeExpiration);
 
-    schedules.push({
-      baseKey: key.slice(0, -suffix.length),
-      expiresAt,
-      notifyAt,
+      if (notifyAt.getTime() < now) {
+        return;
+      }
+
+      schedules.push({
+        baseKey,
+        expiresAt,
+        notifyAt,
+        daysBeforeExpiration,
+        includeReminderOffsetInIdentity,
+      });
     });
   }
 
@@ -386,17 +464,18 @@ export class SopsSecret extends Construct implements ISecret {
       flattenStructuredFileToStringMap(sopsFilePath, '.', fileFormat),
       expiration,
     );
-    const daysBeforeExpiration =
-      expiration.daysBeforeExpiration ?? DEFAULT_DAYS_BEFORE_EXPIRATION;
 
-    schedules.forEach((entry, index) => {
+    schedules.forEach((entry) => {
       const scheduleName = sanitizeScheduleName(
         scheduleSecretName,
         entry.baseKey,
+        entry.daysBeforeExpiration,
+        entry.includeReminderOffsetInIdentity,
       );
       const summary = `Secret key "${entry.baseKey}" in ${scheduleSecretName} expires on ${toIsoDateString(
         entry.expiresAt,
       )}.`;
+      const leadTime = formatDaysBeforeExpiration(entry.daysBeforeExpiration);
       const message = [
         'SOPS secret expiration notification',
         '',
@@ -408,25 +487,34 @@ export class SopsSecret extends Construct implements ISecret {
         `Secret name: ${scheduleSecretName}`,
         `Secret ARN: ${this.secret.secretArn}`,
         `Key name: ${entry.baseKey}`,
+        `Notification lead time: ${leadTime}`,
         `Expiration time: ${entry.expiresAt.toISOString()}`,
       ].join('\n');
 
-      const schedule = new CfnSchedule(this, `ExpirationSchedule${index}`, {
-        description: truncateDescription(
-          `Notify about expiration of SOPS secret key "${entry.baseKey}" ${daysBeforeExpiration} days before expiration.`,
+      const schedule = new CfnSchedule(
+        this,
+        scheduleResourceId(
+          entry.baseKey,
+          entry.daysBeforeExpiration,
+          entry.includeReminderOffsetInIdentity,
         ),
-        groupName: scheduleGroupName,
-        name: scheduleName,
-        scheduleExpression: toScheduleExpression(entry.notifyAt),
-        flexibleTimeWindow: {
-          mode: 'OFF',
+        {
+          description: truncateDescription(
+            `Notify about expiration of SOPS secret key "${entry.baseKey}" ${leadTime} before expiration.`,
+          ),
+          groupName: scheduleGroupName,
+          name: scheduleName,
+          scheduleExpression: toScheduleExpression(entry.notifyAt),
+          flexibleTimeWindow: {
+            mode: 'OFF',
+          },
+          target: {
+            arn: topic.topicArn,
+            roleArn: schedulerRole.roleArn,
+            input: message,
+          },
         },
-        target: {
-          arn: topic.topicArn,
-          roleArn: schedulerRole.roleArn,
-          input: message,
-        },
-      });
+      );
       schedule.addDependency(scheduleGroup);
     });
   }

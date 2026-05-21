@@ -924,6 +924,32 @@ test('Age Key from SSM Parameter without leading slash gets correct ARN', () => 
 
 // ---- Expiration tests ----
 
+function getExpirationSchedules(template: Template) {
+  return Object.entries(template.findResources('AWS::Scheduler::Schedule')).map(
+    ([logicalId, resource]) => ({
+      logicalId,
+      properties: resource.Properties as Record<string, unknown>,
+    }),
+  );
+}
+
+function findExpirationSchedulesByPrefix(
+  schedules: ReturnType<typeof getExpirationSchedules>,
+  prefix: string,
+) {
+  return schedules.filter(
+    ({ properties }) =>
+      typeof properties.Name === 'string' && properties.Name.startsWith(prefix),
+  );
+}
+
+function findExpirationScheduleByPrefix(
+  schedules: ReturnType<typeof getExpirationSchedules>,
+  prefix: string,
+) {
+  return findExpirationSchedulesByPrefix(schedules, `${prefix}-`)[0];
+}
+
 test('Expiration disabled by default - no scheduler/SNS resources', () => {
   const app = new App();
   const stack = new Stack(app, 'SecretIntegration');
@@ -1009,19 +1035,75 @@ test('Expiration enabled - reuses one schedule group per stack', () => {
   template.resourceCountIs('AWS::Scheduler::ScheduleGroup', 1);
   template.resourceCountIs('AWS::Scheduler::Schedule', 4);
 
-  const schedules = Object.values(
-    template.findResources('AWS::Scheduler::Schedule'),
-  ).map((resource) => resource.Properties as Record<string, unknown>);
+  const schedules = getExpirationSchedules(template);
 
-  expect(new Set(schedules.map((resource) => resource.GroupName)).size).toBe(1);
   expect(
-    schedules.some((resource) => resource.Name === 'first-secret-gitlab_token'),
-  ).toBe(true);
+    new Set(schedules.map(({ properties }) => properties.GroupName)).size,
+  ).toBe(1);
   expect(
-    schedules.some(
-      (resource) => resource.Name === 'second-secret-gitlab_token',
-    ),
-  ).toBe(true);
+    findExpirationScheduleByPrefix(schedules, 'first-secret-gitlab_token'),
+  ).toBeDefined();
+  expect(
+    findExpirationScheduleByPrefix(schedules, 'second-secret-gitlab_token'),
+  ).toBeDefined();
+});
+
+test('Expiration enabled - keeps logical IDs stable when earlier keys change', () => {
+  const appWithLeadingKey = new App();
+  const stackWithLeadingKey = new Stack(appWithLeadingKey, 'SecretIntegration');
+
+  new SopsSecret(stackWithLeadingKey, 'SopsSecret', {
+    secretName: 'my-secret',
+    sopsFilePath:
+      'test-secrets/yaml/sopsfile.expiration.with-leading.enc-kms.yaml',
+    expirationNotification: {
+      enabled: true,
+    },
+  });
+
+  const appWithoutLeadingKey = new App();
+  const stackWithoutLeadingKey = new Stack(
+    appWithoutLeadingKey,
+    'SecretIntegration',
+  );
+
+  new SopsSecret(stackWithoutLeadingKey, 'SopsSecret', {
+    secretName: 'my-secret',
+    sopsFilePath: 'test-secrets/yaml/sopsfile.expiration.enc-kms.yaml',
+    expirationNotification: {
+      enabled: true,
+    },
+  });
+
+  const schedulesWithLeadingKey = getExpirationSchedules(
+    Template.fromStack(stackWithLeadingKey),
+  );
+  const schedulesWithoutLeadingKey = getExpirationSchedules(
+    Template.fromStack(stackWithoutLeadingKey),
+  );
+  const gitlabWithLeadingKey = findExpirationScheduleByPrefix(
+    schedulesWithLeadingKey,
+    'my-secret-gitlab_token',
+  );
+  const gitlabWithoutLeadingKey = findExpirationScheduleByPrefix(
+    schedulesWithoutLeadingKey,
+    'my-secret-gitlab_token',
+  );
+  const nestedWithLeadingKey = findExpirationScheduleByPrefix(
+    schedulesWithLeadingKey,
+    'my-secret-nested-api_key',
+  );
+  const nestedWithoutLeadingKey = findExpirationScheduleByPrefix(
+    schedulesWithoutLeadingKey,
+    'my-secret-nested-api_key',
+  );
+
+  expect(gitlabWithLeadingKey?.logicalId).toBe(
+    gitlabWithoutLeadingKey?.logicalId,
+  );
+  expect(nestedWithLeadingKey?.logicalId).toBe(
+    nestedWithoutLeadingKey?.logicalId,
+  );
 });
 
 test('Expiration enabled - schedule names never start with dash', () => {
@@ -1036,20 +1118,18 @@ test('Expiration enabled - schedule names never start with dash', () => {
     },
   });
 
-  const schedules = Object.values(
-    Template.fromStack(stack).findResources('AWS::Scheduler::Schedule'),
-  ).map((resource) => resource.Properties as Record<string, unknown>);
+  const schedules = getExpirationSchedules(Template.fromStack(stack));
 
   expect(schedules.length).toBeGreaterThan(0);
-  schedules.forEach((resource) => {
-    expect(resource.Name).not.toMatch(/^-+/);
+  schedules.forEach(({ properties }) => {
+    expect(properties.Name).not.toMatch(/^-+/);
   });
   expect(
-    schedules.some(
-      (resource) =>
-        resource.Name === 'test-hello-world-my-password-gitlab_token',
-    ),
-  ).toBe(true);
+    findExpirationScheduleByPrefix(
+      schedules,
+      'test-hello-world-my-password-gitlab_token',
+    )?.properties.Name,
+  ).toMatch(/^test-hello-world-my-password-gitlab_token-[0-9a-f]{10}$/);
 });
 
 test('Expiration enabled - adds subscriber to auto-created SNS topic', () => {
@@ -1135,47 +1215,65 @@ test('Expiration enabled - synthesizes schedules from unencrypted expiration key
   const template = Template.fromStack(stack);
   template.resourceCountIs('AWS::Scheduler::Schedule', 2);
 
-  const schedules = Object.values(
-    template.findResources('AWS::Scheduler::Schedule'),
-  ).map((resource) => resource.Properties as Record<string, unknown>);
+  const schedules = getExpirationSchedules(template);
 
-  const gitlabSchedule = schedules.find(
-    (resource) => resource.Name === 'my-secret-gitlab_token',
+  const gitlabSchedule = findExpirationScheduleByPrefix(
+    schedules,
+    'my-secret-gitlab_token',
   );
   expect(gitlabSchedule).toBeDefined();
-  expect(gitlabSchedule?.Description).toContain(
+  expect(gitlabSchedule?.properties.Name).toMatch(
+    /^my-secret-gitlab_token-[0-9a-f]{10}$/,
+  );
+  expect(gitlabSchedule?.properties.Description).toContain(
     'Notify about expiration of SOPS secret key "gitlab_token"',
   );
-  expect(gitlabSchedule?.ScheduleExpression).toBe('at(2099-12-17T00:00:00)');
-  expect(JSON.stringify(gitlabSchedule?.Target)).toContain(
+  expect(gitlabSchedule?.properties.ScheduleExpression).toBe(
+    'at(2099-12-17T00:00:00)',
+  );
+  expect(JSON.stringify(gitlabSchedule?.properties.Target)).toContain(
     'SOPS secret expiration notification',
   );
-  expect(JSON.stringify(gitlabSchedule?.Target)).toContain(
+  expect(JSON.stringify(gitlabSchedule?.properties.Target)).toContain(
     'Secret key \\"gitlab_token\\" in my-secret expires on 2099-12-31.',
   );
-  expect(JSON.stringify(gitlabSchedule?.Target)).toContain(
+  expect(JSON.stringify(gitlabSchedule?.properties.Target)).toContain(
     'Secret name: my-secret',
   );
-  expect(JSON.stringify(gitlabSchedule?.Target)).toContain('gitlab_token');
-  expect(JSON.stringify(gitlabSchedule?.Target)).toContain('2099-12-31');
-  expect(JSON.stringify(gitlabSchedule?.Target)).toContain(
+  expect(JSON.stringify(gitlabSchedule?.properties.Target)).toContain(
+    'gitlab_token',
+  );
+  expect(JSON.stringify(gitlabSchedule?.properties.Target)).toContain(
+    '2099-12-31',
+  );
+  expect(JSON.stringify(gitlabSchedule?.properties.Target)).toContain(
     'Expiration time: 2099-12-31T00:00:00.000Z',
   );
 
-  const nestedSchedule = schedules.find(
-    (resource) => resource.Name === 'my-secret-nested-api_key',
+  const nestedSchedule = findExpirationScheduleByPrefix(
+    schedules,
+    'my-secret-nested-api_key',
   );
   expect(nestedSchedule).toBeDefined();
-  expect(nestedSchedule?.Description).toContain(
+  expect(nestedSchedule?.properties.Name).toMatch(
+    /^my-secret-nested-api_key-[0-9a-f]{10}$/,
+  );
+  expect(nestedSchedule?.properties.Description).toContain(
     'Notify about expiration of SOPS secret key "nested.api_key"',
   );
-  expect(nestedSchedule?.ScheduleExpression).toBe('at(2099-05-18T12:00:00)');
-  expect(JSON.stringify(nestedSchedule?.Target)).toContain(
+  expect(nestedSchedule?.properties.ScheduleExpression).toBe(
+    'at(2099-05-18T12:00:00)',
+  );
+  expect(JSON.stringify(nestedSchedule?.properties.Target)).toContain(
     'Secret key \\"nested.api_key\\" in my-secret expires on 2099-06-01.',
   );
-  expect(JSON.stringify(nestedSchedule?.Target)).toContain('nested.api_key');
-  expect(JSON.stringify(nestedSchedule?.Target)).toContain('2099-06-01');
-  expect(JSON.stringify(nestedSchedule?.Target)).toContain(
+  expect(JSON.stringify(nestedSchedule?.properties.Target)).toContain(
+    'nested.api_key',
+  );
+  expect(JSON.stringify(nestedSchedule?.properties.Target)).toContain(
+    '2099-06-01',
+  );
+  expect(JSON.stringify(nestedSchedule?.properties.Target)).toContain(
     '2099-06-01T12:00:00.000Z',
   );
 });
@@ -1193,33 +1291,149 @@ test('Expiration enabled - respects custom daysBeforeExpiration', () => {
     },
   });
 
-  const schedules = Object.values(
-    Template.fromStack(stack).findResources('AWS::Scheduler::Schedule'),
-  ).map((resource) => resource.Properties as Record<string, unknown>);
+  const schedules = getExpirationSchedules(Template.fromStack(stack));
 
-  const gitlabSchedule = schedules.find(
-    (resource) => resource.Name === 'my-secret-gitlab_token',
+  const gitlabSchedule = findExpirationScheduleByPrefix(
+    schedules,
+    'my-secret-gitlab_token',
   );
   expect(gitlabSchedule).toBeDefined();
-  expect(gitlabSchedule?.Description).toContain('30 days before expiration');
-  expect(gitlabSchedule?.ScheduleExpression).toBe('at(2099-12-01T00:00:00)');
-  expect(JSON.stringify(gitlabSchedule?.Target)).toContain(
+  expect(gitlabSchedule?.properties.Description).toContain(
+    '30 days before expiration',
+  );
+  expect(gitlabSchedule?.properties.ScheduleExpression).toBe(
+    'at(2099-12-01T00:00:00)',
+  );
+  expect(JSON.stringify(gitlabSchedule?.properties.Target)).toContain(
     'Secret key \\"gitlab_token\\" in my-secret expires on 2099-12-31.',
   );
-  expect(JSON.stringify(gitlabSchedule?.Target)).toContain(
+  expect(JSON.stringify(gitlabSchedule?.properties.Target)).toContain(
     'Expiration time: 2099-12-31T00:00:00.000Z',
   );
 
-  const nestedSchedule = schedules.find(
-    (resource) => resource.Name === 'my-secret-nested-api_key',
+  const nestedSchedule = findExpirationScheduleByPrefix(
+    schedules,
+    'my-secret-nested-api_key',
   );
   expect(nestedSchedule).toBeDefined();
-  expect(nestedSchedule?.ScheduleExpression).toBe('at(2099-05-02T12:00:00)');
-  expect(JSON.stringify(nestedSchedule?.Target)).toContain(
+  expect(nestedSchedule?.properties.ScheduleExpression).toBe(
+    'at(2099-05-02T12:00:00)',
+  );
+  expect(JSON.stringify(nestedSchedule?.properties.Target)).toContain(
     'Secret key \\"nested.api_key\\" in my-secret expires on 2099-06-01.',
   );
-  expect(JSON.stringify(nestedSchedule?.Target)).toContain(
+  expect(JSON.stringify(nestedSchedule?.properties.Target)).toContain(
     '2099-06-01T12:00:00.000Z',
+  );
+  expect(JSON.stringify(nestedSchedule?.properties.Target)).toContain(
+    'Notification lead time: 30 days',
+  );
+});
+
+test('Expiration enabled - supports multiple daysBeforeExpiration reminders', () => {
+  const app = new App();
+  const stack = new Stack(app, 'SecretIntegration');
+
+  new SopsSecret(stack, 'SopsSecret', {
+    secretName: 'my-secret',
+    sopsFilePath: 'test-secrets/yaml/sopsfile.expiration.enc-kms.yaml',
+    expirationNotification: {
+      enabled: true,
+      daysBeforeExpiration: [90, 30, 60],
+    },
+  });
+
+  const template = Template.fromStack(stack);
+  template.resourceCountIs('AWS::Scheduler::Schedule', 6);
+
+  const schedules = getExpirationSchedules(template);
+  const gitlabSchedules = findExpirationSchedulesByPrefix(
+    schedules,
+    'my-secret-gitlab_token-',
+  );
+  const nestedSchedules = findExpirationSchedulesByPrefix(
+    schedules,
+    'my-secret-nested-api_key-',
+  );
+
+  expect(gitlabSchedules).toHaveLength(3);
+  expect(nestedSchedules).toHaveLength(3);
+  const gitlabScheduleNames = gitlabSchedules.map(({ properties }) =>
+    String(properties.Name),
+  );
+  const gitlabScheduleExpressions = gitlabSchedules.map(({ properties }) =>
+    String(properties.ScheduleExpression),
+  );
+
+  expect(gitlabScheduleNames).toEqual(
+    expect.arrayContaining([
+      expect.stringMatching(/^my-secret-gitlab_token-30d-[0-9a-f]{10}$/),
+      expect.stringMatching(/^my-secret-gitlab_token-60d-[0-9a-f]{10}$/),
+      expect.stringMatching(/^my-secret-gitlab_token-90d-[0-9a-f]{10}$/),
+    ]),
+  );
+  expect(gitlabScheduleExpressions).toEqual(
+    expect.arrayContaining([
+      'at(2099-10-02T00:00:00)',
+      'at(2099-11-01T00:00:00)',
+      'at(2099-12-01T00:00:00)',
+    ]),
+  );
+  expect(
+    JSON.stringify(gitlabSchedules.map(({ properties }) => properties.Target)),
+  ).toContain('Notification lead time: 90 days');
+  expect(
+    JSON.stringify(gitlabSchedules.map(({ properties }) => properties.Target)),
+  ).toContain('Notification lead time: 60 days');
+  expect(
+    JSON.stringify(gitlabSchedules.map(({ properties }) => properties.Target)),
+  ).toContain('Notification lead time: 30 days');
+  expect(
+    JSON.stringify(nestedSchedules.map(({ properties }) => properties.Target)),
+  ).toContain('Notification lead time: 30 days');
+});
+
+test('Expiration enabled - keeps logical IDs stable when reminder order changes', () => {
+  const firstApp = new App();
+  const firstStack = new Stack(firstApp, 'SecretIntegration');
+
+  new SopsSecret(firstStack, 'SopsSecret', {
+    secretName: 'my-secret',
+    sopsFilePath: 'test-secrets/yaml/sopsfile.expiration.enc-kms.yaml',
+    expirationNotification: {
+      enabled: true,
+      daysBeforeExpiration: [90, 30, 60],
+    },
+  });
+
+  const secondApp = new App();
+  const secondStack = new Stack(secondApp, 'SecretIntegration');
+
+  new SopsSecret(secondStack, 'SopsSecret', {
+    secretName: 'my-secret',
+    sopsFilePath: 'test-secrets/yaml/sopsfile.expiration.enc-kms.yaml',
+    expirationNotification: {
+      enabled: true,
+      daysBeforeExpiration: [30, 60, 90],
+    },
+  });
+
+  const firstSchedules = getExpirationSchedules(Template.fromStack(firstStack));
+  const secondSchedules = getExpirationSchedules(
+    Template.fromStack(secondStack),
+  );
+  const firstGitlab30d = findExpirationScheduleByPrefix(
+    firstSchedules,
+    'my-secret-gitlab_token-30d',
+  );
+  const secondGitlab30d = findExpirationScheduleByPrefix(
+    secondSchedules,
+    'my-secret-gitlab_token-30d',
+  );
+
+  expect(firstGitlab30d?.logicalId).toBe(secondGitlab30d?.logicalId);
+  expect(firstGitlab30d?.properties.Name).toBe(
+    secondGitlab30d?.properties.Name,
   );
 });
 

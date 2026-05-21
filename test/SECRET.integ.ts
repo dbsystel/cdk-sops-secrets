@@ -40,6 +40,16 @@ const tc = [
     },
   },
   {
+    name: 'Yaml2JsonMultiReminder',
+    sopsFilePath: 'test-secrets/testsecret.sops.yaml',
+    additionalProperties: {
+      expirationNotification: {
+        enabled: true,
+        daysBeforeExpiration: [30, 60, 90],
+      },
+    },
+  },
+  {
     name: 'Yaml2RawString',
     sopsFilePath: 'test-secrets/testsecret.sops.yaml',
     additionalProperties: {
