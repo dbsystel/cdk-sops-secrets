@@ -206,6 +206,8 @@ new SopsSecret(stack, 'MySopsSecret', {
 
 Expiration notifications are disabled by default. Once enabled, keys ending in `_expiration` are read directly by CDK from the local `sopsFilePath`, and matching schedules publish to SNS 14 days before the configured date. You can set `daysBeforeExpiration` to either a single number or a list of numbers such as `[30, 60, 90]` to create multiple reminders per secret key. This requires those expiration fields to remain unencrypted in the source file, for example via SOPS `unencrypted_regex`.
 
+> **Upgrade note:** upgrading from earlier versions may change the synthesized EventBridge Scheduler schedule names/logical IDs (now hash-suffixed), which causes CloudFormation to replace existing schedules during deployment. Plan for this schedule churn when rolling out the upgrade.
+
 Example `.sops.yaml` configuration:
 
 ```yaml
