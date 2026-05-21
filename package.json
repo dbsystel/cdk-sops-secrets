@@ -57,6 +57,7 @@
     "jsii-rosetta": "5.9.46",
     "json-schema-to-typescript": "^15.0.4",
     "prettier": "^3.8.1",
+    "renovate": "^43.150.0",
     "ts-jest": "^29.0.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.0.0",

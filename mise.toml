@@ -327,3 +327,8 @@ npx jsii-diff npm:$(node -p "require('./package.json').name") -k --ignore-file .
 [tasks.watch]
 description = "Watch and recompile on changes"
 run = "tsc --watch"
+
+[tasks."renovate:validate"]
+description = "Validate Renovate configuration"
+depends = ["cdk:deps"]
+run = "npx renovate-config-validator --strict --no-global renovate.json"
