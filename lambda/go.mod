@@ -1,6 +1,6 @@
 module github.com/markussiebert/cdk-sops-secrets
 
-go 1.26.3
+go 1.26.4
 
 require (
 	github.com/aws/aws-lambda-go v1.54.0
@@ -13,7 +13,7 @@ require (
 	github.com/getsops/sops/v3 v3.13.1
 	github.com/gkampitakis/go-snaps v0.5.22
 	github.com/invopop/jsonschema v0.14.0
-	github.com/kaptinlin/jsonschema v0.7.15
+	github.com/kaptinlin/jsonschema v0.7.17
 	github.com/stretchr/testify v1.11.1
 	gopkg.in/yaml.v3 v3.0.1
 )
@@ -42,6 +42,7 @@ require (
 	github.com/GoogleCloudPlatform/opentelemetry-operations-go/exporter/metric v0.56.0 // indirect
 	github.com/GoogleCloudPlatform/opentelemetry-operations-go/internal/resourcemapping v0.56.0 // indirect
 	github.com/ProtonMail/go-crypto v1.4.1 // indirect
+	github.com/agentable/go-intl v0.2.6 // indirect
 	github.com/aws/aws-sdk-go-v2/aws/protocol/eventstream v1.7.12 // indirect
 	github.com/aws/aws-sdk-go-v2/credentials v1.19.21 // indirect
 	github.com/aws/aws-sdk-go-v2/feature/ec2/imds v1.18.27 // indirect
@@ -65,6 +66,7 @@ require (
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/cloudflare/circl v1.6.3 // indirect
 	github.com/cncf/xds/go v0.0.0-20260202195803-dba9d589def2 // indirect
+	github.com/cockroachdb/apd/v3 v3.2.3 // indirect
 	github.com/cpuguy83/go-md2man/v2 v2.0.7 // indirect
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
 	github.com/envoyproxy/go-control-plane/envoy v1.37.0 // indirect
@@ -74,7 +76,7 @@ require (
 	github.com/getsops/gopgagent v0.0.0-20241224165529-7044f28e491e // indirect
 	github.com/gkampitakis/ciinfo v0.3.4 // indirect
 	github.com/go-jose/go-jose/v4 v4.1.4 // indirect
-	github.com/go-json-experiment/json v0.0.0-20260520185125-572e7c383686 // indirect
+	github.com/go-json-experiment/json v0.0.0-20260601182631-00ed12fed2a6 // indirect
 	github.com/go-logr/logr v1.4.3 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
 	github.com/go-viper/mapstructure/v2 v2.5.0 // indirect
@@ -100,8 +102,8 @@ require (
 	github.com/huaweicloud/huaweicloud-sdk-go-v3 v0.1.196 // indirect
 	github.com/json-iterator/go v1.1.13-0.20220915233716-71ac16282d12 // indirect
 	github.com/kaptinlin/go-i18n v0.4.9 // indirect
-	github.com/kaptinlin/jsonpointer v0.4.25 // indirect
-	github.com/kaptinlin/messageformat-go v0.6.4 // indirect
+	github.com/kaptinlin/jsonpointer v0.4.26 // indirect
+	github.com/kaptinlin/messageformat-go v0.6.5 // indirect
 	github.com/kr/pretty v0.3.1 // indirect
 	github.com/kr/text v0.2.0 // indirect
 	github.com/kylelemons/godebug v1.1.0 // indirect
