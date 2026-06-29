@@ -2,6 +2,46 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.8.1](https://github.com/dbsystel/cdk-sops-secrets/compare/v2.8.0...v2.8.1) (2026-06-29)
+
+
+### Bug Fixes
+
+* **deps:** update all minor and patch ([#1361](https://github.com/dbsystel/cdk-sops-secrets/issues/1361)) ([4d4e273](https://github.com/dbsystel/cdk-sops-secrets/commit/4d4e27368dcad5f256c211080574e9dfb2a0d944))
+* **deps:** update all minor and patch ([#1370](https://github.com/dbsystel/cdk-sops-secrets/issues/1370)) ([a6eec11](https://github.com/dbsystel/cdk-sops-secrets/commit/a6eec11d9902c46cb84aa3d052aaef9ddeb020cf))
+* **deps:** update module github.com/aws/aws-sdk-go-v2/service/secretsmanager to v1.41.9 ([#1362](https://github.com/dbsystel/cdk-sops-secrets/issues/1362)) ([f2d8710](https://github.com/dbsystel/cdk-sops-secrets/commit/f2d87102443e4281842b391716f5ba4d31b516c3))
+* **renovate:** fix invalid config and add CI validation ([#1352](https://github.com/dbsystel/cdk-sops-secrets/issues/1352)) ([b880691](https://github.com/dbsystel/cdk-sops-secrets/commit/b880691cb7ee7560d2d1c400c73bcb560d250c75))
+
+
+### Miscellaneous Chores
+
+* **deps:** update actions/checkout digest to df4cb1c ([#1365](https://github.com/dbsystel/cdk-sops-secrets/issues/1365)) ([707aaab](https://github.com/dbsystel/cdk-sops-secrets/commit/707aaabb965c0db2e75db9a3ca9ec070327d3694))
+* **deps:** update all minor and patch ([#1354](https://github.com/dbsystel/cdk-sops-secrets/issues/1354)) ([aae9888](https://github.com/dbsystel/cdk-sops-secrets/commit/aae98882c80b489f0648c1e8f878eff3e077c044))
+* **deps:** update all minor and patch ([#1360](https://github.com/dbsystel/cdk-sops-secrets/issues/1360)) ([19fab31](https://github.com/dbsystel/cdk-sops-secrets/commit/19fab31b49262938e0af3ff68538c8e4ec205771))
+* **deps:** update all minor and patch ([#1369](https://github.com/dbsystel/cdk-sops-secrets/issues/1369)) ([89bf3c2](https://github.com/dbsystel/cdk-sops-secrets/commit/89bf3c24980d732f7ca45b0c2760d804ce784356))
+* **deps:** update all minor and patch ([#1374](https://github.com/dbsystel/cdk-sops-secrets/issues/1374)) ([e30057e](https://github.com/dbsystel/cdk-sops-secrets/commit/e30057ef134ba2585e783bf8d9aa4e1fc38b1564))
+* **deps:** update all minor and patch ([#1376](https://github.com/dbsystel/cdk-sops-secrets/issues/1376)) ([509dc6d](https://github.com/dbsystel/cdk-sops-secrets/commit/509dc6dc6be7eb5e9fff7920e6b5b2f489c406a6))
+* **deps:** update all minor and patch ([#1378](https://github.com/dbsystel/cdk-sops-secrets/issues/1378)) ([a3ba4bc](https://github.com/dbsystel/cdk-sops-secrets/commit/a3ba4bc9dc1c5804eb43ea647c1596eff19b9e6f))
+* **deps:** update all minor and patch ([#1382](https://github.com/dbsystel/cdk-sops-secrets/issues/1382)) ([7c14b23](https://github.com/dbsystel/cdk-sops-secrets/commit/7c14b2396feb5144b773aeab947589e42bb8b220))
+* **deps:** update all minor and patch ([#1384](https://github.com/dbsystel/cdk-sops-secrets/issues/1384)) ([1e68b31](https://github.com/dbsystel/cdk-sops-secrets/commit/1e68b31e113bbec0b59bc263ed4f4f4883de09e5))
+* **deps:** update all minor and patch ([#1385](https://github.com/dbsystel/cdk-sops-secrets/issues/1385)) ([a6c1ae5](https://github.com/dbsystel/cdk-sops-secrets/commit/a6c1ae5801fbb48b752ec5cb0f742f95a3ddfd9d))
+* **deps:** update all minor and patch to v24.17.0 ([#1381](https://github.com/dbsystel/cdk-sops-secrets/issues/1381)) ([d4dce82](https://github.com/dbsystel/cdk-sops-secrets/commit/d4dce823b2bc91d3cd97107f47cef7ecc7dd9f7a))
+* **deps:** update all minor and patch to v43.208.0 ([#1364](https://github.com/dbsystel/cdk-sops-secrets/issues/1364)) ([c2b50a9](https://github.com/dbsystel/cdk-sops-secrets/commit/c2b50a952700392ca6dc56106253e56c30ae8178))
+* **deps:** update all minor and patch to v43.209.2 ([#1366](https://github.com/dbsystel/cdk-sops-secrets/issues/1366)) ([4300b10](https://github.com/dbsystel/cdk-sops-secrets/commit/4300b1049d041a4f0c844ed47973fe622040ef87))
+* **deps:** update all minor and patch to v43.212.0 ([#1371](https://github.com/dbsystel/cdk-sops-secrets/issues/1371)) ([3912812](https://github.com/dbsystel/cdk-sops-secrets/commit/39128129eacf46718bd43c5a049d7ad2f1f7260f))
+* **deps:** update all minor and patch to v43.214.4 ([#1372](https://github.com/dbsystel/cdk-sops-secrets/issues/1372)) ([1df1847](https://github.com/dbsystel/cdk-sops-secrets/commit/1df1847bed91e70e8425d33b4f509b9695d8b86a))
+* **deps:** update all minor and patch to v43.214.6 ([#1373](https://github.com/dbsystel/cdk-sops-secrets/issues/1373)) ([20ed7d3](https://github.com/dbsystel/cdk-sops-secrets/commit/20ed7d3457d4e6d7b7478e8e894703e72c83e817))
+* **deps:** update all minor and patch to v43.217.0 ([#1375](https://github.com/dbsystel/cdk-sops-secrets/issues/1375)) ([064c975](https://github.com/dbsystel/cdk-sops-secrets/commit/064c9751f809253a618ee56579c431e98dfb7575))
+* **deps:** update all minor and patch to v43.222.1 ([#1377](https://github.com/dbsystel/cdk-sops-secrets/issues/1377)) ([5bdb06d](https://github.com/dbsystel/cdk-sops-secrets/commit/5bdb06d81e45ef69470fc4b4110f1461dcd0840e))
+* **deps:** update all minor and patch to v43.225.0 ([#1379](https://github.com/dbsystel/cdk-sops-secrets/issues/1379)) ([0d3f9df](https://github.com/dbsystel/cdk-sops-secrets/commit/0d3f9df0caf2e1f6da7133863f050ad9e40ba7e1))
+* **deps:** update dependency aws-cdk to v2.1124.0 ([#1356](https://github.com/dbsystel/cdk-sops-secrets/issues/1356)) ([aa2abf8](https://github.com/dbsystel/cdk-sops-secrets/commit/aa2abf87841bdfd2b50fe4bd78fec72f89799d94))
+* **deps:** update dependency renovate to v43.243.0 ([#1386](https://github.com/dbsystel/cdk-sops-secrets/issues/1386)) ([7264f3e](https://github.com/dbsystel/cdk-sops-secrets/commit/7264f3e2d823a0d94124d22df929a680c8a6fa2a))
+* **deps:** update dependency ts-jest to v29.4.11 ([#1359](https://github.com/dbsystel/cdk-sops-secrets/issues/1359)) ([10b18e7](https://github.com/dbsystel/cdk-sops-secrets/commit/10b18e79968e5279e92bb18451f70e67dbe51ba7))
+* **deps:** update github/codeql-action digest to 7211b7c ([#1358](https://github.com/dbsystel/cdk-sops-secrets/issues/1358)) ([7330af8](https://github.com/dbsystel/cdk-sops-secrets/commit/7330af87e8942dd54817e2f13f6533d7f96fc76b))
+* **deps:** update github/codeql-action digest to 87557b9 ([#1363](https://github.com/dbsystel/cdk-sops-secrets/issues/1363)) ([d9deae9](https://github.com/dbsystel/cdk-sops-secrets/commit/d9deae94442598453d80b288fa09a51232c7e6b5))
+* **deps:** update github/codeql-action digest to 8aad20d ([#1367](https://github.com/dbsystel/cdk-sops-secrets/issues/1367)) ([20de284](https://github.com/dbsystel/cdk-sops-secrets/commit/20de2840d6b6b69105397a4ad0f9576137ae3825))
+* **deps:** update jdx/mise-action digest to dba1968 ([#1368](https://github.com/dbsystel/cdk-sops-secrets/issues/1368)) ([f8402c2](https://github.com/dbsystel/cdk-sops-secrets/commit/f8402c2f628fb28a6252b5e81b18b62d649e5b3d))
+
 ## [2.8.0](https://github.com/dbsystel/cdk-sops-secrets/compare/v2.7.3...v2.8.0) (2026-05-21)
 
 
