@@ -62,14 +62,12 @@ export class MultiStringParameter extends Construct {
         const allowedChars = '/_+=.@-';
         for (let i = 0; i < fixedKey.length; i++) {
           const char = fixedKey[i];
-          if (
-            !(
-              (char >= 'a' && char <= 'z') ||
-              (char >= 'A' && char <= 'Z') ||
-              (char >= '0' && char <= '9') ||
-              allowedChars.includes(char)
-            )
-          ) {
+          if (!(
+            (char >= 'a' && char <= 'z') ||
+            (char >= 'A' && char <= 'Z') ||
+            (char >= '0' && char <= '9') ||
+            allowedChars.includes(char)
+          )) {
             fixedKey = fixedKey.slice(0, i) + '_' + fixedKey.slice(i + 1);
           }
         }
