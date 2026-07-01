@@ -52,7 +52,7 @@
     "jest-junit": "^16",
     "jsii": "5.9.44",
     "jsii-diff": "1.137.0",
-    "jsii-docgen": "10.12.2",
+    "jsii-docgen": "10.12.3",
     "jsii-pacmak": "1.137.0",
     "jsii-rosetta": "5.9.54",
     "json-schema-to-typescript": "^15.0.4",
