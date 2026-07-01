@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.8.2](https://github.com/dbsystel/cdk-sops-secrets/compare/v2.8.1...v2.8.2) (2026-07-01)
+
+
+### Miscellaneous Chores
+
+* **deps:** update dependency renovate to v43.246.0 ([#1388](https://github.com/dbsystel/cdk-sops-secrets/issues/1388)) ([15eae0c](https://github.com/dbsystel/cdk-sops-secrets/commit/15eae0c17dc9fa54a157a529b164447653289316))
+* **deps:** update dependency renovate to v43.247.0 ([#1390](https://github.com/dbsystel/cdk-sops-secrets/issues/1390)) ([df9a4b6](https://github.com/dbsystel/cdk-sops-secrets/commit/df9a4b6d2c4a6b5fea3f6b90a6ea59cf2658c666))
+
 ## [2.8.1](https://github.com/dbsystel/cdk-sops-secrets/compare/v2.8.0...v2.8.1) (2026-06-29)
 
 
