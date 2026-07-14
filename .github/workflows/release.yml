@@ -34,7 +34,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
       - name: Install mise
-        uses: jdx/mise-action@dba19683ed58901619b14f395a24841710cb4925 # v4
+        uses: jdx/mise-action@e6a8b3978addb5a52f2b4cd9d91eafa7f0ab959d # v4
         with:
           experimental: true
           cache: false
@@ -54,7 +54,7 @@ jobs:
           overwrite: true
 
       - name: Attest build provenance
-        uses: actions/attest-build-provenance@a2bbfa25375fe432b6a289bc6b6cd05ecd0c4c32 # v4
+        uses: actions/attest-build-provenance@0f67c3f4856b2e3261c31976d6725780e5e4c373 # v4
         with:
           subject-path: 'dist/**/*.tgz,dist/**/*.jar,dist/**/*.whl,dist/**/*.nupkg,dist/**/*.zip'
 
@@ -91,7 +91,7 @@ jobs:
         continue-on-error: true
 
       - name: Setup Node.js
-        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
         with:
           node-version: '24.x'
           registry-url: 'https://registry.npmjs.org'
@@ -114,7 +114,7 @@ jobs:
       packages: write
     steps:
       - name: Install mise
-        uses: jdx/mise-action@dba19683ed58901619b14f395a24841710cb4925 # v4
+        uses: jdx/mise-action@e6a8b3978addb5a52f2b4cd9d91eafa7f0ab959d # v4
         with:
           cache: false
 
@@ -155,13 +155,13 @@ jobs:
         continue-on-error: true
 
       - name: Setup Node.js
-        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
         with:
           node-version: 'lts/*'
           package-manager-cache: false
 
       - name: Setup Python
-        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6
+        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
         with:
           python-version: '3.14'
 
@@ -179,7 +179,7 @@ jobs:
       packages: write
     steps:
       - name: Install mise
-        uses: jdx/mise-action@dba19683ed58901619b14f395a24841710cb4925 # v4
+        uses: jdx/mise-action@e6a8b3978addb5a52f2b4cd9d91eafa7f0ab959d # v4
         with:
           cache: false
 
