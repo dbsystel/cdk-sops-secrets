@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.8.2](https://github.com/dbsystel/cdk-sops-secrets/compare/v2.8.1...v2.8.2) (2026-07-16)
+
+
+### Bug Fixes
+
+* **deps:** update module github.com/getsops/sops/v3 to v3.13.2 ([#1391](https://github.com/dbsystel/cdk-sops-secrets/issues/1391)) ([5024691](https://github.com/dbsystel/cdk-sops-secrets/commit/5024691d2739c50a1ac776afc1369aef29e6a539))
+
+
+### Miscellaneous Chores
+
+* **deps:** update all minor and patch ([#1397](https://github.com/dbsystel/cdk-sops-secrets/issues/1397)) ([bddb04a](https://github.com/dbsystel/cdk-sops-secrets/commit/bddb04af35baa5408e95731a029cc5192fda9859))
+* **deps:** update dependency renovate to v43.246.0 ([#1388](https://github.com/dbsystel/cdk-sops-secrets/issues/1388)) ([15eae0c](https://github.com/dbsystel/cdk-sops-secrets/commit/15eae0c17dc9fa54a157a529b164447653289316))
+* **deps:** update dependency renovate to v43.247.0 ([#1390](https://github.com/dbsystel/cdk-sops-secrets/issues/1390)) ([df9a4b6](https://github.com/dbsystel/cdk-sops-secrets/commit/df9a4b6d2c4a6b5fea3f6b90a6ea59cf2658c666))
+* **deps:** update dependency renovate to v43.249.6 ([#1393](https://github.com/dbsystel/cdk-sops-secrets/issues/1393)) ([0a02542](https://github.com/dbsystel/cdk-sops-secrets/commit/0a02542d84b583cf8873a0717474b354d3aac5a7))
+* **deps:** update dependency renovate to v43.263.2 ([#1399](https://github.com/dbsystel/cdk-sops-secrets/issues/1399)) ([e70be18](https://github.com/dbsystel/cdk-sops-secrets/commit/e70be181d63621abfbb185e96c2799b277f2a8c2))
+* **renovate:** group action digest updates with minor/patch ([#1396](https://github.com/dbsystel/cdk-sops-secrets/issues/1396)) ([0f173a6](https://github.com/dbsystel/cdk-sops-secrets/commit/0f173a63aa13f264651793699836f71d2b9ecf0d))
+
 ## [2.8.1](https://github.com/dbsystel/cdk-sops-secrets/compare/v2.8.0...v2.8.1) (2026-06-29)
 
 
