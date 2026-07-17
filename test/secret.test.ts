@@ -81,6 +81,25 @@ test('Throw exception on non existent sops secret', () => {
   ).toThrow('File test-secrets/does-not-exist.json does not exist!');
 });
 
+test('SopsSyncProvider uses Amazon Linux 2023 runtime', () => {
+  const app = new App();
+  const stack = new Stack(app, 'SecretIntegration');
+
+  new SopsSecret(stack, 'SopsSecret', {
+    sopsFilePath: 'test-secrets/yaml/sopsfile.enc-kms.yaml',
+  });
+  Template.fromStack(stack).hasResourceProperties('AWS::Lambda::Function', {
+    Runtime: 'provided.al2023',
+    Handler: 'bootstrap',
+    Environment: Match.objectLike({
+      Variables: Match.objectLike({
+        SOPS_AGE_KEY: Match.anyValue(),
+        SOPS_AGE_KEY_PARAMS: Match.anyValue(),
+      }),
+    }),
+  });
+});
+
 test('Age Key passed', () => {
   const app = new App();
   const stack = new Stack(app, 'SecretIntegration');
