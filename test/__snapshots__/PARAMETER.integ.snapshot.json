@@ -58,7 +58,8 @@
     "ResourceType": "PARAMETER",
     "Target": {
      "Ref": "Json7D959341"
-    }
+    },
+    "SyncTrigger": "549b3b75154921ddd4182a0006e4f050afa83d0f3902a748f65795dae96359a3"
    },
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete"
@@ -220,7 +221,8 @@
     "ResourceType": "PARAMETER",
     "Target": {
      "Ref": "Yaml8A8E441C"
-    }
+    },
+    "SyncTrigger": "1508cbfdc3967f8c50d13d631f4f7c23690d152f57037761ac4aa37646fd08d6"
    },
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete"
@@ -283,7 +285,8 @@
     "ResourceType": "PARAMETER",
     "Target": {
      "Ref": "DotEnv36F67242"
-    }
+    },
+    "SyncTrigger": "b65bb28a11a2bc8c9ded4011cad51d92e581f7083b96c28fa6ecf70f08d396de"
    },
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete"
@@ -346,7 +349,8 @@
     "ResourceType": "PARAMETER",
     "Target": {
      "Ref": "Binary266F49CD"
-    }
+    },
+    "SyncTrigger": "01f7baf73aca86aae2badde95af78f0b51cb38bd0734d335c53907dd99d7bd3c"
    },
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete"

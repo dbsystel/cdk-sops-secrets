@@ -63,6 +63,7 @@ type SopsSyncResourceProperties struct {
 	SopsS3File       *SopsS3File  `json:"SopsS3File,omitempty"`
 	SopsInline       *SopsInline  `json:"SopsInline,omitempty"`
 	FlattenSeparator *string      `json:"FlattenSeparator,omitempty"`
+	SyncTrigger      *string      `json:"SyncTrigger,omitempty"`
 	// ServiceToken is the ARN of the service token that was passed to the custom resource
 	// Populated by the CloudFormation
 	ServiceToken *string `json:"ServiceToken,omitempty"`
