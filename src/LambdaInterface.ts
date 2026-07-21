@@ -13,6 +13,7 @@ export interface SopsSyncResourceProperties {
   SopsS3File?: SopsS3File;
   SopsInline?: SopsInline;
   FlattenSeparator?: string;
+  SyncTrigger?: string;
   ServiceToken?: string;
 }
 export interface SopsS3File {

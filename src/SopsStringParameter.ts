@@ -8,6 +8,7 @@ import {
 } from 'aws-cdk-lib/aws-ssm';
 import { RemovalPolicy, ResourceEnvironment, Stack } from 'aws-cdk-lib/core';
 import { Construct } from 'constructs';
+import { addSyncTrigger, parameterSyncTrigger } from './parameterSyncTrigger';
 import { ResourceType, SopsSync, SopsSyncOptions } from './SopsSync';
 
 /**
@@ -93,6 +94,7 @@ export class SopsStringParameter extends Construct implements IStringParameter {
       parameterNames: [props.parameterName ?? this.parameter.parameterName],
       ...(props as SopsSyncOptions),
     });
+    addSyncTrigger(this.sync, parameterSyncTrigger(this.parameter));
   }
   grantRead(grantee: IGrantable): Grant {
     if (this.encryptionKey) {

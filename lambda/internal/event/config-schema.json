@@ -59,6 +59,9 @@
     "FlattenSeparator": {
       "type": "string"
     },
+    "SyncTrigger": {
+      "type": "string"
+    },
     "ServiceToken": {
       "type": "string"
     }
