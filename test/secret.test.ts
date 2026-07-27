@@ -1,4 +1,10 @@
-import { App, RemovalPolicy, SecretValue, Stack } from 'aws-cdk-lib';
+import {
+  App,
+  CfnParameter,
+  RemovalPolicy,
+  SecretValue,
+  Stack,
+} from 'aws-cdk-lib';
 import { Match, Template } from 'aws-cdk-lib/assertions';
 import {
   AnyPrincipal,
@@ -635,16 +641,47 @@ test('SopsStringParameter changes the sync trigger on parameter-only updates', (
     ),
   });
 
+  const firstTemplate = Template.fromStack(firstStack);
+  const secondTemplate = Template.fromStack(secondStack);
   const firstCustomResource = JSON.stringify(
-    Template.fromStack(firstStack).findResources('Custom::SopsSync'),
+    firstTemplate.findResources('Custom::SopsSync'),
   );
   const secondCustomResource = JSON.stringify(
-    Template.fromStack(secondStack).findResources('Custom::SopsSync'),
+    secondTemplate.findResources('Custom::SopsSync'),
+  );
+  const [parameterId] = Object.keys(
+    firstTemplate.findResources('AWS::SSM::Parameter'),
   );
 
   expect(firstCustomResource).toContain('SyncTrigger');
+  expect(firstCustomResource).toContain(parameterId);
   expect(secondCustomResource).toContain('SyncTrigger');
   expect(firstCustomResource).not.toEqual(secondCustomResource);
+});
+
+test('SopsStringParameter keeps parameter tokens in the sync trigger', () => {
+  const app = new App();
+  const stack = new Stack(app, 'ParameterIntegration');
+  const description = new CfnParameter(stack, 'Description', {
+    type: 'String',
+  });
+
+  new SopsStringParameter(stack, 'SopsParameter', {
+    parameterName: '/my-parameter',
+    description: description.valueAsString,
+    sopsFilePath: 'test-secrets/testsecret.sops.json',
+    encryptionKey: Key.fromKeyArn(
+      stack,
+      'Key',
+      'arn:aws:kms:eu-central-1:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab',
+    ),
+  });
+
+  Template.fromStack(stack).hasResourceProperties('Custom::SopsSync', {
+    SyncTrigger: {
+      'Fn::Join': Match.arrayWith([Match.arrayWith([{ Ref: 'Description' }])]),
+    },
+  });
 });
 
 test('MultiStringParameter sync depends on generated parameters and carries a sync trigger', () => {
@@ -674,6 +711,30 @@ test('MultiStringParameter sync depends on generated parameters and carries a sy
   parameterIds.forEach((parameterId) =>
     expect(customResource).toContain(parameterId),
   );
+});
+
+test('MultiStringParameter keeps parameter tokens in the sync trigger', () => {
+  const app = new App();
+  const stack = new Stack(app, 'ParameterIntegration');
+  const description = new CfnParameter(stack, 'Description', {
+    type: 'String',
+  });
+
+  new MultiStringParameter(stack, 'SopsSecret1', {
+    description: description.valueAsString,
+    sopsFilePath: 'test-secrets/yaml/sopsfile-complex-parameters.enc-age.yaml',
+    encryptionKey: Key.fromKeyArn(
+      stack,
+      'Key',
+      'arn:aws:kms:eu-central-1:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab',
+    ),
+  });
+
+  Template.fromStack(stack).hasResourceProperties('Custom::SopsSync', {
+    SyncTrigger: {
+      'Fn::Join': Match.arrayWith([Match.arrayWith([{ Ref: 'Description' }])]),
+    },
+  });
 });
 
 test('Multiple parameters from yaml file with custom key structure', () => {

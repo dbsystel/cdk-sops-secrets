@@ -461,7 +461,7 @@
     "EncryptionKey": "58b75958-883a-440c-842c-85af5d33a5bb",
     "ResourceType": "PARAMETER_MULTI",
     "Target": "/Json/",
-    "SyncTrigger": "332d3dc0a15aa2890240fc21375aba541e204326b2ce9aa59aa41a21f96da087"
+    "SyncTrigger": "{\"DefinitionHash\":\"332d3dc0a15aa2890240fc21375aba541e204326b2ce9aa59aa41a21f96da087\",\"Descriptions\":[],\"Tags\":[]}"
    },
    "DependsOn": [
     "JsonResourceJsonapiKeyEB6B5C10",
@@ -1064,7 +1064,7 @@
     "EncryptionKey": "58b75958-883a-440c-842c-85af5d33a5bb",
     "ResourceType": "PARAMETER_MULTI",
     "Target": "/Yaml/",
-    "SyncTrigger": "5fe08c12bbb48c13d94d9b5a4fdb4c6931afa8184c07d9977cc88df237af7bee"
+    "SyncTrigger": "{\"DefinitionHash\":\"5fe08c12bbb48c13d94d9b5a4fdb4c6931afa8184c07d9977cc88df237af7bee\",\"Descriptions\":[],\"Tags\":[]}"
    },
    "DependsOn": [
     "YamlResourceYamlapiKeyexpiration35C24DC0",

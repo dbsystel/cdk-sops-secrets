@@ -13,16 +13,28 @@ function getParameterResource(parameter: StringParameter): CfnParameter {
   return resource;
 }
 
-function hashSyncTriggerSource(source: unknown): string {
-  return createHash('sha256').update(JSON.stringify(source)).digest('hex');
-}
-
 function stableName(source: Record<string, unknown>): string {
   if (typeof source.Name === 'string') {
     return source.Name;
   }
 
   return JSON.stringify(source.Name) ?? '';
+}
+
+function hashSyncTriggerSource(source: unknown): string {
+  return createHash('sha256').update(JSON.stringify(source)).digest('hex');
+}
+
+function unique(values: unknown[]): unknown[] {
+  const seen = new Set<string>();
+  return values.filter((value) => {
+    const key = JSON.stringify(value);
+    if (key === undefined || seen.has(key)) {
+      return false;
+    }
+    seen.add(key);
+    return true;
+  });
 }
 
 function parameterSyncTriggerSource(
@@ -45,22 +57,33 @@ function parameterSyncTriggerSource(
 
 export function parameterSyncTrigger(parameter: StringParameter): string {
   return Lazy.string({
-    produce: () => hashSyncTriggerSource(parameterSyncTriggerSource(parameter)),
+    produce: () =>
+      Stack.of(parameter).toJsonString(parameterSyncTriggerSource(parameter)),
   });
 }
 
 export function parameterGroupSyncTrigger(
   parameters: StringParameter[],
 ): string {
+  if (parameters.length === 0) {
+    return JSON.stringify([]);
+  }
+
+  const stack = Stack.of(parameters[0]);
   return Lazy.string({
-    produce: () =>
-      hashSyncTriggerSource(
-        parameters
-          .map((parameter) => parameterSyncTriggerSource(parameter))
-          .sort((left, right) =>
-            stableName(left).localeCompare(stableName(right)),
-          ),
-      ),
+    produce: () => {
+      const sources = parameters
+        .map((parameter) => parameterSyncTriggerSource(parameter))
+        .sort((left, right) =>
+          stableName(left).localeCompare(stableName(right)),
+        );
+
+      return stack.toJsonString({
+        DefinitionHash: hashSyncTriggerSource(sources),
+        Descriptions: unique(sources.map((source) => source.Description)),
+        Tags: unique(sources.map((source) => source.Tags)),
+      });
+    },
   });
 }
 
