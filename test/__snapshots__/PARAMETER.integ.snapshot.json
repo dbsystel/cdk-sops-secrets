@@ -58,8 +58,12 @@
     "ResourceType": "PARAMETER",
     "Target": {
      "Ref": "Json7D959341"
-    }
+    },
+    "SyncTrigger": "{\"Name\":\"/Json\",\"Type\":\"String\",\"Value\":\" \"}"
    },
+   "DependsOn": [
+    "Json7D959341"
+   ],
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete"
   },
@@ -220,8 +224,12 @@
     "ResourceType": "PARAMETER",
     "Target": {
      "Ref": "Yaml8A8E441C"
-    }
+    },
+    "SyncTrigger": "{\"Name\":\"/Yaml\",\"Type\":\"String\",\"Value\":\" \"}"
    },
+   "DependsOn": [
+    "Yaml8A8E441C"
+   ],
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete"
   },
@@ -283,8 +291,12 @@
     "ResourceType": "PARAMETER",
     "Target": {
      "Ref": "DotEnv36F67242"
-    }
+    },
+    "SyncTrigger": "{\"Name\":\"/DotEnv\",\"Type\":\"String\",\"Value\":\" \"}"
    },
+   "DependsOn": [
+    "DotEnv36F67242"
+   ],
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete"
   },
@@ -346,8 +358,12 @@
     "ResourceType": "PARAMETER",
     "Target": {
      "Ref": "Binary266F49CD"
-    }
+    },
+    "SyncTrigger": "{\"Name\":\"/Binary\",\"Type\":\"String\",\"Value\":\" \"}"
    },
+   "DependsOn": [
+    "Binary266F49CD"
+   ],
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete"
   }

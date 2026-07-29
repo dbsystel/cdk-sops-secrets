@@ -2,6 +2,11 @@ import { IKey } from 'aws-cdk-lib/aws-kms';
 import { ParameterTier, StringParameter } from 'aws-cdk-lib/aws-ssm';
 import { ResourceEnvironment, Stack } from 'aws-cdk-lib/core';
 import { Construct } from 'constructs';
+import {
+  addSyncDependency,
+  addSyncTrigger,
+  parameterGroupSyncTrigger,
+} from './parameterSyncTrigger';
 import { SopsCommonParameterProps } from './SopsStringParameter';
 import { ResourceType, SopsSync, SopsSyncOptions } from './SopsSync';
 import {
@@ -44,6 +49,7 @@ export class MultiStringParameter extends Construct {
     this.keyPrefix = props.keyPrefix ?? '/';
     this.keySeparator = props.keySeparator ?? '/';
 
+    const parameters: StringParameter[] = [];
     const keys = this.parseFile(props.sopsFilePath!, this.keySeparator)
       .filter((key) => !key.startsWith('sops'))
       .map((value) => {
@@ -75,12 +81,14 @@ export class MultiStringParameter extends Construct {
       });
 
     keys.forEach((key) => {
-      new StringParameter(this, 'Resource' + key, {
-        parameterName: key,
-        description: props.description,
-        tier: ParameterTier.STANDARD,
-        stringValue: ' ',
-      });
+      parameters.push(
+        new StringParameter(this, 'Resource' + key, {
+          parameterName: key,
+          description: props.description,
+          tier: ParameterTier.STANDARD,
+          stringValue: ' ',
+        }),
+      );
     });
 
     this.sync = new SopsSync(this, 'SopsSync', {
@@ -91,6 +99,9 @@ export class MultiStringParameter extends Construct {
       target: this.keyPrefix,
       ...(props as SopsSyncOptions),
     });
+
+    parameters.forEach((parameter) => addSyncDependency(this.sync, parameter));
+    addSyncTrigger(this.sync, parameterGroupSyncTrigger(parameters));
   }
 
   private parseFile(sopsFilePath: string, keySeparator: string): string[] {
