@@ -4,9 +4,9 @@ CDK_DISABLE_CLI_TELEMETRY = "true"
 
 [tools]
 golang = "1.26.5"
-nodejs = "24.18.0"
+nodejs = "24.18.1"
 npm = "11.18.0"
-grype = "0.116.0"
+grype = "0.116.1"
 python = "3.14.6"
 dotnet = "6"
 # aqua repo not working on ubuntu right now
