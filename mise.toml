@@ -7,7 +7,7 @@ golang = "1.26.5"
 nodejs = "24.19.0"
 npm = "11.19.0"
 grype = "0.116.1"
-python = "3.14.6"
+python = "3.14.7"
 dotnet = "6"
 # aqua repo not working on ubuntu right now
 "asdf:maven" = "3.9.11"
