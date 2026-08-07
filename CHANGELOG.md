@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.8.3](https://github.com/dbsystel/cdk-sops-secrets/compare/v2.8.2...v2.8.3) (2026-08-07)
+
+
+### Bug Fixes
+
+* **deps:** update module github.com/aws/aws-sdk-go-v2/service/ssm to v1.73.4 ([#1410](https://github.com/dbsystel/cdk-sops-secrets/issues/1410)) ([7583faf](https://github.com/dbsystel/cdk-sops-secrets/commit/7583fafab03c7846f660a937c2a29ce3bb0c7417))
+
+
+### Miscellaneous Chores
+
+* **deps:** update all minor and patch ([#1407](https://github.com/dbsystel/cdk-sops-secrets/issues/1407)) ([fee3908](https://github.com/dbsystel/cdk-sops-secrets/commit/fee3908417729f0cb9a23a087ec0c2a2f7c25074))
+* **deps:** update github/codeql-action digest to 5595cca ([#1409](https://github.com/dbsystel/cdk-sops-secrets/issues/1409)) ([913d6a3](https://github.com/dbsystel/cdk-sops-secrets/commit/913d6a372d3d97d69de173c133c9ade7436e3206))
+
 ## [2.8.2](https://github.com/dbsystel/cdk-sops-secrets/compare/v2.8.1...v2.8.2) (2026-07-31)
 
 
