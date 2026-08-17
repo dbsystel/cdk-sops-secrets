@@ -3,7 +3,7 @@
 CDK_DISABLE_CLI_TELEMETRY = "true"
 
 [tools]
-golang = "1.26.5"
+golang = "1.26.6"
 nodejs = "24.19.0"
 npm = "11.19.0"
 grype = "0.117.0"
