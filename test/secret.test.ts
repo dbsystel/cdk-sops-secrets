@@ -1542,3 +1542,51 @@ test('Expiration enabled - raw binary output is rejected', () => {
     'Expiration scheduling does not support rawOutput. Remove rawOutput to use expirationNotification.',
   );
 });
+
+test('grantRead adds kms:Decrypt to grantee for an imported encryptionKey (issue #1398)', () => {
+  const app = new App();
+  const stack = new Stack(app, 'SecretIntegration', {
+    env: { account: '111122223333', region: 'us-west-2' },
+  });
+
+  const key = Key.fromKeyArn(
+    stack,
+    'EncryptionKey',
+    'arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab',
+  );
+
+  const secret = new SopsSecret(stack, 'SopsSecret', {
+    sopsFilePath: 'test-secrets/json/sopsfile.enc-age.json',
+    encryptionKey: key,
+    sopsKmsKey: [key],
+  });
+
+  const role = new Role(stack, 'TestRole', {
+    roleName: 'GrantReadImportedKeyRole',
+    assumedBy: new ServicePrincipal('ecs-tasks.amazonaws.com'),
+  });
+
+  secret.grantRead(role);
+
+  // The grantee's identity policy must carry kms:Decrypt on the imported key,
+  // restricted to access via SecretsManager. Prior to the fix this statement
+  // was silently dropped for imported keys.
+  Template.fromStack(stack).hasResourceProperties('AWS::IAM::Policy', {
+    PolicyDocument: Match.objectLike({
+      Statement: Match.arrayWith([
+        {
+          Action: 'kms:Decrypt',
+          Effect: 'Allow',
+          Resource:
+            'arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab',
+          Condition: {
+            StringEquals: {
+              'kms:ViaService': 'secretsmanager.us-west-2.amazonaws.com',
+            },
+          },
+        },
+      ]),
+    }),
+    Roles: [{ Ref: 'TestRole6C9272DF' }],
+  });
+});

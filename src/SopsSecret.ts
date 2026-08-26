@@ -7,7 +7,7 @@ import {
   Role,
   ServicePrincipal,
 } from 'aws-cdk-lib/aws-iam';
-import { IKey, ViaServicePrincipal } from 'aws-cdk-lib/aws-kms';
+import { IKey } from 'aws-cdk-lib/aws-kms';
 import { CfnSchedule, CfnScheduleGroup } from 'aws-cdk-lib/aws-scheduler';
 import {
   ISecret,
@@ -525,13 +525,22 @@ export class SopsSecret extends Construct implements ISecret {
 
   public grantRead(grantee: IGrantable, versionStages?: string[]): Grant {
     if (this.encryptionKey) {
+      // Grant kms:Decrypt directly to the grantee's identity policy, restricted
+      // to access via SecretsManager. Granting to a ViaServicePrincipal wrapper
+      // instead silently drops the statement for imported keys, because the
+      // wrapper cannot carry an identity policy and an imported key has no
+      // modifiable key policy.
       // @see https://docs.aws.amazon.com/kms/latest/developerguide/services-secrets-manager.html
-      this.encryptionKey.grantDecrypt(
-        new ViaServicePrincipal(
-          `secretsmanager.${Stack.of(this).region}.amazonaws.com`,
-          grantee.grantPrincipal,
-        ),
-      );
+      Grant.addToPrincipal({
+        grantee,
+        actions: ['kms:Decrypt'],
+        resourceArns: [this.encryptionKey.keyArn],
+        conditions: {
+          StringEquals: {
+            'kms:ViaService': `secretsmanager.${Stack.of(this).region}.amazonaws.com`,
+          },
+        },
+      });
     }
     return this.secret.grantRead(grantee, versionStages);
   }
