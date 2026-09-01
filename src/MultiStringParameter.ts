@@ -44,6 +44,7 @@ export class MultiStringParameter extends Construct {
     this.keyPrefix = props.keyPrefix ?? '/';
     this.keySeparator = props.keySeparator ?? '/';
 
+    const parameters: StringParameter[] = [];
     const keys = this.parseFile(props.sopsFilePath!, this.keySeparator)
       .filter((key) => !key.startsWith('sops'))
       .map((value) => {
@@ -75,12 +76,14 @@ export class MultiStringParameter extends Construct {
       });
 
     keys.forEach((key) => {
-      new StringParameter(this, 'Resource' + key, {
-        parameterName: key,
-        description: props.description,
-        tier: ParameterTier.STANDARD,
-        stringValue: ' ',
-      });
+      parameters.push(
+        new StringParameter(this, 'Resource' + key, {
+          parameterName: key,
+          description: props.description,
+          tier: ParameterTier.STANDARD,
+          stringValue: ' ',
+        }),
+      );
     });
 
     this.sync = new SopsSync(this, 'SopsSync', {
@@ -89,8 +92,14 @@ export class MultiStringParameter extends Construct {
       flattenSeparator: this.keySeparator,
       parameterNames: keys,
       target: this.keyPrefix,
+      syncTrigger: this.stack.toJsonString({
+        description: props.description,
+        tier: ParameterTier.STANDARD,
+      }),
       ...(props as SopsSyncOptions),
     });
+
+    parameters.forEach((parameter) => this.sync.node.addDependency(parameter));
   }
 
   private parseFile(sopsFilePath: string, keySeparator: string): string[] {

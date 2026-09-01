@@ -38,7 +38,10 @@
      ],
      "Version": "2012-10-17"
     }
-   }
+   },
+   "DependsOn": [
+    "Json7D959341"
+   ]
   },
   "JsonSopsSync13335C85": {
    "Type": "Custom::SopsSync",
@@ -56,10 +59,14 @@
     "Format": "json",
     "EncryptionKey": "58b75958-883a-440c-842c-85af5d33a5bb",
     "ResourceType": "PARAMETER",
+    "SyncTrigger": "{\"parameterName\":\"/Json\"}",
     "Target": {
      "Ref": "Json7D959341"
     }
    },
+   "DependsOn": [
+    "Json7D959341"
+   ],
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete"
   },
@@ -200,7 +207,10 @@
      ],
      "Version": "2012-10-17"
     }
-   }
+   },
+   "DependsOn": [
+    "Yaml8A8E441C"
+   ]
   },
   "YamlSopsSync65050259": {
    "Type": "Custom::SopsSync",
@@ -218,10 +228,14 @@
     "Format": "yaml",
     "EncryptionKey": "58b75958-883a-440c-842c-85af5d33a5bb",
     "ResourceType": "PARAMETER",
+    "SyncTrigger": "{\"parameterName\":\"/Yaml\"}",
     "Target": {
      "Ref": "Yaml8A8E441C"
     }
    },
+   "DependsOn": [
+    "Yaml8A8E441C"
+   ],
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete"
   },
@@ -263,7 +277,10 @@
      ],
      "Version": "2012-10-17"
     }
-   }
+   },
+   "DependsOn": [
+    "DotEnv36F67242"
+   ]
   },
   "DotEnvSopsSyncBB91B728": {
    "Type": "Custom::SopsSync",
@@ -281,10 +298,14 @@
     "Format": "dotenv",
     "EncryptionKey": "58b75958-883a-440c-842c-85af5d33a5bb",
     "ResourceType": "PARAMETER",
+    "SyncTrigger": "{\"parameterName\":\"/DotEnv\"}",
     "Target": {
      "Ref": "DotEnv36F67242"
     }
    },
+   "DependsOn": [
+    "DotEnv36F67242"
+   ],
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete"
   },
@@ -326,7 +347,10 @@
      ],
      "Version": "2012-10-17"
     }
-   }
+   },
+   "DependsOn": [
+    "Binary266F49CD"
+   ]
   },
   "BinarySopsSyncC6FD2267": {
    "Type": "Custom::SopsSync",
@@ -344,10 +368,14 @@
     "Format": "binary",
     "EncryptionKey": "58b75958-883a-440c-842c-85af5d33a5bb",
     "ResourceType": "PARAMETER",
+    "SyncTrigger": "{\"parameterName\":\"/Binary\"}",
     "Target": {
      "Ref": "Binary266F49CD"
     }
    },
+   "DependsOn": [
+    "Binary266F49CD"
+   ],
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete"
   }

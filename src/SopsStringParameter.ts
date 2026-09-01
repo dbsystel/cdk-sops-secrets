@@ -91,8 +91,14 @@ export class SopsStringParameter extends Construct implements IStringParameter {
       target: this.parameter.parameterName,
       resourceType: ResourceType.PARAMETER,
       parameterNames: [props.parameterName ?? this.parameter.parameterName],
+      syncTrigger: this.stack.toJsonString({
+        description: props.description,
+        parameterName: props.parameterName,
+        tier: props.tier,
+      }),
       ...(props as SopsSyncOptions),
     });
+    this.sync.node.addDependency(this.parameter);
   }
   grantRead(grantee: IGrantable): Grant {
     if (this.encryptionKey) {

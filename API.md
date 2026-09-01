@@ -3275,6 +3275,7 @@ const sopsSyncProps: SopsSyncProps = { ... }
 | <code><a href="#cdk-sops-secrets.SopsSyncProps.property.flattenSeparator">flattenSeparator</a></code> | <code>string</code> | If the structure should be flattened use the provided separator between keys. |
 | <code><a href="#cdk-sops-secrets.SopsSyncProps.property.parameterNames">parameterNames</a></code> | <code>string[]</code> | *No description.* |
 | <code><a href="#cdk-sops-secrets.SopsSyncProps.property.secret">secret</a></code> | <code>aws-cdk-lib.aws_secretsmanager.ISecret</code> | *No description.* |
+| <code><a href="#cdk-sops-secrets.SopsSyncProps.property.syncTrigger">syncTrigger</a></code> | <code>string</code> | An inert value that triggers an update when related resource properties change. |
 
 ---
 
@@ -3480,6 +3481,19 @@ public readonly secret: ISecret;
 ```
 
 - *Type:* aws-cdk-lib.aws_secretsmanager.ISecret
+
+---
+
+##### `syncTrigger`<sup>Optional</sup> <a name="syncTrigger" id="cdk-sops-secrets.SopsSyncProps.property.syncTrigger"></a>
+
+```typescript
+public readonly syncTrigger: string;
+```
+
+- *Type:* string
+- *Default:* undefined
+
+An inert value that triggers an update when related resource properties change.
 
 ---
 
@@ -3721,4 +3735,3 @@ Pass the secret data inline (base64 encoded and compressed).
 Upload the secret data as asset.
 
 ---
-

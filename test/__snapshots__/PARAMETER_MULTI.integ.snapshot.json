@@ -441,7 +441,26 @@
      ],
      "Version": "2012-10-17"
     }
-   }
+   },
+   "DependsOn": [
+    "JsonResourceJsonapiKeyEB6B5C10",
+    "JsonResourceJsondatabasehost37888D7D",
+    "JsonResourceJsondatabasepassword12EBC48E",
+    "JsonResourceJsondatabaseuserD88F8D25",
+    "JsonResourceJsonsomeOtherKey8C556C1F",
+    "JsonResourceJsonspecificbooleanDCCAF95E",
+    "JsonResourceJsonspecificHTLMEncodingTest3773A92F2",
+    "JsonResourceJsonspecificHTMLEncodingTest101B8C7B8",
+    "JsonResourceJsonspecificHTMLEncodingTest2479B055F",
+    "JsonResourceJsonspecificnullEFE6F24D",
+    "JsonResourceJsonspecificnumber120FA2919",
+    "JsonResourceJsonspecificnumber2B2EBD3ED",
+    "JsonResourceJsonspecificSpecialCharacters340895B2",
+    "JsonResourceJsontokens0service92C0D936",
+    "JsonResourceJsontokens0token105295EA",
+    "JsonResourceJsontokens1service387D7891",
+    "JsonResourceJsontokens1token4D4522D2"
+   ]
   },
   "JsonSopsSync13335C85": {
    "Type": "Custom::SopsSync",
@@ -460,8 +479,28 @@
     "Format": "json",
     "EncryptionKey": "58b75958-883a-440c-842c-85af5d33a5bb",
     "ResourceType": "PARAMETER_MULTI",
+    "SyncTrigger": "{\"tier\":\"Standard\"}",
     "Target": "/Json/"
    },
+   "DependsOn": [
+    "JsonResourceJsonapiKeyEB6B5C10",
+    "JsonResourceJsondatabasehost37888D7D",
+    "JsonResourceJsondatabasepassword12EBC48E",
+    "JsonResourceJsondatabaseuserD88F8D25",
+    "JsonResourceJsonsomeOtherKey8C556C1F",
+    "JsonResourceJsonspecificbooleanDCCAF95E",
+    "JsonResourceJsonspecificHTLMEncodingTest3773A92F2",
+    "JsonResourceJsonspecificHTMLEncodingTest101B8C7B8",
+    "JsonResourceJsonspecificHTMLEncodingTest2479B055F",
+    "JsonResourceJsonspecificnullEFE6F24D",
+    "JsonResourceJsonspecificnumber120FA2919",
+    "JsonResourceJsonspecificnumber2B2EBD3ED",
+    "JsonResourceJsonspecificSpecialCharacters340895B2",
+    "JsonResourceJsontokens0service92C0D936",
+    "JsonResourceJsontokens0token105295EA",
+    "JsonResourceJsontokens1service387D7891",
+    "JsonResourceJsontokens1token4D4522D2"
+   ],
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete"
   },
@@ -1024,7 +1063,27 @@
      ],
      "Version": "2012-10-17"
     }
-   }
+   },
+   "DependsOn": [
+    "YamlResourceYamlapiKeyexpiration35C24DC0",
+    "YamlResourceYamlapiKey6387C0EA",
+    "YamlResourceYamldatabasehostB5A0FE91",
+    "YamlResourceYamldatabasepassword99035603",
+    "YamlResourceYamldatabaseuser0BD59C5D",
+    "YamlResourceYamlsomeOtherKey98D03965",
+    "YamlResourceYamlspecificboolean377BB393",
+    "YamlResourceYamlspecificHTLMEncodingTest32407BA78",
+    "YamlResourceYamlspecificHTMLEncodingTest10D2233FA",
+    "YamlResourceYamlspecificHTMLEncodingTest2761B8FA7",
+    "YamlResourceYamlspecificnull5A2012DC",
+    "YamlResourceYamlspecificnumber1E294648B",
+    "YamlResourceYamlspecificnumber28F676023",
+    "YamlResourceYamlspecificSpecialCharacters5B206BEA",
+    "YamlResourceYamltokens0service8AE519C3",
+    "YamlResourceYamltokens0token8810E18D",
+    "YamlResourceYamltokens1service870E3CC4",
+    "YamlResourceYamltokens1tokenAC2DFE7E"
+   ]
   },
   "YamlSopsSync65050259": {
    "Type": "Custom::SopsSync",
@@ -1043,8 +1102,29 @@
     "Format": "yaml",
     "EncryptionKey": "58b75958-883a-440c-842c-85af5d33a5bb",
     "ResourceType": "PARAMETER_MULTI",
+    "SyncTrigger": "{\"tier\":\"Standard\"}",
     "Target": "/Yaml/"
    },
+   "DependsOn": [
+    "YamlResourceYamlapiKeyexpiration35C24DC0",
+    "YamlResourceYamlapiKey6387C0EA",
+    "YamlResourceYamldatabasehostB5A0FE91",
+    "YamlResourceYamldatabasepassword99035603",
+    "YamlResourceYamldatabaseuser0BD59C5D",
+    "YamlResourceYamlsomeOtherKey98D03965",
+    "YamlResourceYamlspecificboolean377BB393",
+    "YamlResourceYamlspecificHTLMEncodingTest32407BA78",
+    "YamlResourceYamlspecificHTMLEncodingTest10D2233FA",
+    "YamlResourceYamlspecificHTMLEncodingTest2761B8FA7",
+    "YamlResourceYamlspecificnull5A2012DC",
+    "YamlResourceYamlspecificnumber1E294648B",
+    "YamlResourceYamlspecificnumber28F676023",
+    "YamlResourceYamlspecificSpecialCharacters5B206BEA",
+    "YamlResourceYamltokens0service8AE519C3",
+    "YamlResourceYamltokens0token8810E18D",
+    "YamlResourceYamltokens1service870E3CC4",
+    "YamlResourceYamltokens1tokenAC2DFE7E"
+   ],
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete"
   }
