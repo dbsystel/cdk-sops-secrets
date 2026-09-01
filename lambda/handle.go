@@ -29,12 +29,12 @@ func handleSecret(props BaseProps) (physicalResourceID string, data map[string]i
 	switch props.properties.ResourceType {
 	case event.SECRET:
 		// The secretsmanager does not support nested json objects, so we have to flatten the data
-		seperator := "."
+		separator := "."
 		if props.properties.FlattenSeparator != nil {
-			seperator = *props.properties.FlattenSeparator
+			separator = *props.properties.FlattenSeparator
 		}
-		logger.Info("Flattening secret data", "seperator", seperator, "ResourceType", props.properties.ResourceType)
-		if err := props.secretDecryptedData.Flatten(seperator); err != nil {
+		logger.Info("Flattening secret data", "separator", separator, "ResourceType", props.properties.ResourceType)
+		if err := props.secretDecryptedData.Flatten(separator); err != nil {
 			return props.properties.GeneratePhysicalResourceId(), nil, err
 		}
 
@@ -81,12 +81,12 @@ func handleSecret(props BaseProps) (physicalResourceID string, data map[string]i
 
 func handleParameterMulti(props BaseProps) (physicalResourceID string, data map[string]interface{}, err error) {
 	logger := slog.With("Package", "main", "Function", "handleParameterMulti")
-	seperator := "/"
+	separator := "/"
 	if props.properties.FlattenSeparator != nil {
-		seperator = *props.properties.FlattenSeparator
+		separator = *props.properties.FlattenSeparator
 	}
-	logger.Info("Flattening secret data", "seperator", seperator)
-	if err := props.secretDecryptedData.Flatten(seperator); err != nil {
+	logger.Info("Flattening secret data", "separator", separator)
+	if err := props.secretDecryptedData.Flatten(separator); err != nil {
 		return props.properties.GeneratePhysicalResourceId(), nil, err
 	}
 	logger.Info("Stringify values in data")
@@ -104,10 +104,10 @@ func handleParameterMulti(props BaseProps) (physicalResourceID string, data map[
 	logger.Info("Writing secret data to parameter store")
 	for key, value := range outData {
 		// As we flatten array to [number] path notations, we have to fix this for parameter store
-		fixedKey := strings.ReplaceAll(key, "[", seperator)
-		fixedKey = strings.ReplaceAll(fixedKey, "]", seperator)
-		fixedKey = strings.TrimSuffix(fixedKey, seperator)
-		fixedKey = strings.ReplaceAll(fixedKey, seperator+seperator, seperator)
+		fixedKey := strings.ReplaceAll(key, "[", separator)
+		fixedKey = strings.ReplaceAll(fixedKey, "]", separator)
+		fixedKey = strings.TrimSuffix(fixedKey, separator)
+		fixedKey = strings.ReplaceAll(fixedKey, separator+separator, separator)
 		// The secret name can contain ASCII letters, numbers, and the following characters: /_+=.@-
 		allowedChars := "/_+=.@-"
 		for i, char := range fixedKey {

@@ -32,7 +32,7 @@ export enum UploadType {
    */
   INLINE = 'INLINE',
   /**
-   * Uplaod the secret data as asset
+   * Upload the secret data as asset
    */
   ASSET = 'ASSET',
 }
@@ -413,7 +413,7 @@ export class SopsSync extends Construct {
       }
 
       if (
-        // Is allways true, but to satisfy TS we check explicitly
+        // Is always true, but to satisfy TS we check explicitly
         provider.role !== undefined &&
         // Check if user has disabled automatic generation
         props.autoGenerateIamPermissions !== false
@@ -646,7 +646,7 @@ export namespace Permissions {
       } catch (error) {
         Annotations.of(context).addWarningV2(
           'no-asset-kms-key',
-          `An error occured while retreving the KMS-Key for the Asset S3-Bucket from CDK Bootstrap. Set encryption key manually by using props.assetEncryptionKey. ${error}`,
+          `An error occurred while retrieving the KMS-Key for the Asset S3-Bucket from CDK Bootstrap. Set encryption key manually by using props.assetEncryptionKey. ${error}`,
         );
       }
     }

@@ -16,7 +16,7 @@ import {
 
 export interface MultiStringParameterProps extends SopsCommonParameterProps {
   /**
-   * The seperator used to seperate keys
+   * The separator used to separate keys
    *
    * @default - '/'
    */

@@ -104,7 +104,7 @@ func HandleRequestWithClients(clients client.AwsClient, e cfn.Event) (physicalRe
 		secretDecryptedData: secretDecryptedData,
 	}
 
-	// Fill the secret values in the ressource depending on the ressource type
+	// Fill the secret values in the resource depending on the resource type
 	switch props.ResourceType {
 	case event.SECRET, event.SECRET_RAW, event.SECRET_BINARY:
 		return handleSecret(baseProps)
