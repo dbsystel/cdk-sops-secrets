@@ -145,6 +145,13 @@ export interface SopsSyncProps extends SopsSyncOptions {
    */
   readonly resourceType: ResourceType;
 
+  /**
+   * An inert value that triggers an update when related resource properties change.
+   *
+   * @default - undefined
+   */
+  readonly syncTrigger?: string;
+
   readonly secret?: ISecret;
   readonly parameterNames?: string[];
 }
@@ -473,6 +480,7 @@ export class SopsSync extends Construct {
         Format: sopsFileFormat,
         EncryptionKey: props.encryptionKey?.keyId,
         ResourceType: props.resourceType,
+        SyncTrigger: props.syncTrigger,
         Target: props.target,
       } satisfies SopsSyncResourceProperties,
     });

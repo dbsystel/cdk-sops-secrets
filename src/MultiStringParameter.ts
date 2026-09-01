@@ -2,11 +2,6 @@ import { IKey } from 'aws-cdk-lib/aws-kms';
 import { ParameterTier, StringParameter } from 'aws-cdk-lib/aws-ssm';
 import { ResourceEnvironment, Stack } from 'aws-cdk-lib/core';
 import { Construct } from 'constructs';
-import {
-  addSyncDependency,
-  addSyncTrigger,
-  parameterGroupSyncTrigger,
-} from './parameterSyncTrigger';
 import { SopsCommonParameterProps } from './SopsStringParameter';
 import { ResourceType, SopsSync, SopsSyncOptions } from './SopsSync';
 import {
@@ -97,11 +92,14 @@ export class MultiStringParameter extends Construct {
       flattenSeparator: this.keySeparator,
       parameterNames: keys,
       target: this.keyPrefix,
+      syncTrigger: this.stack.toJsonString({
+        description: props.description,
+        tier: ParameterTier.STANDARD,
+      }),
       ...(props as SopsSyncOptions),
     });
 
-    parameters.forEach((parameter) => addSyncDependency(this.sync, parameter));
-    addSyncTrigger(this.sync, parameterGroupSyncTrigger(parameters));
+    parameters.forEach((parameter) => this.sync.node.addDependency(parameter));
   }
 
   private parseFile(sopsFilePath: string, keySeparator: string): string[] {
