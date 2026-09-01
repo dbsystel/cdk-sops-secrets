@@ -354,7 +354,7 @@ export class SopsSecret extends Construct implements ISecret {
     super(scope, id);
     this.secret = new Secret(this, 'Resource', props satisfies SecretProps);
 
-    // Fullfill secret Interface
+    // Fulfill secret Interface
     this.encryptionKey = this.secret.encryptionKey;
     this.secretArn = this.secret.secretArn;
     this.secretName = this.secret.secretName;
