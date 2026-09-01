@@ -2197,7 +2197,7 @@ const multiStringParameterProps: MultiStringParameterProps = { ... }
 | <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.description">description</a></code> | <code>string</code> | Information about the parameter that you want to add to the system. |
 | <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.tier">tier</a></code> | <code>aws-cdk-lib.aws_ssm.ParameterTier</code> | The tier of the string parameter. |
 | <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.keyPrefix">keyPrefix</a></code> | <code>string</code> | The prefix used for all parameters. |
-| <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.keySeparator">keySeparator</a></code> | <code>string</code> | The seperator used to seperate keys. |
+| <code><a href="#cdk-sops-secrets.MultiStringParameterProps.property.keySeparator">keySeparator</a></code> | <code>string</code> | The separator used to separate keys. |
 
 ---
 
@@ -2394,7 +2394,7 @@ public readonly keySeparator: string;
 - *Type:* string
 - *Default:* '/'
 
-The seperator used to seperate keys.
+The separator used to separate keys.
 
 ---
 
@@ -3705,7 +3705,7 @@ Parse the secret as a binary.
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#cdk-sops-secrets.UploadType.INLINE">INLINE</a></code> | Pass the secret data inline (base64 encoded and compressed). |
-| <code><a href="#cdk-sops-secrets.UploadType.ASSET">ASSET</a></code> | Uplaod the secret data as asset. |
+| <code><a href="#cdk-sops-secrets.UploadType.ASSET">ASSET</a></code> | Upload the secret data as asset. |
 
 ---
 
@@ -3718,7 +3718,7 @@ Pass the secret data inline (base64 encoded and compressed).
 
 ##### `ASSET` <a name="ASSET" id="cdk-sops-secrets.UploadType.ASSET"></a>
 
-Uplaod the secret data as asset.
+Upload the secret data as asset.
 
 ---
 
