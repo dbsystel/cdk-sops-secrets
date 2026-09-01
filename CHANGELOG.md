@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.8.4](https://github.com/dbsystel/cdk-sops-secrets/compare/v2.8.3...v2.8.4) (2026-09-01)
+
+
+### Bug Fixes
+
+* **deps:** update all minor and patch ([#1422](https://github.com/dbsystel/cdk-sops-secrets/issues/1422)) ([caed4f5](https://github.com/dbsystel/cdk-sops-secrets/commit/caed4f5cde9c8922fc10fc7b09602b3a14238da4))
+* **deps:** update all minor and patch ([#1423](https://github.com/dbsystel/cdk-sops-secrets/issues/1423)) ([039e3ef](https://github.com/dbsystel/cdk-sops-secrets/commit/039e3ef17966e76a71fa791e766f34ddb0261a6b))
+* **deps:** update module github.com/aws/smithy-go to v1.27.10 ([#1420](https://github.com/dbsystel/cdk-sops-secrets/issues/1420)) ([a9b72af](https://github.com/dbsystel/cdk-sops-secrets/commit/a9b72af186ac75b64286446234409a4940b6b2d6))
+* **deps:** update module github.com/stretchr/testify to v1.12.0 ([#1416](https://github.com/dbsystel/cdk-sops-secrets/issues/1416)) ([2d85f95](https://github.com/dbsystel/cdk-sops-secrets/commit/2d85f956ec71020b1cdddea45d68235380a5d779))
+* resync sops parameters on prop-only updates ([#1402](https://github.com/dbsystel/cdk-sops-secrets/issues/1402)) ([6d3e8b3](https://github.com/dbsystel/cdk-sops-secrets/commit/6d3e8b3fb3df86df9abd43e01f85a2e1e4792922))
+* **SopsSecret:** grant kms:Decrypt on grantRead for imported keys ([#1421](https://github.com/dbsystel/cdk-sops-secrets/issues/1421)) ([839964b](https://github.com/dbsystel/cdk-sops-secrets/commit/839964b2000764b21180efa0530bbb5f1f38fc4a))
+
+
+### Miscellaneous Chores
+
+* **deps:** update all minor and patch ([#1418](https://github.com/dbsystel/cdk-sops-secrets/issues/1418)) ([a3b4e09](https://github.com/dbsystel/cdk-sops-secrets/commit/a3b4e09bed36889520ea41edeac5ca923879a9df))
+* **deps:** update all minor and patch ([#1419](https://github.com/dbsystel/cdk-sops-secrets/issues/1419)) ([136adae](https://github.com/dbsystel/cdk-sops-secrets/commit/136adae549b042eb1d97c3a7443b0d4722031625))
+* fix recurring typos in comments, log keys, and API docs ([#1427](https://github.com/dbsystel/cdk-sops-secrets/issues/1427)) ([effceed](https://github.com/dbsystel/cdk-sops-secrets/commit/effceed4957aa384c5292002bc864bc4b4bcd7b1))
+
 ## [2.8.3](https://github.com/dbsystel/cdk-sops-secrets/compare/v2.8.2...v2.8.3) (2026-08-17)
 
 
