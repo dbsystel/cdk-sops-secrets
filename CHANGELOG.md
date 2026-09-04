@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.8.5](https://github.com/dbsystel/cdk-sops-secrets/compare/v2.8.4...v2.8.5) (2026-09-04)
+
+
+### Bug Fixes
+
+* **deps:** update module github.com/aws/aws-sdk-go-v2/service/s3 to v1.110.0 ([#1431](https://github.com/dbsystel/cdk-sops-secrets/issues/1431)) ([b227212](https://github.com/dbsystel/cdk-sops-secrets/commit/b227212f55f61ea03321b1c561edfeb388b02be7))
+
+
+### Miscellaneous Chores
+
+* **deps:** update all minor and patch to v8.69.0 ([#1429](https://github.com/dbsystel/cdk-sops-secrets/issues/1429)) ([bb37b7d](https://github.com/dbsystel/cdk-sops-secrets/commit/bb37b7dacdc29c1fba76672895745b8158a37956))
+* **deps:** update dependency aws-cdk-lib to v2.268.0 ([#1432](https://github.com/dbsystel/cdk-sops-secrets/issues/1432)) ([0609cc1](https://github.com/dbsystel/cdk-sops-secrets/commit/0609cc11fcfaa3ff1bb7f9a26eddab901ee94e1e))
+
 ## [2.8.4](https://github.com/dbsystel/cdk-sops-secrets/compare/v2.8.3...v2.8.4) (2026-09-01)
 
 
