@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.8.6](https://github.com/dbsystel/cdk-sops-secrets/compare/v2.8.5...v2.8.6) (2026-09-14)
+
+
+### Miscellaneous Chores
+
+* **deps:** update dependency aws-cdk-lib to v2.269.0 ([#1435](https://github.com/dbsystel/cdk-sops-secrets/issues/1435)) ([feec1a2](https://github.com/dbsystel/cdk-sops-secrets/commit/feec1a2856588c69469fe332d78f2ec116fa87db))
+
 ## [2.8.5](https://github.com/dbsystel/cdk-sops-secrets/compare/v2.8.4...v2.8.5) (2026-09-11)
 
 
