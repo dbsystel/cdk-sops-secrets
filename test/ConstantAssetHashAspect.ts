@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2026 DB Systel GmbH
+//
+// SPDX-License-Identifier: Apache-2.0
+
 import * as cdk from 'aws-cdk-lib';
 import { IConstruct } from 'constructs';
 

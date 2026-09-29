@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2026 DB Systel GmbH
+//
+// SPDX-License-Identifier: Apache-2.0
+
 import * as cdk from 'aws-cdk-lib';
 import { EmailSubscription } from 'aws-cdk-lib/aws-sns-subscriptions';
 import { ConstantAssetHashAspect } from './ConstantAssetHashAspect';

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2026 DB Systel GmbH
+//
+// SPDX-License-Identifier: Apache-2.0
+
 import { IKey } from 'aws-cdk-lib/aws-kms';
 import { ParameterTier, StringParameter } from 'aws-cdk-lib/aws-ssm';
 import { ResourceEnvironment, Stack } from 'aws-cdk-lib/core';
