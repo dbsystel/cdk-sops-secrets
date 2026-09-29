@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.8.6](https://github.com/dbsystel/cdk-sops-secrets/compare/v2.8.5...v2.8.6) (2026-09-16)
+
+
+### Bug Fixes
+
+* **deps:** update module github.com/kaptinlin/jsonschema to v0.9.10 ([#1437](https://github.com/dbsystel/cdk-sops-secrets/issues/1437)) ([39acc98](https://github.com/dbsystel/cdk-sops-secrets/commit/39acc989f549c84f696f9893ab6697ac6d9ca7f6))
+* use non-deprecated addResourceDependency in SopsSecret ([#1439](https://github.com/dbsystel/cdk-sops-secrets/issues/1439)) ([bb38445](https://github.com/dbsystel/cdk-sops-secrets/commit/bb38445942a0df1a73118956adaa6ea4fbb56078))
+
+
+### Miscellaneous Chores
+
+* **deps:** update dependency aws-cdk-lib to v2.269.0 ([#1435](https://github.com/dbsystel/cdk-sops-secrets/issues/1435)) ([feec1a2](https://github.com/dbsystel/cdk-sops-secrets/commit/feec1a2856588c69469fe332d78f2ec116fa87db))
+
 ## [2.8.5](https://github.com/dbsystel/cdk-sops-secrets/compare/v2.8.4...v2.8.5) (2026-09-11)
 
 

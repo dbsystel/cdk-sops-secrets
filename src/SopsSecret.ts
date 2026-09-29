@@ -519,7 +519,7 @@ export class SopsSecret extends Construct implements ISecret {
           },
         },
       );
-      schedule.addDependency(scheduleGroup);
+      schedule.addResourceDependency(scheduleGroup);
     });
   }
 
