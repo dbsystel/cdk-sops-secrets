@@ -11,6 +11,7 @@ python = "3.14.7"
 dotnet = "6"
 # aqua repo not working on ubuntu right now
 "asdf:maven" = "3.9.11"
+"pipx:reuse" = { version = "6.2.0", extras = "charset-normalizer" }
 
 
 [tasks.install]
@@ -20,6 +21,14 @@ depends = ["lambda:deps", "cdk:deps"]
 [tasks.clean]
 description = "Clean build artifacts (including lambda assets)"
 run = "rm -rf lib dist .jsii tsconfig.json coverage test-reports assets"
+
+[tasks."reuse:lint"]
+description = "Check REUSE/SPDX license compliance"
+run = "reuse lint"
+
+[tasks.lint]
+description = "Run all linters/checks (eslint, prettier, reuse)"
+depends = ["cdk:eslint", "cdk:prettier:check", "reuse:lint"]
 
 [tasks."cdk:deps"]
 description = "Prepare CDK dependencies"
@@ -155,6 +164,7 @@ run = "npx prettier --check 'src/**/*.ts' 'test/**/*.ts'"
 [tasks.build]
 description = "Build (lambda, compile, test, lint, verify, package)"
 depends = [
+  "reuse:lint",
   "verify",
   "jsii-pacmak:all"
 ]

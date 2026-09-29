@@ -1,0 +1,45 @@
+version = 1
+
+# Bulk licensing information for files that cannot (or should not) carry an
+# inline SPDX header: generated code, documentation, configuration, lock files,
+# images, and test fixtures / snapshots. Hand-written source files under src/,
+# test/ and lambda/ carry their own SPDX headers instead.
+
+[[annotations]]
+path = [
+  # Documentation
+  "**/*.md",
+  # Configuration & data (package manifests, tsconfig, renovate, snapshots, ...)
+  "**/*.json",
+  "**/*.toml",
+  "**/*.yaml",
+  "**/*.yml",
+  "**/*.txt",
+  # JS configuration (eslint.config.js)
+  "**/*.js",
+  # Test snapshots
+  "**/*.snap",
+  # Encrypted / binary test fixtures
+  "**/*.binary",
+  "**/*.env",
+  # Images
+  "**/*.png",
+  "**/*.svg",
+  # Go module metadata
+  "lambda/go.mod",
+  "lambda/go.sum",
+  # Generated TypeScript (produced by json-schema-to-typescript)
+  "src/LambdaInterface.ts",
+  # Lock files
+  "mise.lock",
+  # Dotfiles without a recognisable comment syntax
+  ".gitattributes",
+  ".gitignore",
+  ".npmignore",
+  ".npmrc",
+  ".prettierignore",
+  ".github/CODEOWNERS",
+]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2026 DB Systel GmbH"
+SPDX-License-Identifier = "Apache-2.0"
