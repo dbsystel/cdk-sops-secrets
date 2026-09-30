@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.9.0](https://github.com/dbsystel/cdk-sops-secrets/compare/v2.8.6...v2.9.0) (2026-09-30)
+
+
+### Features
+
+* publish Go bindings to cdk-sops-secrets-go ([#1444](https://github.com/dbsystel/cdk-sops-secrets/issues/1444)) ([0c7a976](https://github.com/dbsystel/cdk-sops-secrets/commit/0c7a976594a9733bb53e1031739d634f52ca271f))
+
+
+### Bug Fixes
+
+* **deps:** update all minor and patch ([#1440](https://github.com/dbsystel/cdk-sops-secrets/issues/1440)) ([89ad5de](https://github.com/dbsystel/cdk-sops-secrets/commit/89ad5de38c6e7e48cfd555de484b6de35457d38e))
+
+
+### Miscellaneous Chores
+
+* add REUSE/SPDX license compliance ([#1443](https://github.com/dbsystel/cdk-sops-secrets/issues/1443)) ([3823d9c](https://github.com/dbsystel/cdk-sops-secrets/commit/3823d9c163da0329d5639bef2e20a5ff001a1742))
+
 ## [2.8.6](https://github.com/dbsystel/cdk-sops-secrets/compare/v2.8.5...v2.8.6) (2026-09-16)
 
 
