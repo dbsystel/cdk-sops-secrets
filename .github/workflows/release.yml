@@ -236,7 +236,11 @@ jobs:
 
       - name: Publish
         env:
-          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
+          # publib-golang embeds this value verbatim into the git remote URL
+          # (https://<token>@github.com/...). GitHub App installation tokens
+          # must be used as the password with the "x-access-token" username, so
+          # we pass "x-access-token:<token>" to produce a valid HTTPS auth URL.
+          GITHUB_TOKEN: "x-access-token:${{ steps.app-token.outputs.token }}"
           GIT_USER_NAME: github-actions[bot]
           GIT_USER_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
         run: npx -p publib@latest publib-golang
