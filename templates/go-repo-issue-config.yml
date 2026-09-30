@@ -1,0 +1,17 @@
+# This file is copied verbatim to .github/ISSUE_TEMPLATE/config.yml at the root
+# of the generated Go distribution repository (github.com/dbsystel/cdk-sops-secrets-go)
+# on every release by the `publib-golang` publish step. Edit it HERE, in the
+# source repository. Editing it in the -go repository has no effect: it is
+# overwritten on the next release.
+#
+# It disables blank issues and redirects users to the source repository.
+# NOTE: this only customizes the "New issue" chooser. To fully prevent issues,
+# disable the Issues feature in the -go repository settings.
+blank_issues_enabled: false
+contact_links:
+  - name: 🐛 Issues & bug reports
+    url: https://github.com/dbsystel/cdk-sops-secrets/issues
+    about: This repository is auto-generated. Please open issues in the source repository.
+  - name: 📦 Source code & contributing
+    url: https://github.com/dbsystel/cdk-sops-secrets
+    about: All source code, pull requests, and documentation live in the source repository.

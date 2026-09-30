@@ -197,9 +197,48 @@ sources = [".jsii", "lib/**/*"]
 outputs = ["dist/dotnet/**/*"]
 run = "npx jsii-pacmak -v --target dotnet"
 
+[tasks."jsii-pacmak:go"]
+description = "Package for Go"
+depends = ["jsii", "lambda:build"]
+sources = [".jsii", "lib/**/*"]
+outputs = ["dist/go/**/*"]
+run = "npx jsii-pacmak -v --target go"
+
+# Go is published by pushing a whole git repository (publib-golang), not by
+# uploading a package to a registry. So unlike the other targets, the Go
+# distribution needs repository-level files (README, LICENSE, governance docs).
+# publib-golang copies everything under dist/go into the -go repo root, so we
+# drop these files there. This is Go-specific and kept out of jsii-pacmak:go so
+# that task stays identical in shape to the other jsii-pacmak:* tasks.
+[tasks."go:scaffold"]
+description = "Add repository files (README/LICENSE/governance) to the Go distribution"
+depends = ["jsii-pacmak:go"]
+sources = ["LICENSE", "templates/go-repo-*.md", "templates/go-repo-issue-config.yml"]
+outputs = [
+  "dist/go/README.md",
+  "dist/go/LICENSE",
+  "dist/go/CONTRIBUTING.md",
+  "dist/go/MAINTAINERS.md",
+  "dist/go/.github/SECURITY.md",
+  "dist/go/.github/pull_request_template.md",
+  "dist/go/.github/ISSUE_TEMPLATE/config.yml",
+]
+run = """
+# LICENSE carries the full Apache-2.0 text (a link is not sufficient); the
+# governance docs link back to the canonical files in the source repository.
+mkdir -p dist/go/.github/ISSUE_TEMPLATE
+cp LICENSE dist/go/LICENSE
+cp templates/go-repo-README.md dist/go/README.md
+cp templates/go-repo-CONTRIBUTING.md dist/go/CONTRIBUTING.md
+cp templates/go-repo-MAINTAINERS.md dist/go/MAINTAINERS.md
+cp templates/go-repo-issue-config.yml dist/go/.github/ISSUE_TEMPLATE/config.yml
+cp templates/go-repo-SECURITY.md dist/go/.github/SECURITY.md
+cp templates/go-repo-pull_request_template.md dist/go/.github/pull_request_template.md
+"""
+
 [tasks."jsii-pacmak:all"]
 description = "Package for all targets (runs in parallel)"
-depends = ["jsii-pacmak:js", "jsii-pacmak:java", "jsii-pacmak:python", "jsii-pacmak:dotnet"]
+depends = ["jsii-pacmak:js", "jsii-pacmak:java", "jsii-pacmak:python", "jsii-pacmak:dotnet", "go:scaffold"]
 
 # Integration test snapshot tasks
 

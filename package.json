@@ -129,6 +129,10 @@
       "dotnet": {
         "namespace": "Db.De.Systel",
         "packageId": "Db.De.Systel.CdkSopsSecrets"
+      },
+      "go": {
+        "moduleName": "github.com/dbsystel/cdk-sops-secrets-go",
+        "packageName": "cdksopssecrets"
       }
     },
     "tsc": {
