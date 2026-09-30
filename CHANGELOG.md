@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.9.1](https://github.com/dbsystel/cdk-sops-secrets/compare/v2.9.0...v2.9.1) (2026-09-30)
+
+
+### Bug Fixes
+
+* authenticate Go publish with app token as x-access-token ([#1445](https://github.com/dbsystel/cdk-sops-secrets/issues/1445)) ([85cc071](https://github.com/dbsystel/cdk-sops-secrets/commit/85cc0710e1eaab1ca8b6ce34011d7416b400cc8d))
+
 ## [2.9.0](https://github.com/dbsystel/cdk-sops-secrets/compare/v2.8.6...v2.9.0) (2026-09-30)
 
 
