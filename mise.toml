@@ -3,11 +3,11 @@
 CDK_DISABLE_CLI_TELEMETRY = "true"
 
 [tools]
-golang = "1.27.1"
+golang = "1.27.2"
 nodejs = "24.21.0"
-npm = "11.20.0"
-grype = "0.119.0"
-python = "3.14.7"
+npm = "11.21.0"
+grype = "0.120.1"
+python = "3.15.0"
 dotnet = "6"
 # aqua repo not working on ubuntu right now
 "asdf:maven" = "3.9.11"
