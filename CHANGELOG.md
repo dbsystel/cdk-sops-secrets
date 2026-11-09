@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.9.2](https://github.com/dbsystel/cdk-sops-secrets/compare/v2.9.1...v2.9.2) (2026-11-09)
+
+
+### Bug Fixes
+
+* **deps:** update all minor and patch ([#1442](https://github.com/dbsystel/cdk-sops-secrets/issues/1442)) ([ab806db](https://github.com/dbsystel/cdk-sops-secrets/commit/ab806db257e9a00b5916cde03fbfdd0dabc70e64))
+
+
+### Miscellaneous Chores
+
+* **deps:** update all major (major) ([#1357](https://github.com/dbsystel/cdk-sops-secrets/issues/1357)) ([b122f1c](https://github.com/dbsystel/cdk-sops-secrets/commit/b122f1cefaee7e8ede3f39ac49835d24a8b084df))
+
 ## [2.9.1](https://github.com/dbsystel/cdk-sops-secrets/compare/v2.9.0...v2.9.1) (2026-09-30)
 
 
