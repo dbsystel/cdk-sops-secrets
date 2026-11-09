@@ -342,7 +342,7 @@ export class SopsSync extends Construct {
     const provider =
       props.sopsProvider ?? new SopsSyncProvider(scope, 'SopsSyncProvider');
 
-    let uploadType = props.uploadType ?? UploadType.INLINE;
+    const uploadType = props.uploadType ?? UploadType.INLINE;
     let sopsFileFormat: 'json' | 'yaml' | 'dotenv' | 'binary' | undefined =
       props.sopsFileFormat;
     let sopsAsset: Asset | undefined = undefined;
@@ -464,7 +464,6 @@ export class SopsSync extends Construct {
         Bucket: props.sopsS3Bucket,
         Key: props.sopsS3Key,
       };
-      uploadType = UploadType.ASSET;
       Annotations.of(this).addWarning(
         'You have to manually add permissions to the sops provider to (permission to download file, to decrypt sops file)!',
       );

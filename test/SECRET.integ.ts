@@ -4,8 +4,8 @@
 
 import * as cdk from 'aws-cdk-lib';
 import { EmailSubscription } from 'aws-cdk-lib/aws-sns-subscriptions';
-import { ConstantAssetHashAspect } from './ConstantAssetHashAspect';
 import { RawOutput, SopsSecret, SopsSecretProps } from '../src/index';
+import { ConstantAssetHashAspect } from './ConstantAssetHashAspect';
 
 const app = new cdk.App();
 const stack = new cdk.Stack(app, 'SECRET');

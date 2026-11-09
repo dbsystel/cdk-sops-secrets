@@ -22,6 +22,11 @@
       "matchDepTypes": ["indirect"],
       "matchUpdateTypes": ["major"],
       "enabled": false
+    },
+    {
+      "description": "TypeScript 7 (native compiler) is not yet supported by typescript-eslint and ts-jest; lift once both allow >=7",
+      "matchPackageNames": ["typescript"],
+      "allowedVersions": "<7.0.0"
     }
   ],
   "postUpdateOptions": ["gomodTidy", "gomodUpdateImportPaths"],
