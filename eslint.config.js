@@ -3,7 +3,7 @@
 
 const js = require('@eslint/js');
 const typescript = require('typescript-eslint');
-const importPlugin = require('eslint-plugin-import');
+const importPlugin = require('eslint-plugin-import-x');
 const prettierPlugin = require('eslint-plugin-prettier');
 const path = require('node:path');
 
@@ -25,7 +25,7 @@ module.exports = [
   {
     plugins: {
       '@typescript-eslint': typescript.plugin,
-      import: importPlugin,
+      'import-x': importPlugin,
       prettier: prettierPlugin,
     },
     languageOptions: {
@@ -51,10 +51,10 @@ module.exports = [
     files: ['src/**/*.ts', 'test/**/*.ts'],
     ignores,
     settings: {
-      'import/parsers': {
+      'import-x/parsers': {
         '@typescript-eslint/parser': ['.ts', '.tsx'],
       },
-      'import/resolver': {
+      'import-x/resolver': {
         node: {},
         typescript: {
           project: './tsconfig.dev.json',
@@ -65,7 +65,7 @@ module.exports = [
     rules: {
       curly: ['error', 'multi-line', 'consistent'],
       '@typescript-eslint/no-require-imports': 'error',
-      'import/no-extraneous-dependencies': [
+      'import-x/no-extraneous-dependencies': [
         'error',
         {
           devDependencies: ['**/test/**', '**/build-tools/**'],
@@ -73,15 +73,15 @@ module.exports = [
           peerDependencies: true,
         },
       ],
-      'import/no-unresolved': ['error'],
-      'import/order': [
+      'import-x/no-unresolved': ['error'],
+      'import-x/order': [
         'warn',
         {
           groups: ['builtin', 'external'],
           alphabetize: { order: 'asc', caseInsensitive: true },
         },
       ],
-      'import/no-duplicates': ['error'],
+      'import-x/no-duplicates': ['error'],
       'no-shadow': ['off'],
       '@typescript-eslint/no-shadow': 'error',
       '@typescript-eslint/no-floating-promises': 'error',
@@ -126,7 +126,7 @@ module.exports = [
     files: ['.projenrc.js'],
     rules: {
       '@typescript-eslint/no-require-imports': 'off',
-      'import/no-extraneous-dependencies': 'off',
+      'import-x/no-extraneous-dependencies': 'off',
     },
   },
 ];
