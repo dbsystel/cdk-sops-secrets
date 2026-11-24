@@ -33,6 +33,7 @@ path = [
   # Lock files
   "mise.lock",
   # Dotfiles without a recognisable comment syntax
+  ".betterleaksignore",
   ".gitattributes",
   ".gitignore",
   ".npmignore",
