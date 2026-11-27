@@ -27,6 +27,12 @@
       "description": "TypeScript 7 (native compiler) is not yet supported by typescript-eslint and ts-jest; lift once both allow >=7",
       "matchPackageNames": ["typescript"],
       "allowedVersions": "<7.0.0"
+    },
+    {
+      "description": "apache/maven tags its GitHub releases as maven-<version>, which the default lookup of the mise 'maven' tool cannot parse",
+      "matchManagers": ["mise"],
+      "matchDepNames": ["maven"],
+      "extractVersion": "^maven-(?<version>.+)$"
     }
   ],
   "postUpdateOptions": ["gomodTidy", "gomodUpdateImportPaths"],
