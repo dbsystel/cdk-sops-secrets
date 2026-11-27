@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.9.2](https://github.com/dbsystel/cdk-sops-secrets/compare/v2.9.1...v2.9.2) (2026-11-27)
+
+
+### Bug Fixes
+
+* **ci:** repair mise install and renovate lockfile updates ([#1450](https://github.com/dbsystel/cdk-sops-secrets/issues/1450)) ([6badcd4](https://github.com/dbsystel/cdk-sops-secrets/commit/6badcd42c67fd24e07632436e1d185d201be0b99))
+* **deps:** update all minor and patch ([#1442](https://github.com/dbsystel/cdk-sops-secrets/issues/1442)) ([ab806db](https://github.com/dbsystel/cdk-sops-secrets/commit/ab806db257e9a00b5916cde03fbfdd0dabc70e64))
+* **deps:** update all minor and patch ([#1448](https://github.com/dbsystel/cdk-sops-secrets/issues/1448)) ([51c7c86](https://github.com/dbsystel/cdk-sops-secrets/commit/51c7c861bde9655f75800e547c4aa03eb0903550))
+* ignore age test key via .betterleaksignore ([#1449](https://github.com/dbsystel/cdk-sops-secrets/issues/1449)) ([5bf3873](https://github.com/dbsystel/cdk-sops-secrets/commit/5bf3873dbd5c6813bcec53ed51be7816845e4db4))
+
+
+### Miscellaneous Chores
+
+* **deps:** update all major (major) ([#1357](https://github.com/dbsystel/cdk-sops-secrets/issues/1357)) ([b122f1c](https://github.com/dbsystel/cdk-sops-secrets/commit/b122f1cefaee7e8ede3f39ac49835d24a8b084df))
+
 ## [2.9.1](https://github.com/dbsystel/cdk-sops-secrets/compare/v2.9.0...v2.9.1) (2026-09-30)
 
 
