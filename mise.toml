@@ -3,13 +3,13 @@
 CDK_DISABLE_CLI_TELEMETRY = "true"
 
 [tools]
-golang = "1.27.3"
-nodejs = "26.13.0"
-npm = "12.2.2"
-grype = "0.121.2"
+golang = "1.27.4"
+nodejs = "26.13.1"
+npm = "12.2.3"
+grype = "0.122.1"
 python = "3.15.2"
 dotnet = "6"
-maven = "3.9.16"
+maven = "3.10.2"
 "pipx:reuse" = { version = "6.3.0", extras = "charset-normalizer" }
 
 
