@@ -34,7 +34,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
       - name: Install mise
-        uses: jdx/mise-action@b44d12e7d0d8ee7461bb893e1b1993500433185b # v5
+        uses: jdx/mise-action@924e7c586e33d7d4bae9c14e26c5d22e2beb6e78 # v5
         with:
           version: 2026.11.14
           experimental: true
@@ -115,7 +115,7 @@ jobs:
       packages: write
     steps:
       - name: Install mise
-        uses: jdx/mise-action@b44d12e7d0d8ee7461bb893e1b1993500433185b # v5
+        uses: jdx/mise-action@924e7c586e33d7d4bae9c14e26c5d22e2beb6e78 # v5
         with:
           version: 2026.11.14
           cache: false
@@ -181,7 +181,7 @@ jobs:
       packages: write
     steps:
       - name: Install mise
-        uses: jdx/mise-action@b44d12e7d0d8ee7461bb893e1b1993500433185b # v5
+        uses: jdx/mise-action@924e7c586e33d7d4bae9c14e26c5d22e2beb6e78 # v5
         with:
           version: 2026.11.14
           cache: false
@@ -228,7 +228,7 @@ jobs:
       # The Releaser GitHub App must be installed on dbsystel/cdk-sops-secrets-go
       # with "Contents: write" so the generated token is allowed to push there.
       - name: Generate token for Go repository
-        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
+        uses: actions/create-github-app-token@f418cff399f7aef4c2f0ad47e25ca7a6abbdd6fc # v3.4.0
         id: app-token
         with:
           client-id: ${{ secrets.RELEASER_CLIENT_ID }}
