@@ -5,6 +5,8 @@
   "rebaseWhen": "auto",
   "minimumReleaseAge": "1 day",
   "enabledManagers": ["gomod", "npm", "mise", "github-actions"],
+  "npmrc": "allow-remote=all",
+  "npmrcMerge": true,
 
   "packageRules": [
     {
