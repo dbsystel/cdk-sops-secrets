@@ -22,7 +22,7 @@ tsconfig.json
 .versionrc-*
 mise.toml
 renovate.json
-.gitleaks.toml
+.betterleaksignore
 
 # IDE and OS files
 .vscode/
