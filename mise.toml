@@ -264,7 +264,8 @@ done
 
 [tasks."cdk:test:integ:snapshot"]
 description = "Generate CloudFormation template snapshots for all tests"
-depends = ["lambda:build", "cdk:deps"]
+# ts-node needs the tsconfig.json that jsii generates
+depends = ["lambda:build", "cdk:deps", "jsii"]
 run = """
 set -e
 echo "Generating snapshots for all integration tests..."
