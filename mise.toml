@@ -9,8 +9,7 @@ npm = "12.2.2"
 grype = "0.121.2"
 python = "3.15.2"
 dotnet = "6"
-# aqua repo not working on ubuntu right now
-"asdf:maven" = "3.9.11"
+maven = "3.9.16"
 "pipx:reuse" = { version = "6.3.0", extras = "charset-normalizer" }
 
 
@@ -265,7 +264,8 @@ done
 
 [tasks."cdk:test:integ:snapshot"]
 description = "Generate CloudFormation template snapshots for all tests"
-depends = ["lambda:build", "cdk:deps"]
+# ts-node needs the tsconfig.json that jsii generates
+depends = ["lambda:build", "cdk:deps", "jsii"]
 run = """
 set -e
 echo "Generating snapshots for all integration tests..."
